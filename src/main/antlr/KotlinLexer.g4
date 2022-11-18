@@ -1,20 +1,36 @@
 lexer grammar KotlinLexer;
 
+
+
 // Whitespace
-NEWLINE            : '\r\n' | 'r' | '\n' ;
+NL                  : '\r\n' | 'r' | '\n' ;
 WS                 : [\t ]+ -> skip ;
 
 // Keywords
 VAR                : 'var' ;
-LET                : 'let' ;
+VAL                : 'val' ;
 PRINT              : 'print';
 AS                 : 'as';
 INT                : 'Int';
-DECIMAL            : 'Decimal';
+DOUBLE              : 'Double';
+BOOL               : 'Bool';
 
-// Literals
-INTLIT             : '0'|[1-9][0-9]* ;
-DECLIT             : '0'|[1-9][0-9]* '.' [0-9]+ ;
+INT_LIT
+    : DecDigitNoZero DecDigit*
+    | DecDigit
+     ;
+
+BOOL_LIT : 'true' | 'false';
+
+DOUBLE_LIT
+     : DecDigits? '.' DecDigits
+     | DecDigits
+     ;
+
+FLOAT_LIT
+    : DOUBLE_LIT [fF]
+    | DecDigits [fF]
+    ;
 
 // Operators
 PLUS               : '+' ;
@@ -24,6 +40,17 @@ DIVISION           : '/' ;
 ASSIGN             : '=' ;
 LPAREN             : '(' ;
 RPAREN             : ')' ;
+COLON              : ':';
+
 
 // Identifiers
 ID                 : [_]*[a-z][A-Za-z0-9_]* ;
+
+// Literals
+fragment DecDigit: '0'..'9';
+fragment DecDigitNoZero: '1'..'9';
+fragment DecDigits
+    : DecDigit DecDigit*
+    | DecDigit
+    ;
+

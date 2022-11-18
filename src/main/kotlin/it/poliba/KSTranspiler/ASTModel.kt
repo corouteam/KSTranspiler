@@ -85,7 +85,7 @@ data class KotlinFile(val statements : List<Statement>, override var position: P
 
 sealed class Statement : Node() { }
 
-sealed class Expression : Node() { }
+sealed class Expression(open val type: Type) : Node() { }
 
 sealed class Type : Node() { }
 
@@ -101,7 +101,7 @@ data class DecimalType(override var position: Position? = null) : Type()
 // Expressions
 //
 
-sealed class BinaryExpression(open val left: Expression, open val right: Expression) : Expression()
+sealed class BinaryExpression(open val left: Expression, open val right: Expression) : Expression(type = left.type)
 
 data class SumExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
     BinaryExpression(left, right)
@@ -115,21 +115,23 @@ data class MultiplicationExpression(override val left: Expression, override val 
 data class DivisionExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
     BinaryExpression(left, right)
 
-data class UnaryMinusExpression(val value: Expression, override var position: Position? = null) : Expression()
+data class UnaryMinusExpression(val value: Expression, override var position: Position? = null) : Expression(value.type)
 
 data class TypeConversion(val value: Expression, val targetType: Type, override var position: Position? = null) :
-    Expression()
+    Expression(type = targetType)
 
-data class VarReference(val varName: String, override var position: Position? = null) : Expression()
+data class VarReference(val varName: String, override var type: Type, override var position: Position? = null) : Expression(type)
 
-data class IntLit(val value: String, override var position: Position? = null) : Expression()
+data class IntLit(val value: String, override var position: Position? = null) : Expression(IntType())
 
-data class DecLit(val value: String, override var position: Position? = null) : Expression()
+data class DecLit(val value: String, override var position: Position? = null) : Expression(DecimalType())
 
 //
 // Statements
 //
 
+data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression, var mutable: Boolean,  override  var position: Position? = null) :
+Statement()
 data class VarDeclaration(val varName: String, val value: Expression, override var position: Position? = null) :
     Statement()
 

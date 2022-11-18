@@ -3,7 +3,6 @@ package it.poliba.KSTranspiler
 import it.poliba.KSranspiler.*
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
-import java.util.function.BinaryOperator
 
 val group: STGroup = STGroupFile("/Users/annalabellarte/Dev/Università/KSTranspiler2/src/main/antlr/SwiftTemplate.stg")
 
@@ -13,12 +12,22 @@ fun KotlinFile.generateCode(): String{
 
 fun Statement.generateCode(): String {
     return when (this) {
+        is PropertyDeclaration -> this.generateCode()
         is VarDeclaration -> this.generateCode()
         is ReadOnlyVarDeclaration -> this.generateCode()
         is Assignment -> "TODO ASSIGNMENT"
         is Print -> "TODO PRINT"
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
+}
+
+fun PropertyDeclaration.generateCode(): String{
+    val st = group.getInstanceOf("propertyDeclaration")
+    st.add("name",varName)
+    st.add("type", type.generateCode())
+    st.add("value", value.generateCode())
+    st.add("mutable", mutable)
+    return st.render()
 }
 
 fun VarDeclaration.generateCode(): String{
@@ -44,6 +53,11 @@ fun Expression.generateCode() : String = when (this) {
     is BinaryExpression -> this.generateCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun Type.generateCode() : String = when (this) {
+    is IntType -> "Int"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

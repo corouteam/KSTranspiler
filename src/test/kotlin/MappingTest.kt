@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class MappingTest {
-    @Test
+    /*@Test
     fun mapSimpleFile() {
         val code = """var a = 1 + 2
                      |a = 7 * (2 / 3)""".trimMargin("|")
@@ -39,26 +39,36 @@ class MappingTest {
     fun mapPrint() {
         val code = "print(a)"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf(Print(VarReference("a"))))
+        val expectedAst = KotlinFile(listOf(Print(VarReference("a", IntType() ))))
         assertEquals(expectedAst, ast)
-    }
+    }*/
 
     @Test
     fun mapSimpleVarAssignment(){
         val code = "var a = 3"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
         val expectedAst = KotlinFile(listOf(
-            VarDeclaration("a", IntLit("3"))
+            PropertyDeclaration("a", IntType(),IntLit("3"), mutable = true)
         ))
         assertEquals(expectedAst, ast)
     }
 
     @Test
-    fun mapSimpleLetAssignment(){
-        val code = "let a = 3"
+    fun mapSimpleValAssignment(){
+        val code = "val a = 3"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
         val expectedAst = KotlinFile(listOf(
-            ReadOnlyVarDeclaration("a", IntLit("3"))
+            PropertyDeclaration("a", IntType(), IntLit("3"), mutable = false)
+        ))
+        assertEquals(expectedAst, ast)
+    }
+
+    @Test
+    fun mapSimpleValAssignmentExplicitType(){
+        val code = "val a: Int = 3"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            PropertyDeclaration("a", IntType(), IntLit("3"), mutable = false)
         ))
         assertEquals(expectedAst, ast)
     }

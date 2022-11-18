@@ -3,6 +3,9 @@ package it.poliba.KSTranspiler
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
+import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
+import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
+import it.poliba.KSTranspiler.KotlinParser.VarDeclarationContext
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 
@@ -23,26 +26,41 @@ fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
 }
 
 fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
-    is KotlinParser.VarDeclarationStatementContext -> VarDeclaration(varDeclaration().assignment().ID().text, varDeclaration().assignment().expression().toAst(considerPosition), toPosition(considerPosition))
+    is KotlinParser.PropertyDeclarationStatementContext -> this.propertyDeclaration().toAst(considerPosition)
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+    /*is KotlinParser.VarDeclarationStatementContext -> VarDeclaration(varDeclaration().assignment().ID().text, varDeclaration().assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.LetDeclarationStatementContext -> ReadOnlyVarDeclaration(letDeclaration().assignment().ID().text, letDeclaration().assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
-    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)*/
 }
 
+fun KotlinParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Statement {
+    return if(varDeclaration() != null){
+
+        val type = if(varDeclaration().type() != null) varDeclaration().type().toAst() else expression().toAst().type
+        PropertyDeclaration(varDeclaration().ID().text, type, expression().toAst(), mutable = true)
+    }else{
+        val type = if(valDeclaration().type() != null) valDeclaration().type().toAst() else expression().toAst().type
+
+        PropertyDeclaration(valDeclaration().ID().text, type, expression().toAst(), mutable = false)
+
+    }
+}
 fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
-    is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
+    is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
+    /*is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     is KotlinParser.DecimalLiteralContext -> DecLit(text, toPosition(considerPosition))
     is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     is KotlinParser.VarReferenceContext -> VarReference(text, toPosition(considerPosition))
     is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
-    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+    */else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
     is KotlinParser.IntegerContext -> IntType(toPosition(considerPosition))
-    is KotlinParser.DecimalContext -> DecimalType(toPosition(considerPosition))
+   // is KotlinParser.DecimalContext -> DecimalType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

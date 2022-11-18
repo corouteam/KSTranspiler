@@ -23,43 +23,53 @@ class LexerTest {
 
     @Test
     fun parseVarDeclarationAssignedAnIntegerLiteral() {
-        assertEquals(listOf("VAR", "ID", "ASSIGN", "INTLIT", "EOF"),
+        assertEquals(listOf("VAR", "ID", "ASSIGN", "INT_LIT", "EOF"),
             tokens(lexerForCode("var a = 1")))
     }
 
     @Test
-    fun parseLetDeclarationAssignedAnIntegerLiteral() {
-        assertEquals(listOf("LET", "ID", "ASSIGN", "INTLIT", "EOF"),
-            tokens(lexerForCode("let a = 1")))
+    fun parseVarDeclarationIntType() {
+        assertEquals(listOf("VAR", "ID", "COLON", "INT", "EOF"),
+            tokens(lexerForCode("var a: Int")))
+    }
+
+    @Test
+    fun parseVaLDeclarationIntType() {
+        assertEquals(listOf("VAL", "ID", "COLON", "INT", "EOF"),
+            tokens(lexerForCode("val a: Int")))
+    }
+
+
+    @Test
+    fun parseValDeclarationAssignedAnIntegerLiteral() {
+        assertEquals(listOf("VAL", "ID", "ASSIGN", "INT_LIT", "EOF"),
+            tokens(lexerForCode("val a = 1")))
     }
 
     @Test
     fun parseVarDeclarationAssignedADecimalLiteral() {
-        assertEquals(listOf("VAR", "ID", "ASSIGN", "DECLIT", "EOF"),
+        assertEquals(listOf("VAR", "ID", "ASSIGN", "DOUBLE_LIT", "EOF"),
             tokens(lexerForCode("var a = 1.23")))
     }
 
     @Test
     fun parseVarDeclarationAssignedASum() {
-        assertEquals(listOf("VAR", "ID", "ASSIGN", "INTLIT", "PLUS", "INTLIT", "EOF"),
+        assertEquals(listOf("VAR", "ID", "ASSIGN", "INT_LIT", "PLUS", "INT_LIT", "EOF"),
             tokens(lexerForCode("var a = 1 + 2")))
     }
 
     @Test
     fun parseMathematicalExpression() {
-        assertEquals(listOf("INTLIT", "PLUS", "ID", "ASTERISK", "INTLIT", "DIVISION", "INTLIT", "MINUS", "INTLIT", "EOF"),
+        assertEquals(listOf("INT_LIT", "PLUS", "ID", "ASTERISK", "INT_LIT", "DIVISION", "INT_LIT", "MINUS", "INT_LIT", "EOF"),
             tokens(lexerForCode("1 + a * 3 / 4 - 5")))
     }
 
     @Test
     fun parseMathematicalExpressionWithParenthesis() {
-        assertEquals(listOf("INTLIT", "PLUS", "LPAREN", "ID", "ASTERISK", "INTLIT", "RPAREN", "MINUS", "DECLIT", "EOF"),
+        assertEquals(listOf("INT_LIT", "PLUS", "LPAREN", "ID", "ASTERISK", "INT_LIT", "RPAREN", "MINUS", "DOUBLE_LIT", "EOF"),
             tokens(lexerForCode("1 + (a * 3) - 5.12")))
     }
 
-    @Test
-    fun test(){
-        assertEquals(42, 42)
-    }
+
 
 }

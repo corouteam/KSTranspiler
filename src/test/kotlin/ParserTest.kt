@@ -36,41 +36,98 @@ class KotlinParserTest {
     }
 
     @Test
-    fun parseSimplestVarDecl() {
+    fun parsePropertyDeclVarInt() {
         assertEquals(
             """KotlinFile
   Line
-    VarDeclarationStatement
-      VarDeclaration
-        T[var]
-        Assignment
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
           T[a]
-          T[=]
-          IntLiteral
-            T[1]
+        T[=]
+        IntLiteral
+          T[1]
     T[<EOF>]
 """,
-            toParseTree(parseResource("simplest_var_decl")).multiLineString())
+            toParseTree(parseResource("property_declaration_var_int")).multiLineString())
     }
 
     @Test
-    fun parseSimplestLetDecl() {
+    fun parsePropertyDeclVarBool() {
         assertEquals(
             """KotlinFile
   Line
-    LetDeclarationStatement
-      LetDeclaration
-        T[let]
-        Assignment
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
           T[a]
-          T[=]
-          IntLiteral
-            T[1]
+        T[=]
+        BoolLiteral
+          T[true]
     T[<EOF>]
 """,
-            toParseTree(parseResource("simplest_let_decl")).multiLineString())
+            toParseTree(parseResource("property_declaration_var_bool")).multiLineString())
+    }
+    @Test
+    fun parsePropertyDeclVarIntWithExplicitType() {
+        assertEquals(
+            """KotlinFile
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          T[a]
+          T[:]
+          Integer
+            T[Int]
+        T[=]
+        IntLiteral
+          T[1]
+    T[<EOF>]
+""",
+            toParseTree(parseResource("property_declaration_var_int_expl_type")).multiLineString())
     }
 
+    @Test
+    fun parseVarDeclInt() {
+        assertEquals(
+            """KotlinFile
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          T[a]
+          T[:]
+          Integer
+            T[Int]
+    T[<EOF>]
+""",
+            toParseTree(parseResource("var_declaration_int")).multiLineString())
+    }
+
+
+    @Test
+    fun parseValDeclInt() {
+        assertEquals(
+            """KotlinFile
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        ValDeclaration
+          T[val]
+          T[a]
+          T[:]
+          Integer
+            T[Int]
+    T[<EOF>]
+""",
+            toParseTree(parseResource("val_declaration_int")).multiLineString())
+    }
+    /*
    @Test
    fun parsePrecedenceExpressions() {
         assertEquals(
@@ -99,5 +156,5 @@ class KotlinParserTest {
     T[<EOF>]
 """,
             toParseTree(parseResource("precedence_expression")).multiLineString())
-    }
+    }*/
 }

@@ -4,18 +4,21 @@ options { tokenVocab=KotlinLexer; }
 
 kotlinFile : lines=line+ ;
 
-line      : statement (NEWLINE | EOF) ;
+line      : statement (NL | EOF) ;
 
-statement : varDeclaration # varDeclarationStatement
+statement : propertyDeclaration # propertyDeclarationStatement
           | assignment     # assignmentStatement
-          | print          # printStatement
-          | letDeclaration # letDeclarationStatement;
+          | print          # printStatement;
 
 print : PRINT LPAREN expression RPAREN ;
 
-varDeclaration : VAR assignment ;
 
-letDeclaration : LET assignment ;
+varDeclaration : VAR ID (NL* COLON NL* type)?;
+
+valDeclaration : VAL ID (NL* COLON NL* type)?;
+
+propertyDeclaration:  (varDeclaration|valDeclaration) ASSIGN expression;
+
 
 assignment : ID ASSIGN expression ;
 
@@ -25,9 +28,11 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | LPAREN expression RPAREN                                      # parenExpression
            | ID                                                            # varReference
            | MINUS expression                                              # minusExpression
-           | INTLIT                                                        # intLiteral
-           | DECLIT                                                        # decimalLiteral ;
+           | INT_LIT                                                       # intLiteral
+           | DOUBLE_LIT                                                    # doubleLiteral
+           | BOOL_LIT                                                      # boolLiteral;
 
-type : INT     # integer
-     | DECIMAL # decimal ;
+type : INT     # integer |
+       DOUBLE  # double |
+       BOOL    # bool;
 

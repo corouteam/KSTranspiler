@@ -28,17 +28,17 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitLine(KotlinParser.LineContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code varDeclarationStatement}
+	 * Enter a parse tree produced by the {@code propertyDeclarationStatement}
 	 * labeled alternative in {@link KotlinParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterVarDeclarationStatement(KotlinParser.VarDeclarationStatementContext ctx);
+	void enterPropertyDeclarationStatement(KotlinParser.PropertyDeclarationStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code varDeclarationStatement}
+	 * Exit a parse tree produced by the {@code propertyDeclarationStatement}
 	 * labeled alternative in {@link KotlinParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitVarDeclarationStatement(KotlinParser.VarDeclarationStatementContext ctx);
+	void exitPropertyDeclarationStatement(KotlinParser.PropertyDeclarationStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code assignmentStatement}
 	 * labeled alternative in {@link KotlinParser#statement}.
@@ -64,18 +64,6 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitPrintStatement(KotlinParser.PrintStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code letDeclarationStatement}
-	 * labeled alternative in {@link KotlinParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterLetDeclarationStatement(KotlinParser.LetDeclarationStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code letDeclarationStatement}
-	 * labeled alternative in {@link KotlinParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitLetDeclarationStatement(KotlinParser.LetDeclarationStatementContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link KotlinParser#print}.
 	 * @param ctx the parse tree
 	 */
@@ -96,15 +84,25 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitVarDeclaration(KotlinParser.VarDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link KotlinParser#letDeclaration}.
+	 * Enter a parse tree produced by {@link KotlinParser#valDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterLetDeclaration(KotlinParser.LetDeclarationContext ctx);
+	void enterValDeclaration(KotlinParser.ValDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link KotlinParser#letDeclaration}.
+	 * Exit a parse tree produced by {@link KotlinParser#valDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitLetDeclaration(KotlinParser.LetDeclarationContext ctx);
+	void exitValDeclaration(KotlinParser.ValDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#propertyDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterPropertyDeclaration(KotlinParser.PropertyDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#propertyDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitPropertyDeclaration(KotlinParser.PropertyDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link KotlinParser#assignment}.
 	 * @param ctx the parse tree
@@ -115,18 +113,6 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignment(KotlinParser.AssignmentContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code decimalLiteral}
-	 * labeled alternative in {@link KotlinParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterDecimalLiteral(KotlinParser.DecimalLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code decimalLiteral}
-	 * labeled alternative in {@link KotlinParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitDecimalLiteral(KotlinParser.DecimalLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code minusExpression}
 	 * labeled alternative in {@link KotlinParser#expression}.
@@ -151,6 +137,18 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIntLiteral(KotlinParser.IntLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code doubleLiteral}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoubleLiteral(KotlinParser.DoubleLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code doubleLiteral}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoubleLiteral(KotlinParser.DoubleLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code parenExpression}
 	 * labeled alternative in {@link KotlinParser#expression}.
@@ -188,6 +186,18 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitTypeConversion(KotlinParser.TypeConversionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code boolLiteral}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolLiteral(KotlinParser.BoolLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolLiteral}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolLiteral(KotlinParser.BoolLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code varReference}
 	 * labeled alternative in {@link KotlinParser#expression}.
 	 * @param ctx the parse tree
@@ -212,15 +222,27 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitInteger(KotlinParser.IntegerContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code decimal}
+	 * Enter a parse tree produced by the {@code double}
 	 * labeled alternative in {@link KotlinParser#type}.
 	 * @param ctx the parse tree
 	 */
-	void enterDecimal(KotlinParser.DecimalContext ctx);
+	void enterDouble(KotlinParser.DoubleContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code decimal}
+	 * Exit a parse tree produced by the {@code double}
 	 * labeled alternative in {@link KotlinParser#type}.
 	 * @param ctx the parse tree
 	 */
-	void exitDecimal(KotlinParser.DecimalContext ctx);
+	void exitDouble(KotlinParser.DoubleContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code bool}
+	 * labeled alternative in {@link KotlinParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterBool(KotlinParser.BoolContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code bool}
+	 * labeled alternative in {@link KotlinParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitBool(KotlinParser.BoolContext ctx);
 }

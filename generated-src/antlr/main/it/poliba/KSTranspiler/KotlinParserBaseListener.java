@@ -41,13 +41,13 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDeclarationStatement(KotlinParser.VarDeclarationStatementContext ctx) { }
+	@Override public void enterPropertyDeclarationStatement(KotlinParser.PropertyDeclarationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarDeclarationStatement(KotlinParser.VarDeclarationStatementContext ctx) { }
+	@Override public void exitPropertyDeclarationStatement(KotlinParser.PropertyDeclarationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -77,18 +77,6 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLetDeclarationStatement(KotlinParser.LetDeclarationStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLetDeclarationStatement(KotlinParser.LetDeclarationStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPrint(KotlinParser.PrintContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -113,13 +101,25 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLetDeclaration(KotlinParser.LetDeclarationContext ctx) { }
+	@Override public void enterValDeclaration(KotlinParser.ValDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLetDeclaration(KotlinParser.LetDeclarationContext ctx) { }
+	@Override public void exitValDeclaration(KotlinParser.ValDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropertyDeclaration(KotlinParser.PropertyDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropertyDeclaration(KotlinParser.PropertyDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -132,18 +132,6 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssignment(KotlinParser.AssignmentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDecimalLiteral(KotlinParser.DecimalLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDecimalLiteral(KotlinParser.DecimalLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -168,6 +156,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIntLiteral(KotlinParser.IntLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDoubleLiteral(KotlinParser.DoubleLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDoubleLiteral(KotlinParser.DoubleLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -209,6 +209,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBoolLiteral(KotlinParser.BoolLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolLiteral(KotlinParser.BoolLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVarReference(KotlinParser.VarReferenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -233,13 +245,25 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDecimal(KotlinParser.DecimalContext ctx) { }
+	@Override public void enterDouble(KotlinParser.DoubleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDecimal(KotlinParser.DecimalContext ctx) { }
+	@Override public void exitDouble(KotlinParser.DoubleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBool(KotlinParser.BoolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBool(KotlinParser.BoolContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
