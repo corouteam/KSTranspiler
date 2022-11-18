@@ -10,7 +10,7 @@ object App {
     fun main(args: Array<String>) {
         var code = "var a = 5"
         var code2 = "let a = 5 + 2"
-        var actual = code2
+        var actual = code
         val parseResult = KotlinParserFacade.parse(actual).root!!
         var ast = parseResult.toAst()
         println(ast.generateCode())
