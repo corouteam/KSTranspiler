@@ -1,5 +1,8 @@
 package it.poliba.KSTranspiler
 
+import com.strumenta.kolasu.model.Node
+import com.strumenta.kolasu.model.Point
+import com.strumenta.kolasu.model.Position
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 

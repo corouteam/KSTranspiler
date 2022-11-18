@@ -1,4 +1,4 @@
-// Generated from SandyParser.g4 by ANTLR 4.8
+// Generated from java-escape by ANTLR 4.11.1
 package it.poliba.KSTranspiler;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class SandyParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -81,7 +81,7 @@ public class SandyParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "SandyParser.g4"; }
+	public String getGrammarFileName() { return "java-escape"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -97,6 +97,7 @@ public class SandyParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class SandyFileContext extends ParserRuleContext {
 		public LineContext lines;
 		public List<LineContext> line() {
@@ -139,7 +140,7 @@ public class SandyParser extends Parser {
 				setState(21); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << VAR) | (1L << LET) | (1L << PRINT) | (1L << ID))) != 0) );
+			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 262200L) != 0 );
 			}
 		}
 		catch (RecognitionException re) {
@@ -153,6 +154,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class LineContext extends ParserRuleContext {
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
@@ -205,6 +207,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class StatementContext extends ParserRuleContext {
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -216,6 +219,7 @@ public class SandyParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class PrintStatementContext extends StatementContext {
 		public PrintContext print() {
 			return getRuleContext(PrintContext.class,0);
@@ -230,6 +234,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitPrintStatement(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class AssignmentStatementContext extends StatementContext {
 		public AssignmentContext assignment() {
 			return getRuleContext(AssignmentContext.class,0);
@@ -244,6 +249,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitAssignmentStatement(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class LetDeclarationStatementContext extends StatementContext {
 		public LetDeclarationContext letDeclaration() {
 			return getRuleContext(LetDeclarationContext.class,0);
@@ -258,6 +264,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitLetDeclarationStatement(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class VarDeclarationStatementContext extends StatementContext {
 		public VarDeclarationContext varDeclaration() {
 			return getRuleContext(VarDeclarationContext.class,0);
@@ -327,6 +334,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class PrintContext extends ParserRuleContext {
 		public TerminalNode PRINT() { return getToken(SandyParser.PRINT, 0); }
 		public TerminalNode LPAREN() { return getToken(SandyParser.LPAREN, 0); }
@@ -375,6 +383,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class VarDeclarationContext extends ParserRuleContext {
 		public TerminalNode VAR() { return getToken(SandyParser.VAR, 0); }
 		public AssignmentContext assignment() {
@@ -417,6 +426,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class LetDeclarationContext extends ParserRuleContext {
 		public TerminalNode LET() { return getToken(SandyParser.LET, 0); }
 		public AssignmentContext assignment() {
@@ -459,6 +469,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class AssignmentContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(SandyParser.ID, 0); }
 		public TerminalNode ASSIGN() { return getToken(SandyParser.ASSIGN, 0); }
@@ -504,6 +515,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class ExpressionContext extends ParserRuleContext {
 		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -515,6 +527,7 @@ public class SandyParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class DecimalLiteralContext extends ExpressionContext {
 		public TerminalNode DECLIT() { return getToken(SandyParser.DECLIT, 0); }
 		public DecimalLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
@@ -527,6 +540,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitDecimalLiteral(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class MinusExpressionContext extends ExpressionContext {
 		public TerminalNode MINUS() { return getToken(SandyParser.MINUS, 0); }
 		public ExpressionContext expression() {
@@ -542,6 +556,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitMinusExpression(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class IntLiteralContext extends ExpressionContext {
 		public TerminalNode INTLIT() { return getToken(SandyParser.INTLIT, 0); }
 		public IntLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
@@ -554,6 +569,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitIntLiteral(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class ParenExpressionContext extends ExpressionContext {
 		public TerminalNode LPAREN() { return getToken(SandyParser.LPAREN, 0); }
 		public ExpressionContext expression() {
@@ -570,6 +586,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitParenExpression(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class BinaryOperationContext extends ExpressionContext {
 		public ExpressionContext left;
 		public Token operator;
@@ -594,6 +611,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitBinaryOperation(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class TypeConversionContext extends ExpressionContext {
 		public ExpressionContext value;
 		public TypeContext targetType;
@@ -614,6 +632,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitTypeConversion(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class VarReferenceContext extends ExpressionContext {
 		public TerminalNode ID() { return getToken(SandyParser.ID, 0); }
 		public VarReferenceContext(ExpressionContext ctx) { copyFrom(ctx); }
@@ -790,6 +809,7 @@ public class SandyParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class TypeContext extends ParserRuleContext {
 		public TypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -801,6 +821,7 @@ public class SandyParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class IntegerContext extends TypeContext {
 		public TerminalNode INT() { return getToken(SandyParser.INT, 0); }
 		public IntegerContext(TypeContext ctx) { copyFrom(ctx); }
@@ -813,6 +834,7 @@ public class SandyParser extends Parser {
 			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitInteger(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class DecimalContext extends TypeContext {
 		public TerminalNode DECIMAL() { return getToken(SandyParser.DECIMAL, 0); }
 		public DecimalContext(TypeContext ctx) { copyFrom(ctx); }
@@ -884,26 +906,53 @@ public class SandyParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\24P\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\3\2\6\2\26"+
-		"\n\2\r\2\16\2\27\3\3\3\3\3\3\3\4\3\4\3\4\3\4\5\4!\n\4\3\5\3\5\3\5\3\5"+
-		"\3\5\3\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\3"+
-		"\t\3\t\3\t\3\t\5\t<\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\7\tG\n\t\f"+
-		"\t\16\tJ\13\t\3\n\3\n\5\nN\n\n\3\n\2\3\20\13\2\4\6\b\n\f\16\20\22\2\5"+
-		"\3\3\3\3\3\2\17\20\3\2\r\16\2R\2\25\3\2\2\2\4\31\3\2\2\2\6 \3\2\2\2\b"+
-		"\"\3\2\2\2\n\'\3\2\2\2\f*\3\2\2\2\16-\3\2\2\2\20;\3\2\2\2\22M\3\2\2\2"+
-		"\24\26\5\4\3\2\25\24\3\2\2\2\26\27\3\2\2\2\27\25\3\2\2\2\27\30\3\2\2\2"+
-		"\30\3\3\2\2\2\31\32\5\6\4\2\32\33\t\2\2\2\33\5\3\2\2\2\34!\5\n\6\2\35"+
-		"!\5\16\b\2\36!\5\b\5\2\37!\5\f\7\2 \34\3\2\2\2 \35\3\2\2\2 \36\3\2\2\2"+
-		" \37\3\2\2\2!\7\3\2\2\2\"#\7\7\2\2#$\7\22\2\2$%\5\20\t\2%&\7\23\2\2&\t"+
-		"\3\2\2\2\'(\7\5\2\2()\5\16\b\2)\13\3\2\2\2*+\7\6\2\2+,\5\16\b\2,\r\3\2"+
-		"\2\2-.\7\24\2\2./\7\21\2\2/\60\5\20\t\2\60\17\3\2\2\2\61\62\b\t\1\2\62"+
-		"\63\7\22\2\2\63\64\5\20\t\2\64\65\7\23\2\2\65<\3\2\2\2\66<\7\24\2\2\67"+
-		"8\7\16\2\28<\5\20\t\59<\7\13\2\2:<\7\f\2\2;\61\3\2\2\2;\66\3\2\2\2;\67"+
-		"\3\2\2\2;9\3\2\2\2;:\3\2\2\2<H\3\2\2\2=>\f\n\2\2>?\t\3\2\2?G\5\20\t\13"+
-		"@A\f\t\2\2AB\t\4\2\2BG\5\20\t\nCD\f\b\2\2DE\7\b\2\2EG\5\22\n\2F=\3\2\2"+
-		"\2F@\3\2\2\2FC\3\2\2\2GJ\3\2\2\2HF\3\2\2\2HI\3\2\2\2I\21\3\2\2\2JH\3\2"+
-		"\2\2KN\7\t\2\2LN\7\n\2\2MK\3\2\2\2ML\3\2\2\2N\23\3\2\2\2\b\27 ;FHM";
+		"\u0004\u0001\u0012N\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
+		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
+		"\b\u0007\b\u0001\u0000\u0004\u0000\u0014\b\u0000\u000b\u0000\f\u0000\u0015"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0003\u0002\u001f\b\u0002\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0005"+
+		"\u0001\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006"+
+		"\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007"+
+		"\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0003\u0007:\b\u0007"+
+		"\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007"+
+		"\u0001\u0007\u0001\u0007\u0001\u0007\u0005\u0007E\b\u0007\n\u0007\f\u0007"+
+		"H\t\u0007\u0001\b\u0001\b\u0003\bL\b\b\u0001\b\u0000\u0001\u000e\t\u0000"+
+		"\u0002\u0004\u0006\b\n\f\u000e\u0010\u0000\u0003\u0001\u0001\u0001\u0001"+
+		"\u0001\u0000\r\u000e\u0001\u0000\u000b\fP\u0000\u0013\u0001\u0000\u0000"+
+		"\u0000\u0002\u0017\u0001\u0000\u0000\u0000\u0004\u001e\u0001\u0000\u0000"+
+		"\u0000\u0006 \u0001\u0000\u0000\u0000\b%\u0001\u0000\u0000\u0000\n(\u0001"+
+		"\u0000\u0000\u0000\f+\u0001\u0000\u0000\u0000\u000e9\u0001\u0000\u0000"+
+		"\u0000\u0010K\u0001\u0000\u0000\u0000\u0012\u0014\u0003\u0002\u0001\u0000"+
+		"\u0013\u0012\u0001\u0000\u0000\u0000\u0014\u0015\u0001\u0000\u0000\u0000"+
+		"\u0015\u0013\u0001\u0000\u0000\u0000\u0015\u0016\u0001\u0000\u0000\u0000"+
+		"\u0016\u0001\u0001\u0000\u0000\u0000\u0017\u0018\u0003\u0004\u0002\u0000"+
+		"\u0018\u0019\u0007\u0000\u0000\u0000\u0019\u0003\u0001\u0000\u0000\u0000"+
+		"\u001a\u001f\u0003\b\u0004\u0000\u001b\u001f\u0003\f\u0006\u0000\u001c"+
+		"\u001f\u0003\u0006\u0003\u0000\u001d\u001f\u0003\n\u0005\u0000\u001e\u001a"+
+		"\u0001\u0000\u0000\u0000\u001e\u001b\u0001\u0000\u0000\u0000\u001e\u001c"+
+		"\u0001\u0000\u0000\u0000\u001e\u001d\u0001\u0000\u0000\u0000\u001f\u0005"+
+		"\u0001\u0000\u0000\u0000 !\u0005\u0005\u0000\u0000!\"\u0005\u0010\u0000"+
+		"\u0000\"#\u0003\u000e\u0007\u0000#$\u0005\u0011\u0000\u0000$\u0007\u0001"+
+		"\u0000\u0000\u0000%&\u0005\u0003\u0000\u0000&\'\u0003\f\u0006\u0000\'"+
+		"\t\u0001\u0000\u0000\u0000()\u0005\u0004\u0000\u0000)*\u0003\f\u0006\u0000"+
+		"*\u000b\u0001\u0000\u0000\u0000+,\u0005\u0012\u0000\u0000,-\u0005\u000f"+
+		"\u0000\u0000-.\u0003\u000e\u0007\u0000.\r\u0001\u0000\u0000\u0000/0\u0006"+
+		"\u0007\uffff\uffff\u000001\u0005\u0010\u0000\u000012\u0003\u000e\u0007"+
+		"\u000023\u0005\u0011\u0000\u00003:\u0001\u0000\u0000\u00004:\u0005\u0012"+
+		"\u0000\u000056\u0005\f\u0000\u00006:\u0003\u000e\u0007\u00037:\u0005\t"+
+		"\u0000\u00008:\u0005\n\u0000\u00009/\u0001\u0000\u0000\u000094\u0001\u0000"+
+		"\u0000\u000095\u0001\u0000\u0000\u000097\u0001\u0000\u0000\u000098\u0001"+
+		"\u0000\u0000\u0000:F\u0001\u0000\u0000\u0000;<\n\b\u0000\u0000<=\u0007"+
+		"\u0001\u0000\u0000=E\u0003\u000e\u0007\t>?\n\u0007\u0000\u0000?@\u0007"+
+		"\u0002\u0000\u0000@E\u0003\u000e\u0007\bAB\n\u0006\u0000\u0000BC\u0005"+
+		"\u0006\u0000\u0000CE\u0003\u0010\b\u0000D;\u0001\u0000\u0000\u0000D>\u0001"+
+		"\u0000\u0000\u0000DA\u0001\u0000\u0000\u0000EH\u0001\u0000\u0000\u0000"+
+		"FD\u0001\u0000\u0000\u0000FG\u0001\u0000\u0000\u0000G\u000f\u0001\u0000"+
+		"\u0000\u0000HF\u0001\u0000\u0000\u0000IL\u0005\u0007\u0000\u0000JL\u0005"+
+		"\b\u0000\u0000KI\u0001\u0000\u0000\u0000KJ\u0001\u0000\u0000\u0000L\u0011"+
+		"\u0001\u0000\u0000\u0000\u0006\u0015\u001e9DFK";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

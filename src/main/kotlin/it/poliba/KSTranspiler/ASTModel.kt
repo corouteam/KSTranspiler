@@ -1,5 +1,7 @@
 package it.poliba.KSranspiler
 
+import com.strumenta.kolasu.model.Node
+import com.strumenta.kolasu.model.Position
 import java.util.*
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.memberProperties
@@ -8,7 +10,7 @@ import kotlin.reflect.full.primaryConstructor
 //
 // Generic part: valid for all languages
 //
-
+/*
 interface Node {
     val position: Position?
 }
@@ -78,65 +80,62 @@ fun Node.transform(operation: (Node) -> Node) : Node {
 //
 // Sandy specific part
 //
+*/
+data class SandyFile(val statements : List<Statement>, override var position: Position? = null) : Node()
 
-data class SandyFile(val statements : List<Statement>, override val position: Position? = null) : Node
+sealed class Statement : Node() { }
 
-interface Statement : Node { }
+sealed class Expression : Node() { }
 
-interface Expression : Node { }
-
-interface Type : Node { }
+sealed class Type : Node() { }
 
 //
 // Types
 //
 
-data class IntType(override val position: Position? = null) : Type
+data class IntType(override var position: Position? = null) : Type()
 
-data class DecimalType(override val position: Position? = null) : Type
+data class DecimalType(override var position: Position? = null) : Type()
 
 //
 // Expressions
 //
 
-interface BinaryExpression : Expression {
-    val left: Expression
-    val right: Expression
-}
+sealed class BinaryExpression(open val left: Expression, open val right: Expression) : Expression()
 
-data class SumExpression(override val left: Expression, override val right: Expression, override val position: Position? = null) :
-    BinaryExpression
+data class SumExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    BinaryExpression(left, right)
 
-data class SubtractionExpression(override val left: Expression, override val right: Expression, override val position: Position? = null) :
-    BinaryExpression
+data class SubtractionExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    BinaryExpression(left, right)
 
-data class MultiplicationExpression(override val left: Expression, override val right: Expression, override val position: Position? = null) :
-    BinaryExpression
+data class MultiplicationExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    BinaryExpression(left, right)
 
-data class DivisionExpression(override val left: Expression, override val right: Expression, override val position: Position? = null) :
-    BinaryExpression
+data class DivisionExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    BinaryExpression(left, right)
 
-data class UnaryMinusExpression(val value: Expression, override val position: Position? = null) : Expression
+data class UnaryMinusExpression(val value: Expression, override var position: Position? = null) : Expression()
 
-data class TypeConversion(val value: Expression, val targetType: Type, override val position: Position? = null) :
-    Expression
+data class TypeConversion(val value: Expression, val targetType: Type, override var position: Position? = null) :
+    Expression()
 
-data class VarReference(val varName: String, override val position: Position? = null) : Expression
+data class VarReference(val varName: String, override var position: Position? = null) : Expression()
 
-data class IntLit(val value: String, override val position: Position? = null) : Expression
+data class IntLit(val value: String, override var position: Position? = null) : Expression()
 
-data class DecLit(val value: String, override val position: Position? = null) : Expression
+data class DecLit(val value: String, override var position: Position? = null) : Expression()
 
 //
 // Statements
 //
 
-data class VarDeclaration(val varName: String, val value: Expression, override val position: Position? = null) :
-    Statement
+data class VarDeclaration(val varName: String, val value: Expression, override var position: Position? = null) :
+    Statement()
 
-data class ReadOnlyVarDeclaration(val varName: String, val value: Expression, override val position: Position? = null) :
-    Statement
+data class ReadOnlyVarDeclaration(val varName: String, val value: Expression, override var position: Position? = null) :
+    Statement()
 
-data class Assignment(val varName: String, val value: Expression, override val position: Position? = null) : Statement
+data class Assignment(val varName: String, val value: Expression, override var position: Position? = null) : Statement()
 
-data class Print(val value: Expression, override val position: Position? = null) : Statement
+data class Print(val value: Expression, override var position: Position? = null) : Statement()
