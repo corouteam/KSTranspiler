@@ -41,7 +41,7 @@ RPAREN
 ID
 
 rule names:
-sandyFile
+kotlinFile
 line
 statement
 print

@@ -6,19 +6,16 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
 
-
-import it.poliba.KSTranspiler.SandyLexer
-
 class LexerTest {
-   fun lexerForCode(code: String) = it.poliba.KSTranspiler.SandyLexer(CharStreams.fromString(code))
-    fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.SandyLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.sandy")))
-    fun tokens(lexer: SandyLexer): List<String> {
+   fun lexerForCode(code: String) = it.poliba.KSTranspiler.KotlinLexer(CharStreams.fromString(code))
+    fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin")))
+    fun tokens(lexer: KotlinLexer): List<String> {
         val tokens = LinkedList<String>()
         do {
             val t = lexer.nextToken()
             when (t.type) {
                 -1 -> tokens.add("EOF")
-                else -> if (t.type != SandyLexer.WS) tokens.add(lexer.ruleNames[t.type - 1])
+                else -> if (t.type != KotlinLexer.WS) tokens.add(lexer.ruleNames[t.type - 1])
             }
         } while (t.type != -1)
         return tokens

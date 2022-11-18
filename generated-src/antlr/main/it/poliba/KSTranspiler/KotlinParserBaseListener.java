@@ -6,240 +6,240 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link SandyParserListener},
+ * This class provides an empty implementation of {@link KotlinParserListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
 @SuppressWarnings("CheckReturnValue")
-public class SandyParserBaseListener implements SandyParserListener {
+public class KotlinParserBaseListener implements KotlinParserListener {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSandyFile(SandyParser.SandyFileContext ctx) { }
+	@Override public void enterKotlinFile(KotlinParser.KotlinFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSandyFile(SandyParser.SandyFileContext ctx) { }
+	@Override public void exitKotlinFile(KotlinParser.KotlinFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLine(SandyParser.LineContext ctx) { }
+	@Override public void enterLine(KotlinParser.LineContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLine(SandyParser.LineContext ctx) { }
+	@Override public void exitLine(KotlinParser.LineContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDeclarationStatement(SandyParser.VarDeclarationStatementContext ctx) { }
+	@Override public void enterVarDeclarationStatement(KotlinParser.VarDeclarationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarDeclarationStatement(SandyParser.VarDeclarationStatementContext ctx) { }
+	@Override public void exitVarDeclarationStatement(KotlinParser.VarDeclarationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignmentStatement(SandyParser.AssignmentStatementContext ctx) { }
+	@Override public void enterAssignmentStatement(KotlinParser.AssignmentStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignmentStatement(SandyParser.AssignmentStatementContext ctx) { }
+	@Override public void exitAssignmentStatement(KotlinParser.AssignmentStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrintStatement(SandyParser.PrintStatementContext ctx) { }
+	@Override public void enterPrintStatement(KotlinParser.PrintStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrintStatement(SandyParser.PrintStatementContext ctx) { }
+	@Override public void exitPrintStatement(KotlinParser.PrintStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLetDeclarationStatement(SandyParser.LetDeclarationStatementContext ctx) { }
+	@Override public void enterLetDeclarationStatement(KotlinParser.LetDeclarationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLetDeclarationStatement(SandyParser.LetDeclarationStatementContext ctx) { }
+	@Override public void exitLetDeclarationStatement(KotlinParser.LetDeclarationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrint(SandyParser.PrintContext ctx) { }
+	@Override public void enterPrint(KotlinParser.PrintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrint(SandyParser.PrintContext ctx) { }
+	@Override public void exitPrint(KotlinParser.PrintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDeclaration(SandyParser.VarDeclarationContext ctx) { }
+	@Override public void enterVarDeclaration(KotlinParser.VarDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarDeclaration(SandyParser.VarDeclarationContext ctx) { }
+	@Override public void exitVarDeclaration(KotlinParser.VarDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLetDeclaration(SandyParser.LetDeclarationContext ctx) { }
+	@Override public void enterLetDeclaration(KotlinParser.LetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLetDeclaration(SandyParser.LetDeclarationContext ctx) { }
+	@Override public void exitLetDeclaration(KotlinParser.LetDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignment(SandyParser.AssignmentContext ctx) { }
+	@Override public void enterAssignment(KotlinParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignment(SandyParser.AssignmentContext ctx) { }
+	@Override public void exitAssignment(KotlinParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDecimalLiteral(SandyParser.DecimalLiteralContext ctx) { }
+	@Override public void enterDecimalLiteral(KotlinParser.DecimalLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDecimalLiteral(SandyParser.DecimalLiteralContext ctx) { }
+	@Override public void exitDecimalLiteral(KotlinParser.DecimalLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMinusExpression(SandyParser.MinusExpressionContext ctx) { }
+	@Override public void enterMinusExpression(KotlinParser.MinusExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMinusExpression(SandyParser.MinusExpressionContext ctx) { }
+	@Override public void exitMinusExpression(KotlinParser.MinusExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntLiteral(SandyParser.IntLiteralContext ctx) { }
+	@Override public void enterIntLiteral(KotlinParser.IntLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntLiteral(SandyParser.IntLiteralContext ctx) { }
+	@Override public void exitIntLiteral(KotlinParser.IntLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParenExpression(SandyParser.ParenExpressionContext ctx) { }
+	@Override public void enterParenExpression(KotlinParser.ParenExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParenExpression(SandyParser.ParenExpressionContext ctx) { }
+	@Override public void exitParenExpression(KotlinParser.ParenExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinaryOperation(SandyParser.BinaryOperationContext ctx) { }
+	@Override public void enterBinaryOperation(KotlinParser.BinaryOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinaryOperation(SandyParser.BinaryOperationContext ctx) { }
+	@Override public void exitBinaryOperation(KotlinParser.BinaryOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypeConversion(SandyParser.TypeConversionContext ctx) { }
+	@Override public void enterTypeConversion(KotlinParser.TypeConversionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypeConversion(SandyParser.TypeConversionContext ctx) { }
+	@Override public void exitTypeConversion(KotlinParser.TypeConversionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarReference(SandyParser.VarReferenceContext ctx) { }
+	@Override public void enterVarReference(KotlinParser.VarReferenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarReference(SandyParser.VarReferenceContext ctx) { }
+	@Override public void exitVarReference(KotlinParser.VarReferenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInteger(SandyParser.IntegerContext ctx) { }
+	@Override public void enterInteger(KotlinParser.IntegerContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInteger(SandyParser.IntegerContext ctx) { }
+	@Override public void exitInteger(KotlinParser.IntegerContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDecimal(SandyParser.DecimalContext ctx) { }
+	@Override public void enterDecimal(KotlinParser.DecimalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDecimal(SandyParser.DecimalContext ctx) { }
+	@Override public void exitDecimal(KotlinParser.DecimalContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

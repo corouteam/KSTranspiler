@@ -7,18 +7,18 @@ import toParseTree
 import java.io.*
 import java.util.*
 
-class SandyParserTest {
+class KotlinParserTest {
 
     fun lexerForResource(resourceName: String) =
-        it.poliba.KSTranspiler.SandyLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.sandy")))
-    fun parseResource(resourceName: String) : SandyParser.SandyFileContext = it.poliba.KSTranspiler.SandyParser(
+        it.poliba.KSTranspiler.KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.txt")))
+    fun parseResource(resourceName: String) : KotlinParser.KotlinFileContext = it.poliba.KSTranspiler.KotlinParser(
         CommonTokenStream(lexerForResource(resourceName))
-    ).sandyFile()
+    ).kotlinFile()
 
     @Test
     fun parseAdditionAssignment() {
         assertEquals(
-            """SandyFile
+            """KotlinFile
   Line
     AssignmentStatement
       Assignment
@@ -38,7 +38,7 @@ class SandyParserTest {
     @Test
     fun parseSimplestVarDecl() {
         assertEquals(
-            """SandyFile
+            """KotlinFile
   Line
     VarDeclarationStatement
       VarDeclaration
@@ -56,7 +56,7 @@ class SandyParserTest {
     @Test
     fun parseSimplestLetDecl() {
         assertEquals(
-            """SandyFile
+            """KotlinFile
   Line
     LetDeclarationStatement
       LetDeclaration
@@ -74,7 +74,7 @@ class SandyParserTest {
    @Test
    fun parsePrecedenceExpressions() {
         assertEquals(
-            """SandyFile
+            """KotlinFile
   Line
     VarDeclarationStatement
       VarDeclaration

@@ -78,10 +78,10 @@ fun Node.transform(operation: (Node) -> Node) : Node {
 }
 
 //
-// Sandy specific part
+// Kotlin specific part
 //
 */
-data class SandyFile(val statements : List<Statement>, override var position: Position? = null) : Node()
+data class KotlinFile(val statements : List<Statement>, override var position: Position? = null) : Node()
 
 sealed class Statement : Node() { }
 

@@ -1,4 +1,4 @@
-lexer grammar SandyLexer;
+lexer grammar KotlinLexer;
 
 // Whitespace
 NEWLINE            : '\r\n' | 'r' | '\n' ;

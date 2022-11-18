@@ -1,8 +1,8 @@
-parser grammar SandyParser;
+parser grammar KotlinParser;
 
-options { tokenVocab=SandyLexer; }
+options { tokenVocab=KotlinLexer; }
 
-sandyFile : lines=line+ ;
+kotlinFile : lines=line+ ;
 
 line      : statement (NEWLINE | EOF) ;
 

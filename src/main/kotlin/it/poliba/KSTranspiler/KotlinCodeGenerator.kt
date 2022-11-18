@@ -5,9 +5,9 @@ import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.util.function.BinaryOperator
 
-val group: STGroup = STGroupFile("/Users/annalabellarte/Dev/Università/KSTranspiler2/src/main/antlr/test.stg")
+val group: STGroup = STGroupFile("/Users/annalabellarte/Dev/Università/KSTranspiler2/src/main/antlr/SwiftTemplate.stg")
 
-fun SandyFile.generateCode(): String{
+fun KotlinFile.generateCode(): String{
     return statements.map { it.generateCode() }.joinToString("\n")
 }
 
@@ -42,8 +42,8 @@ fun Expression.generateCode() : String = when (this) {
     is DecLit -> this.value
     is VarReference -> this.varName
     is BinaryExpression -> this.generateCode()
-    //is SandyParser.ParenExpressionContext -> expression().toAst(considerPosition)
-    //is SandyParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
+    //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
+    //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

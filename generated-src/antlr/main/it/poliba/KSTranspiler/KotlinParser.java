@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
-public class SandyParser extends Parser {
+public class KotlinParser extends Parser {
 	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -21,12 +21,12 @@ public class SandyParser extends Parser {
 		DECLIT=10, PLUS=11, MINUS=12, ASTERISK=13, DIVISION=14, ASSIGN=15, LPAREN=16, 
 		RPAREN=17, ID=18;
 	public static final int
-		RULE_sandyFile = 0, RULE_line = 1, RULE_statement = 2, RULE_print = 3, 
+		RULE_kotlinFile = 0, RULE_line = 1, RULE_statement = 2, RULE_print = 3, 
 		RULE_varDeclaration = 4, RULE_letDeclaration = 5, RULE_assignment = 6, 
 		RULE_expression = 7, RULE_type = 8;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"sandyFile", "line", "statement", "print", "varDeclaration", "letDeclaration", 
+			"kotlinFile", "line", "statement", "print", "varDeclaration", "letDeclaration", 
 			"assignment", "expression", "type"
 		};
 	}
@@ -92,13 +92,13 @@ public class SandyParser extends Parser {
 	@Override
 	public ATN getATN() { return _ATN; }
 
-	public SandyParser(TokenStream input) {
+	public KotlinParser(TokenStream input) {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class SandyFileContext extends ParserRuleContext {
+	public static class KotlinFileContext extends ParserRuleContext {
 		public LineContext lines;
 		public List<LineContext> line() {
 			return getRuleContexts(LineContext.class);
@@ -106,23 +106,23 @@ public class SandyParser extends Parser {
 		public LineContext line(int i) {
 			return getRuleContext(LineContext.class,i);
 		}
-		public SandyFileContext(ParserRuleContext parent, int invokingState) {
+		public KotlinFileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_sandyFile; }
+		@Override public int getRuleIndex() { return RULE_kotlinFile; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterSandyFile(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterKotlinFile(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitSandyFile(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitKotlinFile(this);
 		}
 	}
 
-	public final SandyFileContext sandyFile() throws RecognitionException {
-		SandyFileContext _localctx = new SandyFileContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_sandyFile);
+	public final KotlinFileContext kotlinFile() throws RecognitionException {
+		KotlinFileContext _localctx = new KotlinFileContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_kotlinFile);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -134,7 +134,7 @@ public class SandyParser extends Parser {
 				{
 				{
 				setState(18);
-				((SandyFileContext)_localctx).lines = line();
+				((KotlinFileContext)_localctx).lines = line();
 				}
 				}
 				setState(21); 
@@ -159,19 +159,19 @@ public class SandyParser extends Parser {
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
-		public TerminalNode NEWLINE() { return getToken(SandyParser.NEWLINE, 0); }
-		public TerminalNode EOF() { return getToken(SandyParser.EOF, 0); }
+		public TerminalNode NEWLINE() { return getToken(KotlinParser.NEWLINE, 0); }
+		public TerminalNode EOF() { return getToken(KotlinParser.EOF, 0); }
 		public LineContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_line; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterLine(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterLine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitLine(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitLine(this);
 		}
 	}
 
@@ -227,11 +227,11 @@ public class SandyParser extends Parser {
 		public PrintStatementContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterPrintStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterPrintStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitPrintStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitPrintStatement(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -242,11 +242,11 @@ public class SandyParser extends Parser {
 		public AssignmentStatementContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterAssignmentStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterAssignmentStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitAssignmentStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitAssignmentStatement(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -257,11 +257,11 @@ public class SandyParser extends Parser {
 		public LetDeclarationStatementContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterLetDeclarationStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterLetDeclarationStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitLetDeclarationStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitLetDeclarationStatement(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -272,11 +272,11 @@ public class SandyParser extends Parser {
 		public VarDeclarationStatementContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterVarDeclarationStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterVarDeclarationStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitVarDeclarationStatement(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitVarDeclarationStatement(this);
 		}
 	}
 
@@ -336,23 +336,23 @@ public class SandyParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class PrintContext extends ParserRuleContext {
-		public TerminalNode PRINT() { return getToken(SandyParser.PRINT, 0); }
-		public TerminalNode LPAREN() { return getToken(SandyParser.LPAREN, 0); }
+		public TerminalNode PRINT() { return getToken(KotlinParser.PRINT, 0); }
+		public TerminalNode LPAREN() { return getToken(KotlinParser.LPAREN, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public TerminalNode RPAREN() { return getToken(SandyParser.RPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(KotlinParser.RPAREN, 0); }
 		public PrintContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_print; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterPrint(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterPrint(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitPrint(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitPrint(this);
 		}
 	}
 
@@ -385,7 +385,7 @@ public class SandyParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class VarDeclarationContext extends ParserRuleContext {
-		public TerminalNode VAR() { return getToken(SandyParser.VAR, 0); }
+		public TerminalNode VAR() { return getToken(KotlinParser.VAR, 0); }
 		public AssignmentContext assignment() {
 			return getRuleContext(AssignmentContext.class,0);
 		}
@@ -395,11 +395,11 @@ public class SandyParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_varDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterVarDeclaration(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterVarDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitVarDeclaration(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitVarDeclaration(this);
 		}
 	}
 
@@ -428,7 +428,7 @@ public class SandyParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class LetDeclarationContext extends ParserRuleContext {
-		public TerminalNode LET() { return getToken(SandyParser.LET, 0); }
+		public TerminalNode LET() { return getToken(KotlinParser.LET, 0); }
 		public AssignmentContext assignment() {
 			return getRuleContext(AssignmentContext.class,0);
 		}
@@ -438,11 +438,11 @@ public class SandyParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_letDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterLetDeclaration(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterLetDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitLetDeclaration(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitLetDeclaration(this);
 		}
 	}
 
@@ -471,8 +471,8 @@ public class SandyParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class AssignmentContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(SandyParser.ID, 0); }
-		public TerminalNode ASSIGN() { return getToken(SandyParser.ASSIGN, 0); }
+		public TerminalNode ID() { return getToken(KotlinParser.ID, 0); }
+		public TerminalNode ASSIGN() { return getToken(KotlinParser.ASSIGN, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -482,11 +482,11 @@ public class SandyParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_assignment; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterAssignment(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterAssignment(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitAssignment(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitAssignment(this);
 		}
 	}
 
@@ -529,61 +529,61 @@ public class SandyParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DecimalLiteralContext extends ExpressionContext {
-		public TerminalNode DECLIT() { return getToken(SandyParser.DECLIT, 0); }
+		public TerminalNode DECLIT() { return getToken(KotlinParser.DECLIT, 0); }
 		public DecimalLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterDecimalLiteral(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterDecimalLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitDecimalLiteral(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitDecimalLiteral(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class MinusExpressionContext extends ExpressionContext {
-		public TerminalNode MINUS() { return getToken(SandyParser.MINUS, 0); }
+		public TerminalNode MINUS() { return getToken(KotlinParser.MINUS, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public MinusExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterMinusExpression(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterMinusExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitMinusExpression(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitMinusExpression(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IntLiteralContext extends ExpressionContext {
-		public TerminalNode INTLIT() { return getToken(SandyParser.INTLIT, 0); }
+		public TerminalNode INTLIT() { return getToken(KotlinParser.INTLIT, 0); }
 		public IntLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterIntLiteral(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterIntLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitIntLiteral(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitIntLiteral(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ParenExpressionContext extends ExpressionContext {
-		public TerminalNode LPAREN() { return getToken(SandyParser.LPAREN, 0); }
+		public TerminalNode LPAREN() { return getToken(KotlinParser.LPAREN, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public TerminalNode RPAREN() { return getToken(SandyParser.RPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(KotlinParser.RPAREN, 0); }
 		public ParenExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterParenExpression(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterParenExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitParenExpression(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitParenExpression(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -597,25 +597,25 @@ public class SandyParser extends Parser {
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
-		public TerminalNode DIVISION() { return getToken(SandyParser.DIVISION, 0); }
-		public TerminalNode ASTERISK() { return getToken(SandyParser.ASTERISK, 0); }
-		public TerminalNode PLUS() { return getToken(SandyParser.PLUS, 0); }
-		public TerminalNode MINUS() { return getToken(SandyParser.MINUS, 0); }
+		public TerminalNode DIVISION() { return getToken(KotlinParser.DIVISION, 0); }
+		public TerminalNode ASTERISK() { return getToken(KotlinParser.ASTERISK, 0); }
+		public TerminalNode PLUS() { return getToken(KotlinParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(KotlinParser.MINUS, 0); }
 		public BinaryOperationContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterBinaryOperation(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterBinaryOperation(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitBinaryOperation(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitBinaryOperation(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TypeConversionContext extends ExpressionContext {
 		public ExpressionContext value;
 		public TypeContext targetType;
-		public TerminalNode AS() { return getToken(SandyParser.AS, 0); }
+		public TerminalNode AS() { return getToken(KotlinParser.AS, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -625,24 +625,24 @@ public class SandyParser extends Parser {
 		public TypeConversionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterTypeConversion(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterTypeConversion(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitTypeConversion(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitTypeConversion(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class VarReferenceContext extends ExpressionContext {
-		public TerminalNode ID() { return getToken(SandyParser.ID, 0); }
+		public TerminalNode ID() { return getToken(KotlinParser.ID, 0); }
 		public VarReferenceContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterVarReference(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterVarReference(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitVarReference(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitVarReference(this);
 		}
 	}
 
@@ -823,28 +823,28 @@ public class SandyParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IntegerContext extends TypeContext {
-		public TerminalNode INT() { return getToken(SandyParser.INT, 0); }
+		public TerminalNode INT() { return getToken(KotlinParser.INT, 0); }
 		public IntegerContext(TypeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterInteger(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterInteger(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitInteger(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitInteger(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DecimalContext extends TypeContext {
-		public TerminalNode DECIMAL() { return getToken(SandyParser.DECIMAL, 0); }
+		public TerminalNode DECIMAL() { return getToken(KotlinParser.DECIMAL, 0); }
 		public DecimalContext(TypeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).enterDecimal(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterDecimal(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SandyParserListener ) ((SandyParserListener)listener).exitDecimal(this);
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitDecimal(this);
 		}
 	}
 

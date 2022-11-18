@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
-public class SandyLexer extends Lexer {
+public class KotlinLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -86,13 +86,13 @@ public class SandyLexer extends Lexer {
 	}
 
 
-	public SandyLexer(CharStream input) {
+	public KotlinLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "SandyLexer.g4"; }
+	public String getGrammarFileName() { return "KotlinLexer.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

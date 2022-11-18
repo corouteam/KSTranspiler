@@ -1,8 +1,8 @@
 package it.poliba.KSTranspiler.parsing
 
 
-import it.poliba.KSTranspiler.SandyParser
-import it.poliba.KSTranspiler.SandyLexer
+import it.poliba.KSTranspiler.KotlinLexer
+import it.poliba.KSTranspiler.KotlinParser
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.atn.ATNConfigSet
 import org.antlr.v4.runtime.dfa.DFA
@@ -15,13 +15,13 @@ import java.util.*
 
 data class Error(val message: String)
 
-data class ParsingResult(val root : SandyParser.SandyFileContext?, val errors: List<Error>) {
+data class ParsingResult(val root : KotlinParser.KotlinFileContext?, val errors: List<Error>) {
     fun isCorrect() = errors.isEmpty() && root != null
 }
 
 fun String.toStream(charset: Charset = Charsets.UTF_8) = ByteArrayInputStream(toByteArray(charset))
 
-object SandyParserFacade {
+object KotlinParserFacade {
 
     fun parse(code: String) : ParsingResult = parse(code.toStream())
 
@@ -47,13 +47,13 @@ object SandyParserFacade {
             }
         }
 
-        val lexer = SandyLexer(ANTLRInputStream(inputStream))
+        val lexer = KotlinLexer(ANTLRInputStream(inputStream))
         lexer.removeErrorListeners()
         lexer.addErrorListener(errorListener)
-        val parser = SandyParser(CommonTokenStream(lexer))
+        val parser = KotlinParser(CommonTokenStream(lexer))
         parser.removeErrorListeners()
         parser.addErrorListener(errorListener)
-        val root = parser.sandyFile()
+        val root = parser.kotlinFile()
         return ParsingResult(root, errors)
     }
 
