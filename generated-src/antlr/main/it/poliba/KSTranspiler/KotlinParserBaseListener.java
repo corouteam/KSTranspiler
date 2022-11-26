@@ -149,6 +149,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStringLiteral(KotlinParser.StringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringLiteral(KotlinParser.StringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIntLiteral(KotlinParser.IntLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -264,6 +276,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBool(KotlinParser.BoolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterString(KotlinParser.StringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitString(KotlinParser.StringContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -72,4 +72,14 @@ class MappingTest {
         ))
         assertEquals(expectedAst, ast)
     }
+
+    @Test
+    fun mapPrint() {
+        val code = "print('a')"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            Print(VarReference("a", StringType() ))
+        ))
+        assertEquals(expectedAst, ast)
+    }
 }

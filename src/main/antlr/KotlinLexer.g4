@@ -12,8 +12,9 @@ VAL                : 'val' ;
 PRINT              : 'print';
 AS                 : 'as';
 INT                : 'Int';
-DOUBLE              : 'Double';
+DOUBLE             : 'Double';
 BOOL               : 'Bool';
+STRING             : 'String';
 
 INT_LIT
     : DecDigitNoZero DecDigit*

@@ -30,9 +30,11 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | MINUS expression                                              # minusExpression
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
-           | BOOL_LIT                                                      # boolLiteral;
+           | BOOL_LIT                                                      # boolLiteral
+           | STRING_LIT                                                    # stringLiteral;
 
 type : INT     # integer |
        DOUBLE  # double |
-       BOOL    # bool;
+       BOOL    # bool |
+       STRING  # string;
 

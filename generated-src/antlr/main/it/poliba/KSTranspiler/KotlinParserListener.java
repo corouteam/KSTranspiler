@@ -126,6 +126,18 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitMinusExpression(KotlinParser.MinusExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code stringLiteral}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringLiteral(KotlinParser.StringLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringLiteral}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringLiteral(KotlinParser.StringLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code intLiteral}
 	 * labeled alternative in {@link KotlinParser#expression}.
 	 * @param ctx the parse tree
@@ -245,4 +257,16 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBool(KotlinParser.BoolContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code string}
+	 * labeled alternative in {@link KotlinParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterString(KotlinParser.StringContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code string}
+	 * labeled alternative in {@link KotlinParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitString(KotlinParser.StringContext ctx);
 }

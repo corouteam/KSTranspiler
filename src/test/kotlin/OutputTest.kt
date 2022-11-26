@@ -62,10 +62,10 @@ class OutputTest {
 
     @Test
     fun convertPrintPropertyDefinition(){
-        var code = "print(5)"
+        var code = "print('5')"
         val parseResult = KotlinParserFacade.parse(code).root!!
         var ast = parseResult.toAst()
-        val expected = "print(5)"
+        val expected = "print('5')"
         assertEquals(expected, ast.generateCode())
     }
 }

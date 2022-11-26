@@ -70,6 +70,10 @@ class LexerTest {
             tokens(lexerForCode("1 + (a * 3) - 5.12")))
     }
 
-
+    @Test
+    fun parsePrintDeclarationLiteral() {
+        assertEquals(listOf("PRINT", "LPAREN", "ID", "RPAREN", "EOF"),
+            tokens(lexerForCode("print('ciao')")))
+    }
 
 }
