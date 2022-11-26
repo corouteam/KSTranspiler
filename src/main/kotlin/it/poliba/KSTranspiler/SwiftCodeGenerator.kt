@@ -12,8 +12,6 @@ fun KotlinFile.generateCode(): String{
 fun Statement.generateCode(): String {
     return when (this) {
         is PropertyDeclaration -> this.generateCode()
-        is VarDeclaration -> this.generateCode()
-        is ReadOnlyVarDeclaration -> this.generateCode()
         is Assignment -> this.generateCode()
         is Print -> this.generateCode()
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -30,22 +28,6 @@ fun PropertyDeclaration.generateCode(): String{
     st.add("type", type.generateCode())
     st.add("value", value.generateCode())
     st.add("mutable", mutable)
-    return st.render()
-}
-
-fun VarDeclaration.generateCode(): String{
-    val st = group.getInstanceOf("decl")
-    st.add("type", "var")
-    st.add("name", this.varName)
-    st.add("value", this.value.generateCode())
-    return st.render()
-}
-
-fun ReadOnlyVarDeclaration.generateCode(): String{
-    val st = group.getInstanceOf("decl")
-    st.add("type", "let")
-    st.add("name", this.varName)
-    st.add("value", this.value.generateCode())
     return st.render()
 }
 

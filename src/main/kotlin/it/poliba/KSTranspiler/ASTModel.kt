@@ -67,11 +67,6 @@ data class DecLit(val value: String, override var position: Position? = null) : 
 
 data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression, var mutable: Boolean,  override  var position: Position? = null) :
 Statement()
-data class VarDeclaration(val varName: String, val value: Expression, override var position: Position? = null) :
-    Statement()
-
-data class ReadOnlyVarDeclaration(val varName: String, val value: Expression, override var position: Position? = null) :
-    Statement()
 
 data class Assignment(val varName: String, val value: Expression, override var position: Position? = null) : Statement()
 
