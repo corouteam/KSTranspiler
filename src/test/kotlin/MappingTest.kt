@@ -82,4 +82,14 @@ class MappingTest {
         ))
         assertEquals(expectedAst, ast)
     }
+
+    @Test
+    fun mapAssignment() {
+        val code = "a = 5"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            Assignment("a", IntLit("5"))
+        ))
+        assertEquals(expectedAst, ast)
+    }
 }

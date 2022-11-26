@@ -76,4 +76,10 @@ class LexerTest {
             tokens(lexerForCode("print('ciao')")))
     }
 
+    @Test
+    fun parseAssignmentDeclarationLiteral() {
+        assertEquals(listOf("ID", "ASSIGN", "INT_LIT", "EOF"),
+            tokens(lexerForCode("a = 5")))
+    }
+
 }
