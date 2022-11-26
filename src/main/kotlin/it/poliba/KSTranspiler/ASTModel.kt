@@ -97,6 +97,8 @@ data class IntType(override var position: Position? = null) : Type()
 
 data class DecimalType(override var position: Position? = null) : Type()
 
+data class DoubleType(override var position: Position? = null) : Type()
+
 //
 // Expressions
 //

@@ -4,7 +4,7 @@ import it.poliba.KSranspiler.*
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 
-val group: STGroup = STGroupFile("/Users/annalabellarte/Dev/Università/KSTranspiler2/src/main/antlr/SwiftTemplate.stg")
+val group: STGroup = STGroupFile("/Users/francescopaolodellaquila/Desktop/UNIVERSITA/Magistrale/Language/KSTranspiler/src/main/antlr/SwiftTemplate.stg")
 
 fun KotlinFile.generateCode(): String{
     return statements.map { it.generateCode() }.joinToString("\n")
@@ -58,13 +58,14 @@ fun Expression.generateCode() : String = when (this) {
 
 fun Type.generateCode() : String = when (this) {
     is IntType -> "Int"
+    is DecimalType -> "Double"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun BinaryExpression.generateCode(): String = when(this){
     is SumExpression -> "${left.generateCode()} + ${right.generateCode()}"
-    is SubtractionExpression -> "${left.generateCode()} + ${right.generateCode()}"
-    is MultiplicationExpression -> "${left.generateCode()} + ${right.generateCode()}"
-    is DivisionExpression -> "${left.generateCode()} + ${right.generateCode()}"
+    is SubtractionExpression -> "${left.generateCode()} - ${right.generateCode()}"
+    is MultiplicationExpression -> "${left.generateCode()} * ${right.generateCode()}"
+    is DivisionExpression -> "${left.generateCode()} / ${right.generateCode()}"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
