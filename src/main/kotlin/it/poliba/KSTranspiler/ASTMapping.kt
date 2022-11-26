@@ -29,12 +29,8 @@ fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
 fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
     is KotlinParser.PropertyDeclarationStatementContext -> this.propertyDeclaration().toAst(considerPosition)
     is KotlinParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
-    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
-    /*is KotlinParser.VarDeclarationStatementContext -> VarDeclaration(varDeclaration().assignment().ID().text, varDeclaration().assignment().expression().toAst(considerPosition), toPosition(considerPosition))
-    is KotlinParser.LetDeclarationStatementContext -> ReadOnlyVarDeclaration(letDeclaration().assignment().ID().text, letDeclaration().assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
-    is KotlinParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
-    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)*/
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun KotlinParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Statement {
@@ -49,6 +45,7 @@ fun KotlinParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fa
 
     }
 }
+
 fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     /*is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
@@ -58,6 +55,9 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.VarReferenceContext -> VarReference(text, toPosition(considerPosition))
     is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     */
+    //is KotlinParser.VarReferenceContext -> VarReference(text, toPosition(considerPosition))
+    //is KotlinParser.PrintContext -> PrintLit(expression().toAst(), toPosition(considerPosition))
+    is KotlinParser.VarReferenceContext -> VarReference(text, type = StringType(),  toPosition(considerPosition))
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DecLit(text, toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -65,7 +65,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
 
 fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
     is KotlinParser.IntegerContext -> IntType(toPosition(considerPosition))
-   is KotlinParser.DoubleContext -> DoubleType(toPosition(considerPosition))
+    is KotlinParser.DoubleContext -> DoubleType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

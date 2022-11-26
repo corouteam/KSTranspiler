@@ -15,8 +15,8 @@ fun Statement.generateCode(): String {
         is PropertyDeclaration -> this.generateCode()
         is VarDeclaration -> this.generateCode()
         is ReadOnlyVarDeclaration -> this.generateCode()
-        is Assignment -> "TODO ASSIGNMENT"
-        is Print -> "TODO PRINT"
+        is Assignment -> this.generateCode()
+        is Print -> this.generateCode()
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
 }
@@ -59,6 +59,7 @@ fun Expression.generateCode() : String = when (this) {
 fun Type.generateCode() : String = when (this) {
     is IntType -> "Int"
     is DecimalType -> "Double"
+    is StringType -> "String"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

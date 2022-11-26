@@ -52,6 +52,15 @@ class OutputTest {
     }
 
     @Test
+    fun convertAssignmentPropertyDefinition(){
+        var code = "val a = 'ciao'"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        var ast = parseResult.toAst()
+        val expected = "let a: String = 'ciao'"
+        assertEquals(expected, ast.generateCode())
+    }
+
+    @Test
     fun convertPrintPropertyDefinition(){
         var code = "print('test')"
         val parseResult = KotlinParserFacade.parse(code).root!!
