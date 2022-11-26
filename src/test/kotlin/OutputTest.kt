@@ -44,7 +44,7 @@ class OutputTest {
 
     @Test
     fun convertDivisionPropertyDefinition(){
-        var code = "val a = 5 / 7"
+        var code = "val a = 5.0 / 7.0"
         val parseResult = KotlinParserFacade.parse(code).root!!
         var ast = parseResult.toAst()
         val expected = "let a:Double = 5 / 7"
@@ -56,7 +56,7 @@ class OutputTest {
         var code = "val a = 'ciao'"
         val parseResult = KotlinParserFacade.parse(code).root!!
         var ast = parseResult.toAst()
-        val expected = "let a: String = 'ciao'"
+        val expected = "let a:String = 'ciao'"
         assertEquals(expected, ast.generateCode())
     }
 
