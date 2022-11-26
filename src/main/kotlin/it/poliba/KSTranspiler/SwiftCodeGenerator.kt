@@ -4,8 +4,7 @@ import it.poliba.KSranspiler.*
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 
-val group: STGroup = STGroupFile("/Users/francescopaolodellaquila/Desktop/UNIVERSITA/Magistrale/Language/KSTranspiler/src/main/antlr/SwiftTemplate.stg")
-
+val group: STGroup = STGroupFile("/Users/annalabellarte/Dev/Università/KSTranspiler2/src/main/antlr/SwiftTemplate.stg")
 fun KotlinFile.generateCode(): String{
     return statements.map { it.generateCode() }.joinToString("\n")
 }
@@ -19,6 +18,10 @@ fun Statement.generateCode(): String {
         is Print -> this.generateCode()
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
+}
+
+fun Print.generateCode(): String{
+    return "print(${value.generateCode()})"
 }
 
 fun PropertyDeclaration.generateCode(): String{
