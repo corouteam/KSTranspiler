@@ -26,8 +26,6 @@ sealed class Type : Node() { }
 
 data class IntType(override var position: Position? = null) : Type()
 
-data class DecimalType(override var position: Position? = null) : Type()
-
 data class DoubleType(override var position: Position? = null) : Type()
 
 data class StringType(override var position: Position? = null) : Type()
@@ -59,7 +57,8 @@ data class VarReference(val varName: String, override var type: Type, override v
 
 data class IntLit(val value: String, override var position: Position? = null) : Expression(IntType())
 
-data class DecLit(val value: String, override var position: Position? = null) : Expression(DecimalType())
+data class DoubleLit(val value: String, override var position: Position? = null) : Expression(DoubleType())
+data class StringLit(val value: String, override var position: Position? = null) : Expression(StringType())
 
 //
 // Statements

@@ -6,11 +6,13 @@ import com.strumenta.kolasu.model.Position
 import com.sun.jdi.DoubleType
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
+import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
 import it.poliba.KSTranspiler.KotlinParser.VarDeclarationContext
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 
 import it.poliba.KSranspiler.*
+import java.lang.Exception
 
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
@@ -48,21 +50,18 @@ fun KotlinParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fa
 
 fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
-    /*is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
-    is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
-    is KotlinParser.DecimalLiteralContext -> DecLit(text, toPosition(considerPosition))
-    is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
-    is KotlinParser.VarReferenceContext -> VarReference(text, toPosition(considerPosition))
-    is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
-    */
-    //is KotlinParser.VarReferenceContext -> VarReference(text, toPosition(considerPosition))
-    //is KotlinParser.PrintContext -> PrintLit(expression().toAst(), toPosition(considerPosition))
+    is KotlinParser.StringLiteralExpressionContext -> toAst(considerPosition)
     is KotlinParser.VarReferenceContext -> VarReference(text, type = StringType(),  toPosition(considerPosition))
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
-    is KotlinParser.DoubleLiteralContext-> DecLit(text, toPosition(considerPosition))
+    is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
+fun KotlinParser.StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{
+    var valueString = ""
+    this.stringLiteral().lineStringLiteral().lineStringContent().forEach { valueString = valueString + ""+it.LineStrText().text }
+    return StringLit(valueString, toPosition(considerPosition))
+}
 fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
     is KotlinParser.IntegerContext -> IntType(toPosition(considerPosition))
     is KotlinParser.DoubleContext -> DoubleType(toPosition(considerPosition))

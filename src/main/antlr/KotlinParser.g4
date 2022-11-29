@@ -22,6 +22,7 @@ propertyDeclaration:  (varDeclaration|valDeclaration) ASSIGN expression;
 
 assignment : ID ASSIGN expression ;
 
+
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
@@ -31,10 +32,25 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
-           | STRING_LIT                                                    # stringLiteral;
+           | stringLiteral                                                 # stringLiteralExpression;
+
+stringLiteral
+   : lineStringLiteral;
+
+
+lineStringLiteral
+   : QUOTE_OPEN (lineStringContent)* QUOTE_CLOSE
+   ;
+
+lineStringContent
+   : LineStrText
+//    | LineStrEscapedChar
+//   | LineStrRef
+   ;
 
 type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
        STRING  # string;
+
 

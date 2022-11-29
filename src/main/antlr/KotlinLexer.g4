@@ -47,11 +47,30 @@ COLON              : ':';
 // Identifiers
 ID                 : [_]*[a-z][A-Za-z0-9_]* ;
 
+
+// SECTION: strings
+
+QUOTE_OPEN: '"' -> pushMode(LineString);
+
+
+mode LineString;
+
+QUOTE_CLOSE
+    : '"' -> popMode
+    ;
+
+LineStrText
+    : ~('\\' | '"' | '$')+ | '$'
+    ;
+mode Inside;
+Inside_QUOTE_OPEN: QUOTE_OPEN -> pushMode(LineString), type(QUOTE_OPEN);
+
 // Literals
 fragment DecDigit: '0'..'9';
 fragment DecDigitNoZero: '1'..'9';
+fragment DecDigitOrSeparator: DecDigit | '_';
+
 fragment DecDigits
-    : DecDigit DecDigit*
+    : DecDigit DecDigitOrSeparator* DecDigit
     | DecDigit
     ;
-

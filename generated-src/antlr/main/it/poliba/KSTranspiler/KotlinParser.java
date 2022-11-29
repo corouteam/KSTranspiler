@@ -20,15 +20,17 @@ public class KotlinParser extends Parser {
 		NL=1, WS=2, VAR=3, VAL=4, PRINT=5, AS=6, INT=7, DOUBLE=8, BOOL=9, STRING=10, 
 		INT_LIT=11, BOOL_LIT=12, DOUBLE_LIT=13, FLOAT_LIT=14, PLUS=15, MINUS=16, 
 		ASTERISK=17, DIVISION=18, ASSIGN=19, LPAREN=20, RPAREN=21, COLON=22, ID=23, 
-		STRING_LIT=24;
+		QUOTE_OPEN=24, QUOTE_CLOSE=25, LineStrText=26;
 	public static final int
 		RULE_kotlinFile = 0, RULE_line = 1, RULE_statement = 2, RULE_print = 3, 
 		RULE_varDeclaration = 4, RULE_valDeclaration = 5, RULE_propertyDeclaration = 6, 
-		RULE_assignment = 7, RULE_expression = 8, RULE_type = 9;
+		RULE_assignment = 7, RULE_expression = 8, RULE_stringLiteral = 9, RULE_lineStringLiteral = 10, 
+		RULE_lineStringContent = 11, RULE_type = 12;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"kotlinFile", "line", "statement", "print", "varDeclaration", "valDeclaration", 
-			"propertyDeclaration", "assignment", "expression", "type"
+			"propertyDeclaration", "assignment", "expression", "stringLiteral", "lineStringLiteral", 
+			"lineStringContent", "type"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -46,7 +48,7 @@ public class KotlinParser extends Parser {
 			null, "NL", "WS", "VAR", "VAL", "PRINT", "AS", "INT", "DOUBLE", "BOOL", 
 			"STRING", "INT_LIT", "BOOL_LIT", "DOUBLE_LIT", "FLOAT_LIT", "PLUS", "MINUS", 
 			"ASTERISK", "DIVISION", "ASSIGN", "LPAREN", "RPAREN", "COLON", "ID", 
-			"STRING_LIT"
+			"QUOTE_OPEN", "QUOTE_CLOSE", "LineStrText"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -130,17 +132,17 @@ public class KotlinParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(21); 
+			setState(27); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(20);
+				setState(26);
 				((KotlinFileContext)_localctx).lines = line();
 				}
 				}
-				setState(23); 
+				setState(29); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( ((_la) & ~0x3f) == 0 && ((1L << _la) & 8388664L) != 0 );
@@ -185,9 +187,9 @@ public class KotlinParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(25);
+			setState(31);
 			statement();
-			setState(26);
+			setState(32);
 			_la = _input.LA(1);
 			if ( !(_la==EOF || _la==NL) ) {
 			_errHandler.recoverInline(this);
@@ -272,7 +274,7 @@ public class KotlinParser extends Parser {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_statement);
 		try {
-			setState(31);
+			setState(37);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case VAR:
@@ -280,7 +282,7 @@ public class KotlinParser extends Parser {
 				_localctx = new PropertyDeclarationStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(28);
+				setState(34);
 				propertyDeclaration();
 				}
 				break;
@@ -288,7 +290,7 @@ public class KotlinParser extends Parser {
 				_localctx = new AssignmentStatementContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(29);
+				setState(35);
 				assignment();
 				}
 				break;
@@ -296,7 +298,7 @@ public class KotlinParser extends Parser {
 				_localctx = new PrintStatementContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(30);
+				setState(36);
 				print();
 				}
 				break;
@@ -343,13 +345,13 @@ public class KotlinParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(33);
+			setState(39);
 			match(PRINT);
-			setState(34);
+			setState(40);
 			match(LPAREN);
-			setState(35);
+			setState(41);
 			expression(0);
-			setState(36);
+			setState(42);
 			match(RPAREN);
 			}
 		}
@@ -397,46 +399,46 @@ public class KotlinParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(38);
+			setState(44);
 			match(VAR);
-			setState(39);
+			setState(45);
 			match(ID);
-			setState(54);
+			setState(60);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NL || _la==COLON) {
 				{
-				setState(43);
+				setState(49);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==NL) {
 					{
 					{
-					setState(40);
+					setState(46);
 					match(NL);
 					}
 					}
-					setState(45);
+					setState(51);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(46);
+				setState(52);
 				match(COLON);
-				setState(50);
+				setState(56);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==NL) {
 					{
 					{
-					setState(47);
+					setState(53);
 					match(NL);
 					}
 					}
-					setState(52);
+					setState(58);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(53);
+				setState(59);
 				type();
 				}
 			}
@@ -487,46 +489,46 @@ public class KotlinParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(56);
+			setState(62);
 			match(VAL);
-			setState(57);
+			setState(63);
 			match(ID);
-			setState(72);
+			setState(78);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NL || _la==COLON) {
 				{
-				setState(61);
+				setState(67);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==NL) {
 					{
 					{
-					setState(58);
+					setState(64);
 					match(NL);
 					}
 					}
-					setState(63);
+					setState(69);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(64);
+				setState(70);
 				match(COLON);
-				setState(68);
+				setState(74);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==NL) {
 					{
 					{
-					setState(65);
+					setState(71);
 					match(NL);
 					}
 					}
-					setState(70);
+					setState(76);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(71);
+				setState(77);
 				type();
 				}
 			}
@@ -576,27 +578,27 @@ public class KotlinParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(76);
+			setState(82);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case VAR:
 				{
-				setState(74);
+				setState(80);
 				varDeclaration();
 				}
 				break;
 			case VAL:
 				{
-				setState(75);
+				setState(81);
 				valDeclaration();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(78);
+			setState(84);
 			match(ASSIGN);
-			setState(79);
+			setState(85);
 			expression(0);
 			}
 		}
@@ -638,11 +640,11 @@ public class KotlinParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(81);
+			setState(87);
 			match(ID);
-			setState(82);
+			setState(88);
 			match(ASSIGN);
-			setState(83);
+			setState(89);
 			expression(0);
 			}
 		}
@@ -670,6 +672,21 @@ public class KotlinParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class StringLiteralExpressionContext extends ExpressionContext {
+		public StringLiteralContext stringLiteral() {
+			return getRuleContext(StringLiteralContext.class,0);
+		}
+		public StringLiteralExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterStringLiteralExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitStringLiteralExpression(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class MinusExpressionContext extends ExpressionContext {
 		public TerminalNode MINUS() { return getToken(KotlinParser.MINUS, 0); }
 		public ExpressionContext expression() {
@@ -683,19 +700,6 @@ public class KotlinParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitMinusExpression(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class StringLiteralContext extends ExpressionContext {
-		public TerminalNode STRING_LIT() { return getToken(KotlinParser.STRING_LIT, 0); }
-		public StringLiteralContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterStringLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitStringLiteral(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -830,7 +834,7 @@ public class KotlinParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
+			setState(103);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LPAREN:
@@ -839,11 +843,11 @@ public class KotlinParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(86);
+				setState(92);
 				match(LPAREN);
-				setState(87);
+				setState(93);
 				expression(0);
-				setState(88);
+				setState(94);
 				match(RPAREN);
 				}
 				break;
@@ -852,7 +856,7 @@ public class KotlinParser extends Parser {
 				_localctx = new VarReferenceContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(90);
+				setState(96);
 				match(ID);
 				}
 				break;
@@ -861,9 +865,9 @@ public class KotlinParser extends Parser {
 				_localctx = new MinusExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(91);
+				setState(97);
 				match(MINUS);
-				setState(92);
+				setState(98);
 				expression(5);
 				}
 				break;
@@ -872,7 +876,7 @@ public class KotlinParser extends Parser {
 				_localctx = new IntLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(93);
+				setState(99);
 				match(INT_LIT);
 				}
 				break;
@@ -881,7 +885,7 @@ public class KotlinParser extends Parser {
 				_localctx = new DoubleLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(94);
+				setState(100);
 				match(DOUBLE_LIT);
 				}
 				break;
@@ -890,24 +894,24 @@ public class KotlinParser extends Parser {
 				_localctx = new BoolLiteralContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(95);
+				setState(101);
 				match(BOOL_LIT);
 				}
 				break;
-			case STRING_LIT:
+			case QUOTE_OPEN:
 				{
-				_localctx = new StringLiteralContext(_localctx);
+				_localctx = new StringLiteralExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(96);
-				match(STRING_LIT);
+				setState(102);
+				stringLiteral();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(110);
+			setState(116);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -915,7 +919,7 @@ public class KotlinParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(108);
+					setState(114);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 					case 1:
@@ -923,9 +927,9 @@ public class KotlinParser extends Parser {
 						_localctx = new BinaryOperationContext(new ExpressionContext(_parentctx, _parentState));
 						((BinaryOperationContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(99);
+						setState(105);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
-						setState(100);
+						setState(106);
 						((BinaryOperationContext)_localctx).operator = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==ASTERISK || _la==DIVISION) ) {
@@ -936,7 +940,7 @@ public class KotlinParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(101);
+						setState(107);
 						((BinaryOperationContext)_localctx).right = expression(11);
 						}
 						break;
@@ -945,9 +949,9 @@ public class KotlinParser extends Parser {
 						_localctx = new BinaryOperationContext(new ExpressionContext(_parentctx, _parentState));
 						((BinaryOperationContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(102);
+						setState(108);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(103);
+						setState(109);
 						((BinaryOperationContext)_localctx).operator = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==PLUS || _la==MINUS) ) {
@@ -958,7 +962,7 @@ public class KotlinParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(104);
+						setState(110);
 						((BinaryOperationContext)_localctx).right = expression(10);
 						}
 						break;
@@ -967,18 +971,18 @@ public class KotlinParser extends Parser {
 						_localctx = new TypeConversionContext(new ExpressionContext(_parentctx, _parentState));
 						((TypeConversionContext)_localctx).value = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(105);
+						setState(111);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(106);
+						setState(112);
 						match(AS);
-						setState(107);
+						setState(113);
 						((TypeConversionContext)_localctx).targetType = type();
 						}
 						break;
 					}
 					} 
 				}
-				setState(112);
+				setState(118);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
 			}
@@ -991,6 +995,146 @@ public class KotlinParser extends Parser {
 		}
 		finally {
 			unrollRecursionContexts(_parentctx);
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class StringLiteralContext extends ParserRuleContext {
+		public LineStringLiteralContext lineStringLiteral() {
+			return getRuleContext(LineStringLiteralContext.class,0);
+		}
+		public StringLiteralContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_stringLiteral; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterStringLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitStringLiteral(this);
+		}
+	}
+
+	public final StringLiteralContext stringLiteral() throws RecognitionException {
+		StringLiteralContext _localctx = new StringLiteralContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_stringLiteral);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(119);
+			lineStringLiteral();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class LineStringLiteralContext extends ParserRuleContext {
+		public TerminalNode QUOTE_OPEN() { return getToken(KotlinParser.QUOTE_OPEN, 0); }
+		public TerminalNode QUOTE_CLOSE() { return getToken(KotlinParser.QUOTE_CLOSE, 0); }
+		public List<LineStringContentContext> lineStringContent() {
+			return getRuleContexts(LineStringContentContext.class);
+		}
+		public LineStringContentContext lineStringContent(int i) {
+			return getRuleContext(LineStringContentContext.class,i);
+		}
+		public LineStringLiteralContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_lineStringLiteral; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterLineStringLiteral(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitLineStringLiteral(this);
+		}
+	}
+
+	public final LineStringLiteralContext lineStringLiteral() throws RecognitionException {
+		LineStringLiteralContext _localctx = new LineStringLiteralContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_lineStringLiteral);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(121);
+			match(QUOTE_OPEN);
+			setState(125);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==LineStrText) {
+				{
+				{
+				setState(122);
+				lineStringContent();
+				}
+				}
+				setState(127);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(128);
+			match(QUOTE_CLOSE);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class LineStringContentContext extends ParserRuleContext {
+		public TerminalNode LineStrText() { return getToken(KotlinParser.LineStrText, 0); }
+		public LineStringContentContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_lineStringContent; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).enterLineStringContent(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KotlinParserListener ) ((KotlinParserListener)listener).exitLineStringContent(this);
+		}
+	}
+
+	public final LineStringContentContext lineStringContent() throws RecognitionException {
+		LineStringContentContext _localctx = new LineStringContentContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_lineStringContent);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(130);
+			match(LineStrText);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
 		}
 		return _localctx;
 	}
@@ -1062,16 +1206,16 @@ public class KotlinParser extends Parser {
 
 	public final TypeContext type() throws RecognitionException {
 		TypeContext _localctx = new TypeContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_type);
+		enterRule(_localctx, 24, RULE_type);
 		try {
-			setState(117);
+			setState(136);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				_localctx = new IntegerContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(113);
+				setState(132);
 				match(INT);
 				}
 				break;
@@ -1079,7 +1223,7 @@ public class KotlinParser extends Parser {
 				_localctx = new DoubleContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(114);
+				setState(133);
 				match(DOUBLE);
 				}
 				break;
@@ -1087,7 +1231,7 @@ public class KotlinParser extends Parser {
 				_localctx = new BoolContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(115);
+				setState(134);
 				match(BOOL);
 				}
 				break;
@@ -1095,7 +1239,7 @@ public class KotlinParser extends Parser {
 				_localctx = new StringContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(116);
+				setState(135);
 				match(STRING);
 				}
 				break;
@@ -1134,75 +1278,86 @@ public class KotlinParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0018x\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
-		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
-		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
-		"\b\u0007\b\u0002\t\u0007\t\u0001\u0000\u0004\u0000\u0016\b\u0000\u000b"+
-		"\u0000\f\u0000\u0017\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0002\u0001"+
-		"\u0002\u0001\u0002\u0003\u0002 \b\u0002\u0001\u0003\u0001\u0003\u0001"+
-		"\u0003\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0005"+
-		"\u0004*\b\u0004\n\u0004\f\u0004-\t\u0004\u0001\u0004\u0001\u0004\u0005"+
-		"\u00041\b\u0004\n\u0004\f\u00044\t\u0004\u0001\u0004\u0003\u00047\b\u0004"+
-		"\u0001\u0005\u0001\u0005\u0001\u0005\u0005\u0005<\b\u0005\n\u0005\f\u0005"+
-		"?\t\u0005\u0001\u0005\u0001\u0005\u0005\u0005C\b\u0005\n\u0005\f\u0005"+
-		"F\t\u0005\u0001\u0005\u0003\u0005I\b\u0005\u0001\u0006\u0001\u0006\u0003"+
-		"\u0006M\b\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0007\u0001"+
+		"\u0004\u0001\u001a\u008b\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001"+
+		"\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004"+
+		"\u0002\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007"+
+		"\u0002\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b"+
+		"\u0002\f\u0007\f\u0001\u0000\u0004\u0000\u001c\b\u0000\u000b\u0000\f\u0000"+
+		"\u001d\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0002\u0001\u0002\u0001"+
+		"\u0002\u0003\u0002&\b\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
+		"\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0005\u00040\b"+
+		"\u0004\n\u0004\f\u00043\t\u0004\u0001\u0004\u0001\u0004\u0005\u00047\b"+
+		"\u0004\n\u0004\f\u0004:\t\u0004\u0001\u0004\u0003\u0004=\b\u0004\u0001"+
+		"\u0005\u0001\u0005\u0001\u0005\u0005\u0005B\b\u0005\n\u0005\f\u0005E\t"+
+		"\u0005\u0001\u0005\u0001\u0005\u0005\u0005I\b\u0005\n\u0005\f\u0005L\t"+
+		"\u0005\u0001\u0005\u0003\u0005O\b\u0005\u0001\u0006\u0001\u0006\u0003"+
+		"\u0006S\b\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0007\u0001"+
 		"\u0007\u0001\u0007\u0001\u0007\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b"+
-		"\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0003\bb\b\b"+
+		"\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0003\bh\b\b"+
 		"\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001\b\u0001"+
-		"\b\u0005\bm\b\b\n\b\f\bp\t\b\u0001\t\u0001\t\u0001\t\u0001\t\u0003\tv"+
-		"\b\t\u0001\t\u0000\u0001\u0010\n\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010"+
-		"\u0012\u0000\u0003\u0001\u0001\u0001\u0001\u0001\u0000\u0011\u0012\u0001"+
-		"\u0000\u000f\u0010\u0083\u0000\u0015\u0001\u0000\u0000\u0000\u0002\u0019"+
-		"\u0001\u0000\u0000\u0000\u0004\u001f\u0001\u0000\u0000\u0000\u0006!\u0001"+
-		"\u0000\u0000\u0000\b&\u0001\u0000\u0000\u0000\n8\u0001\u0000\u0000\u0000"+
-		"\fL\u0001\u0000\u0000\u0000\u000eQ\u0001\u0000\u0000\u0000\u0010a\u0001"+
-		"\u0000\u0000\u0000\u0012u\u0001\u0000\u0000\u0000\u0014\u0016\u0003\u0002"+
-		"\u0001\u0000\u0015\u0014\u0001\u0000\u0000\u0000\u0016\u0017\u0001\u0000"+
-		"\u0000\u0000\u0017\u0015\u0001\u0000\u0000\u0000\u0017\u0018\u0001\u0000"+
-		"\u0000\u0000\u0018\u0001\u0001\u0000\u0000\u0000\u0019\u001a\u0003\u0004"+
-		"\u0002\u0000\u001a\u001b\u0007\u0000\u0000\u0000\u001b\u0003\u0001\u0000"+
-		"\u0000\u0000\u001c \u0003\f\u0006\u0000\u001d \u0003\u000e\u0007\u0000"+
-		"\u001e \u0003\u0006\u0003\u0000\u001f\u001c\u0001\u0000\u0000\u0000\u001f"+
-		"\u001d\u0001\u0000\u0000\u0000\u001f\u001e\u0001\u0000\u0000\u0000 \u0005"+
-		"\u0001\u0000\u0000\u0000!\"\u0005\u0005\u0000\u0000\"#\u0005\u0014\u0000"+
-		"\u0000#$\u0003\u0010\b\u0000$%\u0005\u0015\u0000\u0000%\u0007\u0001\u0000"+
-		"\u0000\u0000&\'\u0005\u0003\u0000\u0000\'6\u0005\u0017\u0000\u0000(*\u0005"+
-		"\u0001\u0000\u0000)(\u0001\u0000\u0000\u0000*-\u0001\u0000\u0000\u0000"+
-		"+)\u0001\u0000\u0000\u0000+,\u0001\u0000\u0000\u0000,.\u0001\u0000\u0000"+
-		"\u0000-+\u0001\u0000\u0000\u0000.2\u0005\u0016\u0000\u0000/1\u0005\u0001"+
-		"\u0000\u00000/\u0001\u0000\u0000\u000014\u0001\u0000\u0000\u000020\u0001"+
-		"\u0000\u0000\u000023\u0001\u0000\u0000\u000035\u0001\u0000\u0000\u0000"+
-		"42\u0001\u0000\u0000\u000057\u0003\u0012\t\u00006+\u0001\u0000\u0000\u0000"+
-		"67\u0001\u0000\u0000\u00007\t\u0001\u0000\u0000\u000089\u0005\u0004\u0000"+
-		"\u00009H\u0005\u0017\u0000\u0000:<\u0005\u0001\u0000\u0000;:\u0001\u0000"+
-		"\u0000\u0000<?\u0001\u0000\u0000\u0000=;\u0001\u0000\u0000\u0000=>\u0001"+
-		"\u0000\u0000\u0000>@\u0001\u0000\u0000\u0000?=\u0001\u0000\u0000\u0000"+
-		"@D\u0005\u0016\u0000\u0000AC\u0005\u0001\u0000\u0000BA\u0001\u0000\u0000"+
-		"\u0000CF\u0001\u0000\u0000\u0000DB\u0001\u0000\u0000\u0000DE\u0001\u0000"+
-		"\u0000\u0000EG\u0001\u0000\u0000\u0000FD\u0001\u0000\u0000\u0000GI\u0003"+
-		"\u0012\t\u0000H=\u0001\u0000\u0000\u0000HI\u0001\u0000\u0000\u0000I\u000b"+
-		"\u0001\u0000\u0000\u0000JM\u0003\b\u0004\u0000KM\u0003\n\u0005\u0000L"+
-		"J\u0001\u0000\u0000\u0000LK\u0001\u0000\u0000\u0000MN\u0001\u0000\u0000"+
-		"\u0000NO\u0005\u0013\u0000\u0000OP\u0003\u0010\b\u0000P\r\u0001\u0000"+
-		"\u0000\u0000QR\u0005\u0017\u0000\u0000RS\u0005\u0013\u0000\u0000ST\u0003"+
-		"\u0010\b\u0000T\u000f\u0001\u0000\u0000\u0000UV\u0006\b\uffff\uffff\u0000"+
-		"VW\u0005\u0014\u0000\u0000WX\u0003\u0010\b\u0000XY\u0005\u0015\u0000\u0000"+
-		"Yb\u0001\u0000\u0000\u0000Zb\u0005\u0017\u0000\u0000[\\\u0005\u0010\u0000"+
-		"\u0000\\b\u0003\u0010\b\u0005]b\u0005\u000b\u0000\u0000^b\u0005\r\u0000"+
-		"\u0000_b\u0005\f\u0000\u0000`b\u0005\u0018\u0000\u0000aU\u0001\u0000\u0000"+
-		"\u0000aZ\u0001\u0000\u0000\u0000a[\u0001\u0000\u0000\u0000a]\u0001\u0000"+
-		"\u0000\u0000a^\u0001\u0000\u0000\u0000a_\u0001\u0000\u0000\u0000a`\u0001"+
-		"\u0000\u0000\u0000bn\u0001\u0000\u0000\u0000cd\n\n\u0000\u0000de\u0007"+
-		"\u0001\u0000\u0000em\u0003\u0010\b\u000bfg\n\t\u0000\u0000gh\u0007\u0002"+
-		"\u0000\u0000hm\u0003\u0010\b\nij\n\b\u0000\u0000jk\u0005\u0006\u0000\u0000"+
-		"km\u0003\u0012\t\u0000lc\u0001\u0000\u0000\u0000lf\u0001\u0000\u0000\u0000"+
-		"li\u0001\u0000\u0000\u0000mp\u0001\u0000\u0000\u0000nl\u0001\u0000\u0000"+
-		"\u0000no\u0001\u0000\u0000\u0000o\u0011\u0001\u0000\u0000\u0000pn\u0001"+
-		"\u0000\u0000\u0000qv\u0005\u0007\u0000\u0000rv\u0005\b\u0000\u0000sv\u0005"+
-		"\t\u0000\u0000tv\u0005\n\u0000\u0000uq\u0001\u0000\u0000\u0000ur\u0001"+
-		"\u0000\u0000\u0000us\u0001\u0000\u0000\u0000ut\u0001\u0000\u0000\u0000"+
-		"v\u0013\u0001\u0000\u0000\u0000\r\u0017\u001f+26=DHLalnu";
+		"\b\u0005\bs\b\b\n\b\f\bv\t\b\u0001\t\u0001\t\u0001\n\u0001\n\u0005\n|"+
+		"\b\n\n\n\f\n\u007f\t\n\u0001\n\u0001\n\u0001\u000b\u0001\u000b\u0001\f"+
+		"\u0001\f\u0001\f\u0001\f\u0003\f\u0089\b\f\u0001\f\u0000\u0001\u0010\r"+
+		"\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u0000"+
+		"\u0003\u0001\u0001\u0001\u0001\u0001\u0000\u0011\u0012\u0001\u0000\u000f"+
+		"\u0010\u0094\u0000\u001b\u0001\u0000\u0000\u0000\u0002\u001f\u0001\u0000"+
+		"\u0000\u0000\u0004%\u0001\u0000\u0000\u0000\u0006\'\u0001\u0000\u0000"+
+		"\u0000\b,\u0001\u0000\u0000\u0000\n>\u0001\u0000\u0000\u0000\fR\u0001"+
+		"\u0000\u0000\u0000\u000eW\u0001\u0000\u0000\u0000\u0010g\u0001\u0000\u0000"+
+		"\u0000\u0012w\u0001\u0000\u0000\u0000\u0014y\u0001\u0000\u0000\u0000\u0016"+
+		"\u0082\u0001\u0000\u0000\u0000\u0018\u0088\u0001\u0000\u0000\u0000\u001a"+
+		"\u001c\u0003\u0002\u0001\u0000\u001b\u001a\u0001\u0000\u0000\u0000\u001c"+
+		"\u001d\u0001\u0000\u0000\u0000\u001d\u001b\u0001\u0000\u0000\u0000\u001d"+
+		"\u001e\u0001\u0000\u0000\u0000\u001e\u0001\u0001\u0000\u0000\u0000\u001f"+
+		" \u0003\u0004\u0002\u0000 !\u0007\u0000\u0000\u0000!\u0003\u0001\u0000"+
+		"\u0000\u0000\"&\u0003\f\u0006\u0000#&\u0003\u000e\u0007\u0000$&\u0003"+
+		"\u0006\u0003\u0000%\"\u0001\u0000\u0000\u0000%#\u0001\u0000\u0000\u0000"+
+		"%$\u0001\u0000\u0000\u0000&\u0005\u0001\u0000\u0000\u0000\'(\u0005\u0005"+
+		"\u0000\u0000()\u0005\u0014\u0000\u0000)*\u0003\u0010\b\u0000*+\u0005\u0015"+
+		"\u0000\u0000+\u0007\u0001\u0000\u0000\u0000,-\u0005\u0003\u0000\u0000"+
+		"-<\u0005\u0017\u0000\u0000.0\u0005\u0001\u0000\u0000/.\u0001\u0000\u0000"+
+		"\u000003\u0001\u0000\u0000\u00001/\u0001\u0000\u0000\u000012\u0001\u0000"+
+		"\u0000\u000024\u0001\u0000\u0000\u000031\u0001\u0000\u0000\u000048\u0005"+
+		"\u0016\u0000\u000057\u0005\u0001\u0000\u000065\u0001\u0000\u0000\u0000"+
+		"7:\u0001\u0000\u0000\u000086\u0001\u0000\u0000\u000089\u0001\u0000\u0000"+
+		"\u00009;\u0001\u0000\u0000\u0000:8\u0001\u0000\u0000\u0000;=\u0003\u0018"+
+		"\f\u0000<1\u0001\u0000\u0000\u0000<=\u0001\u0000\u0000\u0000=\t\u0001"+
+		"\u0000\u0000\u0000>?\u0005\u0004\u0000\u0000?N\u0005\u0017\u0000\u0000"+
+		"@B\u0005\u0001\u0000\u0000A@\u0001\u0000\u0000\u0000BE\u0001\u0000\u0000"+
+		"\u0000CA\u0001\u0000\u0000\u0000CD\u0001\u0000\u0000\u0000DF\u0001\u0000"+
+		"\u0000\u0000EC\u0001\u0000\u0000\u0000FJ\u0005\u0016\u0000\u0000GI\u0005"+
+		"\u0001\u0000\u0000HG\u0001\u0000\u0000\u0000IL\u0001\u0000\u0000\u0000"+
+		"JH\u0001\u0000\u0000\u0000JK\u0001\u0000\u0000\u0000KM\u0001\u0000\u0000"+
+		"\u0000LJ\u0001\u0000\u0000\u0000MO\u0003\u0018\f\u0000NC\u0001\u0000\u0000"+
+		"\u0000NO\u0001\u0000\u0000\u0000O\u000b\u0001\u0000\u0000\u0000PS\u0003"+
+		"\b\u0004\u0000QS\u0003\n\u0005\u0000RP\u0001\u0000\u0000\u0000RQ\u0001"+
+		"\u0000\u0000\u0000ST\u0001\u0000\u0000\u0000TU\u0005\u0013\u0000\u0000"+
+		"UV\u0003\u0010\b\u0000V\r\u0001\u0000\u0000\u0000WX\u0005\u0017\u0000"+
+		"\u0000XY\u0005\u0013\u0000\u0000YZ\u0003\u0010\b\u0000Z\u000f\u0001\u0000"+
+		"\u0000\u0000[\\\u0006\b\uffff\uffff\u0000\\]\u0005\u0014\u0000\u0000]"+
+		"^\u0003\u0010\b\u0000^_\u0005\u0015\u0000\u0000_h\u0001\u0000\u0000\u0000"+
+		"`h\u0005\u0017\u0000\u0000ab\u0005\u0010\u0000\u0000bh\u0003\u0010\b\u0005"+
+		"ch\u0005\u000b\u0000\u0000dh\u0005\r\u0000\u0000eh\u0005\f\u0000\u0000"+
+		"fh\u0003\u0012\t\u0000g[\u0001\u0000\u0000\u0000g`\u0001\u0000\u0000\u0000"+
+		"ga\u0001\u0000\u0000\u0000gc\u0001\u0000\u0000\u0000gd\u0001\u0000\u0000"+
+		"\u0000ge\u0001\u0000\u0000\u0000gf\u0001\u0000\u0000\u0000ht\u0001\u0000"+
+		"\u0000\u0000ij\n\n\u0000\u0000jk\u0007\u0001\u0000\u0000ks\u0003\u0010"+
+		"\b\u000blm\n\t\u0000\u0000mn\u0007\u0002\u0000\u0000ns\u0003\u0010\b\n"+
+		"op\n\b\u0000\u0000pq\u0005\u0006\u0000\u0000qs\u0003\u0018\f\u0000ri\u0001"+
+		"\u0000\u0000\u0000rl\u0001\u0000\u0000\u0000ro\u0001\u0000\u0000\u0000"+
+		"sv\u0001\u0000\u0000\u0000tr\u0001\u0000\u0000\u0000tu\u0001\u0000\u0000"+
+		"\u0000u\u0011\u0001\u0000\u0000\u0000vt\u0001\u0000\u0000\u0000wx\u0003"+
+		"\u0014\n\u0000x\u0013\u0001\u0000\u0000\u0000y}\u0005\u0018\u0000\u0000"+
+		"z|\u0003\u0016\u000b\u0000{z\u0001\u0000\u0000\u0000|\u007f\u0001\u0000"+
+		"\u0000\u0000}{\u0001\u0000\u0000\u0000}~\u0001\u0000\u0000\u0000~\u0080"+
+		"\u0001\u0000\u0000\u0000\u007f}\u0001\u0000\u0000\u0000\u0080\u0081\u0005"+
+		"\u0019\u0000\u0000\u0081\u0015\u0001\u0000\u0000\u0000\u0082\u0083\u0005"+
+		"\u001a\u0000\u0000\u0083\u0017\u0001\u0000\u0000\u0000\u0084\u0089\u0005"+
+		"\u0007\u0000\u0000\u0085\u0089\u0005\b\u0000\u0000\u0086\u0089\u0005\t"+
+		"\u0000\u0000\u0087\u0089\u0005\n\u0000\u0000\u0088\u0084\u0001\u0000\u0000"+
+		"\u0000\u0088\u0085\u0001\u0000\u0000\u0000\u0088\u0086\u0001\u0000\u0000"+
+		"\u0000\u0088\u0087\u0001\u0000\u0000\u0000\u0089\u0019\u0001\u0000\u0000"+
+		"\u0000\u000e\u001d%18<CJNRgrt}\u0088";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

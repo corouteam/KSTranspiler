@@ -114,6 +114,18 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitAssignment(KotlinParser.AssignmentContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code stringLiteralExpression}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringLiteralExpression(KotlinParser.StringLiteralExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringLiteralExpression}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringLiteralExpression(KotlinParser.StringLiteralExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code minusExpression}
 	 * labeled alternative in {@link KotlinParser#expression}.
 	 * @param ctx the parse tree
@@ -125,18 +137,6 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMinusExpression(KotlinParser.MinusExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code stringLiteral}
-	 * labeled alternative in {@link KotlinParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterStringLiteral(KotlinParser.StringLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code stringLiteral}
-	 * labeled alternative in {@link KotlinParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitStringLiteral(KotlinParser.StringLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code intLiteral}
 	 * labeled alternative in {@link KotlinParser#expression}.
@@ -221,6 +221,36 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVarReference(KotlinParser.VarReferenceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#stringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringLiteral(KotlinParser.StringLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#stringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringLiteral(KotlinParser.StringLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#lineStringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterLineStringLiteral(KotlinParser.LineStringLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#lineStringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitLineStringLiteral(KotlinParser.LineStringLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#lineStringContent}.
+	 * @param ctx the parse tree
+	 */
+	void enterLineStringContent(KotlinParser.LineStringContentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#lineStringContent}.
+	 * @param ctx the parse tree
+	 */
+	void exitLineStringContent(KotlinParser.LineStringContentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code integer}
 	 * labeled alternative in {@link KotlinParser#type}.

@@ -137,6 +137,18 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStringLiteralExpression(KotlinParser.StringLiteralExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringLiteralExpression(KotlinParser.StringLiteralExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMinusExpression(KotlinParser.MinusExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -144,18 +156,6 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMinusExpression(KotlinParser.MinusExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStringLiteral(KotlinParser.StringLiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringLiteral(KotlinParser.StringLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -240,6 +240,42 @@ public class KotlinParserBaseListener implements KotlinParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVarReference(KotlinParser.VarReferenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringLiteral(KotlinParser.StringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringLiteral(KotlinParser.StringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLineStringLiteral(KotlinParser.LineStringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLineStringLiteral(KotlinParser.LineStringLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLineStringContent(KotlinParser.LineStringContentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLineStringContent(KotlinParser.LineStringContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

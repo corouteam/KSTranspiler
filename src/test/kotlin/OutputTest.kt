@@ -47,25 +47,25 @@ class OutputTest {
         var code = "val a = 5.0 / 7.0"
         val parseResult = KotlinParserFacade.parse(code).root!!
         var ast = parseResult.toAst()
-        val expected = "let a:Double = 5 / 7"
+        val expected = "let a:Double = 5.0 / 7.0"
         assertEquals(expected, ast.generateCode())
     }
 
     @Test
     fun convertAssignmentPropertyDefinition(){
-        var code = "val a = 'ciao'"
+        var code = "val a = \"ciao\""
         val parseResult = KotlinParserFacade.parse(code).root!!
         var ast = parseResult.toAst()
-        val expected = "let a:String = 'ciao'"
+        val expected = "let a:String = \"ciao\""
         assertEquals(expected, ast.generateCode())
     }
 
     @Test
     fun convertPrintPropertyDefinition(){
-        var code = "print('5')"
+        var code = "print(\"aa\")"
         val parseResult = KotlinParserFacade.parse(code).root!!
         var ast = parseResult.toAst()
-        val expected = "print('5')"
+        val expected = "print(\"aa\")"
         assertEquals(expected, ast.generateCode())
     }
 }

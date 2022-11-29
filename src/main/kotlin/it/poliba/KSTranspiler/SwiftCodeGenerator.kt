@@ -4,9 +4,9 @@ import it.poliba.KSranspiler.*
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 
-val group: STGroup = STGroupFile("/Users/francescopaolodellaquila/Desktop/UNIVERSITA/Magistrale/Language/KSTranspiler/src/main/antlr/SwiftTemplate.stg")
+val group: STGroup = STGroupFile("/Users/annalabellarte/Dev/Università/KSTranspiler2/src/main/antlr/SwiftTemplate.stg")
 fun KotlinFile.generateCode(): String{
-    return statements.map { it.generateCode() }.joinToString("\n")
+     return statements.map { it.generateCode() }.joinToString("\n")
 }
 
 fun Statement.generateCode(): String {
@@ -18,8 +18,12 @@ fun Statement.generateCode(): String {
     }
 }
 
+fun Assignment.generateCode(): String{
+    return "$varName = ${value.generateCode()}"
+}
+
 fun Print.generateCode(): String{
-    return "print('${value.generateCode()}')"
+    return "print(${value.generateCode()})"
 }
 
 fun PropertyDeclaration.generateCode(): String{
@@ -33,9 +37,10 @@ fun PropertyDeclaration.generateCode(): String{
 
 fun Expression.generateCode() : String = when (this) {
     is IntLit -> this.value
-    is DecLit -> this.value
+    is DoubleLit -> this.value
     is VarReference -> this.varName
     is BinaryExpression -> this.generateCode()
+    is StringLit -> "\"${this.value}\""
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -43,7 +48,7 @@ fun Expression.generateCode() : String = when (this) {
 
 fun Type.generateCode() : String = when (this) {
     is IntType -> "Int"
-    is DecimalType -> "Double"
+    is DoubleType -> "Double"
     is StringType -> "String"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }

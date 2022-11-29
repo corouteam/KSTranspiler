@@ -28,6 +28,11 @@ class LexerTest {
     }
 
     @Test
+    fun parseVarDeclarationAssignedAnStringLiteral() {
+        assertEquals(listOf("VAR", "ID", "ASSIGN", "QUOTE_OPEN","LineStrText", "QUOTE_CLOSE",  "EOF"),
+            tokens(lexerForCode("var a = \"test\"")))
+    }
+    @Test
     fun parseVarDeclarationIntType() {
         assertEquals(listOf("VAR", "ID", "COLON", "INT", "EOF"),
             tokens(lexerForCode("var a: Int")))
@@ -72,8 +77,8 @@ class LexerTest {
 
     @Test
     fun parsePrintDeclarationLiteral() {
-        assertEquals(listOf("PRINT", "LPAREN", "ID", "RPAREN", "EOF"),
-            tokens(lexerForCode("print('ciao')")))
+        assertEquals(listOf("PRINT", "LPAREN", "QUOTE_OPEN", "LineStrText","QUOTE_CLOSE","RPAREN", "EOF"),
+            tokens(lexerForCode("print(\"ciao\")")))
     }
 
 }

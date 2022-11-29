@@ -54,6 +54,29 @@ class KotlinParserTest {
     }
 
     @Test
+    fun parsePropertyDeclVarStrinb() {
+        assertEquals(
+            """KotlinFile
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          T[a]
+        T[=]
+        StringLiteralExpression
+          StringLiteral
+            LineStringLiteral
+              T["]
+              LineStringContent
+                T[ciao]
+              T["]
+    T[<EOF>]
+""",
+            toParseTree(parseResource("property_declaration_var_string")).multiLineString())
+    }
+
+    @Test
     fun parsePropertyDeclVarBool() {
         assertEquals(
             """KotlinFile
@@ -127,34 +150,5 @@ class KotlinParserTest {
 """,
             toParseTree(parseResource("val_declaration_int")).multiLineString())
     }
-    /*
-   @Test
-   fun parsePrecedenceExpressions() {
-        assertEquals(
-            """KotlinFile
-  Line
-    VarDeclarationStatement
-      VarDeclaration
-        T[var]
-        Assignment
-          T[a]
-          T[=]
-          BinaryOperation
-            BinaryOperation
-              IntLiteral
-                T[1]
-              T[+]
-              BinaryOperation
-                IntLiteral
-                  T[2]
-                T[*]
-                IntLiteral
-                  T[3]
-            T[-]
-            IntLiteral
-              T[4]
-    T[<EOF>]
-""",
-            toParseTree(parseResource("precedence_expression")).multiLineString())
-    }*/
+
 }
