@@ -53,10 +53,11 @@ class OutputTest {
 
     @Test
     fun convertAssignmentPropertyDefinition(){
-        var code = "val a = \"ciao\""
+
+        var code = "a = 5"
         val parseResult = KotlinParserFacade.parse(code).root!!
         var ast = parseResult.toAst()
-        val expected = "let a:String = \"ciao\""
+        val expected = "a = 5"
         assertEquals(expected, ast.generateCode())
     }
 

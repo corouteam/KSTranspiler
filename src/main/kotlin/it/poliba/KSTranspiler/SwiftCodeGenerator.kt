@@ -26,6 +26,7 @@ fun Print.generateCode(): String{
     return "print(${value.generateCode()})"
 }
 
+
 fun PropertyDeclaration.generateCode(): String{
     val st = group.getInstanceOf("propertyDeclaration")
     st.add("name",varName)
