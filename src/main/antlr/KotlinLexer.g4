@@ -42,7 +42,13 @@ ASSIGN             : '=' ;
 LPAREN             : '(' ;
 RPAREN             : ')' ;
 COLON              : ':';
+LCURL              : '{';
+RCURL              : '}';
+SEMICOLON          : ';';
 
+
+IF: 'if';
+ELSE: 'else';
 
 // Identifiers
 ID                 : [_]*[a-z][A-Za-z0-9_]* ;

@@ -52,6 +52,18 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitAssignmentStatement(KotlinParser.AssignmentStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code expressionStatement}
+	 * labeled alternative in {@link KotlinParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpressionStatement(KotlinParser.ExpressionStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code expressionStatement}
+	 * labeled alternative in {@link KotlinParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpressionStatement(KotlinParser.ExpressionStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code printStatement}
 	 * labeled alternative in {@link KotlinParser#statement}.
 	 * @param ctx the parse tree
@@ -198,6 +210,18 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 */
 	void exitTypeConversion(KotlinParser.TypeConversionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ifExpression}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfExpression(KotlinParser.IfExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ifExpression}
+	 * labeled alternative in {@link KotlinParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfExpression(KotlinParser.IfExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code boolLiteral}
 	 * labeled alternative in {@link KotlinParser#expression}.
 	 * @param ctx the parse tree
@@ -221,6 +245,36 @@ public interface KotlinParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVarReference(KotlinParser.VarReferenceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#if}.
+	 * @param ctx the parse tree
+	 */
+	void enterIf(KotlinParser.IfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#if}.
+	 * @param ctx the parse tree
+	 */
+	void exitIf(KotlinParser.IfContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#controlStructureBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterControlStructureBody(KotlinParser.ControlStructureBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#controlStructureBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitControlStructureBody(KotlinParser.ControlStructureBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KotlinParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(KotlinParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KotlinParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(KotlinParser.BlockContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link KotlinParser#stringLiteral}.
 	 * @param ctx the parse tree
