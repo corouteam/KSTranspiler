@@ -4,8 +4,6 @@ import org.antlr.v4.runtime.CommonTokenStream
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-import java.io.*
-import java.util.*
 
 class KotlinParserTest {
 
@@ -151,4 +149,33 @@ class KotlinParserTest {
             toParseTree(parseResource("val_declaration_int")).multiLineString())
     }
 
+    @Test
+    fun parseIfDeclaration() {
+        assertEquals(
+            """KotlinFile
+  Line
+    ExpressionStatement
+      IfExpression
+        If
+          T[if]
+          T[(]
+          BoolLiteral
+            T[true]
+          T[)]
+          ControlStructureBody
+            Block
+              T[{]
+              PropertyDeclarationStatement
+                PropertyDeclaration
+                  ValDeclaration
+                    T[val]
+                    T[a]
+                  T[=]
+                  IntLiteral
+                    T[5]
+              T[}]
+    T[<EOF>]
+""",
+            toParseTree(parseResource("ifDeclaration")).multiLineString())
+    }
 }

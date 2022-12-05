@@ -87,4 +87,12 @@ class LexerTest {
             tokens(lexerForCode("a = 5")))
     }
 
+    @Test
+    fun parseIfStatement() {
+        assertEquals(listOf("IF", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "PRINT","LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL","EOF"),
+            tokens(lexerForCode("if(true){" +
+                    "   print(\"Hello world\")" +
+                    "}")))
+    }
+
 }
