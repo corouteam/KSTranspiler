@@ -106,4 +106,17 @@ class MappingTest {
             IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = IfExpression(BoolLit("false"), Block(listOf(Print(StringLit("Bye world")))), null))))
         assertEquals(expectedAst, ast)
     }
+
+    @Test
+    fun mapIfElseNonBlock() {
+        val code = "if(true)" +
+                "print(\"Hello world\")" +
+                "else " +
+                "print(\"Bye world\")" +
+                ""
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            IfExpression(BoolLit("true"),Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))))
+        assertEquals(expectedAst, ast)
+    }
 }
