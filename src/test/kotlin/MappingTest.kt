@@ -106,7 +106,6 @@ class MappingTest {
             IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = IfExpression(BoolLit("false"), Block(listOf(Print(StringLit("Bye world")))), null))))
         assertEquals(expectedAst, ast)
     }
-
     @Test
     fun mapIfElseNonBlock() {
         val code = "if(true)" +

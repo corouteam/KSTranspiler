@@ -4,7 +4,7 @@ import it.poliba.KSranspiler.*
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 
-val group: STGroup = STGroupFile("/Users/annalabellarte/Dev/Università/KSTranspiler2/src/main/antlr/SwiftTemplate.stg")
+val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
 fun KotlinFile.generateCode(): String{
      return statements.map { it.generateCode() }.joinToString("\n")
 }
