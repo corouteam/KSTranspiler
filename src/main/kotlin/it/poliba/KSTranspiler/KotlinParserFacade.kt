@@ -51,6 +51,7 @@ object KotlinParserFacade {
         lexer.removeErrorListeners()
         lexer.addErrorListener(errorListener)
         val parser = KotlinParser(CommonTokenStream(lexer))
+        parser.errorHandler = BailErrorStrategy()
         parser.removeErrorListeners()
         parser.addErrorListener(errorListener)
         val root = parser.kotlinFile()

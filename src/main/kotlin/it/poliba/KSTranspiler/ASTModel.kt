@@ -2,6 +2,7 @@ package it.poliba.KSranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Position
+import com.sun.jdi.BooleanType
 import java.util.*
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.memberProperties
@@ -14,9 +15,9 @@ import kotlin.reflect.full.primaryConstructor
 
 data class KotlinFile(val statements : List<Statement>, override var position: Position? = null) : Node()
 
-sealed class Statement : Node() { }
+sealed class Statement : ControlStructureBody() { }
 
-sealed class Expression(open val type: Type) : Node() { }
+sealed class Expression(open val type: Type) : Statement() { }
 
 sealed class Type : Node() { }
 
@@ -29,6 +30,7 @@ data class IntType(override var position: Position? = null) : Type()
 data class DoubleType(override var position: Position? = null) : Type()
 
 data class StringType(override var position: Position? = null) : Type()
+data class BoolType(override var position: Position? = null) : Type()
 
 //
 // Expressions
@@ -59,6 +61,13 @@ data class IntLit(val value: String, override var position: Position? = null) : 
 
 data class DoubleLit(val value: String, override var position: Position? = null) : Expression(DoubleType())
 data class StringLit(val value: String, override var position: Position? = null) : Expression(StringType())
+data class BoolLit(val value: String, override var position: Position? = null) : Expression(BoolType())
+
+data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(IntType())
+
+open class ControlStructureBody(): Node()
+
+data class Block(val body: List<Statement>): ControlStructureBody()
 
 //
 // Statements

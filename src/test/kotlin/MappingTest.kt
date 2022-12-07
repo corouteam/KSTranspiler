@@ -1,5 +1,6 @@
 package it.poliba.KSTranspiler
 
+import it.poliba.KSTranspiler.KotlinParser.BoolLiteralContext
 import it.poliba.KSTranspiler.parsing.KotlinParserFacade
 import it.poliba.KSranspiler.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -64,6 +65,57 @@ class MappingTest {
         val expectedAst = KotlinFile(listOf(
             Assignment("a", IntLit("5"))
         ))
+        assertEquals(expectedAst, ast)
+    }
+
+    @Test
+    fun mapIf() {
+        val code = "if(true){" +
+                "print(\"Hello world\")" +
+                "}"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = null)
+        ))
+        assertEquals(expectedAst, ast)
+    }
+
+    @Test
+    fun mapIfElse() {
+        val code = "if(true){" +
+                "print(\"Hello world\")" +
+                "}else{" +
+                "print(\"Bye world\")" +
+                "}"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = Block(listOf(Print(StringLit("Bye world")))))
+        ))
+        assertEquals(expectedAst, ast)
+    }
+
+    @Test
+    fun mapIfElseIf() {
+        val code = "if(true){" +
+                "print(\"Hello world\")" +
+                "}else if(false){" +
+                "print(\"Bye world\")" +
+                "}"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = IfExpression(BoolLit("false"), Block(listOf(Print(StringLit("Bye world")))), null))))
+        assertEquals(expectedAst, ast)
+    }
+    @Test
+    fun mapIfElseNonBlock() {
+        val code = "if(true)" +
+                "print(\"Hello world\")" +
+                "else " +
+                "print(\"Bye world\")" +
+                ""
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            IfExpression(BoolLit("true"),Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))))
         assertEquals(expectedAst, ast)
     }
 }

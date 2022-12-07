@@ -8,6 +8,7 @@ line      : statement (NL | EOF) ;
 
 statement : propertyDeclaration # propertyDeclarationStatement
           | assignment     # assignmentStatement
+          | expression     #expressionStatement
           | print          # printStatement;
 
 print : PRINT LPAREN expression RPAREN ;
@@ -32,7 +33,25 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
+           | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression;
+
+
+if
+    : IF NL* LPAREN NL* expression NL* RPAREN NL*
+      (
+      | body=controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (elseBody=controlStructureBody | SEMICOLON)
+      | SEMICOLON)
+    ;
+
+controlStructureBody
+    : block
+    | statement
+    ;
+
+block
+    : LCURL NL* statement* NL* RCURL
+    ;
 
 stringLiteral
    : lineStringLiteral;
