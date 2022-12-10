@@ -41,5 +41,6 @@ fun toParseTree(node: ParserRuleContext) : ParseTreeNode {
             is TerminalNode -> res.child(ParseTreeLeaf(c.text))
         }
     }
+
     return res
 }

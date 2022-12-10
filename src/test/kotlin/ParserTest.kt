@@ -1,19 +1,29 @@
 package it.poliba.KSTranspiler
-import it.poliba.KSTranspiler.tools.ErrorHandler.withCustomErrorHandler
+import it.poliba.KSTranspiler.parsing.KotlinParserFacade
 import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
+import it.poliba.KSTranspiler.KotlinLexer
+import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 
 class KotlinParserTest {
+    private fun lexerForResource(resourceName: String) =
+        KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.txt")))
+            .attachErrorHandler()
 
-    fun lexerForResource(resourceName: String) =
-        it.poliba.KSTranspiler.KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.txt")))
-    fun parseResource(
+    private fun parseResource(
         resourceName: String,
-        ) : KotlinParser.KotlinFileContext = it.poliba.KSTranspiler.KotlinParser(
-        CommonTokenStream(lexerForResource(resourceName))
-    ).withCustomErrorHandler().kotlinFile()
+    ): ParserRuleContext {
+        val parseResult = KotlinParserFacade
+            .parse(this.javaClass.getResourceAsStream("/${resourceName}.txt"))
+
+        if (parseResult.isCorrect()) {
+            return parseResult.root ?: throw Exception("ParserRuleContext was null")
+        } else {
+            throw parseResult.errors.first()
+        }
+    }
 
     @Test
     fun parseAdditionAssignment() {

@@ -4,13 +4,31 @@ import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CharStreams
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import it.poliba.KSTranspiler.KotlinLexer
+import it.poliba.KSTranspiler.tools.ErrorHandler
+import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 import java.util.*
 
 class LexerTest {
-   fun lexerForCode(code: String) = it.poliba.KSTranspiler.KotlinLexer(CharStreams.fromString(code))
-    fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin")))
+   private fun lexerForCode(code: String): KotlinLexer {
+       val lexer = KotlinLexer(CharStreams.fromString(code))
+           .attachErrorHandler()
+
+       val errors = ErrorHandler.getErrors()
+
+       if (errors.isNotEmpty()) {
+           throw errors.first
+       }
+
+       return lexer
+   }
+    private fun lexerForResource(resourceName: String) = KotlinLexer(
+        ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin"))
+    ).attachErrorHandler()
+
     fun tokens(lexer: KotlinLexer): List<String> {
         val tokens = LinkedList<String>()
+
         do {
             val t = lexer.nextToken()
             when (t.type) {
@@ -18,6 +36,7 @@ class LexerTest {
                 else -> if (t.type != KotlinLexer.WS) tokens.add(lexer.ruleNames[t.type - 1])
             }
         } while (t.type != -1)
+
         return tokens
     }
 
