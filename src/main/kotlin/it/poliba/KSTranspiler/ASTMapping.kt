@@ -3,7 +3,6 @@ package it.poliba.KSTranspiler
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
-import com.sun.jdi.DoubleType
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
@@ -30,14 +29,14 @@ fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
 }
 
 fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
-    is KotlinParser.PropertyDeclarationStatementContext -> this.propertyDeclaration().toAst(considerPosition)
+    is PropertyDeclarationStatementContext -> this.propertyDeclaration().toAst(considerPosition)
     is KotlinParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.ExpressionStatementContext -> expression().toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun KotlinParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Statement {
+fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Statement {
     return if(varDeclaration() != null){
 
         val type = if(varDeclaration().type() != null) varDeclaration().type().toAst() else expression().toAst().type
@@ -53,7 +52,7 @@ fun KotlinParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fa
 fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     is KotlinParser.BoolLiteralContext -> BoolLit(text, toPosition(considerPosition))
-    is KotlinParser.StringLiteralExpressionContext -> toAst(considerPosition)
+    is StringLiteralExpressionContext -> toAst(considerPosition)
     is KotlinParser.VarReferenceContext -> VarReference(text, type = StringType(),  toPosition(considerPosition))
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
@@ -67,7 +66,7 @@ fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expressio
 }
 
 
-fun KotlinParser.ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody{
+fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody{
     if(this.block() != null){
         return Block(this.block().statement().map { it.toAst(considerPosition) })
     }else if(this.statement() != null){
@@ -78,7 +77,7 @@ fun KotlinParser.ControlStructureBodyContext.toAst(considerPosition: Boolean = f
 }
 
 
-fun KotlinParser.StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{
+fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{
     var valueString = ""
     this.stringLiteral().lineStringLiteral().lineStringContent().forEach { valueString = valueString + ""+it.LineStrText().text }
     return StringLit(valueString, toPosition(considerPosition))

@@ -15,11 +15,11 @@ import kotlin.reflect.full.primaryConstructor
 
 data class KotlinFile(val statements : List<Statement>, override var position: Position? = null) : Node()
 
-sealed class Statement : ControlStructureBody() { }
+sealed class Statement : ControlStructureBody()
 
-sealed class Expression(open val type: Type) : Statement() { }
+sealed class Expression(open val type: Type) : Statement()
 
-sealed class Type : Node() { }
+sealed class Type : Node()
 
 //
 // Types
@@ -65,7 +65,7 @@ data class BoolLit(val value: String, override var position: Position? = null) :
 
 data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(IntType())
 
-open class ControlStructureBody(): Node()
+open class ControlStructureBody : Node()
 
 data class Block(val body: List<Statement>): ControlStructureBody()
 

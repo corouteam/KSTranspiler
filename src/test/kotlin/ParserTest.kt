@@ -1,5 +1,7 @@
 package it.poliba.KSTranspiler
+import it.poliba.KSTranspiler.parsing.toStream
 import org.antlr.v4.runtime.ANTLRInputStream
+import org.antlr.v4.runtime.BailErrorStrategy
 import org.antlr.v4.runtime.CommonTokenStream
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -11,7 +13,9 @@ class KotlinParserTest {
         it.poliba.KSTranspiler.KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.txt")))
     fun parseResource(resourceName: String) : KotlinParser.KotlinFileContext = it.poliba.KSTranspiler.KotlinParser(
         CommonTokenStream(lexerForResource(resourceName))
-    ).kotlinFile()
+    ).apply {
+        errorHandler = BailErrorStrategy()
+    }.kotlinFile()
 
     @Test
     fun parseAdditionAssignment() {
