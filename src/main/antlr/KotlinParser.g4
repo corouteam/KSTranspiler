@@ -40,6 +40,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
       (
+        body=controlStructureBody
       | body=controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (elseBody=controlStructureBody | SEMICOLON)
       | SEMICOLON)
     ;
