@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler.parsing
 
 import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.KotlinParser
+import it.poliba.KSTranspiler.tools.ErrorHandler.withCustomErrorHandler
 import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.atn.ATNConfigSet
 import org.antlr.v4.runtime.dfa.DFA
@@ -52,10 +53,10 @@ object KotlinParserFacade {
         val lexer = KotlinLexer(ANTLRInputStream(inputStream))
         lexer.removeErrorListeners()
         lexer.addErrorListener(errorListener)
-        val parser = KotlinParser(CommonTokenStream(lexer))
-        parser.errorHandler = BailErrorStrategy()
-        parser.removeErrorListeners()
-        parser.addErrorListener(errorListener)
+        val parser =
+            KotlinParser(CommonTokenStream(lexer))
+                .withCustomErrorHandler()
+
         val root = parser.kotlinFile()
         return ParsingResult(root, errors)
     }
