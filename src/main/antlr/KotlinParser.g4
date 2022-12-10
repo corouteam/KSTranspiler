@@ -18,7 +18,7 @@ varDeclaration : VAR ID (NL* COLON NL* type)?;
 
 valDeclaration : VAL ID (NL* COLON NL* type)?;
 
-propertyDeclaration:  (varDeclaration|valDeclaration) ASSIGN expression;
+propertyDeclaration:  (varDeclaration|valDeclaration) (ASSIGN expression)?;
 
 
 assignment : ID ASSIGN expression ;
