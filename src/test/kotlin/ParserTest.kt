@@ -4,12 +4,11 @@ import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 
 class KotlinParserTest {
     private fun lexerForResource(resourceName: String) =
-        KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.txt")))
+        it.poliba.KSTranspiler.KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.txt")))
             .attachErrorHandler()
 
     private fun parseResource(
