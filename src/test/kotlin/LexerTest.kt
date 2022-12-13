@@ -127,4 +127,11 @@ class LexerTest {
         val result = listOf("FUN","ID", "LPAREN", "ID", "COLON", "INT", "COMMA", "ID", "COLON", "INT","RPAREN", "ASSIGN", "INT_LIT","EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseFunctionExpressionWithReturn(){
+        val code = "fun test(x: Int, y: Int): Int {return 5}"
+        val result = listOf("FUN","ID", "LPAREN", "ID", "COLON", "INT", "COMMA", "ID", "COLON", "INT","RPAREN","COLON","INT", "LCURL","RETURN","INT_LIT","RCURL","EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

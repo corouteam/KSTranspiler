@@ -1,7 +1,6 @@
 lexer grammar KotlinLexer;
 
 
-
 // Whitespace
 NL                  : '\r\n' | 'r' | '\n' ;
 WS                 : [\t ]+ -> skip ;
@@ -51,6 +50,7 @@ IF: 'if';
 ELSE: 'else';
 FUN: 'fun';
 PACKAGE: 'package';
+RETURN                  : 'return' ;
 
 // Identifiers
 ID                 : [_]*[a-z][A-Za-z0-9_]* ;

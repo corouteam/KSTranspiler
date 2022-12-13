@@ -4,6 +4,8 @@ package it.poliba.KSTranspiler.parsing
 import com.strumenta.kolasu.model.debugPrint
 import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.KotlinParser
+import it.poliba.KSTranspiler.KotlinParser.KotlinFileContext
+import it.poliba.KSTranspiler.KotlinParser.KotlinScriptContext
 import it.poliba.KSTranspiler.tools.ErrorHandler
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 import org.antlr.v4.runtime.*
@@ -36,23 +38,34 @@ object KotlinParserFacade {
 
         val parser = KotlinParser(CommonTokenStream(lexer))
             .attachErrorHandler()
-
-        val root = parser.kotlinFile()
-
+        val root = parser.file() as? KotlinFileContext ?: throw  Exception("File expected")
         return ParsingResult(root, ErrorHandler.getErrors())
     }
 
-    fun tokens(lexer: KotlinLexer): List<String> {
-        val tokens = LinkedList<String>()
+}
 
-        do {
-            val t = lexer.nextToken()
-            when (t.type) {
-                -1 -> tokens.add("EOF")
-                else -> if (t.type != KotlinLexer.WS) tokens.add(lexer.ruleNames[t.type - 1])
-            }
-        } while (t.type != -1)
 
-        return tokens
+
+data class ParsingResultScript(
+    val root : KotlinParser.KotlinScriptContext?,
+    val errors: List<Exception>
+) {
+    fun isCorrect() = errors.isEmpty() && root != null
+}
+
+object KotlinParserFacadeScript {
+    fun parse(code: String) : ParsingResultScript = parse(code.toStream())
+
+    fun parse(file: File) : ParsingResultScript = parse(FileInputStream(file))
+
+    fun parse(inputStream: InputStream) : ParsingResultScript {
+        val lexer = KotlinLexer(ANTLRInputStream(inputStream))
+            .attachErrorHandler()
+
+        val parser = KotlinParser(CommonTokenStream(lexer))
+            .attachErrorHandler()
+        val root = parser.file() as? KotlinScriptContext ?: throw  Exception("Script expected")
+        return ParsingResultScript(root, ErrorHandler.getErrors())
     }
+
 }

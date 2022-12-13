@@ -9,7 +9,10 @@ import kotlin.reflect.jvm.internal.impl.name.FqNameUnsafe
 
 val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
 fun KotlinFile.generateCode(): String{
-    return declarations.map { it.generateCode() }.joinToString("\n")
+    return declarations.joinToString("\n") { it.generateCode() }
+}
+fun KotlinScript.generateCode(): String{
+    return statement.joinToString("\n") { it.generateCode() }
 }
 
 

@@ -7,7 +7,6 @@ import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
 import it.poliba.KSTranspiler.KotlinParser.FunctionBodyContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
-import it.poliba.KSTranspiler.KotlinParser.ScriptContext
 import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
 import it.poliba.KSTranspiler.KotlinParser.VarDeclarationContext
 import org.antlr.v4.runtime.ParserRuleContext
@@ -34,6 +33,9 @@ fun KotlinParser.ScriptContext.toAst(considerPosition: Boolean = false) : Kotlin
 
 */
 
+fun KotlinParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : KotlinScript{
+    return KotlinScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+}
 fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KotlinFile{
     return KotlinFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
 }
@@ -106,6 +108,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
+    is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

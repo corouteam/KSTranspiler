@@ -1,5 +1,6 @@
 package it.poliba.KSTranspiler
 import it.poliba.KSTranspiler.parsing.KotlinParserFacade
+import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
 import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -7,9 +8,6 @@ import toParseTree
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 
 class KotlinParserTest {
-    private fun lexerForResource(resourceName: String) =
-        it.poliba.KSTranspiler.KotlinLexer(ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.txt")))
-            .attachErrorHandler()
 
     private fun parseResource(
         resourceName: String,
@@ -24,10 +22,23 @@ class KotlinParserTest {
         }
     }
 
+    private fun parseResourceScript(
+        resourceName: String,
+    ): ParserRuleContext {
+        val parseResult = KotlinParserFacadeScript
+            .parse(this.javaClass.getResourceAsStream("/${resourceName}.txt"))
+
+        if (parseResult.isCorrect()) {
+            return parseResult.root ?: throw Exception("ParserRuleContext was null")
+        } else {
+            throw parseResult.errors.first()
+        }
+    }
+
     @Test
     fun parseAdditionAssignment() {
         assertEquals(
-            """KotlinFile
+            """KotlinScript
   Line
     AssignmentStatement
       Assignment
@@ -41,7 +52,7 @@ class KotlinParserTest {
             T[2]
     T[<EOF>]
 """,
-            toParseTree(parseResource("addition_assignment")).multiLineString())
+            toParseTree(parseResourceScript("addition_assignment")).multiLineString())
     }
 
     @Test
@@ -157,7 +168,7 @@ class KotlinParserTest {
     @Test
     fun parseIfDeclaration() {
         assertEquals(
-            """KotlinFile
+            """KotlinScript
   Line
     ExpressionStatement
       IfExpression
@@ -181,7 +192,7 @@ class KotlinParserTest {
               T[}]
     T[<EOF>]
 """,
-            toParseTree(parseResource("ifDeclaration")).multiLineString())
+            toParseTree(parseResourceScript("ifDeclaration")).multiLineString())
     }
     @Test
     fun parseSimpleFun(){
@@ -255,29 +266,25 @@ class KotlinParserTest {
             Integer
               T[Int]
         T[)]
+      T[:]
+      Integer
+        T[Int]
       FunctionBody
         Block
           T[{]
           T[
 ]
-          PrintStatement
-            Print
-              T[print]
-              T[(]
-              StringLiteralExpression
-                StringLiteral
-                  LineStringLiteral
-                    T["]
-                    LineStringContent
-                      T[ciao]
-                    T["]
-              T[)]
+          ExpressionStatement
+            ReturnExpression
+              T[return]
+              IntLiteral
+                T[3]
           T[
 ]
           T[}]
   T[<EOF>]
 """
-        val actual = toParseTree(parseResource("function_declaration")).multiLineString()
+        val actual = toParseTree(parseResource("function_declaration_return")).multiLineString()
         assertEquals(expected, actual)
     }
 

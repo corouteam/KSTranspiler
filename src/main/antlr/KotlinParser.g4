@@ -2,12 +2,10 @@ parser grammar KotlinParser;
 
 options { tokenVocab=KotlinLexer; }
 
-//kotlinFile : traditionalFile | script;
+file
+    : NL* declaration* EOF #kotlinFile
+    |  lines=line+ #kotlinScript;
 
-kotlinFile
-    : NL* declaration* EOF;
-
-script : lines=line+ ;
 
 line      : statement (NL | EOF) ;
 
@@ -57,7 +55,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
-           | stringLiteral                                                 # stringLiteralExpression;
+           | stringLiteral                                                 # stringLiteralExpression
+           | RETURN returnExpression=expression                            # returnExpression;
 
 
 if
@@ -109,6 +108,7 @@ functionDeclaration:
     (NL* COLON NL* type)?
     (NL* functionBody)?
     ;
+
 functionBody
     : block
     | ASSIGN NL* expression
