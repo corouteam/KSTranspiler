@@ -4,8 +4,10 @@ import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
+import it.poliba.KSTranspiler.KotlinParser.FunctionBodyContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
+import it.poliba.KSTranspiler.KotlinParser.ScriptContext
 import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
 import it.poliba.KSTranspiler.KotlinParser.VarDeclarationContext
 import org.antlr.v4.runtime.ParserRuleContext
@@ -17,9 +19,24 @@ import java.lang.Exception
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
 }
+/*
+fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KotlinFile {
+    return if(traditionalFile() != null){
+        traditionalFile().toAst()
+    }else{
+        script().toAst()
+    }
 
-fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KotlinFile = KotlinFile(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+}
+fun KotlinParser.TraditionalFileContext.toAst(considerPosition: Boolean = false) : KotlinFile = KotlinFile(this.declaration().map { it.toAst() } , toPosition(considerPosition))
 
+fun KotlinParser.ScriptContext.toAst(considerPosition: Boolean = false) : KotlinFile = KotlinFile(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+
+*/
+
+fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KotlinFile{
+    return KotlinFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
+}
 fun Token.startPoint() = Point(line, charPositionInLine)
 
 fun Token.endPoint() = Point(line, charPositionInLine + text.length)
@@ -27,7 +44,39 @@ fun Token.endPoint() = Point(line, charPositionInLine + text.length)
 fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
     return if (considerPosition) Position(start.startPoint(), stop.endPoint()) else null
 }
+fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
+    return if(this.functionDeclaration()!= null){
+        this.functionDeclaration().toAst()
+    }else if(this.propertyDeclaration() != null){
+        this.propertyDeclaration().toAst()
+    }else{
+        throw UnsupportedOperationException("")
+    }
+}
 
+fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): FunctionDeclaration{
+    val id = this.ID().text
+    val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
+    var type: Type? = null
+    if(this.type() != null){
+        type = this.type().toAst()
+    }
+    var block = Block(listOf())
+    if(this.functionBody().block() != null){
+        block =  Block(this.functionBody().block().statement().map { it.toAst(considerPosition) })
+    }else{
+        val returnExpression = ReturnExpression(this.functionBody().expression().toAst())
+        block = Block(listOf(returnExpression))
+        if(type == null){
+            type = returnExpression.type
+        }
+    }
+    return FunctionDeclaration(id, params,type, block)
+}
+
+fun KotlinParser.FunctionValueParameterContext.toAst(): FunctionParameter{
+    return FunctionParameter( this.parameter().ID().text, this.parameter().type().toAst())
+}
 fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
     is PropertyDeclarationStatementContext -> this.propertyDeclaration().toAst(considerPosition)
     is KotlinParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
@@ -36,7 +85,7 @@ fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Sta
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Statement {
+fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): PropertyDeclaration {
     return if(varDeclaration() != null){
 
         val type = if(varDeclaration().type() != null) varDeclaration().type().toAst() else expression().toAst().type
@@ -75,6 +124,7 @@ fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): Contro
         return Block(listOf())
     }
 }
+
 
 
 fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{

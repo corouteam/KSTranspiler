@@ -1,14 +1,17 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSranspiler.*
+import org.antlr.v4.codegen.model.decl.Decl
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
+import kotlin.reflect.jvm.internal.impl.name.FqNameUnsafe
 
 val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
 fun KotlinFile.generateCode(): String{
-     return statements.map { it.generateCode() }.joinToString("\n")
+    return declarations.map { it.generateCode() }.joinToString("\n")
 }
+
 
 fun Statement.generateCode(): String {
     return when (this) {
@@ -17,8 +20,20 @@ fun Statement.generateCode(): String {
         is Print -> this.generateCode()
         is IfExpression -> this.generateCode()
         is Expression -> this.generateCode()
+        is FunctionDeclaration -> this.generateCode()
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
+}
+
+fun FunctionDeclaration.generateCode(): String{
+    val returnType = if(this.returnType != null) "-> ${this.returnType.generateCode()}" else ""
+    return "func ${this.id}(${this.parameters.joinToString(", "){it.generateCode()}})"+returnType +
+            "{\n\t${this.body.generateCode()}\n}"
+}
+
+
+fun FunctionParameter.generateCode(): String{
+    return "${this.id}: ${this.type.generateCode()}"
 }
 
 fun Assignment.generateCode(): String{
@@ -70,6 +85,7 @@ fun Expression.generateCode() : String = when (this) {
     is BinaryExpression -> this.generateCode()
     is StringLit -> "\"${this.value}\""
     is BoolLit -> "${this.value}"
+    is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)

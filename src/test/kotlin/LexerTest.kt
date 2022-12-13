@@ -114,4 +114,17 @@ class LexerTest {
                     "}")))
     }
 
+    @Test
+    fun parseFunction(){
+        val code = "fun test(x: Int, y: Int)\t{\tprint(\"ciao\")}"
+        val result = listOf("FUN","ID", "LPAREN", "ID", "COLON", "INT", "COMMA", "ID", "COLON", "INT", "RPAREN","LCURL", "PRINT","LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL","EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseFunctionExpression(){
+        val code = "fun test(x: Int, y: Int) = 3"
+        val result = listOf("FUN","ID", "LPAREN", "ID", "COLON", "INT", "COMMA", "ID", "COLON", "INT","RPAREN", "ASSIGN", "INT_LIT","EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

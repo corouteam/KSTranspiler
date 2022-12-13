@@ -2,9 +2,32 @@ parser grammar KotlinParser;
 
 options { tokenVocab=KotlinLexer; }
 
-kotlinFile : lines=line+ ;
+//kotlinFile : traditionalFile | script;
+
+kotlinFile
+    : NL* declaration* EOF;
+
+script : lines=line+ ;
 
 line      : statement (NL | EOF) ;
+
+packageHeader
+    : (PACKAGE ID)?
+    ;
+
+importList
+    : importHeader*
+    ;
+
+importHeader
+    : IMPORT ID?
+    ;
+
+declaration:
+    functionDeclaration
+    | propertyDeclaration
+    ;
+
 
 statement : propertyDeclaration # propertyDeclarationStatement
           | assignment     # assignmentStatement
@@ -67,6 +90,29 @@ lineStringContent
 //    | LineStrEscapedChar
 //   | LineStrRef
    ;
+
+functionValueParameters
+    : LPAREN NL* (functionValueParameter (NL* COMMA NL* functionValueParameter)* (NL* COMMA)?)? NL* RPAREN
+    ;
+
+functionValueParameter
+    : parameter (NL* ASSIGN NL* expression)?
+    ;
+
+parameter
+    : ID NL* COLON NL* type
+    ;
+
+functionDeclaration:
+    FUN NL* ID
+    NL* functionValueParameters
+    (NL* COLON NL* type)?
+    (NL* functionBody)?
+    ;
+functionBody
+    : block
+    | ASSIGN NL* expression
+    ;
 
 type : INT     # integer |
        DOUBLE  # double |

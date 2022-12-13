@@ -48,16 +48,15 @@ class KotlinParserTest {
     fun parsePropertyDeclVarInt() {
         assertEquals(
             """KotlinFile
-  Line
-    PropertyDeclarationStatement
-      PropertyDeclaration
-        VarDeclaration
-          T[var]
-          T[a]
-        T[=]
-        IntLiteral
-          T[1]
-    T[<EOF>]
+  Declaration
+    PropertyDeclaration
+      VarDeclaration
+        T[var]
+        T[a]
+      T[=]
+      IntLiteral
+        T[1]
+  T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_int")).multiLineString())
     }
@@ -66,21 +65,20 @@ class KotlinParserTest {
     fun parsePropertyDeclVarStrinb() {
         assertEquals(
             """KotlinFile
-  Line
-    PropertyDeclarationStatement
-      PropertyDeclaration
-        VarDeclaration
-          T[var]
-          T[a]
-        T[=]
-        StringLiteralExpression
-          StringLiteral
-            LineStringLiteral
-              T["]
-              LineStringContent
-                T[ciao]
-              T["]
-    T[<EOF>]
+  Declaration
+    PropertyDeclaration
+      VarDeclaration
+        T[var]
+        T[a]
+      T[=]
+      StringLiteralExpression
+        StringLiteral
+          LineStringLiteral
+            T["]
+            LineStringContent
+              T[ciao]
+            T["]
+  T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_string")).multiLineString())
     }
@@ -89,16 +87,15 @@ class KotlinParserTest {
     fun parsePropertyDeclVarBool() {
         assertEquals(
             """KotlinFile
-  Line
-    PropertyDeclarationStatement
-      PropertyDeclaration
-        VarDeclaration
-          T[var]
-          T[a]
-        T[=]
-        BoolLiteral
-          T[true]
-    T[<EOF>]
+  Declaration
+    PropertyDeclaration
+      VarDeclaration
+        T[var]
+        T[a]
+      T[=]
+      BoolLiteral
+        T[true]
+  T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_bool")).multiLineString())
     }
@@ -106,19 +103,18 @@ class KotlinParserTest {
     fun parsePropertyDeclVarIntWithExplicitType() {
         assertEquals(
             """KotlinFile
-  Line
-    PropertyDeclarationStatement
-      PropertyDeclaration
-        VarDeclaration
-          T[var]
-          T[a]
-          T[:]
-          Integer
-            T[Int]
-        T[=]
-        IntLiteral
-          T[1]
-    T[<EOF>]
+  Declaration
+    PropertyDeclaration
+      VarDeclaration
+        T[var]
+        T[a]
+        T[:]
+        Integer
+          T[Int]
+      T[=]
+      IntLiteral
+        T[1]
+  T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_int_expl_type")).multiLineString())
     }
@@ -127,16 +123,15 @@ class KotlinParserTest {
     fun parseVarDeclInt() {
         assertEquals(
             """KotlinFile
-  Line
-    PropertyDeclarationStatement
-      PropertyDeclaration
-        VarDeclaration
-          T[var]
-          T[a]
-          T[:]
-          Integer
-            T[Int]
-    T[<EOF>]
+  Declaration
+    PropertyDeclaration
+      VarDeclaration
+        T[var]
+        T[a]
+        T[:]
+        Integer
+          T[Int]
+  T[<EOF>]
 """,
             toParseTree(parseResource("var_declaration_int")).multiLineString())
     }
@@ -146,16 +141,15 @@ class KotlinParserTest {
     fun parseValDeclInt() {
         assertEquals(
             """KotlinFile
-  Line
-    PropertyDeclarationStatement
-      PropertyDeclaration
-        ValDeclaration
-          T[val]
-          T[a]
-          T[:]
-          Integer
-            T[Int]
-    T[<EOF>]
+  Declaration
+    PropertyDeclaration
+      ValDeclaration
+        T[val]
+        T[a]
+        T[:]
+        Integer
+          T[Int]
+  T[<EOF>]
 """,
             toParseTree(parseResource("val_declaration_int")).multiLineString())
     }
@@ -189,4 +183,103 @@ class KotlinParserTest {
 """,
             toParseTree(parseResource("ifDeclaration")).multiLineString())
     }
+    @Test
+    fun parseSimpleFun(){
+        var expected = """KotlinFile
+  Declaration
+    FunctionDeclaration
+      T[fun]
+      T[test]
+      FunctionValueParameters
+        T[(]
+        FunctionValueParameter
+          Parameter
+            T[x]
+            T[:]
+            Integer
+              T[Int]
+        T[,]
+        FunctionValueParameter
+          Parameter
+            T[y]
+            T[:]
+            Integer
+              T[Int]
+        T[)]
+      FunctionBody
+        Block
+          T[{]
+          T[
+]
+          PrintStatement
+            Print
+              T[print]
+              T[(]
+              StringLiteralExpression
+                StringLiteral
+                  LineStringLiteral
+                    T["]
+                    LineStringContent
+                      T[ciao]
+                    T["]
+              T[)]
+          T[
+]
+          T[}]
+  T[<EOF>]
+"""
+        val actual = toParseTree(parseResource("function_declaration")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseExpressionFun(){
+        var expected = """KotlinFile
+  Declaration
+    FunctionDeclaration
+      T[fun]
+      T[test]
+      FunctionValueParameters
+        T[(]
+        FunctionValueParameter
+          Parameter
+            T[x]
+            T[:]
+            Integer
+              T[Int]
+        T[,]
+        FunctionValueParameter
+          Parameter
+            T[y]
+            T[:]
+            Integer
+              T[Int]
+        T[)]
+      FunctionBody
+        Block
+          T[{]
+          T[
+]
+          PrintStatement
+            Print
+              T[print]
+              T[(]
+              StringLiteralExpression
+                StringLiteral
+                  LineStringLiteral
+                    T["]
+                    LineStringContent
+                      T[ciao]
+                    T["]
+              T[)]
+          T[
+]
+          T[}]
+  T[<EOF>]
+"""
+        val actual = toParseTree(parseResource("function_declaration")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+
 }

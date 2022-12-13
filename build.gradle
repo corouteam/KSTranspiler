@@ -43,6 +43,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.9.0"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 generateGrammarSource {

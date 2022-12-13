@@ -1,5 +1,6 @@
 package it.poliba.KSTranspiler
 
+import com.google.gson.Gson
 import it.poliba.KSTranspiler.KotlinParser.BoolLiteralContext
 import it.poliba.KSTranspiler.parsing.KotlinParserFacade
 import it.poliba.KSranspiler.*
@@ -49,6 +50,31 @@ class MappingTest {
     }
 
     @Test
+    fun funSimple(){
+        val code = "fun test(x: Int, y: Int)\t{\tprint(\"ciao\")}"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+           FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), null, Block(
+               listOf(Print(StringLit("ciao")))
+           ))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+    @Test
+    fun funExpression(){
+        val code = "fun test(x: Int, y: Int) = 3"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
+                listOf(ReturnExpression(IntLit("3")))
+            ))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+
+    /*@Test
     fun mapPrint() {
         val code = "print('a')"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
@@ -116,5 +142,5 @@ class MappingTest {
         val expectedAst = KotlinFile(listOf(
             IfExpression(BoolLit("true"),Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))))
         assertEquals(expectedAst, ast)
-    }
+    }*/
 }

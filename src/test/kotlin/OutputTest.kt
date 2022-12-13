@@ -107,4 +107,21 @@ class OutputTest {
         assertEquals(result, ast.generateCode())
     }
 
+    @Test
+    fun convertFunction(){
+        val code = "fun test(x: Int, y: Int){\tprint(\"ciao\")}"
+        val result = "func test(x: Int, y: Int){\n\tprint(\"ciao\")\n}"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        var ast = parseResult.toAst()
+        assertEquals(result, ast.generateCode())
+    }
+
+    @Test
+    fun convertExpressionFunction(){
+        val code = "fun test(x: Int, y: Int) = 3"
+        val result = "func test(x: Int, y: Int)-> Int{\n\treturn 3\n}"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        var ast = parseResult.toAst()
+        assertEquals(result, ast.generateCode())
+    }
 }

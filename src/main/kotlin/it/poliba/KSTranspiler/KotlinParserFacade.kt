@@ -1,6 +1,7 @@
 package it.poliba.KSTranspiler.parsing
 
 
+import com.strumenta.kolasu.model.debugPrint
 import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.KotlinParser
 import it.poliba.KSTranspiler.tools.ErrorHandler
@@ -11,6 +12,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 import java.nio.charset.Charset
+import java.util.*
 
 data class Error(val message: String)
 
@@ -38,5 +40,19 @@ object KotlinParserFacade {
         val root = parser.kotlinFile()
 
         return ParsingResult(root, ErrorHandler.getErrors())
+    }
+
+    fun tokens(lexer: KotlinLexer): List<String> {
+        val tokens = LinkedList<String>()
+
+        do {
+            val t = lexer.nextToken()
+            when (t.type) {
+                -1 -> tokens.add("EOF")
+                else -> if (t.type != KotlinLexer.WS) tokens.add(lexer.ruleNames[t.type - 1])
+            }
+        } while (t.type != -1)
+
+        return tokens
     }
 }

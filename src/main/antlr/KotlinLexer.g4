@@ -45,14 +45,15 @@ COLON              : ':';
 LCURL              : '{';
 RCURL              : '}';
 SEMICOLON          : ';';
-
+COMMA              : ',';
 
 IF: 'if';
 ELSE: 'else';
+FUN: 'fun';
+PACKAGE: 'package';
 
 // Identifiers
 ID                 : [_]*[a-z][A-Za-z0-9_]* ;
-
 
 // SECTION: strings
 
