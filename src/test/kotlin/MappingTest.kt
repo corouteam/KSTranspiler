@@ -1,7 +1,9 @@
 package it.poliba.KSTranspiler
 
+import com.google.gson.Gson
 import it.poliba.KSTranspiler.KotlinParser.BoolLiteralContext
 import it.poliba.KSTranspiler.parsing.KotlinParserFacade
+import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
 import it.poliba.KSranspiler.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -49,10 +51,47 @@ class MappingTest {
     }
 
     @Test
-    fun mapPrint() {
-        val code = "print('a')"
+    fun funSimple(){
+        val code = "fun test(x: Int, y: Int)\t{\tprint(\"ciao\")}"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
         val expectedAst = KotlinFile(listOf(
+           FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), null, Block(
+               listOf(Print(StringLit("ciao")))
+           ))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+    @Test
+    fun funExpression(){
+        val code = "fun test(x: Int, y: Int) = 3"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
+                listOf(ReturnExpression(IntLit("3")))
+            ))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+    @Test
+    fun funExpressionReturn(){
+        val code = "fun test(x: Int, y: Int): Int { return 3 }"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf(
+            FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
+                listOf(ReturnExpression(IntLit("3")))
+            ))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+
+    @Test
+    fun mapPrint() {
+        val code = "print('a')"
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
             Print(VarReference("a", StringType() ))
         ))
         assertEquals(expectedAst, ast)
@@ -61,8 +100,8 @@ class MappingTest {
     @Test
     fun mapAssignment() {
         val code = "a = 5"
-        val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf(
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
             Assignment("a", IntLit("5"))
         ))
         assertEquals(expectedAst, ast)
@@ -70,13 +109,13 @@ class MappingTest {
 
     @Test
     fun mapIf() {
-        val code = "if(true) print(\"ok\")"
-        val ast = KotlinParserFacade.parse(code).root!!
-            /*.toAst()
-        val expectedAst = KotlinFile(listOf(
-            IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = null)
+        val code = "if(true) print(\"Hello world\")"
+        val ast = KotlinParserFacadeScript.parse(code).root!!
+            .toAst()
+        val expectedAst = KotlinScript(listOf(
+            IfExpression(BoolLit("true"), Print(StringLit("Hello world")), elseBranch = null)
         ))
-        assertEquals(expectedAst, ast)*/
+        assertEquals(expectedAst, ast)
     }
 
     @Test
@@ -86,8 +125,8 @@ class MappingTest {
                 "}else{" +
                 "print(\"Bye world\")" +
                 "}"
-        val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf(
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
             IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = Block(listOf(Print(StringLit("Bye world")))))
         ))
         assertEquals(expectedAst, ast)
@@ -100,8 +139,8 @@ class MappingTest {
                 "}else if(false){" +
                 "print(\"Bye world\")" +
                 "}"
-        val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf(
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
             IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = IfExpression(BoolLit("false"), Block(listOf(Print(StringLit("Bye world")))), null))))
         assertEquals(expectedAst, ast)
     }
@@ -112,8 +151,8 @@ class MappingTest {
                 "else " +
                 "print(\"Bye world\")" +
                 ""
-        val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf(
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
             IfExpression(BoolLit("true"),Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))))
         assertEquals(expectedAst, ast)
     }

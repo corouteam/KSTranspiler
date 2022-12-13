@@ -13,14 +13,23 @@ import kotlin.reflect.full.primaryConstructor
 // Kotlin specific part
 //
 
-data class KotlinFile(val statements : List<Statement>, override var position: Position? = null) : Node()
+data class KotlinFile(val declarations: List<Declaration>,  override var position: Position? = null) : Node()
+data class KotlinScript(val statement: List<Statement>,  override var position: Position? = null) : Node()
+
+sealed class Declaration: Statement()
 
 sealed class Statement : ControlStructureBody()
+
+/*
+    Improvement: handle expression body differently.
+    TODO: error checking
+ */
+class FunctionDeclaration(val id: String,val parameters: List<FunctionParameter>,val returnType: Type?,val body: ControlStructureBody) : Declaration()
 
 sealed class Expression(open val type: Type) : Statement()
 
 sealed class Type : Node()
-
+class FunctionParameter(val id: String,val  type: Type)
 //
 // Types
 //
@@ -35,7 +44,7 @@ data class BoolType(override var position: Position? = null) : Type()
 //
 // Expressions
 //
-
+ class ReturnExpression(val returnExpression: Expression): Expression(returnExpression.type)
 sealed class BinaryExpression(open val left: Expression, open val right: Expression) : Expression(type = left.type)
 
 data class SumExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
@@ -74,7 +83,7 @@ data class Block(val body: List<Statement>): ControlStructureBody()
 //
 
 data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression, var mutable: Boolean,  override  var position: Position? = null) :
-Statement()
+Declaration()
 
 data class Assignment(val varName: String, val value: Expression, override var position: Position? = null) : Statement()
 

@@ -2,9 +2,30 @@ parser grammar KotlinParser;
 
 options { tokenVocab=KotlinLexer; }
 
-kotlinFile : lines=line+ ;
+file
+    : NL* declaration* EOF #kotlinFile
+    |  lines=line+ #kotlinScript;
+
 
 line      : statement (NL | EOF) ;
+
+packageHeader
+    : (PACKAGE ID)?
+    ;
+
+importList
+    : importHeader*
+    ;
+
+importHeader
+    : IMPORT ID?
+    ;
+
+declaration:
+    functionDeclaration
+    | propertyDeclaration
+    ;
+
 
 statement : propertyDeclaration # propertyDeclarationStatement
           | assignment     # assignmentStatement
@@ -34,7 +55,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
-           | stringLiteral                                                 # stringLiteralExpression;
+           | stringLiteral                                                 # stringLiteralExpression
+           | RETURN returnExpression=expression                            # returnExpression;
 
 
 if
@@ -67,6 +89,30 @@ lineStringContent
 //    | LineStrEscapedChar
 //   | LineStrRef
    ;
+
+functionValueParameters
+    : LPAREN NL* (functionValueParameter (NL* COMMA NL* functionValueParameter)* (NL* COMMA)?)? NL* RPAREN
+    ;
+
+functionValueParameter
+    : parameter (NL* ASSIGN NL* expression)?
+    ;
+
+parameter
+    : ID NL* COLON NL* type
+    ;
+
+functionDeclaration:
+    FUN NL* ID
+    NL* functionValueParameters
+    (NL* COLON NL* type)?
+    (NL* functionBody)?
+    ;
+
+functionBody
+    : block
+    | ASSIGN NL* expression
+    ;
 
 type : INT     # integer |
        DOUBLE  # double |
