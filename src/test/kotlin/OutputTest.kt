@@ -134,4 +134,13 @@ class OutputTest {
         var ast = parseResult.toAst()
         assertEquals(result, ast.generateCode())
     }
+
+    @Test
+    fun convertRangeExpression(){
+        var code = "val range = 1..42"
+        val result = "let range:ClosedRange<Int> = 1...42"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        var ast = parseResult.toAst()
+        assertEquals(result, ast.generateCode())
+    }
 }

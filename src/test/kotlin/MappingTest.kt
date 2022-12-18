@@ -156,4 +156,15 @@ class MappingTest {
             IfExpression(BoolLit("true"),Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))))
         assertEquals(expectedAst, ast)
     }
+
+    @Test
+    fun mapRangeExpression() {
+        val code = "val a = 1..42"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val expectedAst = KotlinFile(listOf())
+
+        assertEquals(expectedAst, ast)
+    }
+
+
 }

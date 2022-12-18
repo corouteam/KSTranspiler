@@ -45,6 +45,7 @@ LCURL              : '{';
 RCURL              : '}';
 SEMICOLON          : ';';
 COMMA              : ',';
+RANGE              : '..';
 
 IF: 'if';
 ELSE: 'else';
