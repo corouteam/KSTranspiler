@@ -100,7 +100,7 @@ fun Type.generateCode() : String = when (this) {
     is DoubleType -> "Double"
     is StringType -> "String"
     is BoolType -> "Boolean"
-    is IntRangeType -> "ClosedRange<Int>"
+    is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

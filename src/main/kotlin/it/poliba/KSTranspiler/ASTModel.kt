@@ -34,7 +34,7 @@ class FunctionParameter(val id: String,val  type: Type)
 // Types
 //
 
-data class IntRangeType(override var position: Position? = null): Type()
+data class RangeType(val type: Type, override var position: Position? = null): Type()
 data class IntType(override var position: Position? = null) : Type()
 
 data class DoubleType(override var position: Position? = null) : Type()

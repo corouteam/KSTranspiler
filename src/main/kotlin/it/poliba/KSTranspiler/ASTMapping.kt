@@ -122,10 +122,7 @@ fun KotlinParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expres
 
 fun getRangeType(leftType: Type, rightType: Type): Type {
     // TODO don't just check left type
-    return when (leftType) {
-        is IntType -> IntRangeType()
-        else -> throw TODO("Not implemented")
-    }
+    return RangeType(leftType)
 }
 
 fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression{
