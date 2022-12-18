@@ -7,6 +7,7 @@ import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
 import it.poliba.KSranspiler.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf.Property
 
 class MappingTest {
 
@@ -161,7 +162,9 @@ class MappingTest {
     fun mapRangeExpression() {
         val code = "val a = 1..42"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf())
+        val expectedAst = KotlinFile(listOf(
+            PropertyDeclaration(varName="a", type=RangeType(type=IntType()), value=RangeExpression(leftExpression=IntLit(value="1"), rightExpression=IntLit(value="42", position=null), type=RangeType(type=IntType())), mutable=false))
+        )
 
         assertEquals(expectedAst, ast)
     }
