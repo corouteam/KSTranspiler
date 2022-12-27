@@ -88,6 +88,7 @@ fun Expression.generateCode() : String = when (this) {
     is BinaryExpression -> this.generateCode()
     is StringLit -> "\"${this.value}\""
     is BoolLit -> "${this.value}"
+    is RangeExpression -> "${this.leftExpression.generateCode()}...${this.rightExpression.generateCode()}"
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
@@ -99,6 +100,7 @@ fun Type.generateCode() : String = when (this) {
     is DoubleType -> "Double"
     is StringType -> "String"
     is BoolType -> "Boolean"
+    is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

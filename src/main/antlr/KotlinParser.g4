@@ -56,8 +56,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression;
-
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*

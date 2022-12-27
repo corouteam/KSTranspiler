@@ -134,4 +134,11 @@ class LexerTest {
         val result = listOf("FUN","ID", "LPAREN", "ID", "COLON", "INT", "COMMA", "ID", "COLON", "INT","RPAREN","COLON","INT", "LCURL","RETURN","INT_LIT","RCURL","EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseRangeExpression(){
+        val code = "1..42"
+        val result = listOf("INT_LIT", "RANGE", "INT_LIT", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

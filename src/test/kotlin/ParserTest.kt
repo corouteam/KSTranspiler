@@ -288,5 +288,26 @@ class KotlinParserTest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun parseRangeExpression() {
+        val expected = """KotlinFile
+  Declaration
+    PropertyDeclaration
+      ValDeclaration
+        T[val]
+        T[a]
+      T[=]
+      RangeExpression
+        IntLiteral
+          T[1]
+        T[..]
+        IntLiteral
+          T[42]
+  T[<EOF>]
+"""
+        val actual = toParseTree(parseResource("range_expression")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
 
 }

@@ -34,6 +34,7 @@ class FunctionParameter(val id: String,val  type: Type)
 // Types
 //
 
+data class RangeType(val type: Type, override var position: Position? = null): Type()
 data class IntType(override var position: Position? = null) : Type()
 
 data class DoubleType(override var position: Position? = null) : Type()
@@ -88,3 +89,7 @@ Declaration()
 data class Assignment(val varName: String, val value: Expression, override var position: Position? = null) : Statement()
 
 data class Print(val value: Expression, override var position: Position? = null) : Statement()
+
+data class RangeExpression(val leftExpression: Expression,
+                 val rightExpression: Expression,
+                 override val type: Type): Expression(type)

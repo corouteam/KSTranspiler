@@ -108,8 +108,21 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
+    is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
     is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun KotlinParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return RangeExpression(
+        leftExpression = this.left.toAst(),
+        rightExpression = this.right.toAst(),
+        type = getRangeType(this.left.toAst().type, this.right.toAst().type))
+}
+
+fun getRangeType(leftType: Type, rightType: Type): Type {
+    // TODO don't just check left type
+    return RangeType(leftType)
 }
 
 fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression{
