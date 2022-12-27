@@ -46,12 +46,15 @@ RCURL              : '}';
 SEMICOLON          : ';';
 COMMA              : ',';
 RANGE              : '..';
+LANGLE: '<';
+RANGLE: '>';
 
 IF: 'if';
 ELSE: 'else';
 FUN: 'fun';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
+LISTOF: 'listOf';
 
 // Identifiers
 ID                 : [_]*[a-z][A-Za-z0-9_]* ;
@@ -70,6 +73,7 @@ QUOTE_CLOSE
 LineStrText
     : ~('\\' | '"' | '$')+ | '$'
     ;
+
 mode Inside;
 Inside_QUOTE_OPEN: QUOTE_OPEN -> pushMode(LineString), type(QUOTE_OPEN);
 

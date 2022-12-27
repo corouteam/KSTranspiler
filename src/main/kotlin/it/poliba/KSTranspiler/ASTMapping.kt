@@ -4,16 +4,13 @@ import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
-import it.poliba.KSTranspiler.KotlinParser.FunctionBodyContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
 import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
-import it.poliba.KSTranspiler.KotlinParser.VarDeclarationContext
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 
 import it.poliba.KSranspiler.*
-import java.lang.Exception
 
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
@@ -109,6 +106,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
+    is KotlinParser.ListExpressionContext -> toAst(considerPosition)
     is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
@@ -118,6 +116,18 @@ fun KotlinParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expres
         leftExpression = this.left.toAst(),
         rightExpression = this.right.toAst(),
         type = getRangeType(this.left.toAst().type, this.right.toAst().type))
+}
+
+fun KotlinParser.ListExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return ListExpression(
+        // lists can have just one type, take first of type arguments
+        itemsType = this.typeArguments().toAst(considerPosition).first(),
+        items = this.expression().map { it.toAst() }
+    )
+}
+
+fun KotlinParser.TypeArgumentsContext.toAst(considerPosition: Boolean): List<Type> {
+    return this.type().map { it.toAst() }
 }
 
 fun getRangeType(leftType: Type, rightType: Type): Type {
@@ -151,6 +161,7 @@ fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{
 fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
     is KotlinParser.IntegerContext -> IntType(toPosition(considerPosition))
     is KotlinParser.DoubleContext -> DoubleType(toPosition(considerPosition))
+    is KotlinParser.StringContext -> StringType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

@@ -1,11 +1,9 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSranspiler.*
-import org.antlr.v4.codegen.model.decl.Decl
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
-import kotlin.reflect.jvm.internal.impl.name.FqNameUnsafe
 
 val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
 fun KotlinFile.generateCode(): String{
@@ -89,6 +87,7 @@ fun Expression.generateCode() : String = when (this) {
     is StringLit -> "\"${this.value}\""
     is BoolLit -> "${this.value}"
     is RangeExpression -> "${this.leftExpression.generateCode()}...${this.rightExpression.generateCode()}"
+    is ListExpression -> "[${this.items.map { it.generateCode() }.joinToString(", ")}]"
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
@@ -101,10 +100,11 @@ fun Type.generateCode() : String = when (this) {
     is StringType -> "String"
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
+    is ListType -> "[${this.itemsType.generateCode()}]"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun BinaryExpression.generateCode(): String = when(this){
+fun BinaryExpression.generateCode(): String = when(this) {
     is SumExpression -> "${left.generateCode()} + ${right.generateCode()}"
     is SubtractionExpression -> "${left.generateCode()} - ${right.generateCode()}"
     is MultiplicationExpression -> "${left.generateCode()} * ${right.generateCode()}"

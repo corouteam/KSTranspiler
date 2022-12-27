@@ -2,11 +2,6 @@ package it.poliba.KSranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Position
-import com.sun.jdi.BooleanType
-import java.util.*
-import kotlin.reflect.KParameter
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.primaryConstructor
 
 
 //
@@ -42,6 +37,8 @@ data class DoubleType(override var position: Position? = null) : Type()
 data class StringType(override var position: Position? = null) : Type()
 data class BoolType(override var position: Position? = null) : Type()
 
+data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
+
 //
 // Expressions
 //
@@ -59,6 +56,12 @@ data class MultiplicationExpression(override val left: Expression, override val 
 
 data class DivisionExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
     BinaryExpression(left, right)
+
+data class ListExpression(
+    val itemsType: Type,
+    val items: List<Expression>,
+    override var position: Position? = null
+): Expression(ListType(itemsType))
 
 data class UnaryMinusExpression(val value: Expression, override var position: Position? = null) : Expression(value.type)
 

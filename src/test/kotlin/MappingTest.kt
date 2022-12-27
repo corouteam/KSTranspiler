@@ -1,13 +1,11 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
-import it.poliba.KSTranspiler.KotlinParser.BoolLiteralContext
 import it.poliba.KSTranspiler.parsing.KotlinParserFacade
 import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
 import it.poliba.KSranspiler.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf.Property
 
 class MappingTest {
 
@@ -165,6 +163,19 @@ class MappingTest {
         val expectedAst = KotlinFile(listOf(
             PropertyDeclaration(varName="a", type=RangeType(type=IntType()), value=RangeExpression(leftExpression=IntLit(value="1"), rightExpression=IntLit(value="42", position=null), type=RangeType(type=IntType())), mutable=false))
         )
+
+        assertEquals(expectedAst, ast)
+    }
+
+    @Test
+    fun mapListOfExpression() {
+        val code = "listOf<Int>(1, 2, 3)"
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
+            ListExpression(
+                itemsType=IntType(position=null),
+                items=listOf(IntLit("1"), IntLit("2"), IntLit("3")))
+        ))
 
         assertEquals(expectedAst, ast)
     }
