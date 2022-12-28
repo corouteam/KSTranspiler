@@ -48,6 +48,8 @@ COMMA              : ',';
 RANGE              : '..';
 LANGLE: '<';
 RANGLE: '>';
+AT                 : '@';
+DOT                : '.';
 
 IF: 'if';
 ELSE: 'else';
@@ -56,13 +58,28 @@ PACKAGE: 'package';
 RETURN                  : 'return' ;
 LISTOF: 'listOf';
 
-// Identifiers
-ID                 : [_]*[a-z][A-Za-z0-9_]* ;
+//Colors
+COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
+
 
 // SECTION: strings
 
 QUOTE_OPEN: '"' -> pushMode(LineString);
 
+TEXT_COMPOSE: 'Text';
+
+COLOR: 'Color';
+COLOR_BLUE: 'Blue';
+
+FONT_WEIGHT: 'FontWeight';
+FONT_WEIGHT_BOLD: 'Bold';
+
+FONT_WEIGHT_PARAM: 'fontWeight';
+COLOR_PARAM: 'color';
+
+
+// Identifiers
+ID                 : [_]*[a-z][A-Za-z0-9_]* ;
 
 mode LineString;
 

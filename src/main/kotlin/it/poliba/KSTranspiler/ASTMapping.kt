@@ -81,6 +81,7 @@ fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Sta
     is KotlinParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.ExpressionStatementContext -> expression().toAst()
+
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -108,6 +109,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
     is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
+    is KotlinParser.ComposableCallExpressionContext -> toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -151,7 +153,11 @@ fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): Contro
     }
 }
 
-
+fun KotlinParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression{
+    var valueString = ""
+    this.lineStringLiteral().lineStringContent().forEach { valueString = valueString + ""+it.LineStrText().text }
+    return StringLit(valueString, toPosition(considerPosition))
+}
 
 fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{
     var valueString = ""

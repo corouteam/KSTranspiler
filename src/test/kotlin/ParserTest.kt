@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 
 class KotlinParserTest {
 
@@ -341,4 +340,140 @@ KotlinScript
     }
 
 
+    @Test
+    fun parseTextComposable(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        TextComposable\n" +
+                "          T[Text]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[Hello world]\n" +
+                "                T[\"]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("textComposable")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseCustomColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        CustomColor\n" +
+                "          T[Color]\n" +
+                "          T[(]\n" +
+                "          T[0xFF27AE60]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("customColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseBlueColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        BlueColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Blue]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("blueColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseCustomFontWeight(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      FontWeightLiteral\n" +
+                "        CustomWeight\n" +
+                "          T[FontWeight]\n" +
+                "          T[(]\n" +
+                "          T[200]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("customFontWeight")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseTextWithColorProperties(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        TextComposable\n" +
+                "          T[Text]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[Music]\n" +
+                "                T[\"]\n" +
+                "          T[,]\n" +
+                "          ColorParameter\n" +
+                "            T[color]\n" +
+                "            T[=]\n" +
+                "            BlueColor\n" +
+                "              T[Color]\n" +
+                "              T[.]\n" +
+                "              T[Blue]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("textWithColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseTextWithColorAndFontProperties(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        TextComposable\n" +
+                "          T[Text]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[Music]\n" +
+                "                T[\"]\n" +
+                "          T[,]\n" +
+                "          ColorParameter\n" +
+                "            T[color]\n" +
+                "            T[=]\n" +
+                "            BlueColor\n" +
+                "              T[Color]\n" +
+                "              T[.]\n" +
+                "              T[Blue]\n" +
+                "          T[,]\n" +
+                "          FontWeightParameter\n" +
+                "            T[fontWeight]\n" +
+                "            T[=]\n" +
+                "            BoldFontWeight\n" +
+                "              T[FontWeight]\n" +
+                "              T[.]\n" +
+                "              T[Bold]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("textWithFontWeightAndColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
 }
