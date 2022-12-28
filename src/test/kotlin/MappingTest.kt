@@ -181,4 +181,40 @@ class MappingTest {
     }
 
 
+
+    @Test
+    fun mapTextComposable(){
+        val code = "Text(\"Hello world\")"
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
+            TextComposableCall(StringLit("Hello world"), null, null)
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        //val expectedAst = KotlinScript
+    }
+
+    @Test
+    fun mapTextComposableThrowsIfNotString(){
+        val code = "Text(2)"
+        val expected = IllegalArgumentException("String expected in Text composable")
+        var res: Exception? = null
+        try{
+            val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        }catch (e: Exception){
+            res = e
+        }
+        assertEquals(res.toString(), expected.toString())
+    }
+
+    @Test
+    fun mapTextComposableWithParams(){
+        val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
+        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val expectedAst = KotlinScript(listOf(
+            TextComposableCall(StringLit("Hello world"), ColorBlue(), FontWeightBold())
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        //val expectedAst = KotlinScript
+    }
+
 }

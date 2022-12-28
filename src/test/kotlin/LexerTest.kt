@@ -148,4 +148,52 @@ class LexerTest {
         val result = listOf("LISTOF", "LANGLE", "INT", "RANGLE", "LPAREN", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseTextComposable(){
+        val code = "Text(\"Hello world\")"
+        val result = listOf("TEXT_COMPOSE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseCustomColor(){
+        val code = "Color(0xFF27AE60)"
+        val result = listOf("COLOR", "LPAREN", "COLOR_LITERAL", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseBlueColor(){
+        val code = "Color.Blue"
+        val result = listOf("COLOR", "DOT", "COLOR_BLUE", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseCustomFontWeight(){
+        val code = "FontWeight(200)"
+        val result = listOf("FONT_WEIGHT", "LPAREN", "INT_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseBoldFontWeight(){
+        val code = "FontWeight.Bold"
+        val result = listOf("FONT_WEIGHT", "DOT", "FONT_WEIGHT_BOLD", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseTextWithParameter(){
+        val code = "Text( \"Music\", color = Color.Blue)"
+        val result = listOf("TEXT_COMPOSE", "LPAREN", "QUOTE_OPEN", "LineStrText",
+            "QUOTE_CLOSE",
+            "COMMA",
+            "COLOR_PARAM",
+            "ASSIGN",
+            "COLOR", "DOT", "COLOR_BLUE",
+             "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

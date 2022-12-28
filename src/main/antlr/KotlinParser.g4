@@ -41,6 +41,7 @@ valDeclaration : VAL ID (NL* COLON NL* type)?;
 
 propertyDeclaration:  (varDeclaration|valDeclaration) (ASSIGN expression)?;
 
+annotation: AT ID;
 
 assignment : ID ASSIGN expression ;
 
@@ -58,8 +59,10 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
-           | RETURN returnExpression=expression                            # returnExpression;
-
+           | RETURN returnExpression=expression                            # returnExpression
+           | composableCall #composableCallExpression
+           | color                                                         # colorLiteral
+           | fontWeight                                                    # fontWeightLiteral;
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
       (
@@ -104,7 +107,7 @@ parameter
     ;
 
 functionDeclaration:
-    FUN NL* ID
+    annotation? FUN NL* ID
     NL* functionValueParameters
     (NL* COLON NL* type)?
     (NL* functionBody)?
@@ -123,3 +126,18 @@ type : INT     # integer |
 typeArguments
     : LANGLE NL* type (NL* COMMA NL* type)* (NL* COMMA)? NL* RANGLE
     ;
+
+composableCall:
+    TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable;
+
+textComposeParameter:
+    COLOR_PARAM ASSIGN color #colorParameter
+    | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter;
+
+color:
+     COLOR LPAREN COLOR_LITERAL RPAREN #customColor
+     | COLOR DOT COLOR_BLUE #blueColor;
+
+fontWeight:
+    FONT_WEIGHT LPAREN INT_LIT RPAREN #customWeight
+    | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;

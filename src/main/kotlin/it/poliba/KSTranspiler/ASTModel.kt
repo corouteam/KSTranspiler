@@ -36,9 +36,16 @@ data class DoubleType(override var position: Position? = null) : Type()
 
 data class StringType(override var position: Position? = null) : Type()
 data class BoolType(override var position: Position? = null) : Type()
+data class ColorType(override var position: Position? = null): Type()
+data class FontWeightType(override var position: Position? = null): Type()
+data class VoidType(override var position: Position? = null) : Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 
+// EXPERIMENTAL COMPOSABLE
+sealed class ComposableType: Type()
+class TextComposableType: ComposableType()
+// END TEST
 //
 // Expressions
 //
@@ -96,3 +103,20 @@ data class Print(val value: Expression, override var position: Position? = null)
 data class RangeExpression(val leftExpression: Expression,
                  val rightExpression: Expression,
                  override val type: Type): Expression(type)
+
+sealed class FunctionCall(type: Type = VoidType()): Expression(type = type)
+sealed class ComposableCall(type: ComposableType): FunctionCall(type = type)
+
+class TextComposableCall(
+    val value: Expression,
+    val color: ColorLit?,
+    val fontWeight: FontWeightLit?
+): ComposableCall(TextComposableType())
+
+sealed class ColorLit: Expression(ColorType())
+class CustomColor(val hex: StringLit): ColorLit()
+class ColorBlue: ColorLit()
+sealed class FontWeightLit: Expression(FontWeightType())
+
+class CustomFontWeight(val value: IntLit): FontWeightLit()
+class FontWeightBold: FontWeightLit()
