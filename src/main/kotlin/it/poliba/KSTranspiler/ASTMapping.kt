@@ -15,20 +15,6 @@ import it.poliba.KSranspiler.*
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
 }
-/*
-fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KotlinFile {
-    return if(traditionalFile() != null){
-        traditionalFile().toAst()
-    }else{
-        script().toAst()
-    }
-
-}
-fun KotlinParser.TraditionalFileContext.toAst(considerPosition: Boolean = false) : KotlinFile = KotlinFile(this.declaration().map { it.toAst() } , toPosition(considerPosition))
-
-fun KotlinParser.ScriptContext.toAst(considerPosition: Boolean = false) : KotlinFile = KotlinFile(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
-
-*/
 
 fun KotlinParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : KotlinScript{
     return KotlinScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))

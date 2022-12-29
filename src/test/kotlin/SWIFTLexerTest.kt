@@ -9,9 +9,9 @@ import it.poliba.KSTranspiler.tools.ErrorHandler
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 import java.util.*
 
-class LexerTest {
-   private fun lexerForCode(code: String): KotlinLexer {
-       val lexer = KotlinLexer(CharStreams.fromString(code))
+class SWIFTLexerTest {
+   private fun lexerForCode(code: String): SwiftLexer {
+       val lexer = it.poliba.KSTranspiler.SwiftLexer(CharStreams.fromString(code))
            .attachErrorHandler()
 
        val errors = ErrorHandler.getErrors()
@@ -22,11 +22,11 @@ class LexerTest {
 
        return lexer
    }
-    private fun lexerForResource(resourceName: String) = KotlinLexer(
-        ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin"))
+    private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.SwiftLexer(
+        ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Swift"))
     ).attachErrorHandler()
 
-    fun tokens(lexer: KotlinLexer): List<String> {
+    fun tokens(lexer: SwiftLexer): List<String> {
         val tokens = LinkedList<String>()
 
         do {
@@ -136,20 +136,6 @@ class LexerTest {
     }
 
     @Test
-    fun parseRangeExpression(){
-        val code = "1..42"
-        val result = listOf("INT_LIT", "RANGE", "INT_LIT", "EOF")
-        assertEquals(result, tokens(lexerForCode(code)))
-    }
-
-    @Test
-    fun parseListOfExpression(){
-        val code = "listOf<Int>(1, 2, 3)"
-        val result = listOf("LISTOF", "LANGLE", "INT", "RANGLE", "LPAREN", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RPAREN", "EOF")
-        assertEquals(result, tokens(lexerForCode(code)))
-    }
-
-    @Test
     fun parseTextComposable(){
         val code = "Text(\"Hello world\")"
         val result = listOf("TEXT_COMPOSE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "EOF")
@@ -171,35 +157,23 @@ class LexerTest {
 
     @Test
     fun parseBlueColor(){
-        val code = "Color.Blue"
+        val code = "Color.blue"
         val result = listOf("COLOR", "DOT", "COLOR_BLUE", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
-    fun parseCustomFontWeight(){
-        val code = "FontWeight(200)"
-        val result = listOf("FONT_WEIGHT", "LPAREN", "INT_LIT", "RPAREN", "EOF")
-        assertEquals(result, tokens(lexerForCode(code)))
-    }
-
-    @Test
     fun parseBoldFontWeight(){
-        val code = "FontWeight.Bold"
-        val result = listOf("FONT_WEIGHT", "DOT", "FONT_WEIGHT_BOLD", "EOF")
+        val code = ".bold()"
+        val result = listOf("DOT", "FONT_WEIGHT_BOLD","LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
     fun parseTextWithParameter(){
-        val code = "Text( \"Music\", color = Color.Blue)"
+        val code = "Text( \"Music\").bold()"
         val result = listOf("TEXT_COMPOSE", "LPAREN", "QUOTE_OPEN", "LineStrText",
-            "QUOTE_CLOSE",
-            "COMMA",
-            "COLOR_PARAM",
-            "ASSIGN",
-            "COLOR", "DOT", "COLOR_BLUE",
-             "RPAREN", "EOF")
+            "QUOTE_CLOSE", "RPAREN","DOT", "FONT_WEIGHT_BOLD","LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

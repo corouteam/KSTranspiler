@@ -1,13 +1,41 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
+import it.poliba.KSTranspiler.KotlinParser.BoolLiteralContext
 import it.poliba.KSTranspiler.parsing.KotlinParserFacade
 import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.parsing.SwiftParserFacade
+import it.poliba.KSTranspiler.parsing.SwiftParserFacadeScript
 import it.poliba.KSranspiler.*
+import org.antlr.v4.runtime.ParserRuleContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.awt.Color
 
-class MappingTest {
+class SWIFTMappingTest {
+    private fun mapResource(
+        code: String,
+    ): KotlinFile {
+        val result = SwiftParserFacade.parse(code)
+
+        if (result.isCorrect()) {
+            return result.root?.toAst() ?: throw Exception("ParserRuleContext was null")
+        } else {
+            throw result.errors.first()
+        }
+    }
+
+    private fun mapResourceScript(
+        code: String,
+    ): KotlinScript {
+        val result = SwiftParserFacadeScript.parse(code)
+
+        if (result.isCorrect()) {
+            return result.root?.toAst() ?: throw Exception("ParserRuleContext was null")
+        } else {
+            throw result.errors.first()
+        }
+    }
 
     @Test
     fun mapSimpleVarAssignmentString(){
@@ -157,32 +185,6 @@ class MappingTest {
     }
 
     @Test
-    fun mapRangeExpression() {
-        val code = "val a = 1..42"
-        val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf(
-            PropertyDeclaration(varName="a", type=RangeType(type=IntType()), value=RangeExpression(leftExpression=IntLit(value="1"), rightExpression=IntLit(value="42", position=null), type=RangeType(type=IntType())), mutable=false))
-        )
-
-        assertEquals(expectedAst, ast)
-    }
-
-    @Test
-    fun mapListOfExpression() {
-        val code = "listOf<Int>(1, 2, 3)"
-        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
-        val expectedAst = KotlinScript(listOf(
-            ListExpression(
-                itemsType=IntType(position=null),
-                items=listOf(IntLit("1"), IntLit("2"), IntLit("3")))
-        ))
-
-        assertEquals(expectedAst, ast)
-    }
-
-
-
-    @Test
     fun mapTextComposable(){
         val code = "Text(\"Hello world\")"
         val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
@@ -208,25 +210,24 @@ class MappingTest {
 
     @Test
     fun mapTextComposableWithParams(){
-        val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
-        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
+        val code = "Text(\"Hello world\").bold().foregroundColor(Color.blue)"
+        val ast = mapResourceScript(code)
         val expectedAst = KotlinScript(listOf(
             TextComposableCall(StringLit("Hello world"), ColorBlue(), FontWeightBold())
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
     }
 
     @Test
     fun mapTextComposableRef(){
         val code = "Text(greet)"
-        val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
-
+        val ast = SwiftParserFacadeScript.parse(code).root!!.toAst()
         val expectedAst = KotlinScript(listOf(
             TextComposableCall(VarReference("greet", type = StringType()), null, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
     }
+
 
 }

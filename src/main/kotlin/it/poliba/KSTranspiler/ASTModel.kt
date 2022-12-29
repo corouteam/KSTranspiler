@@ -75,7 +75,7 @@ data class UnaryMinusExpression(val value: Expression, override var position: Po
 data class TypeConversion(val value: Expression, val targetType: Type, override var position: Position? = null) :
     Expression(type = targetType)
 
-data class VarReference(val varName: String, override var type: Type, override var position: Position? = null) : Expression(type)
+class VarReference(val varName: String, type: Type, override var position: Position? = null) : Expression(type)
 
 data class IntLit(val value: String, override var position: Position? = null) : Expression(IntType())
 
@@ -109,10 +109,9 @@ sealed class ComposableCall(type: ComposableType): FunctionCall(type = type)
 
 class TextComposableCall(
     val value: Expression,
-    val color: ColorLit?,
-    val fontWeight: FontWeightLit?
+    val color: Expression?,
+    val fontWeight: Expression?
 ): ComposableCall(TextComposableType())
-
 sealed class ColorLit: Expression(ColorType())
 class CustomColor(val hex: StringLit): ColorLit()
 class ColorBlue: ColorLit()
