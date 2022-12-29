@@ -2,6 +2,8 @@ package it.poliba.KSTranspiler.tools
 
 import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.KotlinParser
+import it.poliba.KSTranspiler.SwiftLexer
+import it.poliba.KSTranspiler.SwiftParser
 import it.poliba.KSTranspiler.parsing.Error
 import org.antlr.v4.runtime.ANTLRErrorListener
 import org.antlr.v4.runtime.Parser
@@ -75,6 +77,24 @@ object ErrorHandler {
     }
 
     fun KotlinParser.attachErrorHandler(): KotlinParser {
+        errors.clear()
+
+        return this.apply {
+            removeErrorListeners()
+            addErrorListener(errorListener)
+        }
+    }
+
+    fun SwiftLexer.attachErrorHandler(): SwiftLexer {
+        errors.clear()
+
+        return this.apply {
+            removeErrorListeners()
+            addErrorListener(errorListener)
+        }
+    }
+
+    fun SwiftParser.attachErrorHandler(): SwiftParser {
         errors.clear()
 
         return this.apply {
