@@ -1,1 +1,1 @@
-Text("Hello world").bold()
+Text("Hello world").fontWeight(Font.Weight.bold)

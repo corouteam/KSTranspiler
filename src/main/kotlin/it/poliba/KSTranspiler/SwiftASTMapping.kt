@@ -1,20 +1,13 @@
 package it.poliba.KSTranspiler
 
-import com.strumenta.kolasu.model.Node
-import com.strumenta.kolasu.model.Point
-import com.strumenta.kolasu.model.Position
-import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.Token
-
 import it.poliba.KSranspiler.*
-import java.lang.Exception
 
 
-fun SwiftParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : KotlinScript{
-    return KotlinScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : KSScript{
+    return KSScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 }
-fun SwiftParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KotlinFile{
-    return KotlinFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
+fun SwiftParser.SwiftFileContext.toAst(considerPosition: Boolean = false) : KSFile{
+    return KSFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
 }
 
 fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
@@ -65,9 +58,9 @@ fun SwiftParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fal
         val type = if(varDeclaration().type() != null) varDeclaration().type().toAst() else expression().toAst().type
         PropertyDeclaration(varDeclaration().ID().text, type, expression().toAst(), mutable = true)
     }else{
-        val type = if(valDeclaration().type() != null) valDeclaration().type().toAst() else expression().toAst().type
+        val type = if(letDeclaration().type() != null) letDeclaration().type().toAst() else expression().toAst().type
 
-        PropertyDeclaration(valDeclaration().ID().text, type, expression().toAst(), mutable = false)
+        PropertyDeclaration(letDeclaration().ID().text, type, expression().toAst(), mutable = false)
 
     }
 }
@@ -81,7 +74,7 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
-    is SwiftParser.ComposableCallExpressionContext -> toAst()
+    is SwiftParser.WidgetCallExpressionContext -> toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -126,6 +119,6 @@ fun SwiftParser.BinaryOperationContext.toAst(considerPosition: Boolean = false) 
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class KotlinParseTreeToAstMapperSwift : ParseTreeToAstMapper<SwiftParser.KotlinFileContext, KotlinFile> {
-    override fun map(parseTreeNode: SwiftParser.KotlinFileContext): KotlinFile = parseTreeNode.toAst()
+class KotlinParseTreeToAstMapperSwift : ParseTreeToAstMapper<SwiftParser.SwiftFileContext, KSFile> {
+    override fun map(parseTreeNode: SwiftParser.SwiftFileContext): KSFile = parseTreeNode.toAst()
 }

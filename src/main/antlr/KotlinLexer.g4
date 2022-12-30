@@ -12,7 +12,7 @@ PRINT              : 'print';
 AS                 : 'as';
 INT                : 'Int';
 DOUBLE             : 'Double';
-BOOL               : 'Bool';
+BOOL               : 'Boolean';
 STRING             : 'String';
 
 INT_LIT

@@ -16,11 +16,11 @@ interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
 }
 
-fun KotlinParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : KotlinScript{
-    return KotlinScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+fun KotlinParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : KSScript{
+    return KSScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 }
-fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KotlinFile{
-    return KotlinFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
+fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KSFile{
+    return KSFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
 }
 fun Token.startPoint() = Point(line, charPositionInLine)
 
@@ -165,6 +165,6 @@ fun KotlinParser.BinaryOperationContext.toAst(considerPosition: Boolean = false)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class KotlinParseTreeToAstMapper : ParseTreeToAstMapper<KotlinParser.KotlinFileContext, KotlinFile> {
-    override fun map(parseTreeNode: KotlinParser.KotlinFileContext): KotlinFile = parseTreeNode.toAst()
+class KotlinParseTreeToAstMapper : ParseTreeToAstMapper<KotlinParser.KotlinFileContext, KSFile> {
+    override fun map(parseTreeNode: KotlinParser.KotlinFileContext): KSFile = parseTreeNode.toAst()
 }

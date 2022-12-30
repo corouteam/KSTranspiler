@@ -11,15 +11,15 @@ import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
 import it.poliba.KSranspiler.*
 import java.util.ListResourceBundle
 
-fun  SwiftParser.ComposableCallExpressionContext.toAst(): Expression{
-    return this.composableCall().toAst()
+fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression{
+    return this.widgetCall().toAst()
 }
-fun SwiftParser.ComposableCallContext.toAst(): Expression = when(this){
-    is SwiftParser.TextComposableContext -> this.toAst()
+fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
+    is SwiftParser.TextWidgetContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun SwiftParser.TextComposableContext.toAst(): Expression{
+fun SwiftParser.TextWidgetContext.toAst(): Expression{
     val expressionAst = this.expression().toAst()
     if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Text composable")
     val params = swiftUITextSuffix().map { it.toAst() }

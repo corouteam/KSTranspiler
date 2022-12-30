@@ -5,8 +5,8 @@ import com.strumenta.kolasu.model.debugPrint
 import it.poliba.KSTranspiler.KotlinParser
 import it.poliba.KSTranspiler.SwiftLexer
 import it.poliba.KSTranspiler.SwiftParser
-import it.poliba.KSTranspiler.SwiftParser.KotlinFileContext
-import it.poliba.KSTranspiler.SwiftParser.KotlinScriptContext
+import it.poliba.KSTranspiler.SwiftParser.SwiftFileContext
+import it.poliba.KSTranspiler.SwiftParser.SwiftScriptContext
 import it.poliba.KSTranspiler.tools.ErrorHandler
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 import org.antlr.v4.runtime.*
@@ -29,7 +29,7 @@ object SwiftParserFacade {
 
         val parser = SwiftParser(CommonTokenStream(lexer))
             .attachErrorHandler()
-        val root = parser.file() as? KotlinFileContext ?: throw  Exception("File expected")
+        val root = parser.file() as? SwiftFileContext ?: throw  Exception("File expected")
 
 
         return ParsingResultSwift(root, ErrorHandler.getErrors())
@@ -37,14 +37,14 @@ object SwiftParserFacade {
 
 }
 data class ParsingResultSwift(
-    val root : SwiftParser.KotlinFileContext?,
+    val root : SwiftParser.SwiftFileContext?,
     val errors: List<Exception>
 ) {
     fun isCorrect() = errors.isEmpty() && root != null
 }
 
 data class ParsingResultScriptSwift(
-    val root : SwiftParser.KotlinScriptContext?,
+    val root : SwiftParser.SwiftScriptContext?,
     val errors: List<Exception>
 ) {
     fun isCorrect() = errors.isEmpty() && root != null
@@ -64,7 +64,7 @@ object SwiftParserFacadeScript {
 
         val parser = SwiftParser(CommonTokenStream(lexer))
             .attachErrorHandler()
-        val root = parser.file() as? KotlinScriptContext ?: throw  Exception("Script expected")
+        val root = parser.file() as? SwiftScriptContext ?: throw  Exception("Script expected")
         return ParsingResultScriptSwift(root, ErrorHandler.getErrors())
     }
 

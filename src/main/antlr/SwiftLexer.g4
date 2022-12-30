@@ -7,7 +7,7 @@ WS                 : [\t ]+ -> skip ;
 
 // Keywords
 VAR                : 'var' ;
-VAL                : 'val' ;
+LET                : 'let' ;
 PRINT              : 'print';
 AS                 : 'as';
 INT                : 'Int';
@@ -50,7 +50,7 @@ DOT                : '.';
 
 IF: 'if';
 ELSE: 'else';
-FUN: 'fun';
+FUN: 'func';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
 
@@ -62,14 +62,15 @@ COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 
 QUOTE_OPEN: '"' -> pushMode(LineString);
 
-TEXT_COMPOSE: 'Text';
-
+TEXT_WIDGET: 'Text';
+FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';
 
 FONT_WEIGHT_BOLD: 'bold';
 FOREGROUND_COLOR: 'foregroundColor';
-
+FONT: 'Font';
+WEIGHT: 'Weight';
 
 
 // Identifiers

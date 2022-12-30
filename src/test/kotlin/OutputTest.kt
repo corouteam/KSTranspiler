@@ -170,4 +170,13 @@ class OutputTest {
         var ast = parseResult.toAst()
         assertEquals(result, ast.generateCode())
     }
+
+    @Test
+    fun convertTextWidget(){
+        val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
+        val result = "Text(\"Hello world\")\n.foregroundColor(Color.blue)\n.fontWeight(Font.Weight.bold)"
+        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        var ast = parseResult.toAst()
+        assertEquals(result, ast.generateCode())
+    }
 }
