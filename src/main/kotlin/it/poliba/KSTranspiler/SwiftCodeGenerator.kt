@@ -6,10 +6,10 @@ import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
 
 val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
-fun KotlinFile.generateCode(): String{
+fun KSFile.generateCode(): String{
     return declarations.joinToString("\n") { it.generateCode() }
 }
-fun KotlinScript.generateCode(): String{
+fun KSScript.generateCode(): String{
     return statement.joinToString("\n") { it.generateCode() }
 }
 
@@ -88,7 +88,10 @@ fun Expression.generateCode() : String = when (this) {
     is BoolLit -> "${this.value}"
     is RangeExpression -> "${this.leftExpression.generateCode()}...${this.rightExpression.generateCode()}"
     is ListExpression -> "[${this.items.map { it.generateCode() }.joinToString(", ")}]"
+    is ColorLit -> this.generateCode()
+    is FontWeightLit -> this.generateCode()
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
+    is TextComposableCall -> this.generateCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -109,5 +112,27 @@ fun BinaryExpression.generateCode(): String = when(this) {
     is SubtractionExpression -> "${left.generateCode()} - ${right.generateCode()}"
     is MultiplicationExpression -> "${left.generateCode()} * ${right.generateCode()}"
     is DivisionExpression -> "${left.generateCode()} / ${right.generateCode()}"
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+fun TextComposableCall.generateCode(): String{
+    val base =  "Text(${this.value.generateCode()})"
+    var colorSuffix = ""
+    var boldSuffix = ""
+    this.color?.generateCode()?.let {
+        colorSuffix = "\n.foregroundColor($it)"
+    }
+    this.fontWeight?.generateCode()?.let {
+        boldSuffix = "\n.fontWeight($it)"
+    }
+    return "$base$colorSuffix$boldSuffix"
+
+}
+fun ColorLit.generateCode(): String = when(this){
+    is ColorBlue -> "Color.blue"
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun FontWeightLit.generateCode(): String = when(this){
+    is FontWeightBold -> "Font.Weight.bold"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }

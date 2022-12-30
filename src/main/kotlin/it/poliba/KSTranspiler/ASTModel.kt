@@ -8,8 +8,8 @@ import com.strumenta.kolasu.model.Position
 // Kotlin specific part
 //
 
-data class KotlinFile(val declarations: List<Declaration>,  override var position: Position? = null) : Node()
-data class KotlinScript(val statement: List<Statement>,  override var position: Position? = null) : Node()
+data class KSFile(val declarations: List<Declaration>, override var position: Position? = null) : Node()
+data class KSScript(val statement: List<Statement>, override var position: Position? = null) : Node()
 
 sealed class Declaration: Statement()
 

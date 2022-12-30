@@ -3,8 +3,8 @@ parser grammar SwiftParser;
 options { tokenVocab=SwiftLexer; }
 
 file
-    : NL* declaration* EOF #kotlinFile
-    |  lines=line+ #kotlinScript;
+    : NL* declaration* EOF #swiftFile
+    |  lines=line+ #swiftScript;
 
 
 line      : statement (NL | EOF) ;
@@ -37,9 +37,9 @@ print : PRINT LPAREN expression RPAREN ;
 
 varDeclaration : VAR ID (NL* COLON NL* type)?;
 
-valDeclaration : VAL ID (NL* COLON NL* type)?;
+letDeclaration : LET ID (NL* COLON NL* type)?;
 
-propertyDeclaration:  (varDeclaration|valDeclaration) (ASSIGN expression)?;
+propertyDeclaration:  (varDeclaration|letDeclaration) (ASSIGN expression)?;
 
 annotation: AT ID;
 
@@ -58,7 +58,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | RETURN returnExpression=expression                            # returnExpression
-           | composableCall #composableCallExpression
+           | widgetCall #widgetCallExpression
            | color                       # colorLiteral;
 
 if
@@ -122,12 +122,14 @@ type : INT     # integer |
        STRING  # string;
 
 
-composableCall:
-    TEXT_COMPOSE LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textComposable;
+widgetCall:
+    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
-    | FONT_WEIGHT_BOLD LPAREN NL* RPAREN # boldSuffix;
+    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
 
+fontWeight:
+     FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 color:
      COLOR DOT COLOR_BLUE #blueColor;

@@ -1,1 +1,1 @@
-Text( "Music").bold().foregroundColor(Color.blue)
+Text( "Music").foregroundColor(Color.blue).fontWeight(Font.Weight.bold)
