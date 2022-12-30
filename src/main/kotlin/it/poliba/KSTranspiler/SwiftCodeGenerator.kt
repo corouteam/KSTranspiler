@@ -125,8 +125,8 @@ fun TextComposableCall.generateCode(): String{
         boldSuffix = "\n.fontWeight($it)"
     }
     return "$base$colorSuffix$boldSuffix"
-
 }
+
 fun ColorLit.generateCode(): String = when(this){
     is ColorBlue -> "Color.blue"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
