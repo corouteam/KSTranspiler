@@ -309,5 +309,36 @@ class KotlinParserTest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun parseListOfExpression(){
+        val expected = """
+KotlinScript
+  Line
+    ExpressionStatement
+      ListExpression
+        T[listOf]
+        TypeArguments
+          T[<]
+          Integer
+            T[Int]
+          T[>]
+        T[(]
+        IntLiteral
+          T[1]
+        T[,]
+        IntLiteral
+          T[2]
+        T[,]
+        IntLiteral
+          T[3]
+        T[)]
+    T[<EOF>]
+
+        """.trimIndent()
+
+        val actual = toParseTree(parseResourceScript("listof_expression")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
 
 }

@@ -141,4 +141,11 @@ class LexerTest {
         val result = listOf("INT_LIT", "RANGE", "INT_LIT", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseListOfExpression(){
+        val code = "listOf<Int>(1, 2, 3)"
+        val result = listOf("LISTOF", "LANGLE", "INT", "RANGLE", "LPAREN", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

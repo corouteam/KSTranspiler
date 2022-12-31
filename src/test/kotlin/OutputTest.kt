@@ -152,4 +152,22 @@ class OutputTest {
         var ast = parseResult.toAst()
         assertEquals(result, ast.generateCode())
     }
+
+    @Test
+    fun convertIntListExpression(){
+        var code = "val list = listOf<Int>(1, 2, 3)"
+        val result = "let list:[Int] = [1, 2, 3]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        var ast = parseResult.toAst()
+        assertEquals(result, ast.generateCode())
+    }
+
+    @Test
+    fun convertStringListExpression(){
+        var code = "val list = listOf<String>(\"a\", \"b\", \"c\")"
+        val result = "let list:[String] = [\"a\", \"b\", \"c\"]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        var ast = parseResult.toAst()
+        assertEquals(result, ast.generateCode())
+    }
 }

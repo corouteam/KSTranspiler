@@ -57,6 +57,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
+           | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
            | RETURN returnExpression=expression                            # returnExpression;
 
 if
@@ -119,4 +120,6 @@ type : INT     # integer |
        BOOL    # bool |
        STRING  # string;
 
-
+typeArguments
+    : LANGLE NL* type (NL* COMMA NL* type)* (NL* COMMA)? NL* RANGLE
+    ;
