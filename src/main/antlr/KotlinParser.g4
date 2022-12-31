@@ -107,7 +107,7 @@ parameter
     ;
 
 functionDeclaration:
-    annotation? FUN NL* ID
+    annotation? NL* FUN NL* ID
     NL* functionValueParameters
     (NL* COLON NL* type)?
     (NL* functionBody)?

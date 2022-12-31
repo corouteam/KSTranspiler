@@ -7,7 +7,6 @@ import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
 import it.poliba.KSranspiler.*
-import java.util.ListResourceBundle
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression{
     return this.composableCall().toAst()
@@ -42,4 +41,18 @@ fun KotlinParser.FontWeightContext.toAst(): Expression = when(this){
     is CustomWeightContext -> CustomFontWeight(IntLit(INT_LIT().text))
     is BoldFontWeightContext ->  FontWeightBold()
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
+}
+
+fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration{
+    val id = this.ID().text
+    val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
+    var block = Block(listOf())
+    if(this.functionBody().block() != null){
+        block =  Block(this.functionBody().block().statement().map { it.toAst(considerPosition) })
+    }else{
+        val returnExpression = ReturnExpression(this.functionBody().expression().toAst())
+        block = Block(listOf(returnExpression))
+
+    }
+    return WidgetDeclaration(id, params, block)
 }

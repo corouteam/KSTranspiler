@@ -79,7 +79,7 @@ COLOR_PARAM: 'color';
 
 
 // Identifiers
-ID                 : [_]*[a-z][A-Za-z0-9_]* ;
+ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;
 
 mode LineString;
 

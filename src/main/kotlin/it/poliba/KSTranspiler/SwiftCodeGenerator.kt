@@ -13,7 +13,13 @@ fun KSScript.generateCode(): String{
     return statement.joinToString("\n") { it.generateCode() }
 }
 
-
+fun Declaration.generateCode(): String{
+    return when(this){
+        is PropertyDeclaration -> this.generateCode()
+        is WidgetDeclaration -> this.generateCode()
+        is FunctionDeclaration -> this.generateCode()
+    }
+}
 fun Statement.generateCode(): String {
     return when (this) {
         is PropertyDeclaration -> this.generateCode()
@@ -135,4 +141,10 @@ fun ColorLit.generateCode(): String = when(this){
 fun FontWeightLit.generateCode(): String = when(this){
     is FontWeightBold -> "Font.Weight.bold"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun WidgetDeclaration.generateCode(): String {
+    val convertedProperties = this.parameters.joinToString("\n") { "var ${it.id}: ${it.type.generateCode()}" }
+    val body = "var body: some View {\n ${body.generateCode()}\n}"
+    return "struct $id: View{\n$convertedProperties\n${body}\n}"
 }
