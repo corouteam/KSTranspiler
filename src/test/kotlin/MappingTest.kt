@@ -228,5 +228,21 @@ class MappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
     }
+    @Test
+    fun convertComposableFunction(){
+        val code = "@Composable\nfun test(x: Int, y: Int) { Text(\"Hello\") }"
+        val ast = KotlinParserFacade.parse(code).root!!.toAst()
+        val body = listOf(
+            TextComposableCall(StringLit("Hello"), null, null)
+        )
+        val expectedAst = KSFile(listOf(
+            WidgetDeclaration(
+                "test",
+                listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())),
+                Block(body)
+            )
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
 
 }

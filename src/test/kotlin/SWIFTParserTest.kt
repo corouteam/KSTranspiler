@@ -111,4 +111,5 @@ class SWIFTParserTest {
         val actual = toParseTree(parseResourceScript("swift/textWithColor")).multiLineString()
         assertEquals(expected, actual)
     }
+
 }

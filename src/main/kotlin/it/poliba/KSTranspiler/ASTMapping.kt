@@ -39,7 +39,16 @@ fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): De
     }
 }
 
-fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): FunctionDeclaration{
+fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
+    if(annotation().ID().text == "Composable"){
+        return this.toWidgetAst()
+    }else{
+        return this.toNormalAst()
+    }
+}
+
+
+fun KotlinParser.FunctionDeclarationContext.toNormalAst(considerPosition: Boolean = false): FunctionDeclaration{
     val id = this.ID().text
     val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
     var type: Type? = null

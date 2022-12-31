@@ -179,4 +179,21 @@ class OutputTest {
         var ast = parseResult.toAst()
         assertEquals(result, ast.generateCode())
     }
+
+
+    @Test
+    fun convertCustomTextWidgetDeclaration(){
+        val code = "@Composable\bfun test(x: Int, y: Int) { Text(\"Hello\") }"
+        val result = "struct test: View{\n" +
+                "var x: Int\n" +
+                "var y: Int\n" +
+                "var body: some View {\n" +
+                " Text(\"Hello\")\n" +
+                "}\n" +
+                "}"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        var ast = parseResult.toAst()
+        assertEquals(result, ast.generateCode())
+    }
+
 }

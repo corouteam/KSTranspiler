@@ -476,4 +476,31 @@ KotlinScript
         val actual = toParseTree(parseResourceScript("textWithFontWeightAndColor")).multiLineString()
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun testAnnotation(){
+        val expected = "KotlinFile\n" +
+                "  Declaration\n" +
+                "    FunctionDeclaration\n" +
+                "      Annotation\n" +
+                "        T[@]\n" +
+                "        T[Composable]\n" +
+                "      T[\n" +
+                "]\n" +
+                "      T[fun]\n" +
+                "      T[test]\n" +
+                "      FunctionValueParameters\n" +
+                "        T[(]\n" +
+                "        T[)]\n" +
+                "      FunctionBody\n" +
+                "        Block\n" +
+                "          T[{]\n" +
+                "          T[\n" +
+                "]\n" +
+                "          T[}]\n" +
+                "  T[<EOF>]\n"
+        val actual = toParseTree(parseResource("functionComposable")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
 }

@@ -119,3 +119,5 @@ sealed class FontWeightLit: Expression(FontWeightType())
 
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
+
+class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody ): Declaration()
