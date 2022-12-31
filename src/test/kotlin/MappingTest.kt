@@ -160,7 +160,7 @@ class MappingTest {
     fun mapRangeExpression() {
         val code = "val a = 1..42"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
-        val expectedAst = KotlinFile(listOf(
+        val expectedAst = KSFile(listOf(
             PropertyDeclaration(varName="a", type=RangeType(type=IntType()), value=RangeExpression(leftExpression=IntLit(value="1"), rightExpression=IntLit(value="42", position=null), type=RangeType(type=IntType())), mutable=false))
         )
 
@@ -171,7 +171,7 @@ class MappingTest {
     fun mapListOfExpression() {
         val code = "listOf<Int>(1, 2, 3)"
         val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
-        val expectedAst = KotlinScript(listOf(
+        val expectedAst = KSScript(listOf(
             ListExpression(
                 itemsType=IntType(position=null),
                 items=listOf(IntLit("1"), IntLit("2"), IntLit("3")))
