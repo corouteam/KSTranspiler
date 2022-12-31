@@ -93,7 +93,7 @@ class MappingTest {
         val expectedAst = KSScript(listOf(
             Print(VarReference("a", StringType() ))
         ))
-        assertEquals(expectedAst, ast)
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
     @Test
