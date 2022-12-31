@@ -39,8 +39,13 @@ fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): De
     }
 }
 
+//TODO: Handle non Composable annotation
 fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
-    if(annotation().ID().text == "Composable"){
+    var annotation: String = ""
+    if(annotation() != null){
+        annotation = annotation().ID().text
+    }
+    if(annotation == "Composable"){
         return this.toWidgetAst()
     }else{
         return this.toNormalAst()
