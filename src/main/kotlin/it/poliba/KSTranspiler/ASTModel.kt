@@ -1,4 +1,4 @@
-package it.poliba.KSranspiler
+package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Position
@@ -19,7 +19,7 @@ sealed class Statement : ControlStructureBody()
     Improvement: handle expression body differently.
     TODO: error checking
  */
-class FunctionDeclaration(val id: String,val parameters: List<FunctionParameter>,val returnType: Type?,val body: ControlStructureBody) : Declaration()
+class FunctionDeclaration(val id: String, val parameters: List<FunctionParameter>, val returnType: Type?, val body: ControlStructureBody) : Declaration()
 
 sealed class Expression(open val type: Type) : Statement()
 
@@ -83,7 +83,9 @@ data class DoubleLit(val value: String, override var position: Position? = null)
 data class StringLit(val value: String, override var position: Position? = null) : Expression(StringType())
 data class BoolLit(val value: String, override var position: Position? = null) : Expression(BoolType())
 
-data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(IntType())
+data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(
+    IntType()
+)
 
 open class ControlStructureBody : Node()
 
@@ -93,7 +95,7 @@ data class Block(val body: List<Statement>): ControlStructureBody()
 // Statements
 //
 
-data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression, var mutable: Boolean,  override  var position: Position? = null) :
+data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression, var mutable: Boolean, override  var position: Position? = null) :
 Declaration()
 
 data class Assignment(val varName: String, val value: Expression, override var position: Position? = null) : Statement()
@@ -101,8 +103,9 @@ data class Assignment(val varName: String, val value: Expression, override var p
 data class Print(val value: Expression, override var position: Position? = null) : Statement()
 
 data class RangeExpression(val leftExpression: Expression,
-                 val rightExpression: Expression,
-                 override val type: Type): Expression(type)
+                           val rightExpression: Expression,
+                           override val type: Type
+): Expression(type)
 
 sealed class FunctionCall(type: Type = VoidType()): Expression(type = type)
 sealed class ComposableCall(type: ComposableType): FunctionCall(type = type)
@@ -120,4 +123,4 @@ sealed class FontWeightLit: Expression(FontWeightType())
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
 
-class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody ): Declaration()
+class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()

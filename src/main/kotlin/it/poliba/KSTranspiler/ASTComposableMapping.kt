@@ -6,9 +6,8 @@ import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
-import it.poliba.KSranspiler.*
 
-fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression{
+fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
@@ -16,7 +15,7 @@ fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun KotlinParser.TextComposableContext.toAst(): Expression{
+fun KotlinParser.TextComposableContext.toAst(): Expression {
     val expressionAst = this.expression().toAst()
     if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Text composable")
     val params = textComposeParameter().map { it.toAst() }
@@ -43,7 +42,7 @@ fun KotlinParser.FontWeightContext.toAst(): Expression = when(this){
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
-fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration{
+fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration {
     val id = this.ID().text
     val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
     var block = Block(listOf())

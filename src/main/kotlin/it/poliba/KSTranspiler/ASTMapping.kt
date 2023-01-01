@@ -10,16 +10,14 @@ import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 
-import it.poliba.KSranspiler.*
-
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
 }
 
-fun KotlinParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : KSScript{
+fun KotlinParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : KSScript {
     return KSScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 }
-fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KSFile{
+fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : KSFile {
     return KSFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
 }
 fun Token.startPoint() = Point(line, charPositionInLine)
@@ -29,7 +27,7 @@ fun Token.endPoint() = Point(line, charPositionInLine + text.length)
 fun ParserRuleContext.toPosition(considerPosition: Boolean) : Position? {
     return if (considerPosition) Position(start.startPoint(), stop.endPoint()) else null
 }
-fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
+fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     return if(this.functionDeclaration()!= null){
         this.functionDeclaration().toAst()
     }else if(this.propertyDeclaration() != null){
@@ -40,7 +38,7 @@ fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): De
 }
 
 //TODO: Handle non Composable annotation
-fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
+fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     var annotation: String = ""
     if(annotation() != null){
         annotation = annotation().ID().text
@@ -53,7 +51,7 @@ fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fa
 }
 
 
-fun KotlinParser.FunctionDeclarationContext.toNormalAst(considerPosition: Boolean = false): FunctionDeclaration{
+fun KotlinParser.FunctionDeclarationContext.toNormalAst(considerPosition: Boolean = false): FunctionDeclaration {
     val id = this.ID().text
     val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
     var type: Type? = null
@@ -73,7 +71,7 @@ fun KotlinParser.FunctionDeclarationContext.toNormalAst(considerPosition: Boolea
     return FunctionDeclaration(id, params,type, block)
 }
 
-fun KotlinParser.FunctionValueParameterContext.toAst(): FunctionParameter{
+fun KotlinParser.FunctionValueParameterContext.toAst(): FunctionParameter {
     return FunctionParameter( this.parameter().ID().text, this.parameter().type().toAst())
 }
 fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
@@ -137,13 +135,13 @@ fun getRangeType(leftType: Type, rightType: Type): Type {
     return RangeType(leftType)
 }
 
-fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression{
+fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression {
     var elseBody = if(this.if_().elseBody != null) this.if_().elseBody.toAst() else null
     return IfExpression(this.if_().expression().toAst(), this.if_().body.toAst(), elseBody )
 }
 
 
-fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody{
+fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
         return Block(this.block().statement().map { it.toAst(considerPosition) })
     }else if(this.statement() != null){
@@ -153,13 +151,13 @@ fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): Contro
     }
 }
 
-fun KotlinParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression{
+fun KotlinParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression {
     var valueString = ""
     this.lineStringLiteral().lineStringContent().forEach { valueString = valueString + ""+it.LineStrText().text }
     return StringLit(valueString, toPosition(considerPosition))
 }
 
-fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{
+fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression {
     var valueString = ""
     this.stringLiteral().lineStringLiteral().lineStringContent().forEach { valueString = valueString + ""+it.LineStrText().text }
     return StringLit(valueString, toPosition(considerPosition))

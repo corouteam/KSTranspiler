@@ -1,6 +1,5 @@
 package it.poliba.KSTranspiler
 
-import it.poliba.KSranspiler.*
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception

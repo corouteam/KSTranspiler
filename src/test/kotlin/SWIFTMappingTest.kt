@@ -3,7 +3,7 @@ package it.poliba.KSTranspiler
 import com.google.gson.Gson
 import it.poliba.KSTranspiler.parsing.SwiftParserFacade
 import it.poliba.KSTranspiler.parsing.SwiftParserFacadeScript
-import it.poliba.KSranspiler.*
+import it.poliba.KSTranspiler.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

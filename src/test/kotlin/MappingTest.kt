@@ -3,7 +3,6 @@ package it.poliba.KSTranspiler
 import com.google.gson.Gson
 import it.poliba.KSTranspiler.parsing.KotlinParserFacade
 import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
-import it.poliba.KSranspiler.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -14,7 +13,7 @@ class MappingTest {
         val code = "var a = \"hello\""
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
         val expectedAst = KSFile(listOf(
-            PropertyDeclaration("a", StringType(),StringLit("hello"), mutable = true)
+            PropertyDeclaration("a", StringType(), StringLit("hello"), mutable = true)
         ))
         assertEquals(expectedAst, ast)
     }
@@ -24,7 +23,7 @@ class MappingTest {
         val code = "var a = 3"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
         val expectedAst = KSFile(listOf(
-            PropertyDeclaration("a", IntType(),IntLit("3"), mutable = true)
+            PropertyDeclaration("a", IntType(), IntLit("3"), mutable = true)
         ))
         assertEquals(expectedAst, ast)
     }
@@ -56,7 +55,8 @@ class MappingTest {
         val expectedAst = KSFile(listOf(
            FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), null, Block(
                listOf(Print(StringLit("ciao")))
-           ))
+           )
+           )
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
@@ -68,7 +68,8 @@ class MappingTest {
         val expectedAst = KSFile(listOf(
             FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
                 listOf(ReturnExpression(IntLit("3")))
-            ))
+            )
+            )
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
@@ -80,7 +81,8 @@ class MappingTest {
         val expectedAst = KSFile(listOf(
             FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
                 listOf(ReturnExpression(IntLit("3")))
-            ))
+            )
+            )
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
@@ -126,7 +128,11 @@ class MappingTest {
                 "}"
         val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
         val expectedAst = KSScript(listOf(
-            IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = Block(listOf(Print(StringLit("Bye world")))))
+            IfExpression(
+                BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = Block(listOf(
+                    Print(StringLit("Bye world"))
+                ))
+            )
         ))
         assertEquals(expectedAst, ast)
     }
@@ -140,7 +146,11 @@ class MappingTest {
                 "}"
         val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
         val expectedAst = KSScript(listOf(
-            IfExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = IfExpression(BoolLit("false"), Block(listOf(Print(StringLit("Bye world")))), null))))
+            IfExpression(
+                BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = IfExpression(
+                    BoolLit("false"), Block(listOf(Print(StringLit("Bye world")))), null)
+            )
+        ))
         assertEquals(expectedAst, ast)
     }
     @Test
@@ -152,7 +162,8 @@ class MappingTest {
                 ""
         val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
         val expectedAst = KSScript(listOf(
-            IfExpression(BoolLit("true"),Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))))
+            IfExpression(BoolLit("true"), Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))
+        ))
         assertEquals(expectedAst, ast)
     }
 
@@ -161,7 +172,8 @@ class MappingTest {
         val code = "val a = 1..42"
         val ast = KotlinParserFacade.parse(code).root!!.toAst()
         val expectedAst = KSFile(listOf(
-            PropertyDeclaration(varName="a", type=RangeType(type=IntType()), value=RangeExpression(leftExpression=IntLit(value="1"), rightExpression=IntLit(value="42", position=null), type=RangeType(type=IntType())), mutable=false))
+            PropertyDeclaration(varName="a", type= RangeType(type= IntType()), value= RangeExpression(leftExpression= IntLit(value="1"), rightExpression= IntLit(value="42", position=null), type= RangeType(type= IntType())), mutable=false)
+        )
         )
 
         assertEquals(expectedAst, ast)
@@ -173,7 +185,7 @@ class MappingTest {
         val ast = KotlinParserFacadeScript.parse(code).root!!.toAst()
         val expectedAst = KSScript(listOf(
             ListExpression(
-                itemsType=IntType(position=null),
+                itemsType= IntType(position=null),
                 items=listOf(IntLit("1"), IntLit("2"), IntLit("3")))
         ))
 

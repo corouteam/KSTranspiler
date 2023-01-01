@@ -1,16 +1,13 @@
 package it.poliba.KSTranspiler
 
-import it.poliba.KSranspiler.*
-
-
-fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : KSScript{
+fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : KSScript {
     return KSScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 }
-fun SwiftParser.SwiftFileContext.toAst(considerPosition: Boolean = false) : KSFile{
+fun SwiftParser.SwiftFileContext.toAst(considerPosition: Boolean = false) : KSFile {
     return KSFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
 }
 
-fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
+fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     return if(this.functionDeclaration()!= null){
         this.functionDeclaration().toAst()
     }else if(this.propertyDeclaration() != null){
@@ -20,7 +17,7 @@ fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Dec
     }
 }
 
-fun SwiftParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): FunctionDeclaration{
+fun SwiftParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): FunctionDeclaration {
     val id = this.ID().text
     val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
     var type: Type? = null
@@ -40,7 +37,7 @@ fun SwiftParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fal
     return FunctionDeclaration(id, params,type, block)
 }
 
-fun SwiftParser.FunctionValueParameterContext.toAst(): FunctionParameter{
+fun SwiftParser.FunctionValueParameterContext.toAst(): FunctionParameter {
     return FunctionParameter( this.parameter().ID().text, this.parameter().type().toAst())
 }
 fun SwiftParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
@@ -78,13 +75,13 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun SwiftParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression{
+fun SwiftParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression {
     var elseBody = if(this.if_().elseBody != null) this.if_().elseBody.toAst() else null
     return IfExpression(this.if_().expression().toAst(), this.if_().body.toAst(), elseBody )
 }
 
 
-fun SwiftParser.ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody{
+fun SwiftParser.ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
         return Block(this.block().statement().map { it.toAst(considerPosition) })
     }else if(this.statement() != null){
@@ -94,13 +91,13 @@ fun SwiftParser.ControlStructureBodyContext.toAst(considerPosition: Boolean = fa
     }
 }
 
-fun SwiftParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression{
+fun SwiftParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression {
     var valueString = ""
     this.lineStringLiteral().lineStringContent().forEach { valueString = valueString + ""+it.LineStrText().text }
     return StringLit(valueString, toPosition(considerPosition))
 }
 
-fun SwiftParser.StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression{
+fun SwiftParser.StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression {
     var valueString = ""
     this.stringLiteral().lineStringLiteral().lineStringContent().forEach { valueString = valueString + ""+it.LineStrText().text }
     return StringLit(valueString, toPosition(considerPosition))

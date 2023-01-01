@@ -1,17 +1,9 @@
 package it.poliba.KSTranspiler
 
-import it.poliba.KSTranspiler.KotlinParser.BlueColorContext
-import it.poliba.KSTranspiler.KotlinParser.BoldFontWeightContext
-import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
-import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
-import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
-import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
 import it.poliba.KSTranspiler.SwiftParser.BoldSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
-import it.poliba.KSranspiler.*
-import java.util.ListResourceBundle
 
-fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression{
+fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
     return this.widgetCall().toAst()
 }
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
@@ -19,7 +11,7 @@ fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun SwiftParser.TextWidgetContext.toAst(): Expression{
+fun SwiftParser.TextWidgetContext.toAst(): Expression {
     val expressionAst = this.expression().toAst()
     if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Text composable")
     val params = swiftUITextSuffix().map { it.toAst() }
