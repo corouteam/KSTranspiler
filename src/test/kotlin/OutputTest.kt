@@ -1,7 +1,7 @@
 package it.poliba.KSTranspiler
 
-import it.poliba.KSTranspiler.parsing.KotlinParserFacade
-import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
+import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

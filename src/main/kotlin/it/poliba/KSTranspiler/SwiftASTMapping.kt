@@ -1,10 +1,10 @@
 package it.poliba.KSTranspiler
 
-fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : KSScript {
-    return KSScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
+fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
+    return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 }
-fun SwiftParser.SwiftFileContext.toAst(considerPosition: Boolean = false) : KSFile {
-    return KSFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
+fun SwiftParser.SwiftFileContext.toAst(considerPosition: Boolean = false) : AstFile {
+    return AstFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
 }
 
 fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
@@ -116,6 +116,6 @@ fun SwiftParser.BinaryOperationContext.toAst(considerPosition: Boolean = false) 
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class KotlinParseTreeToAstMapperSwift : ParseTreeToAstMapper<SwiftParser.SwiftFileContext, KSFile> {
-    override fun map(parseTreeNode: SwiftParser.SwiftFileContext): KSFile = parseTreeNode.toAst()
+class KotlinParseTreeToAstMapperSwift : ParseTreeToAstMapper<SwiftParser.SwiftFileContext, AstFile> {
+    override fun map(parseTreeNode: SwiftParser.SwiftFileContext): AstFile = parseTreeNode.toAst()
 }

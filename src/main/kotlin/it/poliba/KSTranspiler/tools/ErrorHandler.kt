@@ -1,10 +1,12 @@
 package it.poliba.KSTranspiler.tools
 
+import com.strumenta.kolasu.model.Point
+import com.strumenta.kolasu.model.Position
+import it.poliba.KSTranspiler.Error
 import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.KotlinParser
 import it.poliba.KSTranspiler.SwiftLexer
 import it.poliba.KSTranspiler.SwiftParser
-import it.poliba.KSTranspiler.parsing.Error
 import org.antlr.v4.runtime.ANTLRErrorListener
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.RecognitionException
@@ -12,10 +14,10 @@ import org.antlr.v4.runtime.Recognizer
 import org.antlr.v4.runtime.atn.ATNConfigSet
 import org.antlr.v4.runtime.dfa.DFA
 import java.util.*
-import kotlin.jvm.internal.Intrinsics.Kotlin
 
 object ErrorHandler {
-    private val errors = LinkedList<Exception>()
+    private val lexicalAndSyntaticErrors = LinkedList<Error>()
+
     private val errorListener = object : ANTLRErrorListener {
         override fun reportAmbiguity(
             p0: Parser?,
@@ -27,7 +29,6 @@ object ErrorHandler {
             p6: ATNConfigSet?
         ) {
             // Ignored for now
-            print("reportAmbiguity")
         }
 
         override fun reportAttemptingFullContext(
@@ -39,7 +40,6 @@ object ErrorHandler {
             p5: ATNConfigSet?
         ) {
             // Ignored for now
-            print("reportAttemptingFullContext")
         }
 
         override fun syntaxError(
@@ -50,7 +50,13 @@ object ErrorHandler {
             msg: String?,
             ex: RecognitionException?
         ) {
-            errors.add(Exception("Error at L$line:$charPositionInline: $msg"))
+            ex?.printStackTrace()
+
+            lexicalAndSyntaticErrors.add(Error(msg ?: "Syntax Error",
+                Position(
+                    Point(line, charPositionInline),
+                    Point(line, charPositionInline+1))
+            ))
         }
 
         override fun reportContextSensitivity(
@@ -65,10 +71,10 @@ object ErrorHandler {
         }
     }
 
-    fun getErrors() = errors
+    fun getLexicalAndSyntaticErrors() = lexicalAndSyntaticErrors
 
     fun KotlinLexer.attachErrorHandler(): KotlinLexer {
-        errors.clear()
+        lexicalAndSyntaticErrors.clear()
 
         return this.apply {
             removeErrorListeners()
@@ -77,7 +83,7 @@ object ErrorHandler {
     }
 
     fun KotlinParser.attachErrorHandler(): KotlinParser {
-        errors.clear()
+        lexicalAndSyntaticErrors.clear()
 
         return this.apply {
             removeErrorListeners()
@@ -86,7 +92,7 @@ object ErrorHandler {
     }
 
     fun SwiftLexer.attachErrorHandler(): SwiftLexer {
-        errors.clear()
+        lexicalAndSyntaticErrors.clear()
 
         return this.apply {
             removeErrorListeners()
@@ -95,7 +101,7 @@ object ErrorHandler {
     }
 
     fun SwiftParser.attachErrorHandler(): SwiftParser {
-        errors.clear()
+        lexicalAndSyntaticErrors.clear()
 
         return this.apply {
             removeErrorListeners()

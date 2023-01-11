@@ -2,14 +2,16 @@ package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Position
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 
 
 //
 // Kotlin specific part
 //
 
-data class KSFile(val declarations: List<Declaration>, override var position: Position? = null) : Node()
-data class KSScript(val statement: List<Statement>, override var position: Position? = null) : Node()
+data class AstFile(val declarations: List<Declaration>, override var position: Position? = null) : Node()
+data class AstScript(val statement: List<Statement>, override var position: Position? = null) : Node()
 
 sealed class Declaration: Statement()
 
@@ -124,3 +126,29 @@ class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
+
+data class Error(val message: String, val position: Position?)
+
+/**
+ * Define a function for each node;
+ * Reflection will automatically add process to all
+ * properties of this class
+ */
+fun Node.process(operation: (Node) -> Unit) {
+    operation(this)
+    this.javaClass.kotlin.memberProperties.forEach { p ->
+        p.isAccessible = true
+        val v = p.get(this)
+        when (v) {
+            is Node -> v.process(operation)
+            is Collection<*> -> v.forEach { if (it is Node) it.process(operation) }
+        }
+    }
+}
+
+/**
+ * Run processing on just a class
+ */
+fun <T: Node> Node.specificProcess(klass: Class<T>, operation: (T) -> Unit) {
+    process { if (klass.isInstance(it)) { operation(it as T) } }
+}

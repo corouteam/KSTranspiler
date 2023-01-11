@@ -1,21 +1,24 @@
 package it.poliba.KSTranspiler
 
-import it.poliba.KSTranspiler.parsing.KotlinParserFacade
-import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
-import org.stringtemplate.v4.STGroup
-import org.stringtemplate.v4.STGroupFile
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
+import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 
 
 object App {
     @JvmStatic
     fun main(args: Array<String>) {
-        var code = """if(true){val a = 5}""".trim()
+        var code = """val test = listOf<Int>(1, 2, "A")""".trim()
         var code2 = "let a = 5 + 2"
         var actual = code
-        val parseResult = KotlinParserFacadeScript.parse(actual).root!!
-        var ast = parseResult.toAst()
-        println(ast.generateCode())
+        val parseResult = KotlinParserFacade.parse(actual)
+        if (!parseResult.isCorrect()) {
+            println("ERRORS FOUND")
+            parseResult.errors.forEach {
+                println(" * ${it.position?.start}: ${it.message}")
+            }
+        }
 
+        println(parseResult.root?.generateCode())
     }
 
 }

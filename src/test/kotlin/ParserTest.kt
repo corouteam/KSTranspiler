@@ -1,6 +1,6 @@
 package it.poliba.KSTranspiler
-import it.poliba.KSTranspiler.parsing.KotlinParserFacade
-import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
+import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

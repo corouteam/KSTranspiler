@@ -5,10 +5,10 @@ import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
 
 val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
-fun KSFile.generateCode(): String{
+fun AstFile.generateCode(): String{
     return declarations.joinToString("\n") { it.generateCode() }
 }
-fun KSScript.generateCode(): String{
+fun AstScript.generateCode(): String{
     return statement.joinToString("\n") { it.generateCode() }
 }
 
