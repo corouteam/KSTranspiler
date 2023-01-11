@@ -127,7 +127,7 @@ class FontWeightBold: FontWeightLit()
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
 
-data class Error(val message: String, val position: Position?)
+data class Error(override val message: String, val position: Position?): Throwable(message)
 
 /**
  * Define a function for each node;

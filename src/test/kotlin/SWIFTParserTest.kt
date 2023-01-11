@@ -1,4 +1,6 @@
 package it.poliba.KSTranspiler
+import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacade
+import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacadeScript
 import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
 import org.antlr.v4.runtime.*
@@ -11,7 +13,7 @@ class SWIFTParserTest {
     private fun parseResource(
         resourceName: String,
     ): ParserRuleContext {
-        val parseResult = SwiftParserFacade
+        val parseResult = SwiftAntlrParserFacade
             .parse(this.javaClass.getResourceAsStream("/${resourceName}.txt"))
 
         if (parseResult.isCorrect()) {
@@ -24,7 +26,7 @@ class SWIFTParserTest {
     private fun parseResourceScript(
         resourceName: String,
     ): ParserRuleContext {
-        val parseResult = SwiftParserFacadeScript
+        val parseResult = SwiftAntlrParserFacadeScript
             .parse(this.javaClass.getResourceAsStream("/${resourceName}.txt"))
 
         if (parseResult.isCorrect()) {

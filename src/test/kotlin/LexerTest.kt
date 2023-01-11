@@ -10,7 +10,7 @@ import java.util.*
 
 class LexerTest {
    private fun lexerForCode(code: String): KotlinLexer {
-       val lexer = KotlinLexer(CharStreams.fromString(code))
+       val lexer = it.poliba.KSTranspiler.KotlinLexer(CharStreams.fromString(code))
            .attachErrorHandler()
 
        val errors = ErrorHandler.getLexicalAndSyntaticErrors()
@@ -21,7 +21,7 @@ class LexerTest {
 
        return lexer
    }
-    private fun lexerForResource(resourceName: String) = KotlinLexer(
+    private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer (
         ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin"))
     ).attachErrorHandler()
 

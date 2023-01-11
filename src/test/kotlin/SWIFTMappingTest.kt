@@ -13,7 +13,7 @@ class SWIFTMappingTest {
         val result = SwiftParserFacade.parse(code)
 
         if (result.isCorrect()) {
-            return result.root?.toAst() ?: throw Exception("ParserRuleContext was null")
+            return result.root ?: throw Exception("ParserRuleContext was null")
         } else {
             throw result.errors.first()
         }
@@ -25,7 +25,7 @@ class SWIFTMappingTest {
         val result = SwiftParserFacadeScript.parse(code)
 
         if (result.isCorrect()) {
-            return result.root?.toAst() ?: throw Exception("ParserRuleContext was null")
+            return result.root ?: throw Exception("ParserRuleContext was null")
         } else {
             throw result.errors.first()
         }
