@@ -2,6 +2,7 @@ package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
 import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacade
+import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacadeScript
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -12,7 +13,7 @@ class MappingTest {
     @Test
     fun mapSimpleVarAssignmentString(){
         val code = "var a = \"hello\""
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             PropertyDeclaration("a", StringType(), StringLit("hello"), mutable = true)
         ))
@@ -22,7 +23,7 @@ class MappingTest {
     @Test
     fun mapSimpleVarAssignment(){
         val code = "var a = 3"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             PropertyDeclaration("a", IntType(), IntLit("3"), mutable = true)
         ))
@@ -32,7 +33,7 @@ class MappingTest {
     @Test
     fun mapSimpleValAssignment(){
         val code = "val a = 3"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             PropertyDeclaration("a", IntType(), IntLit("3"), mutable = false)
         ))
@@ -42,7 +43,7 @@ class MappingTest {
     @Test
     fun mapSimpleValAssignmentExplicitType(){
         val code = "val a: Int = 3"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             PropertyDeclaration("a", IntType(), IntLit("3"), mutable = false)
         ))
@@ -52,7 +53,7 @@ class MappingTest {
     @Test
     fun funSimple(){
         val code = "fun test(x: Int, y: Int)\t{\tprint(\"ciao\")}"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
            FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), null, Block(
                listOf(Print(StringLit("ciao")))
@@ -65,7 +66,7 @@ class MappingTest {
     @Test
     fun funExpression(){
         val code = "fun test(x: Int, y: Int) = 3"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
                 listOf(ReturnExpression(IntLit("3")))
@@ -78,7 +79,7 @@ class MappingTest {
     @Test
     fun funExpressionReturn(){
         val code = "fun test(x: Int, y: Int): Int { return 3 }"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
                 listOf(ReturnExpression(IntLit("3")))
@@ -92,7 +93,7 @@ class MappingTest {
     @Test
     fun mapPrint() {
         val code = "print('a')"
-        val ast = KotlinParserFacadeScript.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             Print(VarReference("a", StringType() ))
         ))
@@ -102,7 +103,7 @@ class MappingTest {
     @Test
     fun mapAssignment() {
         val code = "a = 5"
-        val ast = KotlinParserFacadeScript.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             Assignment("a", IntLit("5"))
         ))
@@ -112,7 +113,7 @@ class MappingTest {
     @Test
     fun mapIf() {
         val code = "if(true) print(\"Hello world\")"
-        val ast = KotlinParserFacadeScript.parse(code).root!!
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             IfExpression(BoolLit("true"), Print(StringLit("Hello world")), elseBranch = null)
         ))
@@ -126,7 +127,7 @@ class MappingTest {
                 "}else{" +
                 "print(\"Bye world\")" +
                 "}"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             IfExpression(
                 BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = Block(listOf(
@@ -144,7 +145,7 @@ class MappingTest {
                 "}else if(false){" +
                 "print(\"Bye world\")" +
                 "}"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             IfExpression(
                 BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))), elseBranch = IfExpression(
@@ -160,7 +161,7 @@ class MappingTest {
                 "else " +
                 "print(\"Bye world\")" +
                 ""
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             IfExpression(BoolLit("true"), Print(StringLit("Hello world")), elseBranch = Print(StringLit("Bye world")))
         ))
@@ -170,7 +171,7 @@ class MappingTest {
     @Test
     fun mapRangeExpression() {
         val code = "val a = 1..42"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             PropertyDeclaration(varName="a", type= RangeType(type= IntType()), value= RangeExpression(leftExpression= IntLit(value="1"), rightExpression= IntLit(value="42", position=null), type= RangeType(type= IntType())), mutable=false)
         )
@@ -182,7 +183,7 @@ class MappingTest {
     @Test
     fun mapListOfExpression() {
         val code = "listOf<Int>(1, 2, 3)"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             ListExpression(
                 itemsType= IntType(position=null),
@@ -197,7 +198,7 @@ class MappingTest {
     @Test
     fun mapTextComposable(){
         val code = "Text(\"Hello world\")"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             TextComposableCall(StringLit("Hello world"), null, null)
         ))
@@ -211,7 +212,7 @@ class MappingTest {
         val expected = IllegalArgumentException("String expected in Text composable")
         var res: Exception? = null
         try{
-            val ast = KotlinParserFacade.parse(code).root
+            val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         }catch (e: Exception){
             res = e
         }
@@ -221,7 +222,7 @@ class MappingTest {
     @Test
     fun mapTextComposableWithParams(){
         val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             TextComposableCall(StringLit("Hello world"), ColorBlue(), FontWeightBold())
         ))
@@ -232,7 +233,7 @@ class MappingTest {
     @Test
     fun mapTextComposableRef(){
         val code = "Text(greet)"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
             TextComposableCall(VarReference("greet", type = StringType()), null, null)
@@ -243,7 +244,7 @@ class MappingTest {
     @Test
     fun convertComposableFunction(){
         val code = "@Composable\nfun test(x: Int, y: Int) { Text(\"Hello\") }"
-        val ast = KotlinParserFacade.parse(code).root
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
         val body = listOf(
             TextComposableCall(StringLit("Hello"), null, null)
         )

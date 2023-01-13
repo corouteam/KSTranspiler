@@ -1,41 +1,18 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
+import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacade
+import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacadeScript
 import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class SWIFTMappingTest {
-    private fun mapResource(
-        code: String,
-    ): AstFile {
-        val result = SwiftParserFacade.parse(code)
-
-        if (result.isCorrect()) {
-            return result.root ?: throw Exception("ParserRuleContext was null")
-        } else {
-            throw result.errors.first()
-        }
-    }
-
-    private fun mapResourceScript(
-        code: String,
-    ): AstScript {
-        val result = SwiftParserFacadeScript.parse(code)
-
-        if (result.isCorrect()) {
-            return result.root ?: throw Exception("ParserRuleContext was null")
-        } else {
-            throw result.errors.first()
-        }
-    }
-
-
     @Test
     fun mapTextComposable(){
         val code = "Text(\"Hello world\")"
-        val ast = mapResourceScript(code)
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             TextComposableCall(StringLit("Hello world"), null, null)
         ))
@@ -49,7 +26,7 @@ class SWIFTMappingTest {
         val expected = IllegalArgumentException("String expected in Text composable")
         var res: Exception? = null
         try{
-            val ast = mapResourceScript(code)
+            val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         }catch (e: Exception){
             res = e
         }
@@ -59,7 +36,7 @@ class SWIFTMappingTest {
     @Test
     fun mapTextComposableWithParams(){
         val code = "Text(\"Hello world\").foregroundColor(Color.blue).fontWeight(Font.Weight.bold)"
-        val ast = mapResourceScript(code)
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             TextComposableCall(StringLit("Hello world"), ColorBlue(), FontWeightBold())
         ))
@@ -69,7 +46,7 @@ class SWIFTMappingTest {
     @Test
     fun mapTextComposableRef(){
         val code = "Text(greet)"
-        val ast = mapResourceScript(code)
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             TextComposableCall(VarReference("greet", type = StringType()), null, null)
         ))
