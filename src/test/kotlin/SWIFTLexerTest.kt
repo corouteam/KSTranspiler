@@ -75,4 +75,30 @@ class SWIFTLexerTest {
             "QUOTE_CLOSE", "RPAREN","DOT", "FONT_WEIGHT_BOLD","LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseVarDeclarationAssignedADecimalLiteral() {
+        assertEquals(listOf("VAR", "ID", "ASSIGN", "DOUBLE_LIT", "EOF"),
+            tokens(lexerForCode("var a = 1.23")))
+    }
+
+    @Test
+    fun parseLetDeclarationAssignedADecimalLiteral() {
+        assertEquals(listOf("LET", "ID", "ASSIGN", "DOUBLE_LIT", "EOF"),
+            tokens(lexerForCode("let a = 1.23")))
+    }
+
+    @Test
+    fun parseView(){
+        val code = "struct HomeView: View {}"
+        val result = listOf("STRUCT", "ID", "COLON", "VIEW", "LCURL", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseStruct(){
+        val code = "struct HomeView: View { let screen = 56.5 }"
+        val result = listOf("STRUCT", "ID", "COLON", "VIEW", "LCURL", "LET", "ID", "ASSIGN", "DOUBLE_LIT", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

@@ -14,6 +14,8 @@ INT                : 'Int';
 DOUBLE             : 'Double';
 BOOL               : 'Bool';
 STRING             : 'String';
+STRUCT             : 'struct';
+VIEW               : 'View';
 
 INT_LIT
     : DecDigitNoZero DecDigit*
