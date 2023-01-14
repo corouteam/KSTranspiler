@@ -1,6 +1,8 @@
 package it.poliba.KSTranspiler
-import it.poliba.KSTranspiler.parsing.KotlinParserFacade
-import it.poliba.KSTranspiler.parsing.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacade
+import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
+import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -11,26 +13,26 @@ class KotlinParserTest {
     private fun parseResource(
         resourceName: String,
     ): ParserRuleContext {
-        val parseResult = KotlinParserFacade
+        val parseResult = KotlinAntlrParserFacade
             .parse(this.javaClass.getResourceAsStream("/${resourceName}.txt"))
 
         if (parseResult.isCorrect()) {
             return parseResult.root ?: throw Exception("ParserRuleContext was null")
         } else {
-            throw parseResult.errors.first()
+            throw Exception(parseResult.errors.first().message)
         }
     }
 
     private fun parseResourceScript(
         resourceName: String,
     ): ParserRuleContext {
-        val parseResult = KotlinParserFacadeScript
+        val parseResult = KotlinAntlrParserFacadeScript
             .parse(this.javaClass.getResourceAsStream("/${resourceName}.txt"))
 
         if (parseResult.isCorrect()) {
             return parseResult.root ?: throw Exception("ParserRuleContext was null")
         } else {
-            throw parseResult.errors.first()
+            throw Exception(parseResult.errors.first().message)
         }
     }
 

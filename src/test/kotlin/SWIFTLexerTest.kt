@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CharStreams
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.tools.ErrorHandler
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 import java.util.*
@@ -14,7 +13,7 @@ class SWIFTLexerTest {
        val lexer = it.poliba.KSTranspiler.SwiftLexer(CharStreams.fromString(code))
            .attachErrorHandler()
 
-       val errors = ErrorHandler.getErrors()
+       val errors = ErrorHandler.getLexicalAndSyntaticErrors()
 
        if (errors.isNotEmpty()) {
            throw errors.first
