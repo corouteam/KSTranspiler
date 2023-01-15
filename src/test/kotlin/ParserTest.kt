@@ -1,8 +1,6 @@
 package it.poliba.KSTranspiler
 import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacade
 import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacadeScript
-import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -164,6 +162,72 @@ class KotlinParserTest {
   T[<EOF>]
 """,
             toParseTree(parseResource("val_declaration_int")).multiLineString())
+    }
+
+    @Test
+    fun parseArrayDeclaration() {
+        assertEquals(
+            """KotlinScript
+    Line
+        Declaration
+            PropertyDeclaration
+            VarDeclaration
+                T[var]
+                T[a]
+                T[=]
+                ArrayLiteral
+                    T[[]
+                    IntLiteral
+                    T[1]
+                    T[,] 
+                    IntLiteral
+                    T[2]
+                    T[,] 
+                    IntLiteral
+                    T[3]
+                    T[]]
+    T[<EOF>]
+""",
+            toParseTree(parseResourceScript("array_declaration")).multiLineString())
+    }
+
+    @Test
+    fun parseWhileLoop() {
+        assertEquals(
+            """KotlinScript
+    Line
+        WhileStatement
+            T[while]
+            T[(]
+            BinaryOperation
+            IntLiteral
+                T[1]
+            T[<]
+            IntLiteral
+                T[2]
+            T[)]
+            Block
+            T[{]
+          T[
+]
+          PrintStatement
+            Print
+              T[print]
+              T[(]
+              StringLiteralExpression
+                StringLiteral
+                  LineStringLiteral
+                    T["]
+                    LineStringContent
+                      T[Hello World!]
+                    T["]
+              T[)]
+          T[
+]
+          T[}]
+    T[<EOF>]
+""",
+            toParseTree(parseResourceScript("while_loop.txt")).multiLineString())
     }
 
     @Test

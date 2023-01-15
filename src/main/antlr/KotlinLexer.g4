@@ -14,6 +14,7 @@ INT                : 'Int';
 DOUBLE             : 'Double';
 BOOL               : 'Boolean';
 STRING             : 'String';
+ARRAY              : 'Array';
 
 INT_LIT
     : DecDigitNoZero DecDigit*
@@ -40,6 +41,8 @@ DIVISION           : '/' ;
 ASSIGN             : '=' ;
 LPAREN             : '(' ;
 RPAREN             : ')' ;
+LBRAK              : '[' ;
+RBRAK              : ']' ;
 COLON              : ':';
 LCURL              : '{';
 RCURL              : '}';
@@ -57,6 +60,9 @@ FUN: 'fun';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
 LISTOF: 'listOf';
+WHILE              : 'while';
+BREAK              : 'break';
+CONTINUE           : 'continue';
 
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;

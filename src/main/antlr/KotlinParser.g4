@@ -39,6 +39,8 @@ varDeclaration : VAR ID (NL* COLON NL* type)?;
 
 valDeclaration : VAL ID (NL* COLON NL* type)?;
 
+arrayDeclaration : ARRAY ID (NL* COLON NL* type)?;
+
 propertyDeclaration:  (varDeclaration|valDeclaration) (ASSIGN expression)?;
 
 annotation: AT ID;
@@ -56,13 +58,20 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
+           | while                                                         # whileExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | arrayLiteral                                                  # arrayLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
            | RETURN returnExpression=expression                            # returnExpression
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral
            | fontWeight                                                    # fontWeightLiteral;
+
+arrayLiteral: LBRACK NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RBRACK;
+
+while: WHILE LPAREN expression RPAREN NL* block;
+
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
       (
@@ -121,7 +130,8 @@ functionBody
 type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
-       STRING  # string;
+       STRING  # string |
+       ARRAY   # array ;
 
 typeArguments
     : LANGLE NL* type (NL* COMMA NL* type)* (NL* COMMA)? NL* RANGLE
@@ -141,3 +151,4 @@ color:
 fontWeight:
     FONT_WEIGHT LPAREN INT_LIT RPAREN #customWeight
     | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
