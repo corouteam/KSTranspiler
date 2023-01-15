@@ -9,6 +9,24 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class SWIFTMappingTest {
+
+    @Test
+    fun mapStruct(){
+        val code = "struct test: View { let height = 56.8 }"
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+        val expectedAst = AstFile(listOf(
+            StructDeclaration("test", Block(
+                    listOf(PropertyDeclaration(varName = "height", type= DoubleType(), value = DoubleLit("56.8"), mutable = false))
+                )
+            )
+        ))
+
+
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        //val expectedAst = KotlinScript
+    }
+
+
     @Test
     fun mapTextComposable(){
         val code = "Text(\"Hello world\")"

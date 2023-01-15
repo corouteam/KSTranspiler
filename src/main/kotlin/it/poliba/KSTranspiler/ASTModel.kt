@@ -22,6 +22,7 @@ sealed class Statement : ControlStructureBody()
     TODO: error checking
  */
 class FunctionDeclaration(val id: String, val parameters: List<FunctionParameter>, val returnType: Type?, val body: ControlStructureBody) : Declaration()
+class StructDeclaration(val id: String, val body: ControlStructureBody) : Declaration()
 
 sealed class Expression(open val type: Type) : Statement()
 
@@ -41,6 +42,7 @@ data class BoolType(override var position: Position? = null) : Type()
 data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
+data class ViewType(override var position: Position? = null) : Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 

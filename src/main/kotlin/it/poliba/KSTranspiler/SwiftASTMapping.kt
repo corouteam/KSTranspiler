@@ -10,6 +10,8 @@ fun SwiftParser.SwiftFileContext.toAst(considerPosition: Boolean = false) : AstF
 fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     return if(this.functionDeclaration()!= null){
         this.functionDeclaration().toAst()
+    }else if(this.structDeclaration() != null){
+        this.structDeclaration().toAst()
     }else if(this.propertyDeclaration() != null){
         this.propertyDeclaration().toAst()
     }else{
@@ -60,6 +62,18 @@ fun SwiftParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fal
         PropertyDeclaration(letDeclaration().ID().text, type, expression().toAst(), mutable = false)
 
     }
+}
+
+fun SwiftParser.StructDeclarationContext.toAst(considerPosition: Boolean = false): StructDeclaration {
+    val id = this.ID().text
+    var block = Block(listOf())
+    if(this.structBody().block() != null){
+        block =  Block(this.structBody().block().statement().map { it.toAst(considerPosition) })
+    }else{
+        val returnExpression = ReturnExpression(this.structBody().expression().toAst())
+        block = Block(listOf(returnExpression))
+    }
+    return StructDeclaration(id, block)
 }
 
 fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {

@@ -17,6 +17,7 @@ fun Declaration.generateCode(): String{
         is PropertyDeclaration -> this.generateCode()
         is WidgetDeclaration -> this.generateCode()
         is FunctionDeclaration -> this.generateCode()
+        is StructDeclaration -> this.generateCode()
     }
 }
 fun Statement.generateCode(): String {
