@@ -38,6 +38,34 @@ class SWIFTParserTest {
 
 
     @Test
+    fun parseStruct(){
+
+        val expected = "SwiftFile\n" +
+                "  Declaration\n" +
+                "    StructDeclaration\n" +
+                "      T[struct]\n" +
+                "      T[test]\n" +
+                "      T[:]\n" +
+                "      View\n" +
+                "        T[View]\n" +
+                "      StructBody\n" +
+                "        Block\n" +
+                "          T[{]\n" +
+                "          PropertyDeclarationStatement\n" +
+                "            PropertyDeclaration\n" +
+                "              LetDeclaration\n" +
+                "                T[let]\n" +
+                "                T[height]\n" +
+                "              T[=]\n" +
+                "              DoubleLiteral\n" +
+                "                T[56.8]\n" +
+                "          T[}]\n" +
+                "  T[<EOF>]\n"
+        val actual = toParseTree(parseResource("swift/struct")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseSwiftTextWithBold(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +

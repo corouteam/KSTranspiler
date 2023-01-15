@@ -23,13 +23,14 @@ importHeader
 
 declaration:
     functionDeclaration
+    | structDeclaration
     | propertyDeclaration
     ;
 
 
 statement : propertyDeclaration # propertyDeclarationStatement
           | assignment     # assignmentStatement
-          | expression     #expressionStatement
+          | expression     # expressionStatement
           | print          # printStatement;
 
 print : PRINT LPAREN expression RPAREN ;
@@ -116,10 +117,23 @@ functionBody
     | ASSIGN NL* expression
     ;
 
+
+structDeclaration:
+    annotation? STRUCT NL* ID
+    (NL* COLON NL* type)?
+    (NL* structBody)?
+    ;
+
+structBody
+    : block
+    | ASSIGN NL* expression
+    ;
+
 type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
-       STRING  # string;
+       STRING  # string |
+       VIEW    # view;
 
 
 widgetCall:
@@ -131,5 +145,6 @@ swiftUITextSuffix:
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
 color:
      COLOR DOT COLOR_BLUE #blueColor;
