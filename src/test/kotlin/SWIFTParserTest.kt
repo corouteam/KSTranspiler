@@ -112,4 +112,36 @@ class SWIFTParserTest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun parseSwiftImageWithResizableAndScaledToFit(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        ImageWidget\n" +
+                "          T[Image]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[nome-immagine-test]\n" +
+                "                T[\"]\n" +
+                "          T[)]\n" +
+                "          T[.]\n" +
+                "          ResizableSuffix\n" +
+                "            T[resizable]\n" +
+                "            T[(]\n" +
+                "            T[)]\n" +
+                "             T[.]\n"
+                "          ScaledToFitSuffix\n" +
+                "            T[scaledToFit]\n" +
+                "            T[(]\n" +
+                "            T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/imageWithResizableAndScaledToFit")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
 }

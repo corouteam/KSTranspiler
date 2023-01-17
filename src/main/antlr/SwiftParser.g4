@@ -123,13 +123,17 @@ type : INT     # integer |
 
 
 widgetCall:
-    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget;
+    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget |
+    IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #imageWidget;
 
 swiftUITextSuffix:
-    FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
-    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
+    FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix |
+    FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix |
+    RESIZABLE_MODIFIER LPAREN RPAREN # resizableSuffix |
+    SCALED_TO_FIT_MODIFIER LPAREN RPAREN # scaledToFitSuffix;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
 color:
      COLOR DOT COLOR_BLUE #blueColor;
