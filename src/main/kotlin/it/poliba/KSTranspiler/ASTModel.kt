@@ -40,6 +40,8 @@ data class StringType(override var position: Position? = null) : Type()
 data class BoolType(override var position: Position? = null) : Type()
 data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
+data class ResizableType(override var position: Position? = null): Type()
+data class ScaledToFitType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
@@ -47,6 +49,7 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class TextComposableType: ComposableType()
+class ImageComposableType: ComposableType()
 // END TEST
 //
 // Expressions
@@ -124,6 +127,17 @@ sealed class FontWeightLit: Expression(FontWeightType())
 
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
+
+
+class ImageComposableCall(
+    val value: Expression,
+    val resizable: Expression?,
+    val scaledToFit: Expression?
+): ComposableCall(ImageComposableType())
+sealed class ResizableLit: Expression(ResizableType())
+class Resizable: ResizableLit()
+sealed class ScaledToFitLit: Expression(ScaledToFitType())
+class ScaledToFit: ScaledToFitLit()
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
 

@@ -8,6 +8,7 @@ fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
 }
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
+    is SwiftParser.ImageWidgetContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -20,9 +21,20 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
     return TextComposableCall(expressionAst, color, fontWeight)
 }
 
+fun SwiftParser.ImageWidgetContext.toAst(): Expression {
+    val expressionAst = this.expression().toAst()
+    if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Image composable")
+    val params = swiftUITextSuffix().map { it.toAst() }
+    val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
+    val scaledToFit = params.firstOrNull { it is ScaledToFit } as ScaledToFit?
+    return ImageComposableCall(expressionAst, resizable, scaledToFit)
+}
+
 fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
     is ForegroundColorSuffixContext -> color().toAst()
     is BoldSuffixContext -> FontWeightBold()
+    is SwiftParser.ResizableSuffixContext -> Resizable()
+    is SwiftParser.ScaledToFitSuffixContext -> ScaledToFit()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
