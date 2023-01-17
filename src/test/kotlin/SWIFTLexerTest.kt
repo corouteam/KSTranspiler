@@ -40,6 +40,7 @@ class SWIFTLexerTest {
     }
 
 
+
     @Test
     fun parseTextComposable(){
         val code = "Text(\"Hello world\")"
@@ -73,6 +74,22 @@ class SWIFTLexerTest {
         val code = "Text( \"Music\").bold()"
         val result = listOf("TEXT_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText",
             "QUOTE_CLOSE", "RPAREN","DOT", "FONT_WEIGHT_BOLD","LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+
+    @Test
+    fun parseImageComposable(){
+        val code = "Image(\"nome-immagine-test\")"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseImageWithParameters(){
+        val code = "Image( \"nome-immagine-test\").resizable().scaledToFit()"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText",
+            "QUOTE_CLOSE", "RPAREN", "DOT", "RESIZABLE_MODIFIER","LPAREN", "RPAREN", "DOT", "SCALED_TO_FIT_MODIFIER","LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

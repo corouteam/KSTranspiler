@@ -63,6 +63,9 @@ COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 QUOTE_OPEN: '"' -> pushMode(LineString);
 
 TEXT_WIDGET: 'Text';
+IMAGE_WIDGET: 'Image';
+RESIZABLE_MODIFIER: 'resizable';
+SCALED_TO_FIT_MODIFIER: 'scaledToFit';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';
