@@ -58,8 +58,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | RETURN returnExpression=expression                            # returnExpression
-           | widgetCall #widgetCallExpression
-           | color                       # colorLiteral;
+           | widgetCall                                                    # widgetCallExpression
+           | color                                                         # colorLiteral
+           | resource                                                      # resourceLiteral;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -129,11 +130,14 @@ widgetCall:
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix |
     FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix |
-    RESIZABLE_MODIFIER LPAREN RPAREN # resizableSuffix |
-    SCALED_TO_FIT_MODIFIER LPAREN RPAREN # scaledToFitSuffix;
+    RESIZABLE LPAREN RPAREN # resizableSuffix |
+    ASPECT_RATIO LPAREN RPAREN # aspectRatioSuffix;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 
 color:
      COLOR DOT COLOR_BLUE #blueColor;
+
+resource:
+  LOCAL_RESOURCE LPAREN stringLiteral RPAREN #localResource;

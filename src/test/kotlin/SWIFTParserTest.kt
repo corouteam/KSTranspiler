@@ -113,7 +113,7 @@ class SWIFTParserTest {
     }
 
     @Test
-    fun parseSwiftImageWithResizableAndScaledToFit(){
+    fun parseSwiftImageWithResizableAndAspectRatio(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +
                 "    ExpressionStatement\n" +
@@ -121,22 +121,26 @@ class SWIFTParserTest {
                 "        ImageWidget\n" +
                 "          T[Image]\n" +
                 "          T[(]\n" +
-                "          StringLiteralExpression\n" +
-                "            StringLiteral\n" +
-                "              LineStringLiteral\n" +
-                "                T[\"]\n" +
-                "                LineStringContent\n" +
-                "                  T[nome-immagine-test]\n" +
-                "                T[\"]\n" +
+                "          ResourceLiteral\n" +
+                "            LocalResource\n" +
+                "              T[LocalResource]\n" +
+                "              T[(]\n" +
+                "              StringLiteral\n" +
+                "                LineStringLiteral\n" +
+                "                  T[\"]\n" +
+                "                  LineStringContent\n" +
+                "                    T[nome-immagine-test]\n" +
+                "                  T[\"]\n" +
+                "              T[)]\n" +
                 "          T[)]\n" +
                 "          T[.]\n" +
                 "          ResizableSuffix\n" +
                 "            T[resizable]\n" +
                 "            T[(]\n" +
                 "            T[)]\n" +
-                "             T[.]\n"
-                "          ScaledToFitSuffix\n" +
-                "            T[scaledToFit]\n" +
+                "          T[.]\n" +
+                "          AspectRatioSuffix\n" +
+                "            T[aspectRatio]\n" +
                 "            T[(]\n" +
                 "            T[)]\n" +
                 "    T[<EOF>]\n"

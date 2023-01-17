@@ -23,18 +23,18 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
 
 fun SwiftParser.ImageWidgetContext.toAst(): Expression {
     val expressionAst = this.expression().toAst()
-    if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Image composable")
+    if(expressionAst.type != LocalResourceType(type = StringType())) throw IllegalArgumentException("Local Resource expected in Image composable")
     val params = swiftUITextSuffix().map { it.toAst() }
     val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
-    val scaledToFit = params.firstOrNull { it is ScaledToFit } as ScaledToFit?
-    return ImageComposableCall(expressionAst, resizable, scaledToFit)
+    val scaledToFit = params.firstOrNull { it is AspectRatio } as AspectRatio?
+    return ImageComposableCall(LocalResourceExpression(value = expressionAst), resizable, scaledToFit)
 }
 
 fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
     is ForegroundColorSuffixContext -> color().toAst()
     is BoldSuffixContext -> FontWeightBold()
     is SwiftParser.ResizableSuffixContext -> Resizable()
-    is SwiftParser.ScaledToFitSuffixContext -> ScaledToFit()
+    is SwiftParser.AspectRatioSuffixContext -> AspectRatio()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 

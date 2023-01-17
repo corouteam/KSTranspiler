@@ -80,16 +80,15 @@ class SWIFTLexerTest {
 
     @Test
     fun parseImageComposable(){
-        val code = "Image(\"nome-immagine-test\")"
-        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "EOF")
+        val code = "Image(LocalResource(\"nome-immagine-test\"))"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "LOCAL_RESOURCE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
     fun parseImageWithParameters(){
-        val code = "Image( \"nome-immagine-test\").resizable().scaledToFit()"
-        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText",
-            "QUOTE_CLOSE", "RPAREN", "DOT", "RESIZABLE_MODIFIER","LPAREN", "RPAREN", "DOT", "SCALED_TO_FIT_MODIFIER","LPAREN", "RPAREN", "EOF")
+        val code = "Image(LocalResource(\"nome-immagine-test\")).resizable().aspectRatio()"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "LOCAL_RESOURCE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "DOT", "ASPECT_RATIO","LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

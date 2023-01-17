@@ -56,20 +56,20 @@ class SWIFTMappingTest {
 
     @Test
     fun mapImageComposable(){
-        val code = "Image(\"nome-immagine-test\")"
+        val code = "Image(LocalResource(\"nome-immagine-test\"))"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(StringLit("nome-immagine-test"), null, null)
+            ImageComposableCall(LocalResourceExpression(StringLit("\"nome-immagine-test\"")), null, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
     @Test
     fun mapImageComposableWithParams(){
-        val code = "Image(\"nome-immagine-test\").resizable().scaledToFit()"
+        val code = "Image(LocalResource(\"nome-immagine-test\")).resizable().aspectRatio()"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(StringLit("nome-immagine-test"), Resizable(), ScaledToFit())
+            ImageComposableCall(LocalResourceExpression(StringLit("\"nome-immagine-test\"")), Resizable(), AspectRatio())
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
