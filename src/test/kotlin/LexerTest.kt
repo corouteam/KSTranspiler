@@ -146,12 +146,6 @@ class LexerTest {
     }
 
     @Test
-    fun parseArrayDeclaration() {
-        assertEquals(listOf("VAR", "ID", "ASSIGN", "LCURL", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RCURL", "EOF"),
-            tokens(lexerForCode("var a = [1,2,3]")))
-    }
-
-    @Test
     fun parseFunction(){
         val code = "fun test(x: Int, y: Int)\t{\tprint(\"ciao\")}"
         val result = listOf("FUN","ID", "LPAREN", "ID", "COLON", "INT", "COMMA", "ID", "COLON", "INT", "RPAREN","LCURL", "PRINT","LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL","EOF")
@@ -183,6 +177,13 @@ class LexerTest {
     fun parseListOfExpression(){
         val code = "listOf<Int>(1, 2, 3)"
         val result = listOf("LISTOF", "LANGLE", "INT", "RANGLE", "LPAREN", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseArrayOfExpression(){
+        val code = "arrayOf<Int>(1, 2, 3)"
+        val result = listOf("ARRAYOF", "LANGLE", "INT", "RANGLE", "LPAREN", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 

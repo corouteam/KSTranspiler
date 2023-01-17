@@ -14,7 +14,6 @@ INT                : 'Int';
 DOUBLE             : 'Double';
 BOOL               : 'Boolean';
 STRING             : 'String';
-ARRAY              : 'Array';
 
 INT_LIT
     : DecDigitNoZero DecDigit*
@@ -60,6 +59,7 @@ FUN: 'fun';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
 LISTOF: 'listOf';
+ARRAYOF: 'arrayOf';
 WHILE              : 'while';
 BREAK              : 'break';
 CONTINUE           : 'continue';

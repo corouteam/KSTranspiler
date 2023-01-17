@@ -39,8 +39,6 @@ varDeclaration : VAR ID (NL* COLON NL* type)?;
 
 valDeclaration : VAL ID (NL* COLON NL* type)?;
 
-arrayDeclaration : ARRAY ID (NL* COLON NL* type)?;
-
 propertyDeclaration:  (varDeclaration|valDeclaration) (ASSIGN expression)?;
 
 annotation: AT ID;
@@ -60,15 +58,14 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | if                                                            # ifExpression
            | while                                                         # whileExpression
            | stringLiteral                                                 # stringLiteralExpression
-           | arrayLiteral                                                  # arrayLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
+           | ARRAYOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # arrayExpression
            | RETURN returnExpression=expression                            # returnExpression
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral
            | fontWeight                                                    # fontWeightLiteral;
 
-arrayLiteral: LBRACK NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RBRACK;
 
 while: WHILE LPAREN expression RPAREN NL* block;
 
@@ -130,8 +127,7 @@ functionBody
 type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
-       STRING  # string |
-       ARRAY   # array ;
+       STRING  # string ;
 
 typeArguments
     : LANGLE NL* type (NL* COMMA NL* type)* (NL* COMMA)? NL* RANGLE

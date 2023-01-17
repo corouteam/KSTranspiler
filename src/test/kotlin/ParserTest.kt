@@ -165,32 +165,32 @@ class KotlinParserTest {
     }
 
     @Test
-    fun parseArrayDeclaration() {
+    fun parseArrayOfExpression() {
         assertEquals(
             """KotlinScript
-    Line
-        Declaration
-            PropertyDeclaration
-            VarDeclaration
-                T[var]
-                T[a]
-                T[=]
-                ArrayLiteral
-                    T[[]
-                    IntLiteral
-                    T[1]
-                    T[,] 
-                    IntLiteral
-                    T[2]
-                    T[,] 
-                    IntLiteral
-                    T[3]
-                    T[]]
+  Line
+    ExpressionStatement
+      ArrayExpression
+        T[arrayOf]
+        TypeArguments
+          T[<]
+          Integer
+            T[Int]
+          T[>]
+        T[(]
+        IntLiteral
+          T[1]
+        T[,]
+        IntLiteral
+          T[2]
+        T[,]
+        IntLiteral
+          T[3]
+        T[)]
     T[<EOF>]
 """,
-            toParseTree(parseResourceScript("array_declaration")).multiLineString())
+            toParseTree(parseResourceScript("array_expression")).multiLineString())
     }
-
     @Test
     fun parseWhileLoop() {
         assertEquals(
