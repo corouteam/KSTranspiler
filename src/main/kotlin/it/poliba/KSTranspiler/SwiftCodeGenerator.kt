@@ -93,6 +93,7 @@ fun Expression.generateCode() : String = when (this) {
     is BoolLit -> "${this.value}"
     is RangeExpression -> "${this.leftExpression.generateCode()}...${this.rightExpression.generateCode()}"
     is ListExpression -> "[${this.items.map { it.generateCode() }.joinToString(", ")}]"
+    is ArrayExpression -> "[${this.items.map { it.generateCode() }.joinToString(", ")}]"
     is ColorLit -> this.generateCode()
     is FontWeightLit -> this.generateCode()
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
@@ -109,6 +110,7 @@ fun Type.generateCode() : String = when (this) {
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     is ListType -> "[${this.itemsType.generateCode()}]"
+    is ArrayType -> "[${this.itemsType.generateCode()}]"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

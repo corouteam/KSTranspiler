@@ -43,6 +43,7 @@ data class FontWeightType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
+data class ArrayType(val itemsType: Type, override var position: Position? = null) : Type()
 
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
@@ -71,6 +72,12 @@ data class ListExpression(
     val items: List<Expression>,
     override var position: Position? = null
 ): Expression(ListType(itemsType))
+
+data class ArrayExpression(
+    val itemsType: Type,
+    val items: List<Expression>,
+    override var position: Position? = null
+): Expression(ArrayType(itemsType))
 
 data class UnaryMinusExpression(val value: Expression, override var position: Position? = null) : Expression(value.type)
 

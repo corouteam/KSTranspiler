@@ -154,6 +154,14 @@ class OutputTest {
     }
 
     @Test
+    fun convertIntArrayExpression(){
+        var code = "val list = arrayOf<Int>(1, 2, 3)"
+        val result = "let list:[Int] = [1, 2, 3]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
     fun convertTextWidget(){
         val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
         val result = "Text(\"Hello world\")\n.foregroundColor(Color.blue)\n.fontWeight(Font.Weight.bold)"
