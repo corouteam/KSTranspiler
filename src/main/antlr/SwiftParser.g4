@@ -56,6 +56,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
+           | while                                                         # whileExpression
            | stringLiteral                                                 # stringLiteralExpression
            | RETURN returnExpression=expression                            # returnExpression
            | widgetCall #widgetCallExpression
@@ -68,6 +69,8 @@ if
       | body=controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (elseBody=controlStructureBody | SEMICOLON)
       | SEMICOLON)
     ;
+
+while : WHILE NL* LPAREN NL* expression NL* RPAREN NL* body=controlStructureBody;
 
 controlStructureBody
     : block

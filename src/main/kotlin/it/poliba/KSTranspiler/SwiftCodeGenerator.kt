@@ -25,6 +25,7 @@ fun Statement.generateCode(): String {
         is Assignment -> this.generateCode()
         is Print -> this.generateCode()
         is IfExpression -> this.generateCode()
+        is WhileExpression -> this.generateCode()
         is Expression -> this.generateCode()
         is FunctionDeclaration -> this.generateCode()
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -62,6 +63,12 @@ fun IfExpression.generateCode(): String{
         }
     }
     return result
+}
+
+fun WhileExpression.generateCode(): String{
+    return "while(${condition.generateCode()}){\n"+
+            "\t${body.generateCode()}\n"+
+            "}"
 }
 
 fun ControlStructureBody.generateCode(): String{

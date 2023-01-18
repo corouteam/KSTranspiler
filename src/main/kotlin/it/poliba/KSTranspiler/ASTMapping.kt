@@ -104,6 +104,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
+    is KotlinParser.WhileExpressionContext-> toAst(considerPosition)
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
     is KotlinParser.ArrayExpressionContext -> toAst(considerPosition)
@@ -147,6 +148,10 @@ fun getRangeType(leftType: Type, rightType: Type): Type {
 fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression {
     var elseBody = if(this.if_().elseBody != null) this.if_().elseBody.toAst() else null
     return IfExpression(this.if_().expression().toAst(), this.if_().body.toAst(), elseBody )
+}
+
+fun KotlinParser.WhileExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return WhileExpression(this.while_().expression().toAst(), this.while_().body.toAst())
 }
 
 

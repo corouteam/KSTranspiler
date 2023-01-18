@@ -96,6 +96,8 @@ data class IfExpression(val condition: Expression, var body: ControlStructureBod
     IntType()
 )
 
+data class WhileExpression(val condition: Expression, var body: ControlStructureBody): Expression(IntType())
+
 open class ControlStructureBody : Node()
 
 data class Block(val body: List<Statement>): ControlStructureBody()

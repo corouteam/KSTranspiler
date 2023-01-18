@@ -73,6 +73,15 @@ class OutputTest {
     }
 
     @Test
+    fun convertWhile(){
+        val code = "while(true){ print(\"Is true \") }"
+        val result = "while(true){\n\tprint(\"Is true \")\n}"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+
+    }
+
+    @Test
     fun convertIfElse(){
         val code = "if(true){ print(\"Is true \") }else{print(\"Is false\")}"
         val result = "if(true){\n\tprint(\"Is true \")\n}else{\n\tprint(\"Is false\")\n}"

@@ -168,46 +168,18 @@ class KotlinParserTest {
     fun parseArrayOfExpression() {
         assertEquals(
             """KotlinScript
-  Line
-    ExpressionStatement
-      ArrayExpression
-        T[arrayOf]
-        TypeArguments
-          T[<]
-          Integer
-            T[Int]
-          T[>]
-        T[(]
-        IntLiteral
-          T[1]
-        T[,]
-        IntLiteral
-          T[2]
-        T[,]
-        IntLiteral
-          T[3]
-        T[)]
-    T[<EOF>]
-""",
-            toParseTree(parseResourceScript("array_expression")).multiLineString())
-    }
-    @Test
-    fun parseWhileLoop() {
-        assertEquals(
-            """KotlinScript
+KotlinScript
     Line
-        WhileStatement
-            T[while]
-            T[(]
-            BinaryOperation
-            IntLiteral
-                T[1]
-            T[<]
-            IntLiteral
-                T[2]
-            T[)]
+    ExpressionStatement
+      WhileExpression
+        While
+          T[while]
+          T[(]
+          BoolLiteral
+            T[true]
+          T[)]
             Block
-            T[{]
+          T[{]
           T[
 ]
           PrintStatement
@@ -219,15 +191,53 @@ class KotlinParserTest {
                   LineStringLiteral
                     T["]
                     LineStringContent
-                      T[Hello World!]
+                      T[ciao]
                     T["]
               T[)]
           T[
 ]
           T[}]
+  T[<EOF>]
+""",
+            toParseTree(parseResourceScript("array_expression")).multiLineString())
+    }
+
+    @Test
+    fun parseWhileDeclaration() {
+        assertEquals(
+            """KotlinScript
+  Line
+    ExpressionStatement
+      WhileExpression
+        While
+          T[while]
+          T[(]
+          BoolLiteral
+            T[true]
+          T[)]
+          ControlStructureBody
+            Block
+              T[{]
+              T[
+]
+              PrintStatement
+                Print
+                  T[print]
+                  T[(]
+                  StringLiteralExpression
+                    StringLiteral
+                      LineStringLiteral
+                        T["]
+                        LineStringContent
+                          T[ciao]
+                        T["]
+                  T[)]
+              T[
+]
+              T[}]
     T[<EOF>]
 """,
-            toParseTree(parseResourceScript("while_loop.txt")).multiLineString())
+            toParseTree(parseResourceScript("while_loop")).multiLineString())
     }
 
     @Test

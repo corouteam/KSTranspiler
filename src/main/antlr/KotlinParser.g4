@@ -67,7 +67,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | fontWeight                                                    # fontWeightLiteral;
 
 
-while: WHILE LPAREN expression RPAREN NL* block;
+while: WHILE LPAREN expression RPAREN NL* body=controlStructureBody*;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
