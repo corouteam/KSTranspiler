@@ -131,13 +131,18 @@ swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix |
     FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix |
     RESIZABLE LPAREN RPAREN # resizableSuffix |
-    ASPECT_RATIO LPAREN RPAREN # aspectRatioSuffix;
+    ASPECT_RATIO LPAREN contentMode RPAREN # aspectRatioSuffix;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
+contentMode:
+     ID COLON DOT FONT_WEIGHT_FIT #contentModeFit |
+     ID COLON DOT FONT_WEIGHT_FILL #contentModeFill;
+
 
 color:
      COLOR DOT COLOR_BLUE #blueColor;
 
 resource:
-  LOCAL_RESOURCE LPAREN stringLiteral RPAREN #localResource;
+     LOCAL_RESOURCE LPAREN stringLiteral RPAREN #localResource;

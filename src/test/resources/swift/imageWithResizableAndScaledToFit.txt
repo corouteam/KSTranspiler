@@ -1,1 +1,1 @@
-Image(LocalResource("nome-immagine-test")).resizable().aspectRatio()
+Image(LocalResource("nome-immagine-test")).resizable().aspectRatio(contentMode: .fit)

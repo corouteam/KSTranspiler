@@ -142,6 +142,11 @@ class SWIFTParserTest {
                 "          AspectRatioSuffix\n" +
                 "            T[aspectRatio]\n" +
                 "            T[(]\n" +
+                "            ContentModeFit\n"+
+                "              T[contentMode]\n" +
+                "              T[:]\n" +
+                "              T[.]\n" +
+                "              T[fit]\n" +
                 "            T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("swift/imageWithResizableAndScaledToFit")).multiLineString()
