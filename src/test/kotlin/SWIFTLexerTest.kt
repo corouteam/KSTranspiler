@@ -86,9 +86,23 @@ class SWIFTLexerTest {
     }
 
     @Test
+    fun parseAspectRatioWithParameterFit(){
+        val code = ".aspectRatio(contentMode: ContentMode.fit)"
+        val result = listOf("DOT", "ASPECT_RATIO","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "FONT_WEIGHT_FIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseAspectRatioWithParameterFill(){
+        val code = ".aspectRatio(contentMode: ContentMode.fill)"
+        val result = listOf("DOT", "ASPECT_RATIO","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "FONT_WEIGHT_FILL", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
     fun parseImageWithParameters(){
-        val code = "Image(LocalResource(\"nome-immagine-test\")).resizable().aspectRatio()"
-        val result = listOf("IMAGE_WIDGET", "LPAREN", "LOCAL_RESOURCE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "DOT", "ASPECT_RATIO","LPAREN", "RPAREN", "EOF")
+        val code = "Image(LocalResource(\"nome-immagine-test\")).resizable().aspectRatio(contentMode: ContentMode.fill)"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "LOCAL_RESOURCE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "DOT", "ASPECT_RATIO","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "FONT_WEIGHT_FILL", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

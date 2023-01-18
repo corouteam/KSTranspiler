@@ -67,7 +67,11 @@ IMAGE_WIDGET: 'Image';
 RESIZABLE: 'resizable';
 ASPECT_RATIO: 'aspectRatio';
 LOCAL_RESOURCE: 'LocalResource';
+
 FONT_WEIGHT_PARAM: 'fontWeight';
+CONTENT_MODE: 'ContentMode';
+FONT_WEIGHT_FIT: 'fit';
+FONT_WEIGHT_FILL: 'fill';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';
 
