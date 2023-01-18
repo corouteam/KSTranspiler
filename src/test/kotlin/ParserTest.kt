@@ -168,36 +168,26 @@ class KotlinParserTest {
     fun parseArrayOfExpression() {
         assertEquals(
             """KotlinScript
-KotlinScript
-    Line
+  Line
     ExpressionStatement
-      WhileExpression
-        While
-          T[while]
-          T[(]
-          BoolLiteral
-            T[true]
-          T[)]
-            Block
-          T[{]
-          T[
-]
-          PrintStatement
-            Print
-              T[print]
-              T[(]
-              StringLiteralExpression
-                StringLiteral
-                  LineStringLiteral
-                    T["]
-                    LineStringContent
-                      T[ciao]
-                    T["]
-              T[)]
-          T[
-]
-          T[}]
-  T[<EOF>]
+      ArrayExpression
+        T[arrayOf]
+        TypeArguments
+          T[<]
+          Integer
+            T[Int]
+          T[>]
+        T[(]
+        IntLiteral
+          T[1]
+        T[,]
+        IntLiteral
+          T[2]
+        T[,]
+        IntLiteral
+          T[3]
+        T[)]
+    T[<EOF>]
 """,
             toParseTree(parseResourceScript("array_expression")).multiLineString())
     }
