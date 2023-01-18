@@ -14,7 +14,6 @@ object App {
                 val b = 2
                 val a = 2
             }
-            
         """.trimIndent().trim()
         var code2 = "let a = 5 + 2"
         var actual = code

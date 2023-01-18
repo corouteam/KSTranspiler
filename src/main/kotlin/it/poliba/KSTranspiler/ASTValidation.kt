@@ -1,30 +1,31 @@
 package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
-import com.strumenta.kolasu.model.children
-import com.strumenta.kolasu.traversing.findAncestorOfType
-import com.strumenta.kolasu.traversing.walk
 import com.strumenta.kolasu.traversing.walkAncestors
-import it.poliba.KSTranspiler.SwiftParser.VarDeclarationContext
 import java.util.*
+import kotlin.collections.ArrayList
 
 fun Node.commonValidation(): LinkedList<Error> {
     val errors = LinkedList<Error>()
 
+    val allVariables = ArrayList<PropertyDeclaration>()
+    this.specificProcess(PropertyDeclaration::class.java) {
+        allVariables.add(it)
+    }
+
+    // check for variables duplicates in functions
+    val variablesInFunctions = HashMap<String, PropertyDeclaration>()
     this.specificProcess(ControlStructureBody::class.java) {
         val varsByName = HashMap<String, PropertyDeclaration>()
-
         if (it is Block) {
             it.body
                 .filterIsInstance<PropertyDeclaration>()
                 .forEach {
+                    variablesInFunctions[it.varName] = it
                     if (varsByName.containsKey(it.varName)) {
-                        it.walkAncestors().forEach {
-                            println("test ${it.nodeType}")
-                        }
                         errors.add(
                             Error(
-                                "A variable named '${it.varName}' has been already declared at ${varsByName[it.varName]?.position?.start}",
+                                "A variable named '${it.varName}' has been already declared",
                                 it.position?.start?.asPosition
                             )
                         )
@@ -34,6 +35,22 @@ fun Node.commonValidation(): LinkedList<Error> {
                 }
         }
     }
+
+    // check for duplicates in global variables
+    val globalVariables = allVariables.filterNot { variablesInFunctions.containsKey(it.varName) }
+    globalVariables
+        .groupBy { it.varName }
+        .forEach {
+            if (it.value.size > 1) {
+                // variable with same name found
+                errors.add(
+                    Error(
+                        "A variable named '${it.key}' has been already declared",
+                        it.value.first().position?.start?.asPosition
+                    )
+                )
+            }
+        }
 
     // check for list correct types
     this.specificProcess(ListExpression::class.java) {
