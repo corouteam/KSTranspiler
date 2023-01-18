@@ -53,6 +53,8 @@ ELSE: 'else';
 FUN: 'func';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
+STRUCT: 'struct';
+SOME:'some';
 
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
@@ -74,7 +76,7 @@ WEIGHT: 'Weight';
 
 
 // Identifiers
-ID                 : [_]*[a-z][A-Za-z0-9_]* ;
+ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
 
 mode LineString;
 

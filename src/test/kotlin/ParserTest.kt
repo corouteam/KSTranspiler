@@ -235,7 +235,8 @@ class KotlinParserTest {
                       T[ciao]
                     T["]
               T[)]
-          T[
+          Semis
+            T[
 ]
           T[}]
   T[<EOF>]
@@ -280,7 +281,8 @@ class KotlinParserTest {
               T[return]
               IntLiteral
                 T[3]
-          T[
+          Semis
+            T[
 ]
           T[}]
   T[<EOF>]

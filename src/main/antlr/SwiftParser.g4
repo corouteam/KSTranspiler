@@ -24,6 +24,7 @@ importHeader
 declaration:
     functionDeclaration
     | propertyDeclaration
+    | structDeclaration
     ;
 
 
@@ -34,17 +35,18 @@ statement : propertyDeclaration # propertyDeclarationStatement
 
 print : PRINT LPAREN expression RPAREN ;
 
+varDeclaration : VAR ID (NL* COLON NL* SOME? type)?;
 
-varDeclaration : VAR ID (NL* COLON NL* type)?;
+letDeclaration : LET ID (NL* COLON NL* SOME? type)?;
 
-letDeclaration : LET ID (NL* COLON NL* type)?;
-
-propertyDeclaration:  (varDeclaration|letDeclaration) (ASSIGN expression)?;
+propertyDeclaration:  (varDeclaration|letDeclaration) ((ASSIGN expression)|computedPropertyDeclarationBody)?;
 
 annotation: AT ID;
 
 assignment : ID ASSIGN expression ;
 
+computedPropertyDeclarationBody:
+    NL* block;
 
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
@@ -75,7 +77,7 @@ controlStructureBody
     ;
 
 block
-    : LCURL NL* statement* NL* RCURL
+    : LCURL NL* (statement semis?)* NL* RCURL
     ;
 
 stringLiteral
@@ -101,7 +103,7 @@ functionValueParameter
     ;
 
 parameter
-    : ID NL* COLON NL* type
+    : ID NL* COLON NL* SOME? type
     ;
 
 functionDeclaration:
@@ -116,10 +118,32 @@ functionBody
     | ASSIGN NL* expression
     ;
 
+structDeclaration:
+    STRUCT ID (NL* COLON NL* delegationSpecifiers)?
+    (NL* classBody)?
+    ;
+
+classBody
+    : LCURL NL* classMemberDeclarations NL* RCURL
+    ;
+delegationSpecifiers
+    : ID (NL* COMMA NL* ID)*
+    ;
+
+classMemberDeclarations
+    : (declaration semis?)*
+    ;
+
+semis
+    : (SEMICOLON | NL)+
+    ;
+
 type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
-       STRING  # string;
+       STRING  # string |
+      ID      #userType;
+
 
 
 widgetCall:

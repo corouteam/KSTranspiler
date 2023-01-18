@@ -77,9 +77,8 @@ controlStructureBody
     ;
 
 block
-    : LCURL NL* statement* NL* RCURL
+    : LCURL NL* (statement semis?)* NL* RCURL
     ;
-
 stringLiteral
    : lineStringLiteral;
 
@@ -117,6 +116,8 @@ functionBody
     : block
     | ASSIGN NL* expression
     ;
+semis
+    : (SEMICOLON | NL)+;
 
 type : INT     # integer |
        DOUBLE  # double |

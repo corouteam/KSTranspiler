@@ -12,11 +12,25 @@ fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Dec
         this.functionDeclaration().toAst()
     }else if(this.propertyDeclaration() != null){
         this.propertyDeclaration().toAst()
+    } else if(this.structDeclaration() != null){
+        this.structDeclaration().toAst()
     }else{
         throw UnsupportedOperationException("")
     }
 }
 
+fun SwiftParser.StructDeclarationContext.toAst(): Declaration{
+    if(delegationSpecifiers().ID() != null){
+        if(delegationSpecifiers().ID().map { it.text }.contains("View")){
+            return this.toWidgetAST()
+        }else{
+            throw UnsupportedOperationException("")
+        }
+    }else{
+        throw UnsupportedOperationException("")
+    }
+
+}
 fun SwiftParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): FunctionDeclaration {
     val id = this.ID().text
     val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
@@ -53,11 +67,26 @@ fun SwiftParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fal
     return if(varDeclaration() != null){
 
         val type = if(varDeclaration().type() != null) varDeclaration().type().toAst() else expression().toAst().type
-        PropertyDeclaration(varDeclaration().ID().text, type, expression().toAst(), mutable = true)
+        var expression: Expression? = null
+        if(expression() != null){
+            expression = expression().toAst()
+        }
+        var body: Block? = null
+        if(computedPropertyDeclarationBody()!= null){
+            body = Block(computedPropertyDeclarationBody().block().statement().map { it.toAst() })
+        }
+        PropertyDeclaration(varDeclaration().ID().text, type, expression, mutable = true, getter = body)
     }else{
         val type = if(letDeclaration().type() != null) letDeclaration().type().toAst() else expression().toAst().type
-
-        PropertyDeclaration(letDeclaration().ID().text, type, expression().toAst(), mutable = false)
+        var expression: Expression? = null
+        if(expression() != null){
+            expression = expression().toAst()
+        }
+        var body: Block? = null
+        if(computedPropertyDeclarationBody()!= null){
+            body = Block(computedPropertyDeclarationBody().block().statement().map { it.toAst() })
+        }
+        PropertyDeclaration(letDeclaration().ID().text, type, expression, mutable = false, getter = body)
 
     }
 }
@@ -105,6 +134,8 @@ fun SwiftParser.StringLiteralExpressionContext.toAst(considerPosition: Boolean):
 fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
     is SwiftParser.IntegerContext -> IntType(toPosition(considerPosition))
     is SwiftParser.DoubleContext -> DoubleType(toPosition(considerPosition))
+    is SwiftParser.UserTypeContext -> UserType(ID().text)
+    is SwiftParser.StringContext -> StringType()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
