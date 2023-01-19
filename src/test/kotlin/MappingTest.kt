@@ -89,6 +89,25 @@ class MappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun funExpressionReturnMultiline(){
+        val code = """fun test(x: Int, y: Int): Int { 
+            print("Ciao")
+            return 3
+         }""".trimMargin()
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
+        val expectedAst = AstFile(listOf(
+            FunctionDeclaration("test", listOf(FunctionParameter("x", IntType()), FunctionParameter("y", IntType())), IntType(), Block(
+                listOf(
+                    Print(StringLit("Ciao")),
+                    ReturnExpression(IntLit("3")))
+            )
+            )
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+
 
     @Test
     fun mapPrint() {

@@ -52,3 +52,13 @@ fun SwiftParser.ColorContext.toAst(): Expression = when(this){
     is SwiftParser.BlueColorContext ->  ColorBlue()
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
+
+
+fun SwiftParser.StructDeclarationContext.toWidgetAST(): WidgetDeclaration{
+    var id = this.ID().text
+    val bodyInstruction = this.classBody().classMemberDeclarations().declaration().map { it.toAst() }
+    val properties = bodyInstruction.filter { it is PropertyDeclaration  && it.varName != "body"}.map { it as PropertyDeclaration }
+    val functionParameters = properties.map { FunctionParameter(it.varName, it.type) }
+    val body = bodyInstruction.first() { it is PropertyDeclaration  && it.varName == "body"} as PropertyDeclaration
+    return WidgetDeclaration(id, functionParameters,body.getter!!)
+}

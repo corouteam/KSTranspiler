@@ -43,7 +43,9 @@ data class FontWeightType(override var position: Position? = null): Type()
 data class ResizableType(override var position: Position? = null): Type()
 data class AspectRatioType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
+
 data class ContentModeType(override var position: Position? = null) : Type()
+data class UserType(var name: String): Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 
@@ -101,9 +103,8 @@ data class Block(val body: List<Statement>): ControlStructureBody()
 // Statements
 //
 
-data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression, var mutable: Boolean, override  var position: Position? = null) :
-Declaration()
-
+data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression?, var getter: Block? = null, var mutable: Boolean, override  var position: Position? = null) :
+    Declaration()
 data class Assignment(val varName: String, val value: Expression, override var position: Position? = null) : Statement()
 
 data class Print(val value: Expression, override var position: Position? = null) : Statement()

@@ -79,7 +79,9 @@ fun PropertyDeclaration.generateCode(): String{
     val st = group.getInstanceOf("propertyDeclaration")
     st.add("name",varName)
     st.add("type", type.generateCode())
-    st.add("value", value.generateCode())
+    value?.let {
+        st.add("value", value.generateCode())
+    }
     st.add("mutable", mutable)
     return st.render()
 }

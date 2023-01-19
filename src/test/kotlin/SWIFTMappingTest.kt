@@ -50,7 +50,7 @@ class SWIFTMappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
     }
-
+    
     @Test
     fun mapImageComposable(){
         val code = "Image(\"nome-immagine-test\")"
@@ -71,5 +71,22 @@ class SWIFTMappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun mapWidget(){
+        val code = "struct MainView: View {\n" +
+                "var name: String\n" +
+                "    var body: some View {\n" +
+                "        Text(\"Ciao\")\n" +
+                "        Text(\"Ciao\")\n" +
+                "    }\n" +
+                "}"
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+        val expectedAst = AstFile(listOf(
+            WidgetDeclaration("MainView", listOf(FunctionParameter("name", StringType())), Block(listOf(TextComposableCall(StringLit("Ciao"), null, null), TextComposableCall(StringLit("Ciao"), null, null))
+            ))))
+
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+
+    }
 
 }
