@@ -72,7 +72,6 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     is SwiftParser.WidgetCallExpressionContext -> toAst()
-    is SwiftParser.ResourceLiteralContext -> LocalResourceExpression(value = StringLit(value = text))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

@@ -59,8 +59,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | stringLiteral                                                 # stringLiteralExpression
            | RETURN returnExpression=expression                            # returnExpression
            | widgetCall                                                    # widgetCallExpression
-           | color                                                         # colorLiteral
-           | resource                                                      # resourceLiteral;
+           | color                                                         # colorLiteral;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -125,24 +124,22 @@ type : INT     # integer |
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget |
-    IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #imageWidget;
+    IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUIImageSuffix) (NL* DOT NL* swiftUIImageSuffix)*)?  #imageWidget;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix |
-    FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix |
+    FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
+
+swiftUIImageSuffix:
     RESIZABLE LPAREN RPAREN # resizableSuffix |
-    ASPECT_RATIO LPAREN contentMode RPAREN # aspectRatioSuffix;
+    ASPECT_RATIO_PARAM LPAREN contentMode RPAREN # aspectRatioSuffix;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 
 contentMode:
-     ID COLON DOT FONT_WEIGHT_FIT #contentModeFit |
-     ID COLON DOT FONT_WEIGHT_FILL #contentModeFill;
-
+     ID COLON CONTENT_MODE DOT CONTENT_FIT #contentModeFit |
+     ID COLON CONTENT_MODE DOT CONTENT_FILL #contentModeFill;
 
 color:
      COLOR DOT COLOR_BLUE #blueColor;
-
-resource:
-     LOCAL_RESOURCE LPAREN stringLiteral RPAREN #localResource;

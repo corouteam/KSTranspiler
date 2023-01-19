@@ -121,17 +121,13 @@ class SWIFTParserTest {
                 "        ImageWidget\n" +
                 "          T[Image]\n" +
                 "          T[(]\n" +
-                "          ResourceLiteral\n" +
-                "            LocalResource\n" +
-                "              T[LocalResource]\n" +
-                "              T[(]\n" +
-                "              StringLiteral\n" +
-                "                LineStringLiteral\n" +
-                "                  T[\"]\n" +
-                "                  LineStringContent\n" +
-                "                    T[nome-immagine-test]\n" +
-                "                  T[\"]\n" +
-                "              T[)]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[nome-immagine-test]\n" +
+                "                T[\"]\n" +
                 "          T[)]\n" +
                 "          T[.]\n" +
                 "          ResizableSuffix\n" +
@@ -145,6 +141,7 @@ class SWIFTParserTest {
                 "            ContentModeFit\n"+
                 "              T[contentMode]\n" +
                 "              T[:]\n" +
+                "              T[ContentMode]\n" +
                 "              T[.]\n" +
                 "              T[fit]\n" +
                 "            T[)]\n" +

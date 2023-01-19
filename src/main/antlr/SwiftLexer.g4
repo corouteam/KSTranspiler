@@ -65,13 +65,13 @@ QUOTE_OPEN: '"' -> pushMode(LineString);
 TEXT_WIDGET: 'Text';
 IMAGE_WIDGET: 'Image';
 RESIZABLE: 'resizable';
-ASPECT_RATIO: 'aspectRatio';
-LOCAL_RESOURCE: 'LocalResource';
+
+ASPECT_RATIO_PARAM: 'aspectRatio';
+CONTENT_MODE: 'ContentMode';
+CONTENT_FIT: 'fit';
+CONTENT_FILL: 'fill';
 
 FONT_WEIGHT_PARAM: 'fontWeight';
-CONTENT_MODE: 'ContentMode';
-FONT_WEIGHT_FIT: 'fit';
-FONT_WEIGHT_FILL: 'fill';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';
 

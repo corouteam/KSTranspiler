@@ -80,29 +80,29 @@ class SWIFTLexerTest {
 
     @Test
     fun parseImageComposable(){
-        val code = "Image(LocalResource(\"nome-immagine-test\"))"
-        val result = listOf("IMAGE_WIDGET", "LPAREN", "LOCAL_RESOURCE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RPAREN", "EOF")
+        val code = "Image(\"nome-immagine-test\")"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
     fun parseAspectRatioWithParameterFit(){
-        val code = ".aspectRatio(contentMode: ContentMode.fit)"
-        val result = listOf("DOT", "ASPECT_RATIO","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "FONT_WEIGHT_FIT", "RPAREN", "EOF")
+        val code = "Image(\"nome-immagine-test\").aspectRatio(contentMode: ContentMode.fit)"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN","DOT", "ASPECT_RATIO_PARAM","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "CONTENT_FIT", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
     fun parseAspectRatioWithParameterFill(){
-        val code = ".aspectRatio(contentMode: ContentMode.fill)"
-        val result = listOf("DOT", "ASPECT_RATIO","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "FONT_WEIGHT_FILL", "RPAREN", "EOF")
+        val code = "Image(\"nome-immagine-test\").aspectRatio(contentMode: ContentMode.fill)"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "DOT", "ASPECT_RATIO_PARAM","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "CONTENT_FILL", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
     fun parseImageWithParameters(){
-        val code = "Image(LocalResource(\"nome-immagine-test\")).resizable().aspectRatio(contentMode: ContentMode.fill)"
-        val result = listOf("IMAGE_WIDGET", "LPAREN", "LOCAL_RESOURCE", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "DOT", "ASPECT_RATIO","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "FONT_WEIGHT_FILL", "RPAREN", "EOF")
+        val code = "Image(\"nome-immagine-test\").resizable().aspectRatio(contentMode: ContentMode.fill)"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "DOT", "ASPECT_RATIO_PARAM","LPAREN","ID", "COLON", "CONTENT_MODE", "DOT", "CONTENT_FILL", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

@@ -43,7 +43,7 @@ data class FontWeightType(override var position: Position? = null): Type()
 data class ResizableType(override var position: Position? = null): Type()
 data class AspectRatioType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
-data class LocalResourceType(val type: Type, override var position: Position? = null) : Type()
+data class ContentModeType(override var position: Position? = null) : Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 
@@ -89,8 +89,6 @@ data class DoubleLit(val value: String, override var position: Position? = null)
 data class StringLit(val value: String, override var position: Position? = null) : Expression(StringType())
 data class BoolLit(val value: String, override var position: Position? = null) : Expression(BoolType())
 
-data class LocalResourceExpression(val value: Expression, override var position: Position? = null) : Expression(LocalResourceType(type = StringType()))
-
 data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(
     IntType()
 )
@@ -133,14 +131,17 @@ class FontWeightBold: FontWeightLit()
 
 
 class ImageComposableCall(
-    val value: LocalResourceExpression,
+    val value: Expression,
     val resizable: Expression?,
     val aspectRatio: Expression?
 ): ComposableCall(ImageComposableType())
+
 sealed class ResizableLit: Expression(ResizableType())
 class Resizable: ResizableLit()
+
 sealed class AspectRatioLit: Expression(AspectRatioType())
-class AspectRatio: AspectRatioLit()
+class ContentFit: AspectRatioLit()
+class ContentFill: AspectRatioLit()
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
 

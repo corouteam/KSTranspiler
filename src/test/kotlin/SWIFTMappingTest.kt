@@ -1,10 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
-import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacade
 import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacadeScript
-import it.poliba.KSTranspiler.facade.SwiftParserFacade
-import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -56,20 +53,20 @@ class SWIFTMappingTest {
 
     @Test
     fun mapImageComposable(){
-        val code = "Image(LocalResource(\"nome-immagine-test\"))"
+        val code = "Image(\"nome-immagine-test\")"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(LocalResourceExpression(StringLit("\"nome-immagine-test\"")), null, null)
+            ImageComposableCall(StringLit("nome-immagine-test"), null, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
     @Test
     fun mapImageComposableWithParams(){
-        val code = "Image(LocalResource(\"nome-immagine-test\")).resizable().aspectRatio()"
+        val code = "Image(\"nome-immagine-test\").resizable().aspectRatio(contentMode: ContentMode.fit)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(LocalResourceExpression(StringLit("\"nome-immagine-test\"")), Resizable(), AspectRatio())
+            ImageComposableCall(StringLit("nome-immagine-test"), Resizable(), ContentFit())
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }

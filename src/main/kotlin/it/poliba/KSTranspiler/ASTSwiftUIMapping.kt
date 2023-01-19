@@ -23,19 +23,29 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
 
 fun SwiftParser.ImageWidgetContext.toAst(): Expression {
     val expressionAst = this.expression().toAst()
-    if(expressionAst.type != LocalResourceType(type = StringType())) throw IllegalArgumentException("Local Resource expected in Image composable")
-    val params = swiftUITextSuffix().map { it.toAst() }
+    if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Image composable")
+    val params = swiftUIImageSuffix().map { it.toAst() }
     val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
-    val scaledToFit = params.firstOrNull { it is AspectRatio } as AspectRatio?
-    return ImageComposableCall(LocalResourceExpression(value = expressionAst), resizable, scaledToFit)
+    val aspectRatio = params.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
+    return ImageComposableCall(expressionAst, resizable, aspectRatio)
 }
 
 fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
     is ForegroundColorSuffixContext -> color().toAst()
     is BoldSuffixContext -> FontWeightBold()
-    is SwiftParser.ResizableSuffixContext -> Resizable()
-    is SwiftParser.AspectRatioSuffixContext -> AspectRatio()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
+}
+
+fun SwiftParser.SwiftUIImageSuffixContext.toAst(): Expression = when(this){
+    is SwiftParser.ResizableSuffixContext -> Resizable()
+    is SwiftParser.AspectRatioSuffixContext -> contentMode().toAst()
+    else -> throw IllegalArgumentException("Parametro non riconosciuto")
+}
+
+fun SwiftParser.ContentModeContext.toAst(): Expression = when(this){
+    is SwiftParser.ContentModeFitContext -> ContentFit()
+    is SwiftParser.ContentModeFillContext -> ContentFill()
+    else -> throw java.lang.IllegalArgumentException("ContentMode not recognized")
 }
 
 fun SwiftParser.ColorContext.toAst(): Expression = when(this){
