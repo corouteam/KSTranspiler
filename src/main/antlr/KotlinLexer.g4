@@ -67,6 +67,10 @@ COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 QUOTE_OPEN: '"' -> pushMode(LineString);
 
 TEXT_COMPOSE: 'Text';
+IMAGE_COMPOSE: 'Image';
+
+PAINTER_PARAM: 'painter';
+PAINTER_RESOURCE_PARAM: 'painterResource';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';
@@ -77,6 +81,8 @@ FONT_WEIGHT_BOLD: 'Bold';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR_PARAM: 'color';
 
+ASPECT_RATIO: 'AspectRatio';
+ASPECT_RATIO_PARAM: 'aspectRatio';
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

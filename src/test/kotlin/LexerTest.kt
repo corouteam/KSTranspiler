@@ -201,4 +201,60 @@ class LexerTest {
              "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseImageComposable(){
+        val code = "Image(painter = painterResource(id = R.drawable.dog))"
+        val result = listOf("IMAGE_COMPOSE",
+            "LPAREN",
+            "PAINTER_PARAM",
+            "ASSIGN",
+            "PAINTER_RESOURCE_PARAM",
+            "LPAREN",
+            "ID",
+            "ASSIGN",
+            "ID",
+            "DOT",
+            "ID",
+            "DOT",
+            "ID",
+            "RPAREN",
+            "RPAREN",
+            "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseCustomAspectRatio(){
+        val code = "AspectRatio(16f)"
+        val result = listOf("ASPECT_RATIO", "LPAREN", "FLOAT_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseImageWithAspectRatio(){
+        val code = "Image(painter = painterResource(id = R.drawable.dog)).aspectRatio(16f)"
+        val result = listOf("IMAGE_COMPOSE",
+            "LPAREN",
+            "PAINTER_PARAM",
+            "ASSIGN",
+            "PAINTER_RESOURCE_PARAM",
+            "LPAREN",
+            "ID",
+            "ASSIGN",
+            "ID",
+            "DOT",
+            "ID",
+            "DOT",
+            "ID",
+            "RPAREN",
+            "RPAREN",
+            "DOT",
+            "ASPECT_RATIO_PARAM",
+            "LPAREN",
+            "FLOAT_LIT",
+            "RPAREN",
+            "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

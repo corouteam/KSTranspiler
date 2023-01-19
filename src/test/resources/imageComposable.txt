@@ -1,0 +1,1 @@
+Image(painter = painterResource(id = R.drawable.dog))

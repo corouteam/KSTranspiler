@@ -480,6 +480,82 @@ KotlinScript
     }
 
     @Test
+    fun parseImageComposebale(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        ImageComposable\n" +
+                "          T[Image]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[Music]\n" +
+                "                T[\"]\n" +
+                "          T[,]\n" +
+                "          ColorParameter\n" +
+                "            T[color]\n" +
+                "            T[=]\n" +
+                "            BlueColor\n" +
+                "              T[Color]\n" +
+                "              T[.]\n" +
+                "              T[Blue]\n" +
+                "          T[,]\n" +
+                "          FontWeightParameter\n" +
+                "            T[fontWeight]\n" +
+                "            T[=]\n" +
+                "            BoldFontWeight\n" +
+                "              T[FontWeight]\n" +
+                "              T[.]\n" +
+                "              T[Bold]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("imageComposable")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseImageWithAspectRatio(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        ImageComposable\n" +
+                "          T[Image]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[Music]\n" +
+                "                T[\"]\n" +
+                "          T[,]\n" +
+                "          ColorParameter\n" +
+                "            T[color]\n" +
+                "            T[=]\n" +
+                "            BlueColor\n" +
+                "              T[Color]\n" +
+                "              T[.]\n" +
+                "              T[Blue]\n" +
+                "          T[,]\n" +
+                "          FontWeightParameter\n" +
+                "            T[fontWeight]\n" +
+                "            T[=]\n" +
+                "            BoldFontWeight\n" +
+                "              T[FontWeight]\n" +
+                "              T[.]\n" +
+                "              T[Bold]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("imageWithAspectRatio")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun testAnnotation(){
         val expected = "KotlinFile\n" +
                 "  Declaration\n" +
