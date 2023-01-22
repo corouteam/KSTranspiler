@@ -1,5 +1,7 @@
 package it.poliba.KSTranspiler
 
+import it.poliba.KSTranspiler.SwiftParser.BlockContext
+
 fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
     return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 }
@@ -114,12 +116,16 @@ fun SwiftParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression
 
 fun SwiftParser.ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
-        return Block(this.block().statement().map { it.toAst(considerPosition) })
+        return this.block().toAst(considerPosition)
     }else if(this.statement() != null){
         return this.statement().toAst()
     }else{
         return Block(listOf())
     }
+}
+
+fun BlockContext.toAst(considerPosition: Boolean = false): Block{
+    return Block(this.statement().map { it.toAst(considerPosition) })
 }
 
 fun SwiftParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression {

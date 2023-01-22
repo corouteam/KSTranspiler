@@ -12,6 +12,7 @@ fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
     is SwiftParser.VStackWidgetContext -> this.toAst()
+    is SwiftParser.ScrollViewWidgetContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -57,12 +58,30 @@ fun SwiftParser.VStackWidgetContext.toAst(): Expression{
         spacingExpression = DpLit(spacingExpression.value)
     }
 
-    return ColumnComposableCall(spacing = spacingExpression, horizontalAlignment = alignmentExpression, false)
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+
+    return ColumnComposableCall(spacing = spacingExpression, horizontalAlignment = alignmentExpression, false, block )
 }
 
 fun SwiftParser.HorizontalAlignmentExpressionContext.toAst(): Expression{
     when(this.horizontalAlignment()){
         is LeadingAlignmentContext -> return StartAlignment
         else -> throw java.lang.IllegalArgumentException("HorizontalAlignmentExpressionContext not recognized")
+    }
+}
+
+fun SwiftParser.ScrollViewWidgetContext.toAst(): Expression{
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+    if(this.ID() != null){
+        if(this.ID().text == "vertical"){
+            return ColumnComposableCall(null, null, true, block )
+        }else if(this.ID().text == "horizontal"){
+            return RowComposableCall(null, null, true, block )
+
+        }else{
+            throw java.lang.IllegalArgumentException("Scroll parameter not recognized")
+        }
+    }else{
+        return ColumnComposableCall(null, null, true, block)
     }
 }

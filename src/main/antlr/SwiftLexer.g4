@@ -78,6 +78,8 @@ VSTACK_WIDGET: 'VStack';
 ALIGNMENT_PARAM: 'alignment';
 SPACING_PARAM: 'spacing';
 
+SCROLL_VIEW: 'ScrollView';
+
 ALIGNMENT: 'Alignment';
 LEADING: 'leading';
 // Identifiers

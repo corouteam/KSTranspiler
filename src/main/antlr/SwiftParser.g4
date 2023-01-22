@@ -151,12 +151,13 @@ type : INT     # integer |
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget |
-    VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget
-    ;
+    VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
+    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget ;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
-    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
+    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix
+    ;
 
 swiftUIColumnParam:
     ALIGNMENT_PARAM COLON expression # alignmentParameter |

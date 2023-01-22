@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
+import it.poliba.KSTranspiler.KotlinParser.BlockContext
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
 import it.poliba.KSTranspiler.KotlinParser.FunctionCallContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
@@ -156,12 +157,16 @@ fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expressio
 
 fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
-        return Block(this.block().statement().map { it.toAst(considerPosition) })
+        return this.block().toAst(considerPosition)
     }else if(this.statement() != null){
         return this.statement().toAst()
     }else{
         return Block(listOf())
     }
+}
+
+fun BlockContext.toAst(considerPosition: Boolean = false): Block{
+    return Block(statement().map { it.toAst(considerPosition) })
 }
 
 fun KotlinParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression {

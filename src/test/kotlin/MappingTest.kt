@@ -304,7 +304,8 @@ class MappingTest {
             ColumnComposableCall(
                 spacing = DpLit("8"),
                 horizontalAlignment = StartAlignment,
-                scrollable = false
+                scrollable = false,
+                body = ControlStructureBody()
             )
         ))
         val column = ast?.statement?.first() as? ColumnComposableCall
@@ -328,7 +329,9 @@ class MappingTest {
             ColumnComposableCall(
                 spacing = DpLit("8"),
                 horizontalAlignment = EndAlignment,
-                scrollable = false
+                scrollable = false,
+                body = ControlStructureBody()
+
             )
         ))
         val column = ast?.statement?.first() as? ColumnComposableCall
@@ -352,7 +355,8 @@ class MappingTest {
         val expected = ColumnComposableCall(
             spacing = DpLit("8"),
             horizontalAlignment = EndAlignment,
-            scrollable = true
+            scrollable = true,
+            body = ControlStructureBody()
         )
         val column = ast?.statement?.first() as? ColumnComposableCall
         val spacing = column?.spacing as? DpLit

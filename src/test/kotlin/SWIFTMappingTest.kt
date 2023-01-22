@@ -102,4 +102,26 @@ class SWIFTMappingTest {
 
         assertEquals(expected, ast)
     }
+
+   @Test
+    fun parseScrollView(){
+        val code = "ScrollView(.vertical){}"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+
+       val column = ast?.statement?.first() as? ColumnComposableCall
+
+       assertEquals(true, column?.scrollable)
+
+   }
+
+    @Test
+    fun parseScrollHorizontalView(){
+        val code = "ScrollView(.horizontal){}"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val column = ast?.statement?.first() as? RowComposableCall
+
+        assertEquals(true, column?.scrollable)
+
+    }
 }

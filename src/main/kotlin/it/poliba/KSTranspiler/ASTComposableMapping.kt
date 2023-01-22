@@ -33,7 +33,10 @@ fun KotlinParser.ColumnComposableContext.toAst(): Expression{
 
     val modifier = columnComposeParameter().firstOrNull() {it is ModifierColumnParameterContext} as? ModifierColumnParameterContext
     val scroll = modifier?.modifierParameter()?.modifier()?.modifierSuffix()?.firstOrNull { it is VerticalScrollSuffixContext } != null
-    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression, scroll)
+
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+
+    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression, scroll, block )
 }
 
 

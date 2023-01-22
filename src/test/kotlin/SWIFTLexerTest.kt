@@ -145,4 +145,12 @@ class SWIFTLexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
 
     }
+
+
+    @Test
+    fun parseScrollView(){
+        val code = "ScrollView(.horizontal){}"
+        val result = listOf("SCROLL_VIEW", "LPAREN", "DOT", "ID", "RPAREN", "LCURL", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }
