@@ -303,7 +303,8 @@ class MappingTest {
         val expectedAst = AstScript(listOf(
             ColumnComposableCall(
                 spacing = DpLit("8"),
-                horizontalAlignment = StartAlignment
+                horizontalAlignment = StartAlignment,
+                scrollable = false
             )
         ))
         val column = ast?.statement?.first() as? ColumnComposableCall
@@ -326,7 +327,8 @@ class MappingTest {
         val expectedAst = AstScript(listOf(
             ColumnComposableCall(
                 spacing = DpLit("8"),
-                horizontalAlignment = EndAlignment
+                horizontalAlignment = EndAlignment,
+                scrollable = false
             )
         ))
         val column = ast?.statement?.first() as? ColumnComposableCall
@@ -336,5 +338,30 @@ class MappingTest {
         assertEquals(EndAlignment, alignment)
 
     }
+
+    @Test
+    fun mapColumnScroll(){
+        val code = """
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expected = ColumnComposableCall(
+            spacing = DpLit("8"),
+            horizontalAlignment = EndAlignment,
+            scrollable = true
+        )
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(EndAlignment, alignment)
+        assertEquals(expected.scrollable, column?.scrollable)
+
+    }
+
 
 }

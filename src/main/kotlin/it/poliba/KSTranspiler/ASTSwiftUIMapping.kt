@@ -57,7 +57,7 @@ fun SwiftParser.VStackWidgetContext.toAst(): Expression{
         spacingExpression = DpLit(spacingExpression.value)
     }
 
-    return ColumnComposableCall(spacing = spacingExpression, horizontalAlignment = alignmentExpression)
+    return ColumnComposableCall(spacing = spacingExpression, horizontalAlignment = alignmentExpression, false)
 }
 
 fun SwiftParser.HorizontalAlignmentExpressionContext.toAst(): Expression{

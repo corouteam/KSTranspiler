@@ -93,6 +93,10 @@ CENTER_HORIZONTALLY: 'CenterHorizontally';
 END: 'End';
 SPACED_BY: 'spacedBy';
 DP_SUFFIX: 'dp';
+MODIFIER_PARAM: 'modifier';
+VERTICAL_SCROLL_SUFFIX: 'verticalScroll';
+REMEMBER_SCROLL: 'rememberScrollState';
+MODIFIER: 'Modifier';
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

@@ -10,8 +10,10 @@ import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.EndAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
 import it.poliba.KSTranspiler.KotlinParser.HorizontalAlignmentParameterContext
+import it.poliba.KSTranspiler.KotlinParser.ModifierColumnParameterContext
 import it.poliba.KSTranspiler.KotlinParser.StartAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
+import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
@@ -23,11 +25,15 @@ fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
 }
 
 fun KotlinParser.ColumnComposableContext.toAst(): Expression{
-    val verticalArrangement = columnComposeParameter().firstOrNull { it is VerticalArrangementParameterContext } as VerticalArrangementParameterContext
-    val verticalArrangementExpression = verticalArrangement.expression().toAst()
-    val alignment = columnComposeParameter().firstOrNull { it is HorizontalAlignmentParameterContext } as HorizontalAlignmentParameterContext
-    val alignmentExpression = alignment.expression().toAst()
-    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression)
+    val verticalArrangement = columnComposeParameter().firstOrNull { it is VerticalArrangementParameterContext } as? VerticalArrangementParameterContext
+    val verticalArrangementExpression = verticalArrangement?.expression()?.toAst()
+
+    val alignment = columnComposeParameter().firstOrNull { it is HorizontalAlignmentParameterContext } as? HorizontalAlignmentParameterContext
+    val alignmentExpression = alignment?.expression()?.toAst()
+
+    val modifier = columnComposeParameter().firstOrNull() {it is ModifierColumnParameterContext} as? ModifierColumnParameterContext
+    val scroll = modifier?.modifierParameter()?.modifier()?.modifierSuffix()?.firstOrNull { it is VerticalScrollSuffixContext } != null
+    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression, scroll)
 }
 
 
@@ -85,3 +91,4 @@ fun KotlinParser.HorizhontalAlignmentExpressionContext.toAst(): Expression{
         else -> throw  throw java.lang.IllegalArgumentException("Alignment not recognized")
     }
 }
+

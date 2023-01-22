@@ -137,7 +137,8 @@ class FontWeightBold: FontWeightLit()
 
 data class ColumnComposableCall(
     val spacing: Expression?,
-    val horizontalAlignment: Expression?
+    val horizontalAlignment: Expression?,
+    val scrollable: Boolean
 ): ComposableCall(ColumnComposableType())
 
 sealed class HorizontalAlignment: Expression(HorizontalAlignmentType())

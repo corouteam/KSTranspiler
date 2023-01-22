@@ -50,7 +50,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
            | LPAREN expression RPAREN                                      # parenExpression
-           | ID                                                            # varReference
+           | ID                                                    # varReference
            | MINUS expression                                              # minusExpression
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
@@ -67,6 +67,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | fontWeight                                                    # fontWeightLiteral
            | horizontalAlignment                                           #horizhontalAlignmentExpression
            | arrangement                                                   #arrangementExpression;
+
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -148,7 +149,8 @@ textComposeParameter:
 
 columnComposeParameter:
     VERTICAL_ARRANGEMENT_PARAM ASSIGN expression #verticalArrangementParameter |
-    HORIZONTAL_ALIGNMENT_PARAM ASSIGN expression #horizontalAlignmentParameter;
+    HORIZONTAL_ALIGNMENT_PARAM ASSIGN expression #horizontalAlignmentParameter |
+    modifierParameter #modifierColumnParameter;
 
 arrangement:
    ARRANGEMENT DOT SPACED_BY LPAREN expression RPAREN;
@@ -166,3 +168,12 @@ color:
 fontWeight:
     FONT_WEIGHT LPAREN INT_LIT RPAREN #customWeight
     | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
+modifierParameter:
+    MODIFIER_PARAM ASSIGN modifier;
+
+modifier:
+    MODIFIER (NL* DOT NL* modifierSuffix)*;
+
+modifierSuffix:
+   VERTICAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #verticalScrollSuffix;
