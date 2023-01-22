@@ -108,4 +108,41 @@ class SWIFTLexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
 
     }
+    @Test
+    fun parseVStack(){
+        val code = "VStack(alignment: Alignment.leading, spacing: 10)"
+        val result = listOf(
+            "VSTACK_WIDGET",
+            "LPAREN",
+            "ALIGNMENT_PARAM",
+            "COLON",
+            "ALIGNMENT",
+            "DOT",
+            "LEADING",
+            "COMMA",
+            "SPACING_PARAM",
+            "COLON",
+            "INT_LIT",
+            "RPAREN",
+            "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseCGFloat(){
+        val code = "let margin = CGFloat(8)"
+        val result = listOf(
+            "LET",
+            "ID",
+            "ASSIGN",
+            "CG_FLOAT",
+            "LPAREN",
+            "INT_LIT",
+            "RPAREN",
+            "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+
+    }
 }

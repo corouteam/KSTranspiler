@@ -2,18 +2,34 @@ package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.KotlinParser.BlueColorContext
 import it.poliba.KSTranspiler.KotlinParser.BoldFontWeightContext
+import it.poliba.KSTranspiler.KotlinParser.CenterHorizontallyAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
+import it.poliba.KSTranspiler.KotlinParser.ColumnComposeParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
+import it.poliba.KSTranspiler.KotlinParser.EndAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import it.poliba.KSTranspiler.KotlinParser.HorizontalAlignmentParameterContext
+import it.poliba.KSTranspiler.KotlinParser.StartAlignmentContext
+import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
+    is KotlinParser.ColumnComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
+fun KotlinParser.ColumnComposableContext.toAst(): Expression{
+    val verticalArrangement = columnComposeParameter().firstOrNull { it is VerticalArrangementParameterContext } as VerticalArrangementParameterContext
+    val verticalArrangementExpression = verticalArrangement.expression().toAst()
+    val alignment = columnComposeParameter().firstOrNull { it is HorizontalAlignmentParameterContext } as HorizontalAlignmentParameterContext
+    val alignmentExpression = alignment.expression().toAst()
+    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression)
+}
+
 
 fun KotlinParser.TextComposableContext.toAst(): Expression {
     val expressionAst = this.expression().toAst()
@@ -54,4 +70,18 @@ fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolea
 
     }
     return WidgetDeclaration(id, params, block)
+}
+
+
+fun KotlinParser.ArrangementExpressionContext.toAst(): Expression{
+    return this.arrangement().expression().toAst()
+}
+
+fun KotlinParser.HorizhontalAlignmentExpressionContext.toAst(): Expression{
+    when (this.horizontalAlignment()){
+        is StartAlignmentContext -> return StartAlignment
+        is EndAlignmentContext -> return EndAlignment
+        is CenterHorizontallyAlignmentContext -> return CenterHorizAlignment
+        else -> throw  throw java.lang.IllegalArgumentException("Alignment not recognized")
+    }
 }

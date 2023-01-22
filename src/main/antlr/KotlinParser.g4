@@ -55,6 +55,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
+           | INT_LIT DOT DP_SUFFIX                                             # dpLiteral
            | name=ID NL* functionCallParameters NL*                        # functionCall
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
@@ -63,7 +64,10 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | RETURN returnExpression=expression                            # returnExpression
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral
-           | fontWeight                                                    # fontWeightLiteral;
+           | fontWeight                                                    # fontWeightLiteral
+           | horizontalAlignment                                           #horizhontalAlignmentExpression
+           | arrangement                                                   #arrangementExpression;
+
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
       (
@@ -135,15 +139,29 @@ typeArguments
     ;
 
 composableCall:
-    TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable;
+    TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable |
+    COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
     | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter;
 
+columnComposeParameter:
+    VERTICAL_ARRANGEMENT_PARAM ASSIGN expression #verticalArrangementParameter |
+    HORIZONTAL_ALIGNMENT_PARAM ASSIGN expression #horizontalAlignmentParameter;
+
+arrangement:
+   ARRANGEMENT DOT SPACED_BY LPAREN expression RPAREN;
+
+horizontalAlignment:
+    ALIGNMENT DOT START #startAlignment |
+    ALIGNMENT DOT END #endAlignment |
+    ALIGNMENT DOT CENTER_HORIZONTALLY #centerHorizontallyAlignment;
+
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor
-     | COLOR DOT COLOR_BLUE #blueColor;
+     | COLOR DOT COLOR_BLUE #blueColor
+     | ID #idColor ;
 
 fontWeight:
     FONT_WEIGHT LPAREN INT_LIT RPAREN #customWeight

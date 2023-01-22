@@ -57,10 +57,12 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
+           | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | RETURN returnExpression=expression                            # returnExpression
            | widgetCall #widgetCallExpression
+           | horizontalAlignment #horizontalAlignmentExpression
            | color                       # colorLiteral;
 
 if
@@ -142,18 +144,30 @@ type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
        STRING  # string |
-      ID      #userType;
+       ID      #userType |
+       CG_FLOAT #cgFloat;
 
 
 
 widgetCall:
-    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget;
+    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget |
+    VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget
+    ;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
     | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
 
+swiftUIColumnParam:
+    ALIGNMENT_PARAM COLON expression # alignmentParameter |
+    SPACING_PARAM COLON expression # spacingParameter;
+
+horizontalAlignment:
+    ALIGNMENT DOT LEADING #leadingAlignment;
+
+
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
 color:
      COLOR DOT COLOR_BLUE #blueColor;

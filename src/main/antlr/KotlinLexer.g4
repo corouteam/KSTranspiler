@@ -14,11 +14,15 @@ INT                : 'Int';
 DOUBLE             : 'Double';
 BOOL               : 'Boolean';
 STRING             : 'String';
+DP                 : 'Dp';
+
 
 INT_LIT
     : DecDigitNoZero DecDigit*
     | DecDigit
      ;
+
+
 
 BOOL_LIT : 'true' | 'false';
 
@@ -67,6 +71,7 @@ COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 QUOTE_OPEN: '"' -> pushMode(LineString);
 
 TEXT_COMPOSE: 'Text';
+COLUMN_COMPOSE: 'Column';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';
@@ -77,6 +82,17 @@ FONT_WEIGHT_BOLD: 'Bold';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR_PARAM: 'color';
 
+VERTICAL_ARRANGEMENT_PARAM: 'verticalArrangement';
+HORIZONTAL_ALIGNMENT_PARAM: 'horizontalAlignment';
+
+ARRANGEMENT: 'Arrangement';
+ALIGNMENT: 'Alignment';
+TOP: 'Top';
+START: 'Start';
+CENTER_HORIZONTALLY: 'CenterHorizontally';
+END: 'End';
+SPACED_BY: 'spacedBy';
+DP_SUFFIX: 'dp';
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

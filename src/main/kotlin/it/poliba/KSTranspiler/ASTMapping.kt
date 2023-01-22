@@ -100,6 +100,7 @@ fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Propert
 fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     is KotlinParser.BoolLiteralContext -> BoolLit(text, toPosition(considerPosition))
+    is KotlinParser.DpLiteralContext -> DpLit(this.INT_LIT().text, toPosition(considerPosition))
     is StringLiteralExpressionContext -> toAst(considerPosition)
     is KotlinParser.VarReferenceContext -> VarReference(text, type = StringType(),  toPosition(considerPosition))
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
@@ -110,6 +111,9 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
     is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     is KotlinParser.ComposableCallExpressionContext -> toAst()
+    is KotlinParser.ArrangementExpressionContext -> toAst()
+    is KotlinParser.HorizhontalAlignmentExpressionContext -> toAst()
+
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

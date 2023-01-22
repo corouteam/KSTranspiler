@@ -89,6 +89,7 @@ fun PropertyDeclaration.generateCode(): String{
 fun Expression.generateCode() : String = when (this) {
     is IntLit -> this.value
     is DoubleLit -> this.value
+    is DpLit -> "CGFloat(${this.value})"
     is VarReference -> this.varName
     is BinaryExpression -> this.generateCode()
     is StringLit -> "\"${this.value}\""

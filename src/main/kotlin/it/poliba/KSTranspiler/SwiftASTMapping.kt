@@ -94,6 +94,7 @@ fun SwiftParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fal
 fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is SwiftParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     is SwiftParser.BoolLiteralContext -> BoolLit(text, toPosition(considerPosition))
+    is SwiftParser.CgFloatLiteralContext -> DpLit(INT_LIT().text, toPosition(considerPosition))
     is SwiftParser.StringLiteralExpressionContext -> toAst(considerPosition)
     is SwiftParser.VarReferenceContext -> VarReference(text, type = StringType(),  toPosition(considerPosition))
     is SwiftParser.BinaryOperationContext -> toAst(considerPosition)
@@ -101,6 +102,7 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     is SwiftParser.WidgetCallExpressionContext -> toAst()
+    is SwiftParser.HorizontalAlignmentExpressionContext -> toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -136,6 +138,7 @@ fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = wh
     is SwiftParser.DoubleContext -> DoubleType(toPosition(considerPosition))
     is SwiftParser.UserTypeContext -> UserType(ID().text)
     is SwiftParser.StringContext -> StringType()
+    is SwiftParser.CgFloatContext -> DpType()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

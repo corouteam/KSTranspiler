@@ -14,6 +14,7 @@ INT                : 'Int';
 DOUBLE             : 'Double';
 BOOL               : 'Bool';
 STRING             : 'String';
+CG_FLOAT           : 'CGFloat';
 
 INT_LIT
     : DecDigitNoZero DecDigit*
@@ -68,13 +69,17 @@ TEXT_WIDGET: 'Text';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';
-
 FONT_WEIGHT_BOLD: 'bold';
 FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';
 
+VSTACK_WIDGET: 'VStack';
+ALIGNMENT_PARAM: 'alignment';
+SPACING_PARAM: 'spacing';
 
+ALIGNMENT: 'Alignment';
+LEADING: 'leading';
 // Identifiers
 ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
 

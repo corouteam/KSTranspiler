@@ -209,4 +209,61 @@ class LexerTest {
              "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseColumn(){
+        val code = "Column(){ Text(\"a\")}"
+        val result = listOf(
+            "COLUMN_COMPOSE",
+            "LPAREN",
+            "RPAREN",
+            "LCURL",
+            "TEXT_COMPOSE",
+            "LPAREN",
+            "QUOTE_OPEN",
+            "LineStrText",
+            "QUOTE_CLOSE",
+            "RPAREN",
+            "RCURL",
+            "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun ParseColumnWithParameters(){
+        val code = """
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.Start
+            )
+        """.trimIndent()
+        val result = listOf(
+            "COLUMN_COMPOSE",
+            "LPAREN",
+            "NL",
+            "VERTICAL_ARRANGEMENT_PARAM",
+            "ASSIGN",
+            "ARRANGEMENT",
+            "DOT",
+            "SPACED_BY",
+            "LPAREN",
+            "INT_LIT",
+            "DOT",
+            "DP_SUFFIX",
+            "RPAREN",
+            "COMMA",
+            "NL",
+            "HORIZONTAL_ALIGNMENT_PARAM",
+            "ASSIGN",
+            "ALIGNMENT",
+            "DOT",
+            "START",
+            "NL",
+            "RPAREN",
+            "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+
+    }
 }

@@ -291,4 +291,50 @@ class MappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun mapColumn(){
+        val code = """
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.Start
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ColumnComposableCall(
+                spacing = DpLit("8"),
+                horizontalAlignment = StartAlignment
+            )
+        ))
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(StartAlignment, alignment)
+
+    }
+
+    @Test
+    fun mapColumnWEndAlignment(){
+        val code = """
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ColumnComposableCall(
+                spacing = DpLit("8"),
+                horizontalAlignment = EndAlignment
+            )
+        ))
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(EndAlignment, alignment)
+
+    }
+
 }

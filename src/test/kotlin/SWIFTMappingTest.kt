@@ -72,4 +72,34 @@ class SWIFTMappingTest {
 
     }
 
+
+    @Test
+    fun mapVStack(){
+        val code = "VStack(alignment: Alignment.leading, spacing: 10)"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectingSpacing = DpLit("10")
+
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+
+        assertEquals(expectingSpacing, spacing)
+        assertEquals(StartAlignment, alignment)
+    }
+    @Test
+    fun parseCGFloat(){
+        val code = "let margin = CGFloat(8)"
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+        val expected = AstFile(declarations = listOf(
+            PropertyDeclaration(
+                "margin",
+                DpType(),
+                DpLit("8"),
+                null,
+                false
+            )
+        ))
+
+        assertEquals(expected, ast)
+    }
 }
