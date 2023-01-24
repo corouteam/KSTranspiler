@@ -43,7 +43,6 @@ data class FontWeightType(override var position: Position? = null): Type()
 data class ResizableType(override var position: Position? = null): Type()
 data class AspectRatioType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
-data class ContentModeType(override var position: Position? = null) : Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 

@@ -131,7 +131,7 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable |
-    IMAGE_COMPOSE LPAREN expression (NL* COMMA NL* imageComposeParameter) RPAREN ((NL* DOT NL* imageComposeSuffix)*)? #imageComposable;
+    IMAGE_COMPOSE LPAREN expression (NL* ASSIGN NL* imageComposeParameter) RPAREN (NL* DOT NL* imageComposeSuffix)*? #imageComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
@@ -141,7 +141,7 @@ imageComposeParameter:
     PAINTER_PARAM ASSIGN painter #painterParameter;
 
 imageComposeSuffix:
-    ASPECT_RATIO_PARAM ASSIGN expression #aspectRatioParameter;
+    ASPECT_RATIO_PARAM LPAREN DOUBLE_LIT RPAREN #aspectRatioParameter;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor
@@ -152,4 +152,7 @@ fontWeight:
     | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 
 painter:
-    PAINTER_RESOURCE_PARAM ASSIGN expression #painterResource;
+    PAINTER_RESOURCE LPAREN painterResourceParam RPAREN #painterResource;
+
+painterResourceParam:
+    PAINTER_RESOURCE_PARAM ASSIGN expression #painterResourceParameter;

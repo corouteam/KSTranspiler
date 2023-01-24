@@ -70,7 +70,8 @@ TEXT_COMPOSE: 'Text';
 IMAGE_COMPOSE: 'Image';
 
 PAINTER_PARAM: 'painter';
-PAINTER_RESOURCE_PARAM: 'painterResource';
+PAINTER_RESOURCE: 'painterResource';
+PAINTER_RESOURCE_PARAM: 'id';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';
