@@ -67,6 +67,7 @@ IMAGE_WIDGET: 'Image';
 RESIZABLE: 'resizable';
 
 ASPECT_RATIO_PARAM: 'aspectRatio';
+CONTENT_MODE_PARAM: 'contentMode';
 CONTENT_MODE: 'ContentMode';
 CONTENT_FIT: 'fit';
 CONTENT_FILL: 'fill';
