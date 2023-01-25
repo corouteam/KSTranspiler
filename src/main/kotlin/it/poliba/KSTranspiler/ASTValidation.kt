@@ -1,6 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
+import com.strumenta.kolasu.traversing.searchByType
 import com.strumenta.kolasu.traversing.walkAncestors
 import java.util.*
 import kotlin.collections.ArrayList
@@ -51,6 +52,27 @@ fun Node.commonValidation(): LinkedList<Error> {
                 )
             }
         }
+
+    // check if used variable is declared before
+    this.specificProcess(ControlStructureBody::class.java) { block ->
+        if (block is Block) {
+            block.searchByType(VarReference::class.java).forEach {
+                val name = it.varName
+                // check in function scope first
+                if (block.body.filterIsInstance(PropertyDeclaration::class.java).none { it.varName == name }) {
+                    // not found, check global variables then
+                    if (globalVariables.none { it.varName == name }) {
+                        errors.add(
+                            Error(
+                                "A variable named '${name}' is used but never declared",
+                                it.position?.start?.asPosition
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     // check for list correct types
     this.specificProcess(ListExpression::class.java) {

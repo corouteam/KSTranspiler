@@ -63,6 +63,33 @@ class ValidationTest {
     }
 
     @Test
+    fun `variable not declared throws error`() {
+        var code = """
+            fun test() {
+                print(a)
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("A variable named 'a' is used but never declared", parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `variable declared in different scope does not throw error`() {
+        var code = """
+            val a = "Hello world!"
+            
+            fun test() {
+                print(a)
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isEmpty())
+    }
+
+    @Test
     fun `var type mismatch is reported`() {
         var code = """
             val a: Int = "a"
