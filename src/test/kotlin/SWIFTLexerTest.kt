@@ -110,13 +110,13 @@ class SWIFTLexerTest {
     }
     @Test
     fun parseVStack(){
-        val code = "VStack(alignment: Alignment.leading, spacing: 10)"
+        val code = "VStack(alignment: VerticalAlignment.leading, spacing: 10)"
         val result = listOf(
             "VSTACK_WIDGET",
             "LPAREN",
             "ALIGNMENT_PARAM",
             "COLON",
-            "ALIGNMENT",
+            "VERTICAL_ALIGNMENT",
             "DOT",
             "LEADING",
             "COMMA",

@@ -401,29 +401,11 @@ class LexerTest {
             )
         """.trimIndent()
         val result = listOf(
-            "COLUMN_COMPOSE",
-            "LPAREN",
-            "NL",
-            "VERTICAL_ARRANGEMENT_PARAM",
-            "ASSIGN",
-            "ARRANGEMENT",
-            "DOT",
-            "SPACED_BY",
-            "LPAREN",
-            "INT_LIT",
-            "DOT",
-            "DP_SUFFIX",
-            "RPAREN",
-            "COMMA",
-            "NL",
-            "HORIZONTAL_ALIGNMENT_PARAM",
-            "ASSIGN",
-            "ALIGNMENT",
-            "DOT",
-            "START",
-            "NL",
-            "RPAREN",
-            "EOF"
+            "ROW_COMPOSE", "LPAREN", "NL", "MODIFIER_PARAM", "ASSIGN", "MODIFIER", "DOT",
+            "HORIZONTAL_SCROLL_SUFFIX", "LPAREN", "REMEMBER_SCROLL", "LPAREN", "RPAREN",
+            "RPAREN", "COMMA", "NL", "HORIZONTAL_ARRANGEMENT_PARAM", "ASSIGN", "ARRANGEMENT",
+            "DOT", "SPACED_BY", "LPAREN", "INT_LIT", "DOT", "DP_SUFFIX", "RPAREN", "COMMA", "NL",
+            "VERTICAL_ALIGNMENT_PARAM", "ASSIGN", "ALIGNMENT", "DOT", "TOP", "NL", "RPAREN", "EOF"
         )
         assertEquals(result, tokens(lexerForCode(code)))
 
