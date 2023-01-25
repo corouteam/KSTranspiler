@@ -367,5 +367,24 @@ class MappingTest {
 
     }
 
+    @Test
+    fun mapRowScroll(){
+        val code = """
+            Row(
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.Top
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val column = ast?.statement?.first() as? RowComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.verticalAlignment as? VerticalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(TopAlignment, alignment)
+        assertEquals(true, column?.scrollable)
+
+    }
 
 }

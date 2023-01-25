@@ -105,6 +105,7 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     is SwiftParser.WidgetCallExpressionContext -> toAst()
     is SwiftParser.HorizontalAlignmentExpressionContext -> toAst()
+    is SwiftParser.VerticalAlignmentExpressionContext -> toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

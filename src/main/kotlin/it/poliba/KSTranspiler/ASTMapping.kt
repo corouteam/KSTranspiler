@@ -114,6 +114,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.ComposableCallExpressionContext -> toAst()
     is KotlinParser.ArrangementExpressionContext -> toAst()
     is KotlinParser.HorizhontalAlignmentExpressionContext -> toAst()
+    is KotlinParser.VerticalAlignmentExpressionContext -> toAst()
 
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }

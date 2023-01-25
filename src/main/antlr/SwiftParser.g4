@@ -63,6 +63,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | RETURN returnExpression=expression                            # returnExpression
            | widgetCall #widgetCallExpression
            | horizontalAlignment #horizontalAlignmentExpression
+           | verticalAlignment #verticalAlignmentExpression
            | color                       # colorLiteral;
 
 if
@@ -152,6 +153,7 @@ type : INT     # integer |
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget |
     VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
+    HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
     SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget ;
 
 swiftUITextSuffix:
@@ -164,7 +166,14 @@ swiftUIColumnParam:
     SPACING_PARAM COLON expression # spacingParameter;
 
 horizontalAlignment:
-    ALIGNMENT DOT LEADING #leadingAlignment;
+    HORIZONTAL_ALIGNMENT DOT LEADING #leadingAlignment |
+    HORIZONTAL_ALIGNMENT DOT TRAILING #trailingAlignment |
+    HORIZONTAL_ALIGNMENT DOT CENTER #centerHorizontalAlignment;
+
+verticalAlignment:
+    VERTICAL_ALIGNMENT DOT TOP #topAlignment |
+    VERTICAL_ALIGNMENT DOT BOTTOM #bottomAlignment |
+    VERTICAL_ALIGNMENT DOT CENTER #centerVerticalAlignment;
 
 
 fontWeight:

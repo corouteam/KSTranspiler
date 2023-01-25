@@ -124,4 +124,25 @@ class SWIFTMappingTest {
         assertEquals(true, column?.scrollable)
 
     }
+
+    @Test
+    fun parseHStack(){
+        val code = """
+            HStack(
+                spacing: 10,
+                alignment: VerticalAlignment.center
+            ){
+                
+            }
+        """.trimIndent()
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectingSpacing = DpLit("10")
+
+        val column = ast?.statement?.first() as? RowComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.verticalAlignment as? VerticalAlignment
+
+        assertEquals(expectingSpacing, spacing)
+        assertEquals(CenterVerticallyAlignment, alignment)
+    }
 }

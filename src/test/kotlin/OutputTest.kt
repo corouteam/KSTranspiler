@@ -187,4 +187,66 @@ class OutputTest {
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
+    @Test
+    fun convertColumn(){
+        val code = """
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.Start)
+            """.trimIndent()
+        val result = """
+         VStack(
+         	alignment: HorizontalAlignment.start,
+         	spacing: CGFloat(10)){
+             
+         }
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun convertColumnScrollable(){
+        val code = """
+            Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.Start)
+            """.trimIndent()
+        val result = """
+        	ScrollView(.vertical){
+        		VStack(
+        		alignment: HorizontalAlignment.start,
+        		spacing: CGFloat(10)){
+        			
+        		}
+        	}
+    """.trimIndent()
+
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun convertColumnScrollableWithText(){
+        val code = """
+            Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.Start){
+                Text("Ciao")
+            }
+            """.trimIndent()
+        val result = """
+        	ScrollView(.vertical){
+        		VStack(
+        		alignment: HorizontalAlignment.start,
+        		spacing: CGFloat(10)){
+        			Text("Ciao")
+        		}
+        	}
+    """.trimIndent()
+
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
 }

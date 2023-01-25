@@ -66,6 +66,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | color                                                         # colorLiteral
            | fontWeight                                                    # fontWeightLiteral
            | horizontalAlignment                                           #horizhontalAlignmentExpression
+           | verticalAlignment                                             #verticalAlignmentExpression
            | arrangement                                                   #arrangementExpression;
 
 
@@ -141,7 +142,8 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable |
-    COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable;
+    COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable |
+    ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable ;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
@@ -152,6 +154,11 @@ columnComposeParameter:
     HORIZONTAL_ALIGNMENT_PARAM ASSIGN expression #horizontalAlignmentParameter |
     modifierParameter #modifierColumnParameter;
 
+rowComposeParameter:
+    VERTICAL_ALIGNMENT_PARAM ASSIGN expression #verticalAlignmentParameter |
+    HORIZONTAL_ARRANGEMENT_PARAM ASSIGN expression #horizontalArrangementParameter |
+    modifierParameter #modifierRawParameter;
+
 arrangement:
    ARRANGEMENT DOT SPACED_BY LPAREN expression RPAREN;
 
@@ -159,6 +166,11 @@ horizontalAlignment:
     ALIGNMENT DOT START #startAlignment |
     ALIGNMENT DOT END #endAlignment |
     ALIGNMENT DOT CENTER_HORIZONTALLY #centerHorizontallyAlignment;
+
+verticalAlignment:
+    ALIGNMENT DOT TOP #topAlignment |
+    ALIGNMENT DOT BOTTOM #bottomAlignment |
+    ALIGNMENT DOT CENTER_VERTICALLY #centerVerticalltAlignment;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor
@@ -176,4 +188,5 @@ modifier:
     MODIFIER (NL* DOT NL* modifierSuffix)*;
 
 modifierSuffix:
-   VERTICAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #verticalScrollSuffix;
+   VERTICAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #verticalScrollSuffix|
+   HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix;

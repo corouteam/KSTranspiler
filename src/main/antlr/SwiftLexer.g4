@@ -75,13 +75,20 @@ FONT: 'Font';
 WEIGHT: 'Weight';
 
 VSTACK_WIDGET: 'VStack';
+HSTACK_WIDGET: 'HStack';
 ALIGNMENT_PARAM: 'alignment';
 SPACING_PARAM: 'spacing';
 
 SCROLL_VIEW: 'ScrollView';
 
-ALIGNMENT: 'Alignment';
+VERTICAL_ALIGNMENT: 'VerticalAlignment';
+HORIZONTAL_ALIGNMENT: 'HorizontalAlignment';
+
 LEADING: 'leading';
+TOP: 'top';
+CENTER: 'center';
+TRAILING: 'trailing';
+BOTTOM: 'bottom';
 // Identifiers
 ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
 

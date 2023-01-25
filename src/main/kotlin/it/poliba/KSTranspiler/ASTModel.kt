@@ -53,6 +53,7 @@ class TextComposableType: ComposableType()
 class ColumnComposableType: ComposableType()
 
 class HorizontalAlignmentType: Type()
+class VerticalAlignmentType: Type()
 // END TEST
 //
 // Expressions
@@ -144,16 +145,20 @@ data class ColumnComposableCall(
 
 data class RowComposableCall(
     val spacing: Expression?,
-    val horizontalAlignment: Expression?,
+    val verticalAlignment: Expression?,
     val scrollable: Boolean,
     val body: ControlStructureBody
 ): ComposableCall(ColumnComposableType())
 
 sealed class HorizontalAlignment: Expression(HorizontalAlignmentType())
+sealed class VerticalAlignment: Expression(VerticalAlignmentType())
 
 object StartAlignment: HorizontalAlignment()
 object EndAlignment: HorizontalAlignment()
 object CenterHorizAlignment: HorizontalAlignment()
+object TopAlignment: VerticalAlignment()
+object BottomAlignment: VerticalAlignment()
+object CenterVerticallyAlignment: VerticalAlignment()
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
 

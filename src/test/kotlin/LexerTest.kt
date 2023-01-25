@@ -390,4 +390,42 @@ class LexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
 
     }
+
+    @Test
+    fun ParseRowWithParameters() {
+        val code = """
+            Row(
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.Top
+            )
+        """.trimIndent()
+        val result = listOf(
+            "COLUMN_COMPOSE",
+            "LPAREN",
+            "NL",
+            "VERTICAL_ARRANGEMENT_PARAM",
+            "ASSIGN",
+            "ARRANGEMENT",
+            "DOT",
+            "SPACED_BY",
+            "LPAREN",
+            "INT_LIT",
+            "DOT",
+            "DP_SUFFIX",
+            "RPAREN",
+            "COMMA",
+            "NL",
+            "HORIZONTAL_ALIGNMENT_PARAM",
+            "ASSIGN",
+            "ALIGNMENT",
+            "DOT",
+            "START",
+            "NL",
+            "RPAREN",
+            "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+
+    }
 }
