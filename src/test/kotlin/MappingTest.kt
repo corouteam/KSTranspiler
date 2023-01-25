@@ -7,6 +7,7 @@ import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.awt.Paint
 
 class MappingTest {
 
@@ -256,6 +257,18 @@ class MappingTest {
             )
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+    @Test
+    fun mapImageComposableRef(){
+        val code = "Image(painter = painterResource(id = R.drawable.dog))"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val expectedAst = AstScript(listOf(
+            ImageComposableCall(Painter(PainterResource(Resource(Drawable(StringLit("dog"))))), null, null)
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        //val expectedAst = KotlinScript
     }
 
 }

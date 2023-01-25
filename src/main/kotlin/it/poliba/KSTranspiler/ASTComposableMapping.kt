@@ -12,6 +12,7 @@ fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
+    is KotlinParser.ImageComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -41,6 +42,23 @@ fun KotlinParser.FontWeightContext.toAst(): Expression = when(this){
     is BoldFontWeightContext ->  FontWeightBold()
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
+
+/*fun KotlinParser.ImageComposableContext.toAst(): Expression {
+    val expressionAst = this.expression().toAst()
+    if(expressionAst.type != PaintType()) throw IllegalArgumentException("Painter expected in Image composable")
+    val params = imageComposeParameter().map { it.toAst() }
+
+    val painter = params.firstOrNull { it is Painter } as PaintType?
+
+    //TODO: mapping
+    return ImageComposableCall(expressionAst, null, null)*
+}
+
+fun KotlinParser.ImageComposeParameterContext.toAst(): Expression = when(this){
+    is KotlinParser.PainterParameterContext -> this.painter().toAst()
+    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
+}*/
+
 
 fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration {
     val id = this.ID().text

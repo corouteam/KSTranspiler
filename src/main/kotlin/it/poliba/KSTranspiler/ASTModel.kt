@@ -43,6 +43,10 @@ data class FontWeightType(override var position: Position? = null): Type()
 data class ResizableType(override var position: Position? = null): Type()
 data class AspectRatioType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
+data class PaintType(override var position: Position? = null) : Type()
+data class PainterResourceType(override var position: Position? = null) : Type()
+data class ResourceType(override var position: Position? = null) : Type()
+data class DrawableType(override var position: Position? = null) : Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 
@@ -87,6 +91,11 @@ data class IntLit(val value: String, override var position: Position? = null) : 
 data class DoubleLit(val value: String, override var position: Position? = null) : Expression(DoubleType())
 data class StringLit(val value: String, override var position: Position? = null) : Expression(StringType())
 data class BoolLit(val value: String, override var position: Position? = null) : Expression(BoolType())
+
+class Painter(val painterResource: PainterResource, override var position: Position? = null) : Expression(PaintType())
+class PainterResource(val drawable: Resource, override var position: Position? = null) : Expression(PainterResourceType())
+class Resource(val drawable: Drawable, override var position: Position? = null) : Expression(ResourceType())
+class Drawable(val drawable: StringLit, override var position: Position? = null) : Expression(DrawableType())
 
 data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(
     IntType()
