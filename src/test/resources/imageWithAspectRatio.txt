@@ -1,1 +1,1 @@
-Image(painter = painterResource(id = R.drawable.dog)).aspectRatio(16f)
+Image(painter = painterResource(id = R.drawable.dog)).aspectRatio(16.5)

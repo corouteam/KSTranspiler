@@ -72,6 +72,8 @@ IMAGE_COMPOSE: 'Image';
 PAINTER_PARAM: 'painter';
 PAINTER_RESOURCE: 'painterResource';
 PAINTER_RESOURCE_PARAM: 'id';
+RESOURCE: 'R';
+RESOURCE_DRAWABLE: 'drawable';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';

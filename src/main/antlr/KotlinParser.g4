@@ -60,7 +60,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
            | RETURN returnExpression=expression                            # returnExpression
-           | composableCall                                                #composableCallExpression
+           | composableCall                                                # composableCallExpression
            | color                                                         # colorLiteral
            | fontWeight                                                    # fontWeightLiteral
            | painter                                                       # painterLiteral;
@@ -131,7 +131,7 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable |
-    IMAGE_COMPOSE LPAREN expression (NL* ASSIGN NL* imageComposeParameter) RPAREN (NL* DOT NL* imageComposeSuffix)*? #imageComposable;
+    IMAGE_COMPOSE LPAREN NL* imageComposeParameter RPAREN (NL* DOT NL* imageComposeSuffix)*? #imageComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
@@ -155,4 +155,4 @@ painter:
     PAINTER_RESOURCE LPAREN painterResourceParam RPAREN #painterResource;
 
 painterResourceParam:
-    PAINTER_RESOURCE_PARAM ASSIGN expression #painterResourceParameter;
+    PAINTER_RESOURCE_PARAM ASSIGN RESOURCE DOT RESOURCE_DRAWABLE DOT expression #painterResourceParameter;

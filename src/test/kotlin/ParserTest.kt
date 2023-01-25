@@ -488,29 +488,22 @@ KotlinScript
                 "        ImageComposable\n" +
                 "          T[Image]\n" +
                 "          T[(]\n" +
-                "          StringLiteralExpression\n" +
-                "            StringLiteral\n" +
-                "              LineStringLiteral\n" +
-                "                T[\"]\n" +
-                "                LineStringContent\n" +
-                "                  T[Music]\n" +
-                "                T[\"]\n" +
-                "          T[,]\n" +
-                "          ColorParameter\n" +
-                "            T[color]\n" +
+                "          PainterParameter\n" +
+                "            T[painter]\n" +
                 "            T[=]\n" +
-                "            BlueColor\n" +
-                "              T[Color]\n" +
-                "              T[.]\n" +
-                "              T[Blue]\n" +
-                "          T[,]\n" +
-                "          FontWeightParameter\n" +
-                "            T[fontWeight]\n" +
-                "            T[=]\n" +
-                "            BoldFontWeight\n" +
-                "              T[FontWeight]\n" +
-                "              T[.]\n" +
-                "              T[Bold]\n" +
+                "            PainterResource\n" +
+                "              T[painterResource]\n" +
+                "              T[(]\n" +
+                "              PainterResourceParameter\n" +
+                "                T[id]\n" +
+                "                T[=]\n" +
+                "                T[R]\n" +
+                "                T[.]\n" +
+                "                T[drawable]\n" +
+                "                T[.]\n" +
+                "                VarReference\n" +
+                "                  T[dog]\n" +
+                "              T[)]\n" +
                 "          T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("imageComposable")).multiLineString()
@@ -526,30 +519,29 @@ KotlinScript
                 "        ImageComposable\n" +
                 "          T[Image]\n" +
                 "          T[(]\n" +
-                "          StringLiteralExpression\n" +
-                "            StringLiteral\n" +
-                "              LineStringLiteral\n" +
-                "                T[\"]\n" +
-                "                LineStringContent\n" +
-                "                  T[Music]\n" +
-                "                T[\"]\n" +
-                "          T[,]\n" +
-                "          ColorParameter\n" +
-                "            T[color]\n" +
+                "          PainterParameter\n" +
+                "            T[painter]\n" +
                 "            T[=]\n" +
-                "            BlueColor\n" +
-                "              T[Color]\n" +
-                "              T[.]\n" +
-                "              T[Blue]\n" +
-                "          T[,]\n" +
-                "          FontWeightParameter\n" +
-                "            T[fontWeight]\n" +
-                "            T[=]\n" +
-                "            BoldFontWeight\n" +
-                "              T[FontWeight]\n" +
-                "              T[.]\n" +
-                "              T[Bold]\n" +
+                "            PainterResource\n" +
+                "              T[painterResource]\n" +
+                "              T[(]\n" +
+                "              PainterResourceParameter\n" +
+                "                T[id]\n" +
+                "                T[=]\n" +
+                "                T[R]\n" +
+                "                T[.]\n" +
+                "                T[drawable]\n" +
+                "                T[.]\n" +
+                "                VarReference\n" +
+                "                  T[dog]\n" +
+                "              T[)]\n" +
                 "          T[)]\n" +
+                "          T[.]\n" +
+                "          AspectRatioParameter\n" +
+                "            T[aspectRatio]\n" +
+                "            T[(]\n" +
+                "            T[16.5]\n" +
+                "            T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("imageWithAspectRatio")).multiLineString()
         assertEquals(expected, actual)
