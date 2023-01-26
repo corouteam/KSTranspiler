@@ -142,7 +142,8 @@ imageComposeParameter:
 
 imageComposeSuffix:
     RESIZABLE LPAREN RPAREN # resizable |
-    ASPECT_RATIO_PARAM LPAREN DOUBLE_LIT RPAREN #aspectRatioParameter;
+    ASPECT_RATIO_PARAM LPAREN DOUBLE_LIT RPAREN #aspectRatioParameter |
+    FRAME LPAREN WIDTH COLON DOUBLE_LIT COMMA HEIGHT COLON DOUBLE_LIT RPAREN # frameSuffix;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor

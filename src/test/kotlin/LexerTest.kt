@@ -283,4 +283,41 @@ class LexerTest {
             "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseImageWithFrame(){
+        val code = "Image(painter = painterResource(id = R.drawable.dog)).fillMaxSize().frame(width: 54.0, height: 54.0)"
+        val result = listOf("IMAGE_COMPOSE",
+            "LPAREN",
+            "PAINTER_PARAM",
+            "ASSIGN",
+            "PAINTER_RESOURCE",
+            "LPAREN",
+            "PAINTER_RESOURCE_PARAM",
+            "ASSIGN",
+            "RESOURCE",
+            "DOT",
+            "RESOURCE_DRAWABLE",
+            "DOT",
+            "ID",
+            "RPAREN",
+            "RPAREN",
+            "DOT",
+            "RESIZABLE",
+            "LPAREN",
+            "RPAREN",
+            "DOT",
+            "FRAME",
+            "LPAREN",
+            "WIDTH",
+            "COLON",
+            "DOUBLE_LIT",
+            "COMMA",
+            "HEIGHT",
+            "COLON",
+            "DOUBLE_LIT",
+            "RPAREN",
+            "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }
