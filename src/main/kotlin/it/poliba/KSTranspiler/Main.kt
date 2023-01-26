@@ -9,10 +9,13 @@ object App {
     fun main(args: Array<String>) {
         var code = """
             val a = 1
-            
-            fun test() {
-                val b = 2
-                val a = 2
+
+            fun test(param1: String) {
+                print(param1)
+            }
+                        
+            fun main() {
+                test("hello", 42)
             }
         """.trimIndent().trim()
         var code2 = "let a = 5 + 2"

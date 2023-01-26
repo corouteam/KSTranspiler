@@ -31,6 +31,7 @@ class FunctionParameter(val id: String,val  type: Type)
 // Types
 //
 
+data class FunctionCallType(override var position: Position?): Type()
 data class RangeType(val type: Type, override var position: Position? = null): Type()
 data class IntType(override var position: Position? = null) : Type()
 
@@ -109,8 +110,12 @@ data class RangeExpression(val leftExpression: Expression,
                            override val type: Type
 ): Expression(type)
 
-sealed class FunctionCall(type: Type = VoidType()): Expression(type = type)
-sealed class ComposableCall(type: ComposableType): FunctionCall(type = type)
+data class FunctionCall(val name: String,
+                        val parameters: List<Expression>,
+                        override var position: Position? = null
+): Expression(FunctionCallType(position))
+
+sealed class ComposableCall(type: ComposableType): Expression(type = type)
 
 class TextComposableCall(
     val value: Expression,

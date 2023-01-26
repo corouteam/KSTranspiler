@@ -292,6 +292,34 @@ class KotlinParserTest {
     }
 
     @Test
+    fun parseFunctionCall(){
+        var expected = """
+KotlinScript
+  Line
+    ExpressionStatement
+      FunctionCall
+        T[test]
+        FunctionCallParameters
+          T[(]
+          StringLiteralExpression
+            StringLiteral
+              LineStringLiteral
+                T["]
+                LineStringContent
+                  T[a]
+                T["]
+          T[,]
+          IntLiteral
+            T[42]
+          T[)]
+    T[<EOF>]
+
+        """.trimIndent()
+        val actual = toParseTree(parseResourceScript("function_call")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseRangeExpression() {
         val expected = """KotlinFile
   Declaration

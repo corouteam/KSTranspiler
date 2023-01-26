@@ -55,6 +55,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
+           | name=ID NL* functionCallParameters NL*                        # functionCall
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
@@ -101,8 +102,13 @@ functionValueParameter
     : parameter (NL* ASSIGN NL* expression)?
     ;
 
+
 parameter
     : ID NL* COLON NL* type
+    ;
+
+functionCallParameters
+    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
     ;
 
 functionDeclaration:

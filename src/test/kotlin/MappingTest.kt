@@ -107,6 +107,20 @@ class MappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun functionCall(){
+        val code = "test(\"hello\", \"world\", 42, a)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            FunctionCall("test", listOf(
+                StringLit("hello"),
+                StringLit("world"),
+                IntLit("42"),
+                VarReference("a", type = StringType())
+            ))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
 
 
     @Test
