@@ -49,9 +49,10 @@ fun KotlinParser.FontWeightContext.toAst(): Expression = when(this){
     val params = imageComposeParameter().map { it.toAst() }
 
     val painter = params.firstOrNull { it is Painter } as PaintType?
+    val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
 
     //TODO: mapping
-    return ImageComposableCall(expressionAst, null, null)*
+    return ImageComposableCall(expressionAst, resizable, null)
 }
 
 fun KotlinParser.ImageComposeParameterContext.toAst(): Expression = when(this){
