@@ -146,6 +146,7 @@ class ImageComposableCall(
 
 sealed class ResizableLit: Expression(ResizableType())
 class Resizable: ResizableLit()
+class FillMaxSize: ResizableLit()
 
 sealed class AspectRatioLit: Expression(AspectRatioType())
 class ContentFit: AspectRatioLit()

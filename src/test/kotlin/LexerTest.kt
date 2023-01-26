@@ -257,4 +257,30 @@ class LexerTest {
             "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseImageWithFillMaxSize(){
+        val code = "Image(painter = painterResource(id = R.drawable.dog)).fillMaxSize()"
+        val result = listOf("IMAGE_COMPOSE",
+            "LPAREN",
+            "PAINTER_PARAM",
+            "ASSIGN",
+            "PAINTER_RESOURCE",
+            "LPAREN",
+            "PAINTER_RESOURCE_PARAM",
+            "ASSIGN",
+            "RESOURCE",
+            "DOT",
+            "RESOURCE_DRAWABLE",
+            "DOT",
+            "ID",
+            "RPAREN",
+            "RPAREN",
+            "DOT",
+            "RESIZABLE",
+            "LPAREN",
+            "RPAREN",
+            "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

@@ -141,6 +141,7 @@ imageComposeParameter:
     PAINTER_PARAM ASSIGN painter #painterParameter;
 
 imageComposeSuffix:
+    RESIZABLE LPAREN RPAREN # resizable |
     ASPECT_RATIO_PARAM LPAREN DOUBLE_LIT RPAREN #aspectRatioParameter;
 
 color:

@@ -68,6 +68,7 @@ QUOTE_OPEN: '"' -> pushMode(LineString);
 
 TEXT_COMPOSE: 'Text';
 IMAGE_COMPOSE: 'Image';
+RESIZABLE: 'fillMaxSize';
 
 PAINTER_PARAM: 'painter';
 PAINTER_RESOURCE: 'painterResource';
