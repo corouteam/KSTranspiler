@@ -27,7 +27,8 @@ fun SwiftParser.ImageWidgetContext.toAst(): Expression {
     val params = swiftUIImageSuffix().map { it.toAst() }
     val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
     val aspectRatio = params.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
-    return ImageComposableCall(expressionAst, resizable, aspectRatio)
+    val frame = params.firstOrNull { it is FrameLit } as FrameLit?
+    return ImageComposableCall(expressionAst, resizable, aspectRatio, frame)
 }
 
 fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
@@ -39,6 +40,7 @@ fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
 fun SwiftParser.SwiftUIImageSuffixContext.toAst(): Expression = when(this){
     is SwiftParser.ResizableSuffixContext -> Resizable()
     is SwiftParser.AspectRatioSuffixContext -> contentMode().toAst()
+    is SwiftParser.FrameSuffixContext -> Frame(width = 54.0, height = 54.0) //TODO recuperare i 2 parametri
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 

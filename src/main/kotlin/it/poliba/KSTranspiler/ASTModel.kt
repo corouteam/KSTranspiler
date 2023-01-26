@@ -47,6 +47,7 @@ data class PaintType(override var position: Position? = null) : Type()
 data class PainterResourceType(override var position: Position? = null) : Type()
 data class ResourceType(override var position: Position? = null) : Type()
 data class DrawableType(override var position: Position? = null) : Type()
+data class FrameType(override var position: Position? = null): Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 
@@ -141,12 +142,16 @@ class FontWeightBold: FontWeightLit()
 class ImageComposableCall(
     val value: Expression,
     val resizable: ResizableLit?,
-    val aspectRatio: Expression?
+    val aspectRatio: Expression?,
+    val frame: FrameLit?,
 ): ComposableCall(ImageComposableType())
 
 sealed class ResizableLit: Expression(ResizableType())
 class Resizable : ResizableLit()
 class FillMaxSize: ResizableLit()
+
+sealed class FrameLit: Expression(FrameType())
+class Frame(val width: Double, val height: Double) : FrameLit()
 
 sealed class AspectRatioLit: Expression(AspectRatioType())
 class ContentFit: AspectRatioLit()
