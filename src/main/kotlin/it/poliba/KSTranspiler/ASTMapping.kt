@@ -4,6 +4,7 @@ import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
+import it.poliba.KSTranspiler.KotlinParser.FunctionCallContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
 import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
@@ -105,6 +106,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
+    is KotlinParser.FunctionCallContext -> toAst(considerPosition)
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
     is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     is KotlinParser.ComposableCallExpressionContext -> toAst()
@@ -116,6 +118,13 @@ fun KotlinParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expres
         leftExpression = this.left.toAst(),
         rightExpression = this.right.toAst(),
         type = getRangeType(this.left.toAst().type, this.right.toAst().type))
+}
+
+fun KotlinParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression {
+    return FunctionCall(
+        name = this.name.text,
+        parameters = this.functionCallParameters().expression().map { it.toAst() }
+    )
 }
 
 fun KotlinParser.ListExpressionContext.toAst(considerPosition: Boolean): Expression {

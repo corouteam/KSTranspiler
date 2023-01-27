@@ -93,6 +93,7 @@ fun Expression.generateCode() : String = when (this) {
     is BinaryExpression -> this.generateCode()
     is StringLit -> "\"${this.value}\""
     is BoolLit -> "${this.value}"
+    is FunctionCall -> "${this.name}(${this.parameters.map { it.generateCode() }.joinToString(", " )})"
     is RangeExpression -> "${this.leftExpression.generateCode()}...${this.rightExpression.generateCode()}"
     is ListExpression -> "[${this.items.map { it.generateCode() }.joinToString(", ")}]"
     is ColorLit -> this.generateCode()

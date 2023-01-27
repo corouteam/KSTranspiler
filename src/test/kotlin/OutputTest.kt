@@ -122,6 +122,14 @@ class OutputTest {
     }
 
     @Test
+    fun convertFunctionCall(){
+        val code = """test("hello", "world", 42)"""
+        val result = """test("hello", "world", 42)"""
+        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
     fun convertIntRangeExpression(){
         var code = "val range = 1..42"
         val result = "let range:ClosedRange<Int> = 1...42"
