@@ -108,4 +108,11 @@ class SWIFTLexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
 
     }
+
+    @Test
+    fun parseDivider(){
+        val code = "Divider()"
+        val result = listOf("DIVIDER", "LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }
