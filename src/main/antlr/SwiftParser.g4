@@ -152,6 +152,7 @@ type : INT     # integer |
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
+    | SPACER_WIDGET LPAREN RPAREN #spacerWidget
     | DIVIDER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #dividerWidget
     | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
     |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
