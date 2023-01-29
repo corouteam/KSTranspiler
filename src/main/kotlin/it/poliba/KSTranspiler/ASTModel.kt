@@ -49,6 +49,7 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class TextComposableType: ComposableType()
+class SpacerComposableType: ComposableType()
 class DividerComposableType: ComposableType()
 // END TEST
 //
@@ -130,6 +131,8 @@ sealed class FontWeightLit: Expression(FontWeightType())
 
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
+
+class SpacerComposableCall(): ComposableCall(SpacerComposableType())
 
 class DividerComposableCall(): ComposableCall(DividerComposableType())
 
