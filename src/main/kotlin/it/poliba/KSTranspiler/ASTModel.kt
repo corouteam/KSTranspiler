@@ -58,13 +58,13 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class TextComposableType(override var position: Position? = null): ComposableType()
+class SpacerComposableType: ComposableType()
 class DividerComposableType(override var position: Position? = null): ComposableType()
 class SpacerComposableType(override var position: Position? = null): ComposableType()
 class ColumnComposableType(override var position: Position? = null): ComposableType()
 
 class HorizontalAlignmentType(override var position: Position? = null): Type()
 class VerticalAlignmentType(override var position: Position? = null): Type()
-
 // END TEST
 //
 // Expressions
@@ -197,6 +197,8 @@ class DividerComposableCall(val frame: Frame?,
 class SpacerComposableCall(val size: Frame?,
                            override var position: Position? = null
 ): ComposableCall(SpacerComposableType(position))
+
+class SpacerComposableCall(): ComposableCall(SpacerComposableType())
 
 class Frame(val width: Expression, val height: Expression, override var position: Position? = null): Node()
 
