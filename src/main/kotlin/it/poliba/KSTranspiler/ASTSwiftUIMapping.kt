@@ -23,6 +23,7 @@ fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression =
     is SwiftParser.VStackWidgetContext -> this.toAst(considerPosition)
     is SwiftParser.HStackWidgetContext -> this.toAst(considerPosition)
     is SwiftParser.ScrollViewWidgetContext -> this.toAst(considerPosition)
+    is SwiftParser.DividerWidgetContext -> DividerComposableCall()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
