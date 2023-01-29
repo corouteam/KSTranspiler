@@ -74,6 +74,7 @@ FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';
 
+SPACER_WIDGET: 'Spacer';
 DIVIDER_WIDGET: 'Divider';
 
 // Identifiers
