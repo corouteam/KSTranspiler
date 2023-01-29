@@ -439,4 +439,13 @@ class LexerTest {
         val result = listOf("SPACER_COMPOSE","LPAREN","RPAREN", "DOT", "SIZE", "LPAREN", "WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseDivider(){
+        val code = "Divider()"
+        val result = listOf("DIVIDER", "LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+
 }
