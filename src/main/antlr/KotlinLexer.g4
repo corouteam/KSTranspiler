@@ -77,7 +77,7 @@ FONT_WEIGHT_BOLD: 'Bold';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR_PARAM: 'color';
 
-DIVIDER: 'Divider';
+DIVIDER_COMPOSE: 'Divider';
 
 
 // Identifiers

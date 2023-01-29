@@ -166,4 +166,19 @@ class SWIFTParserTest {
         val actual = toParseTree(parseResource("swift/structDeclaration")).multiLineString()
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun parseSwiftDivider(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        DividerWidget\n" +
+                "          T[Divider]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/divider")).multiLineString()
+        assertEquals(expected, actual)
+    }
 }

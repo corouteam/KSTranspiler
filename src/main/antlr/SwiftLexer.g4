@@ -74,7 +74,7 @@ FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';
 
-DIVIDER: 'Divider';
+DIVIDER_WIDGET: 'Divider';
 
 // Identifiers
 ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;

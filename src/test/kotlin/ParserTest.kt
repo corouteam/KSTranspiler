@@ -535,4 +535,19 @@ KotlinScript
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun parseComposableDivider(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        DividerComposable\n" +
+                "          T[Divider]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("divider")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
 }
