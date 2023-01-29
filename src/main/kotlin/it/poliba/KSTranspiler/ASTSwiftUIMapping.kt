@@ -8,6 +8,7 @@ fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
 }
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
+    is SwiftParser.DividerWidgetContext -> DividerComposableCall()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

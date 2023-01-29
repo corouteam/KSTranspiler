@@ -12,6 +12,7 @@ fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
+    is KotlinParser.DividerComposableContext -> DividerComposableCall()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

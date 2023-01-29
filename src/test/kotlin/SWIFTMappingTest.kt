@@ -72,4 +72,15 @@ class SWIFTMappingTest {
 
     }
 
+    @Test
+    fun testDividerSwiftUI(){
+        val code = "Divider()"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            DividerComposableCall()
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+
+    }
+
 }
