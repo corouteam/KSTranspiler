@@ -168,6 +168,44 @@ class SWIFTParserTest {
     }
 
     @Test
+    fun parseSwiftButton(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        ButtonWidget\n" +
+                "          T[Button]\n" +
+                "          T[(]\n" +
+                "          T[action]\n" +
+                "          T[:]\n" +
+                "          Block\n" +
+                "            T[{]\n" +
+                "            T[}]\n" +
+                "          T[)]\n" +
+                "          Block\n" +
+                "            T[{]\n" +
+                "            ExpressionStatement\n" +
+                "              VarReference\n" +
+                "                T[Image]\n" +
+                "            ExpressionStatement\n" +
+                "              ParenExpression\n" +
+                "                T[(]\n" +
+                "                StringLiteralExpression\n" +
+                "                  StringLiteral\n" +
+                "                    LineStringLiteral\n" +
+                "                      T[\"]\n" +
+                "                      LineStringContent\n" +
+                "                        T[marker]\n" +
+                "                      T[\"]\n" +
+                "                T[)]\n" +
+                "            T[}]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/button")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+
+    @Test
     fun parseSwiftDivider(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +

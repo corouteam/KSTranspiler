@@ -142,10 +142,12 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
+    | ICON_BUTTON_COMPOSABLE LPAREN ID ASSIGN block RPAREN block #iconButtonComposable
+    | ICON_COMPOSABLE LPAREN RPAREN #iconComposable
     | DIVIDER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
     | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable
-    |COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable 
-    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable ;
+    | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
+    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter

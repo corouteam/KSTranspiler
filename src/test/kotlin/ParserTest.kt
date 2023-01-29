@@ -535,6 +535,36 @@ KotlinScript
         assertEquals(expected, actual)
     }
 
+
+    @Test
+    fun parseKotlinIconButton(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        IconButtonComposable\n" +
+                "          T[IconButton]\n" +
+                "          T[(]\n" +
+                "          T[onClick]\n" +
+                "          T[=]\n" +
+                "          Block\n" +
+                "            T[{]\n" +
+                "            T[}]\n" +
+                "          T[)]\n" +
+                "          Block\n" +
+                "            T[{]\n" +
+                "            ExpressionStatement\n" +
+                "              ComposableCallExpression\n" +
+                "                IconComposable\n" +
+                "                  T[Icon]\n" +
+                "                  T[(]\n" +
+                "                  T[)]\n" +
+                "            T[}]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("button")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
     @Test
     fun parseComposableDivider(){
         val expected = "KotlinScript\n" +
