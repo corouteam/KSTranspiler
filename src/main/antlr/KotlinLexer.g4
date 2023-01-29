@@ -77,6 +77,7 @@ FONT_WEIGHT_BOLD: 'Bold';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR_PARAM: 'color';
 
+SPACER_COMPOSE: 'Spacer';
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

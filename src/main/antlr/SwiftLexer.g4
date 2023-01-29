@@ -74,6 +74,7 @@ FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';
 
+SPACER_WIDGET: 'Spacer';
 
 // Identifiers
 ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
