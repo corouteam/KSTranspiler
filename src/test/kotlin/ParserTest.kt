@@ -536,6 +536,21 @@ KotlinScript
     }
 
     @Test
+    fun parseSpacer(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        SpacerComposable\n" +
+                "          T[Spacer]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("spacer")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseComposableDivider(){
         val expected = "KotlinScript\n" +
                 "  Line\n" +

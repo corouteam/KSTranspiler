@@ -168,6 +168,22 @@ class SWIFTParserTest {
     }
 
     @Test
+    fun parseSpacer(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        SpacerWidget\n" +
+                "          T[Spacer]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/spacer")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+
+    @Test
     fun parseSwiftDivider(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +
