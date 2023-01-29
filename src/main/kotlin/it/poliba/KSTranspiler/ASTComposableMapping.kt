@@ -29,12 +29,26 @@ fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
+    is KotlinParser.IconButtonComposableContext -> ButtonComposableCall(action = Block(listOf()), body = Block(listOf())) //TODO: check this
+    is KotlinParser.IconComposableContext -> Icon()
     is KotlinParser.DividerComposableContext -> this.toAst()
     is KotlinParser.SpacerComposableContext -> this.toAst()
     is KotlinParser.ColumnComposableContext -> this.toAst()
     is KotlinParser.RowComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
+
+//TODO: check this
+/*fun KotlinParser.IconButtonComposableContext.toAst(): Expression {
+
+    var action = this.block().map { it -> it.statement().map { it.toAst() } }
+    var body = this.block()[1]
+
+
+    return ButtonComposableCall(action, body)
+}*/
+
 
 fun KotlinParser.DividerComposableContext.toAst(): Expression {
     val params = composableUIGenericWidgetSuffix().map { it.toAst() }

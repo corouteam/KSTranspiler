@@ -1,5 +1,6 @@
 package it.poliba.KSTranspiler
 
+import com.strumenta.kolasu.parsing.position
 import it.poliba.KSTranspiler.KotlinParser.CenterVerticalltAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.BoldSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.BottomAlignmentContext
@@ -17,6 +18,7 @@ fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
 }
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
+    is SwiftParser.ButtonWidgetContext -> ButtonComposableCall(action = Block(listOf()), body = Block(listOf())) //TODO: check this
     is SwiftParser.DividerWidgetContext -> this.toAst()
     is SwiftParser.SpacerWidgetContext -> this.toAst()
     is SwiftParser.VStackWidgetContext -> this.toAst()
@@ -33,6 +35,17 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
     val fontWeight = params.firstOrNull { it is FontWeightLit } as FontWeightLit?
     return TextComposableCall(expressionAst, color, fontWeight)
 }
+
+//TODO: check this
+/*fun SwiftParser.ButtonWidgetContext.toAst(): Expression {
+
+    var action = this.block().map { it -> it.statement().map { it.toAst() } }
+    var body = this.block()[1]
+
+
+    return ButtonComposableCall(action, body)
+}*/
+
 
 fun SwiftParser.DividerWidgetContext.toAst(): Expression {
     val params = swiftUIGenericWidgetSuffix().map { it.toAst() }

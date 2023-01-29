@@ -52,6 +52,8 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class TextComposableType: ComposableType()
+class ButtonComposableType: ComposableType()
+class IconComposableType: ComposableType()
 class DividerComposableType: ComposableType()
 class SpacerComposableType: ComposableType()
 class ColumnComposableType: ComposableType()
@@ -169,6 +171,18 @@ object CenterHorizAlignment: HorizontalAlignment()
 object TopAlignment: VerticalAlignment()
 object BottomAlignment: VerticalAlignment()
 object CenterVerticallyAlignment: VerticalAlignment()
+
+
+class ButtonComposableCall(
+    val action: Block,
+    val body: Block
+): ComposableCall(ButtonComposableType())
+
+
+class Icon(
+
+): ComposableCall(IconComposableType())
+
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
 

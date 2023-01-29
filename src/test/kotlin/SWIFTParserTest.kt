@@ -184,20 +184,6 @@ class SWIFTParserTest {
                 "          T[)]\n" +
                 "          Block\n" +
                 "            T[{]\n" +
-                "            ExpressionStatement\n" +
-                "              VarReference\n" +
-                "                T[Image]\n" +
-                "            ExpressionStatement\n" +
-                "              ParenExpression\n" +
-                "                T[(]\n" +
-                "                StringLiteralExpression\n" +
-                "                  StringLiteral\n" +
-                "                    LineStringLiteral\n" +
-                "                      T[\"]\n" +
-                "                      LineStringContent\n" +
-                "                        T[marker]\n" +
-                "                      T[\"]\n" +
-                "                T[)]\n" +
                 "            T[}]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("swift/button")).multiLineString()
