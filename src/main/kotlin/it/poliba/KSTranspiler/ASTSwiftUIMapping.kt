@@ -54,11 +54,11 @@ fun SwiftParser.StructDeclarationContext.toWidgetAST(): WidgetDeclaration{
 
 
 fun SwiftParser.VStackWidgetContext.toAst(): Expression{
-    val alignment = swiftUIColumnParam().firstOrNull { it is SwiftParser.AlignmentParameterContext } as SwiftParser.AlignmentParameterContext
-    val alignmentExpression = alignment.expression().toAst()
+    val alignment = swiftUIColumnParam().firstOrNull { it is SwiftParser.AlignmentParameterContext } as? SwiftParser.AlignmentParameterContext
+    val alignmentExpression = alignment?.expression()?.toAst()
 
-    val spacing = swiftUIColumnParam().firstOrNull { it is SwiftParser.SpacingParameterContext } as SpacingParameterContext
-    var spacingExpression = spacing.expression().toAst()
+    val spacing = swiftUIColumnParam().firstOrNull { it is SwiftParser.SpacingParameterContext } as? SpacingParameterContext
+    var spacingExpression = spacing?.expression()?.toAst()
 
     if (spacingExpression is IntLit){
         spacingExpression = DpLit(spacingExpression.value)
@@ -70,11 +70,11 @@ fun SwiftParser.VStackWidgetContext.toAst(): Expression{
 }
 
 fun SwiftParser.HStackWidgetContext.toAst(): Expression{
-    val alignment = swiftUIColumnParam().firstOrNull { it is SwiftParser.AlignmentParameterContext } as SwiftParser.AlignmentParameterContext
-    val alignmentExpression = alignment.expression().toAst()
+    val alignment = swiftUIColumnParam().firstOrNull { it is SwiftParser.AlignmentParameterContext } as? SwiftParser.AlignmentParameterContext
+    val alignmentExpression = alignment?.expression()?.toAst()
 
-    val spacing = swiftUIColumnParam().firstOrNull { it is SwiftParser.SpacingParameterContext } as SpacingParameterContext
-    var spacingExpression = spacing.expression().toAst()
+    val spacing = swiftUIColumnParam().firstOrNull { it is SwiftParser.SpacingParameterContext } as? SpacingParameterContext
+    var spacingExpression = spacing?.expression()?.toAst()
 
     if (spacingExpression is IntLit){
         spacingExpression = DpLit(spacingExpression.value)

@@ -75,7 +75,7 @@ class SWIFTMappingTest {
 
     @Test
     fun mapVStack(){
-        val code = "VStack(alignment: Alignment.leading, spacing: 10)"
+        val code = "VStack(alignment: HorizontalAlignment.leading, spacing: 10)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectingSpacing = DpLit("10")
 
