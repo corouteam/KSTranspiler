@@ -2,14 +2,15 @@ package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.SwiftParser.BoldSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 
 fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
     return this.widgetCall().toAst()
 }
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
-    is SwiftParser.DividerWidgetContext -> DividerComposableCall()
-    is SwiftParser.SpacerWidgetContext -> SpacerComposableCall()
+    is SwiftParser.DividerWidgetContext -> this.toAst()
+    is SwiftParser.SpacerWidgetContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -22,15 +23,40 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
     return TextComposableCall(expressionAst, color, fontWeight)
 }
 
+fun SwiftParser.DividerWidgetContext.toAst(): Expression {
+    val params = swiftUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Frame } as Frame?
+
+    return DividerComposableCall(frame)
+}
+
+fun SwiftParser.SpacerWidgetContext.toAst(): Expression {
+    val params = swiftUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Frame } as Frame?
+
+    return SpacerComposableCall(frame)
+}
+
 fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
     is ForegroundColorSuffixContext -> color().toAst()
     is BoldSuffixContext -> FontWeightBold()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
+fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(): Expression = when(this){
+    is FrameSuffixContext -> toAst()
+    else -> throw IllegalArgumentException("Parametro non riconosciuto")
+}
+
 fun SwiftParser.ColorContext.toAst(): Expression = when(this){
     is SwiftParser.BlueColorContext ->  ColorBlue()
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
+}
+
+fun SwiftParser.FrameSuffixContext.toAst(): Expression {
+
+    return Frame(width = this.width.toAst(), height = this.heigth.toAst())
+
 }
 
 
