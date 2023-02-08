@@ -289,18 +289,6 @@ class MappingTest {
     }
 
     @Test
-    fun mapSpacerComposableRef(){
-        val code = "Spacer()"
-        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
-
-        val expectedAst = AstScript(listOf(
-            SpacerComposableCall()
-        ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
-    }
-
-    @Test
     fun convertComposableDivider(){
         val code = "Divider()"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
@@ -416,6 +404,18 @@ class MappingTest {
         assertEquals(DpLit("8"), spacing)
         assertEquals(TopAlignment(), alignment)
         assertEquals(true, column?.scrollable)
+
+    }
+
+
+    @Test
+    fun testSpacerWithSizeComposable(){
+        val code = "Spacer().size(width: 54.0, height: 54.0)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            SpacerComposableCall(Size(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
 
     }
 

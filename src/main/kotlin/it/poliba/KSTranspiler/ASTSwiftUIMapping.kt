@@ -6,6 +6,7 @@ import it.poliba.KSTranspiler.SwiftParser.BottomAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.CenterVerticalAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.LeadingAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.SpacingParameterContext
 import it.poliba.KSTranspiler.SwiftParser.TopAlignmentContext
@@ -23,8 +24,8 @@ fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression =
     is SwiftParser.VStackWidgetContext -> this.toAst(considerPosition)
     is SwiftParser.HStackWidgetContext -> this.toAst(considerPosition)
     is SwiftParser.ScrollViewWidgetContext -> this.toAst(considerPosition)
-    is SwiftParser.SpacerWidgetContext -> SpacerComposableCall()
-    is SwiftParser.DividerWidgetContext -> DividerComposableCall()
+    is SwiftParser.DividerWidgetContext -> this.toAst()
+    is SwiftParser.SpacerWidgetContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

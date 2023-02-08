@@ -75,7 +75,7 @@ class SWIFTMappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-            SpacerComposableCall()
+            SpacerComposableCall(null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript

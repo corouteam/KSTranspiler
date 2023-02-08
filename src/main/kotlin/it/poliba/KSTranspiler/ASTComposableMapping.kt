@@ -34,8 +34,8 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
     is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
     is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
     is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
-    is KotlinParser.SpacerComposableContext -> SpacerComposableCall()
-    is KotlinParser.DividerComposableContext -> DividerComposableCall()
+    is KotlinParser.DividerComposableContext -> this.toAst()
+    is KotlinParser.SpacerComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

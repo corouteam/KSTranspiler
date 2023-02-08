@@ -48,6 +48,7 @@ data class BoolType(override var position: Position? = null) : Type()
 data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
 
+data class FrameType(override var position: Position? = null): Type()
 
 data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String, override var position: Position? = null): Type()
@@ -198,7 +199,11 @@ class SpacerComposableCall(val size: Frame?,
                            override var position: Position? = null
 ): ComposableCall(SpacerComposableType(position))
 
-class SpacerComposableCall(): ComposableCall(SpacerComposableType())
+class DividerComposableCall(val frame: Expression?): ComposableCall(DividerComposableType())
+
+class SpacerComposableCall(val size: Expression?): ComposableCall(SpacerComposableType())
+
+class Size(val width: Expression, val height: Expression): Expression(FrameType())
 
 class Frame(val width: Expression, val height: Expression, override var position: Position? = null): Node()
 
