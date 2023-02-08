@@ -156,7 +156,7 @@ swiftUITextSuffix:
     | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
 
 swiftUIGenericWidgetSuffix:
-    FRAME LPAREN WIDTH COLON DOUBLE_LIT COMMA HEIGHT COLON DOUBLE_LIT RPAREN #frameSuffix;
+    FRAME LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #frameSuffix;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;

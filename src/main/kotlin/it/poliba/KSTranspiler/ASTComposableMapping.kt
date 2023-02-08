@@ -6,15 +6,42 @@ import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import it.poliba.KSTranspiler.KotlinParser.SizeSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
-    is KotlinParser.SpacerComposableContext -> SpacerComposableCall()
-    is KotlinParser.DividerComposableContext -> DividerComposableCall()
+    is KotlinParser.DividerComposableContext -> this.toAst()
+    is KotlinParser.SpacerComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun KotlinParser.DividerComposableContext.toAst(): Expression {
+    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Size } as Size?
+
+    return DividerComposableCall(frame)
+}
+
+fun KotlinParser.SpacerComposableContext.toAst(): Expression {
+    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Size } as Size?
+
+    return SpacerComposableCall(frame)
+}
+
+fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(): Expression = when(this){
+    is SizeSuffixContext -> toAst()
+    else -> throw IllegalArgumentException("Parametro non riconosciuto")
+}
+
+fun KotlinParser.SizeSuffixContext.toAst(): Expression {
+
+    return Size(width = this.width.toAst(), height = this.heigth.toAst())
+
 }
 
 fun KotlinParser.TextComposableContext.toAst(): Expression {

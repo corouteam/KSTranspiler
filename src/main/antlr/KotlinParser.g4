@@ -144,7 +144,7 @@ textComposeParameter:
     | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter;
 
 composableUIGenericWidgetSuffix:
-    SIZE LPAREN WIDTH COLON DOUBLE_LIT COMMA HEIGHT COLON DOUBLE_LIT RPAREN #frameSuffix;
+    SIZE LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #sizeSuffix;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor

@@ -75,7 +75,7 @@ class SWIFTMappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-            SpacerComposableCall()
+            SpacerComposableCall(null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
@@ -86,7 +86,18 @@ class SWIFTMappingTest {
         val code = "Divider()"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            DividerComposableCall()
+            DividerComposableCall(null)
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+
+    }
+
+    @Test
+    fun testSpacerWithFrameSwiftUI(){
+        val code = "Spacer().frame(width: 54.0, height: 54.0)"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            SpacerComposableCall(Frame(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
 
