@@ -136,12 +136,15 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
-    | SPACER_COMPOSE LPAREN RPAREN #spacerComposable
-    | DIVIDER_COMPOSE LPAREN RPAREN #dividerComposable;
+    | DIVIDER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
+    | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
     | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter;
+
+composableUIGenericWidgetSuffix:
+    SIZE LPAREN WIDTH COLON DOUBLE_LIT COMMA HEIGHT COLON DOUBLE_LIT RPAREN #frameSuffix;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor

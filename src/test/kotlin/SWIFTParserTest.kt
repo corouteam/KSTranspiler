@@ -168,6 +168,21 @@ class SWIFTParserTest {
     }
 
     @Test
+    fun parseSwiftDivider(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        DividerWidget\n" +
+                "          T[Divider]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/divider")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseSpacer(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +
@@ -182,19 +197,31 @@ class SWIFTParserTest {
         assertEquals(expected, actual)
     }
 
-
     @Test
-    fun parseSwiftDivider(){
+    fun parseSpacerWithSize(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +
                 "    ExpressionStatement\n" +
                 "      WidgetCallExpression\n" +
-                "        DividerWidget\n" +
-                "          T[Divider]\n" +
+                "        SpacerWidget\n" +
+                "          T[Spacer]\n" +
                 "          T[(]\n" +
                 "          T[)]\n" +
+                "          T[.]\n" +
+                "          FrameSuffix\n" +
+                "            T[frame]\n" +
+                "            T[(]\n" +
+                "            T[width]\n" +
+                "            T[:]\n" +
+                "            T[54.0]\n" +
+                "            T[,]\n" +
+                "            T[height]\n" +
+                "            T[:]\n" +
+                "            T[54.0]\n" +
+                "            T[)]\n" +
                 "    T[<EOF>]\n"
-        val actual = toParseTree(parseResourceScript("swift/divider")).multiLineString()
+        val actual = toParseTree(parseResourceScript("swift/spacerWithFrame")).multiLineString()
         assertEquals(expected, actual)
     }
+
 }
