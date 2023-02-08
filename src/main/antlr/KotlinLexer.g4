@@ -52,6 +52,12 @@ LANGLE             : '<' ;
 RANGLE             : '>' ;
 AT                 : '@' ;
 DOT                : '.' ;
+EQUAL              : '==' ;
+NOT_EQUAL          : '!=' ;
+LTEQ               : '<=' ;
+GTEQ               : '>=' ;
+AND                : '&&' ;
+OR                 : '||' ;
 
 IF: 'if';
 ELSE: 'else';

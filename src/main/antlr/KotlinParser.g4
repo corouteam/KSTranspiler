@@ -45,6 +45,11 @@ annotation: AT ID;
 
 assignment : ID ASSIGN expression ;
 
+equality : expression operator=(EQUAL | NOT_EQUAL) expression ;
+
+logical: expression operator=(AND | OR) expression;
+
+comparison: expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) expression ;
 
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
@@ -56,6 +61,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
+           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # equalityExpression
+           | left=expression operator=(AND | OR) right=expression         # logicalExpression
+           | left=expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) right=expression # comparisonExpression
            | while                                                         # whileExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
@@ -67,7 +75,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | fontWeight                                                    # fontWeightLiteral;
 
 
-while: WHILE LPAREN expression RPAREN NL* body=controlStructureBody*;
+while: WHILE LPAREN expression RPAREN NL* body=controlStructureBody;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -147,4 +155,3 @@ color:
 fontWeight:
     FONT_WEIGHT LPAREN INT_LIT RPAREN #customWeight
     | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
-
