@@ -43,23 +43,41 @@ fun KotlinParser.FontWeightContext.toAst(): Expression = when(this){
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
-/*fun KotlinParser.ImageComposableContext.toAst(): Expression {
-    val expressionAst = this.expression().toAst()
+fun KotlinParser.ImageComposableContext.toAst(): Expression {
+    val expressionAst = this.imageComposeParameter().toAst()
     if(expressionAst.type != PaintType()) throw IllegalArgumentException("Painter expected in Image composable")
     val params = imageComposeParameter().map { it.toAst() }
 
     val painter = params.firstOrNull { it is Painter } as PaintType?
     val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
+    val aspectRatio = params.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
+    val frame = params.firstOrNull { it is FrameLit } as FrameLit?
 
     //TODO: mapping
-    return ImageComposableCall(expressionAst, resizable, null)
+    return ImageComposableCall(expressionAst, resizable, aspectRatio, frame)
 }
 
 fun KotlinParser.ImageComposeParameterContext.toAst(): Expression = when(this){
     is KotlinParser.PainterParameterContext -> this.painter().toAst()
     else -> throw java.lang.IllegalArgumentException("Pain not recognized")
-}*/
+}
 
+fun KotlinParser.PainterContext.toAst(): Expression = when(this){
+    is KotlinParser.PainterResourceContext -> this.painterResourceParam().toAst()
+    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
+}
+
+fun KotlinParser.PainterResourceContext.toAst(): Expression {
+
+    val expressionAst = this.
+    if(expressionAst.type != PaintType()) throw IllegalArgumentException("Painter expected in Image composable")
+    val params = imageComposeParameter().map { it.toAst() }
+
+    val painter = params.firstOrNull { it is Painter } as PaintType?
+    val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
+    val aspectRatio = params.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
+    val frame = params.firstOrNull { it is FrameLit } as FrameLit?
+}
 
 fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration {
     val id = this.ID().text

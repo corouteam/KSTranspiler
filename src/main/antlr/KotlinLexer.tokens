@@ -58,6 +58,7 @@ RESIZABLE = 57
 FRAME = 58
 WIDTH = 59
 HEIGHT = 60
+ASPECT_RATIO_PARAM=61
 'var'=3
 'val'=4
 'print'=5

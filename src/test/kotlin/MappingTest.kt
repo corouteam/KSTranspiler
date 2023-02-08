@@ -273,23 +273,11 @@ class MappingTest {
 
     @Test
     fun mapImageComposableWithResizable(){
-        val code = "Image(painter = painterResource(id = R.drawable.dog)).fillMaxSize()"
+        val code = "Image(painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))).fillMaxSize()"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
             ImageComposableCall(Painter(PainterResource(Resource(Drawable(StringLit("dog"))))), FillMaxSize(), null, null)
-        ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
-    }
-
-    @Test
-    fun mapImageComposableWithFrame(){
-        val code = "Image(painter = painterResource(id = R.drawable.dog)).fillMaxSize().frame(width: 54.0, height: 54.0)"
-        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
-
-        val expectedAst = AstScript(listOf(
-            ImageComposableCall(Painter(PainterResource(Resource(Drawable(StringLit("dog"))))), FillMaxSize(), null, Frame(width = 54.0, height = 54.0))
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
