@@ -81,6 +81,10 @@ SPACER_COMPOSE: 'Spacer';
 DIVIDER_COMPOSE: 'Divider';
 
 
+SIZE: 'size';
+WIDTH: 'width';
+HEIGHT: 'height';
+
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;
 
