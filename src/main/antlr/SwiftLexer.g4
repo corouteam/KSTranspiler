@@ -77,6 +77,10 @@ WEIGHT: 'Weight';
 DIVIDER_WIDGET: 'Divider';
 SPACER_WIDGET: 'Spacer';
 
+FRAME: 'frame';
+WIDTH: 'width';
+HEIGHT: 'height';
+
 // Identifiers
 ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
 

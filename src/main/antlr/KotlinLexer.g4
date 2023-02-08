@@ -78,8 +78,11 @@ FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR_PARAM: 'color';
 
 DIVIDER_COMPOSE: 'Divider';
-
 SPACER_COMPOSE: 'Spacer';
+
+SIZE: 'size';
+WIDTH: 'width';
+HEIGHT: 'height';
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

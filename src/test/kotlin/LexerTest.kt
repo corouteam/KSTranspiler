@@ -225,4 +225,11 @@ class LexerTest {
         val result = listOf("SPACER_COMPOSE", "LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseSpacerWithSize(){
+        val code = "Spacer().size(width: 54.0, height: 54.0)"
+        val result = listOf("SPACER_COMPOSE","LPAREN","RPAREN", "DOT", "SIZE", "LPAREN", "WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }
