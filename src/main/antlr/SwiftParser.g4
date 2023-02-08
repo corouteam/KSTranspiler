@@ -148,7 +148,8 @@ type : INT     # integer |
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
-    | DIVIDER_WIDGET LPAREN RPAREN #dividerWidget;
+    | DIVIDER_WIDGET LPAREN RPAREN #dividerWidget
+    | SPACER_WIDGET LPAREN RPAREN #spacerWidget;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix

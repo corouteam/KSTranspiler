@@ -218,4 +218,11 @@ class LexerTest {
     }
 
 
+
+    @Test
+    fun parseSpacer(){
+        val code = "Spacer()"
+        val result = listOf("SPACER_COMPOSE", "LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

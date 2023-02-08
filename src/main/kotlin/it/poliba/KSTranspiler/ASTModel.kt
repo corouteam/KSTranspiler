@@ -50,6 +50,7 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 sealed class ComposableType: Type()
 class TextComposableType: ComposableType()
 class DividerComposableType: ComposableType()
+class SpacerComposableType: ComposableType()
 // END TEST
 //
 // Expressions
@@ -132,6 +133,8 @@ class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
 
 class DividerComposableCall(): ComposableCall(DividerComposableType())
+
+class SpacerComposableCall(): ComposableCall(SpacerComposableType())
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
 

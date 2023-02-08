@@ -136,7 +136,8 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
-    | DIVIDER_COMPOSE LPAREN RPAREN #dividerComposable;
+    | DIVIDER_COMPOSE LPAREN RPAREN #dividerComposable
+    | SPACER_COMPOSE LPAREN RPAREN #spacerComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter

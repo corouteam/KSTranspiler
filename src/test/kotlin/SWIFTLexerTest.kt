@@ -115,4 +115,11 @@ class SWIFTLexerTest {
         val result = listOf("DIVIDER_WIDGET", "LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseSpacer(){
+        val code = "Spacer()"
+        val result = listOf("SPACER_WIDGET", "LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

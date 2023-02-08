@@ -1,10 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
-import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacade
-import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacadeScript
-import it.poliba.KSTranspiler.facade.SwiftParserFacade
-import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
+import it.poliba.KSTranspiler.facade.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -70,6 +67,18 @@ class SWIFTMappingTest {
 
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
 
+    }
+
+    @Test
+    fun mapSpacerComposableRef(){
+        val code = "Spacer()"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val expectedAst = AstScript(listOf(
+            SpacerComposableCall()
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        //val expectedAst = KotlinScript
     }
 
     @Test
