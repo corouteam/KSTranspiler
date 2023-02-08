@@ -576,16 +576,18 @@ KotlinScript
                 "          T[(]\n" +
                 "          T[)]\n" +
                 "          T[.]\n" +
-                "          FrameSuffix\n" +
+                "          SizeSuffix\n" +
                 "            T[size]\n" +
                 "            T[(]\n" +
                 "            T[width]\n" +
                 "            T[:]\n" +
-                "            T[54.0]\n" +
+                "            DoubleLiteral\n" +
+                "              T[54.0]\n" +
                 "            T[,]\n" +
                 "            T[height]\n" +
                 "            T[:]\n" +
-                "            T[54.0]\n" +
+                "            DoubleLiteral\n" +
+                "              T[54.0]\n" +
                 "            T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("spacerWithSize")).multiLineString()
