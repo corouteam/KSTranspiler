@@ -213,11 +213,13 @@ class SWIFTParserTest {
                 "            T[(]\n" +
                 "            T[width]\n" +
                 "            T[:]\n" +
-                "            T[54.0]\n" +
+                "            DoubleLiteral\n" +
+                "              T[54.0]\n" +
                 "            T[,]\n" +
                 "            T[height]\n" +
                 "            T[:]\n" +
-                "            T[54.0]\n" +
+                "            DoubleLiteral\n" +
+                "              T[54.0]\n" +
                 "            T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("swift/spacerWithFrame")).multiLineString()
