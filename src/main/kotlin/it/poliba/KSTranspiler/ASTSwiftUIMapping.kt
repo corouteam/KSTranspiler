@@ -18,6 +18,7 @@ fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
 }
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
+    is SwiftParser.ButtonWidgetContext -> this.toAst()
     is SwiftParser.ButtonWidgetContext -> ButtonComposableCall(action = Block(listOf()), body = Block(listOf())) //TODO: check this
     is SwiftParser.DividerWidgetContext -> this.toAst()
     is SwiftParser.SpacerWidgetContext -> this.toAst()
@@ -36,15 +37,14 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
     return TextComposableCall(expressionAst, color, fontWeight)
 }
 
-//TODO: check this
-/*fun SwiftParser.ButtonWidgetContext.toAst(): Expression {
 
-    var action = this.block().map { it -> it.statement().map { it.toAst() } }
-    var body = this.block()[1]
+fun SwiftParser.ButtonWidgetContext.toAst(): Expression {
 
+    val action = Block(this.action.statement().map { it.toAst() })
+    val body = Block(this.body.statement().map { it.toAst() })
 
     return ButtonComposableCall(action, body)
-}*/
+}
 
 
 fun SwiftParser.DividerWidgetContext.toAst(): Expression {

@@ -142,7 +142,7 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
-    | ICON_BUTTON_COMPOSABLE LPAREN ID ASSIGN block RPAREN block #iconButtonComposable
+    | ICON_BUTTON_COMPOSABLE LPAREN ID ASSIGN action = block RPAREN body = block #iconButtonComposable
     | ICON_COMPOSABLE LPAREN RPAREN #iconComposable
     | DIVIDER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
     | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable

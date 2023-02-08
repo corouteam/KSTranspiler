@@ -29,7 +29,7 @@ fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
-    is KotlinParser.IconButtonComposableContext -> ButtonComposableCall(action = Block(listOf()), body = Block(listOf())) //TODO: check this
+    is KotlinParser.IconButtonComposableContext -> this.toAst()
     is KotlinParser.IconComposableContext -> Icon()
     is KotlinParser.DividerComposableContext -> this.toAst()
     is KotlinParser.SpacerComposableContext -> this.toAst()
@@ -39,15 +39,13 @@ fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
 }
 
 
-//TODO: check this
-/*fun KotlinParser.IconButtonComposableContext.toAst(): Expression {
+fun KotlinParser.IconButtonComposableContext.toAst(): Expression {
 
-    var action = this.block().map { it -> it.statement().map { it.toAst() } }
-    var body = this.block()[1]
-
+    val action = Block(this.action.statement().map { it.toAst() })
+    val body = Block(this.body.statement().map { it.toAst() })
 
     return ButtonComposableCall(action, body)
-}*/
+}
 
 
 fun KotlinParser.DividerComposableContext.toAst(): Expression {

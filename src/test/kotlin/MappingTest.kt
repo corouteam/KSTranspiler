@@ -409,14 +409,12 @@ class MappingTest {
 
     @Test
     fun mapIconButtonComposableRef(){
-        //val code = "IconButton( onClick: {} ) { Icon( ) }" //TODO prod string
-        val code = "IconButton( onClick: {} ) { }"
+        val code = "IconButton( onClick = {} ) { Icon() }"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ButtonComposableCall(action = Block(listOf()), body = Block(listOf()))
+            ButtonComposableCall(action = Block(listOf()), body = Block(listOf( Icon() )))
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
     }
 
 }
