@@ -112,4 +112,37 @@ class SWIFTLexerTest {
         val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "DOT", "FRAME","LPAREN","WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseStruct(){
+        val code = """struct MainView: View {
+    var body: some View {
+        Text("Ciao")
+    }
+} """
+
+        val result = listOf("STRUCT", "ID", "COLON", "ID",
+            "LCURL", "NL","VAR", "ID", "COLON", "SOME", "ID", "LCURL",
+            "NL", "TEXT_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN",
+            "NL", "RCURL", "NL", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+
+    }
+    @Test
+    fun parseStruct2(){
+        val code = "struct MainView: View {\n" +
+                "var name: String\n" +
+                "    var body: some View {\n" +
+                "        Text(\"Ciao\")\n" +
+                "        Text(\"Ciao\")\n" +
+                "    }\n" +
+                "}"
+
+        val result = listOf("STRUCT", "ID", "COLON", "ID",
+            "LCURL", "NL","VAR", "ID", "COLON", "STRING","NL", "VAR", "ID", "COLON","SOME", "ID", "LCURL",
+            "NL", "TEXT_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN",
+            "NL", "TEXT_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "NL", "RCURL", "NL", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+
+    }
 }

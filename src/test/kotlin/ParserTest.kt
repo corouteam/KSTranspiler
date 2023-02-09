@@ -235,7 +235,8 @@ class KotlinParserTest {
                       T[ciao]
                     T["]
               T[)]
-          T[
+          Semis
+            T[
 ]
           T[}]
   T[<EOF>]
@@ -280,12 +281,41 @@ class KotlinParserTest {
               T[return]
               IntLiteral
                 T[3]
-          T[
+          Semis
+            T[
 ]
           T[}]
   T[<EOF>]
 """
         val actual = toParseTree(parseResource("function_declaration_return")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseFunctionCall(){
+        var expected = """
+KotlinScript
+  Line
+    ExpressionStatement
+      FunctionCall
+        T[test]
+        FunctionCallParameters
+          T[(]
+          StringLiteralExpression
+            StringLiteral
+              LineStringLiteral
+                T["]
+                LineStringContent
+                  T[a]
+                T["]
+          T[,]
+          IntLiteral
+            T[42]
+          T[)]
+    T[<EOF>]
+
+        """.trimIndent()
+        val actual = toParseTree(parseResourceScript("function_call")).multiLineString()
         assertEquals(expected, actual)
     }
 

@@ -31,6 +31,7 @@ class FunctionParameter(val id: String,val  type: Type)
 // Types
 //
 
+data class FunctionCallType(override var position: Position?): Type()
 data class RangeType(val type: Type, override var position: Position? = null): Type()
 data class IntType(override var position: Position? = null) : Type()
 
@@ -48,6 +49,7 @@ data class PainterResourceType(override var position: Position? = null) : Type()
 data class ResourceType(override var position: Position? = null) : Type()
 data class DrawableType(override var position: Position? = null) : Type()
 data class FrameType(override var position: Position? = null): Type()
+data class UserType(var name: String): Type()
 
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
 
@@ -110,9 +112,8 @@ data class Block(val body: List<Statement>): ControlStructureBody()
 // Statements
 //
 
-data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression, var mutable: Boolean, override  var position: Position? = null) :
-Declaration()
-
+data class PropertyDeclaration(val varName: String, val type: Type, val value: Expression?, var getter: Block? = null, var mutable: Boolean, override  var position: Position? = null) :
+    Declaration()
 data class Assignment(val varName: String, val value: Expression, override var position: Position? = null) : Statement()
 
 data class Print(val value: Expression, override var position: Position? = null) : Statement()
@@ -122,8 +123,12 @@ data class RangeExpression(val leftExpression: Expression,
                            override val type: Type
 ): Expression(type)
 
-sealed class FunctionCall(type: Type = VoidType()): Expression(type = type)
-sealed class ComposableCall(type: ComposableType): FunctionCall(type = type)
+data class FunctionCall(val name: String,
+                        val parameters: List<Expression>,
+                        override var position: Position? = null
+): Expression(FunctionCallType(position))
+
+sealed class ComposableCall(type: ComposableType): Expression(type = type)
 
 class TextComposableCall(
     val value: Expression,
