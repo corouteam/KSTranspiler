@@ -61,4 +61,17 @@ class ValidationTest {
         assert(parseResult.errors.isNotEmpty())
         assertEquals("A variable named 'a' has been already declared", parseResult.errors.first().message)
     }
+
+    @Test
+    fun `var type mismatch is reported`() {
+        var code = """
+            val a: Int = "a"
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Type mismatch (String assigned to a variable of type Int).
+        """.trimIndent(), parseResult.errors.first().message)
+    }
 }
