@@ -150,13 +150,13 @@ textComposeParameter:
     | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter;
 
 columnComposeParameter:
-    VERTICAL_ARRANGEMENT_PARAM ASSIGN expression #verticalArrangementParameter |
-    HORIZONTAL_ALIGNMENT_PARAM ASSIGN expression #horizontalAlignmentParameter |
+    VERTICAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #verticalArrangementParameter |
+    HORIZONTAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #horizontalAlignmentParameter |
     modifierParameter #modifierColumnParameter;
 
 rowComposeParameter:
-    VERTICAL_ALIGNMENT_PARAM ASSIGN expression #verticalAlignmentParameter |
-    HORIZONTAL_ARRANGEMENT_PARAM ASSIGN expression #horizontalArrangementParameter |
+    VERTICAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #verticalAlignmentParameter |
+    HORIZONTAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #horizontalArrangementParameter |
     modifierParameter #modifierRawParameter;
 
 arrangement:
@@ -182,7 +182,7 @@ fontWeight:
     | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 
 modifierParameter:
-    MODIFIER_PARAM ASSIGN modifier;
+    MODIFIER_PARAM NL* ASSIGN NL* modifier;
 
 modifier:
     MODIFIER (NL* DOT NL* modifierSuffix)*;
