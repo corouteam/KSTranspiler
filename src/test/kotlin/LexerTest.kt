@@ -23,7 +23,7 @@ class LexerTest {
        return lexer
    }
 
-        
+
 
     private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer(
         ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin"))
