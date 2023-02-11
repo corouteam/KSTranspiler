@@ -67,6 +67,17 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // check if variable type and assignation match
+    this.specificProcess(PropertyDeclaration::class.java) {
+        if (it.value == null) return@specificProcess
+
+        if (it.type != it.value.type) {
+            errors.add(Error("""
+                Type mismatch (${it.value.type.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+            """.trimIndent(), this.position))
+        }
+    }
+
     return errors
 }
 
