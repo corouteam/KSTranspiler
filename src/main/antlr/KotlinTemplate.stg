@@ -1,0 +1,7 @@
+decl(type, name, value) ::= "<type> <name><init(value)>"
+init(v) ::= "<if(v)> = <v><endif>"
+hello(name) ::= "Hello, <name>"
+
+propertyDeclaration(name, type, value, mutable) ::= "<propertyPrefix(mutable)> <name>:<type> = <value>"
+
+propertyPrefix(mutable) ::= "<if(mutable)>var<else>val<endif>"

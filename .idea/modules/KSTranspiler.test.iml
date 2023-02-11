@@ -71,46 +71,9 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <output-test url="file://$MODULE_DIR$/../../build/classes/kotlin/test" />
-    <exclude-output />
-    <content url="file://$MODULE_DIR$/../../build/generated-src/antlr/test" />
     <content url="file://$MODULE_DIR$/../../src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/kotlin" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
     </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="KSTranspiler.main" />
-    <orderEntry type="library" name="Gradle: com.strumenta.kolasu:kolasu-core:1.5.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.antlr:antlr4:4.11.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.antlr:antlr4-runtime:4.11.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.7.20" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-junit:1.7.20" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.7.20" level="project" />
-    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-all:5.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.antlr:ST4:4.3.4" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.5" level="project" />
-    <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.9.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.antlr:antlr-runtime:3.5.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.abego.treelayout:org.abego.treelayout.core:1.0.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.glassfish:javax.json:1.1.4" level="project" />
-    <orderEntry type="library" name="Gradle: com.ibm.icu:icu4j:71.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test:1.7.20" level="project" />
-    <orderEntry type="library" name="Gradle: junit:junit:4.13.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.junit.platform:junit-platform-commons:1.9.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.opentest4j:opentest4j:1.2.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apiguardian:apiguardian-api:1.1.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.9.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.github.salomonbrys.kotson:kotson:2.5.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.github.doyaaaaaken:kotlin-csv-jvm:1.4.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.redundent:kotlin-xml-builder:1.7.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.9.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.commons:commons-lang3:3.5" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21" level="project" />
   </component>
 </module>
