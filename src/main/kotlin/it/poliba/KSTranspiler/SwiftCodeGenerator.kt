@@ -102,12 +102,30 @@ fun Expression.generateCode() : String = when (this) {
     is FontWeightLit -> this.generateCode()
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
     is TextComposableCall -> this.generateCode()
+    is DividerComposableCall -> this.generateCode()
+    is SpacerComposableCall -> this.generateCode()
     is ColumnComposableCall -> this.generateCode()
     is HorizontalAlignment -> this.generateCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
+fun DividerComposableCall.generateCode(): String{
+    var suffix = frame?.generateCode() ?: ""
+    return "Divider()$suffix"
+}
+
+fun SpacerComposableCall.generateCode(): String{
+    val suffix = size?.generateCode() ?: ""
+
+    return "Spacer()$suffix"
+}
+
+fun Frame.generateCode(): String{
+    return "\n\t.frame(width: ${width.generateCode()}, height: ${height.generateCode()})"
+}
+
 
 fun Type.generateCode() : String = when (this) {
     is IntType -> "Int"

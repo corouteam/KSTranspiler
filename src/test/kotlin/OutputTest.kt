@@ -5,7 +5,7 @@ import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class OutputTest {
+class  OutputTest {
 
     @Test
     fun convertVarPropertyDefinition(){
@@ -188,7 +188,7 @@ class OutputTest {
     }
 
     @Test
-    fun convertColumn(){
+    fun convertColumn() {
         val code = """
             Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.Start)
             """.trimIndent()
@@ -199,6 +199,13 @@ class OutputTest {
              
          }
         """.trimIndent()
+    }
+    @Test
+     fun mapDivider(){
+        val code = """
+            Divider()
+            """.trimIndent()
+        val result = "Divider()"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
@@ -220,13 +227,21 @@ class OutputTest {
         		}
         	}
     """.trimIndent()
+    }
 
+    @Test
+    fun mapDividerWithParams(){
+        val code = """
+            Divider().size(width: 54.0, height: 54.0)
+            """.trimIndent()
+        val result = "Divider()\n\t.frame(width: 54.0, height: 54.0)"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
+
     @Test
-    fun convertColumnScrollableWithText(){
+    fun convertColumnScrollableWithText() {
         val code = """
             Column(
             modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -244,7 +259,14 @@ class OutputTest {
         		}
         	}
     """.trimIndent()
+    }
 
+ @Test
+    fun mapSpacerWithParams(){
+        val code = """
+            Divider().size(width: 54.0, height: 54.0)
+            """.trimIndent()
+        val result = "Divider()\n\t.frame(width: 54.0, height: 54.0)"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }

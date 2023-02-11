@@ -11,6 +11,9 @@ import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.EndAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import it.poliba.KSTranspiler.KotlinParser.SizeSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
+
 import it.poliba.KSTranspiler.KotlinParser.HorizontalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.HorizontalScrollSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.ModifierColumnParameterContext
@@ -26,10 +29,37 @@ fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
+    is KotlinParser.DividerComposableContext -> this.toAst()
+    is KotlinParser.SpacerComposableContext -> this.toAst()
     is KotlinParser.ColumnComposableContext -> this.toAst()
     is KotlinParser.RowComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
+fun KotlinParser.DividerComposableContext.toAst(): Expression {
+    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Frame } as Frame?
+
+    return DividerComposableCall(frame)
+}
+
+fun KotlinParser.SpacerComposableContext.toAst(): Expression {
+    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Frame } as Frame?
+    return SpacerComposableCall(frame)
+}
+
+fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(): Any = when(this){
+    is SizeSuffixContext -> toAst()
+    else -> throw IllegalArgumentException("Parametro non riconosciuto")
+}
+
+fun KotlinParser.SizeSuffixContext.toAst(): Frame {
+    return Frame(width = this.width.toAst(), height = this.heigth.toAst())
+}
+
+
+
 
 fun KotlinParser.ColumnComposableContext.toAst(): Expression{
     val verticalArrangement = columnComposeParameter().firstOrNull { it is VerticalArrangementParameterContext } as? VerticalArrangementParameterContext

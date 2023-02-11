@@ -1,10 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
-import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacade
-import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacadeScript
-import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -291,6 +288,29 @@ class MappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun convertComposableDivider(){
+        val code = "Divider()"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val expectedAst = AstScript(listOf(
+            DividerComposableCall(null)
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+
+    @Test
+    fun testSpacerWithSizeComposable() {
+        val code = "Spacer().size(width: 54.0, height: 54.0)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(
+            listOf(
+                SpacerComposableCall(Frame(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
+            )
+        )
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
     @Test
     fun mapColumn(){
         val code = """

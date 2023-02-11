@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import it.poliba.KSTranspiler.tools.ErrorHandler
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 import java.util.*
+import kotlin.jvm.internal.Intrinsics.Kotlin
 
 class LexerTest {
     private fun lexerForCode(code: String): KotlinLexer {
@@ -19,8 +20,10 @@ class LexerTest {
             throw errors.first
         }
 
-        return lexer
-    }
+       return lexer
+   }
+
+        
 
     private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer(
         ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin"))
@@ -409,5 +412,31 @@ class LexerTest {
         )
         assertEquals(result, tokens(lexerForCode(code)))
 
+    }
+
+
+
+
+    @Test
+    fun parseSpacer(){
+        val code = "Spacer()"
+        val result = listOf("SPACER_COMPOSE", "LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseDivider(){
+        val code = "Divider()"
+        val result = listOf("DIVIDER_COMPOSE", "LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+
+
+    @Test
+    fun parseSpacerWithSize(){
+        val code = "Spacer().size(width: 54.0, height: 54.0)"
+        val result = listOf("SPACER_COMPOSE","LPAREN","RPAREN", "DOT", "SIZE", "LPAREN", "WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
     }
 }

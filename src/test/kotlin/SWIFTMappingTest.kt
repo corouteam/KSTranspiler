@@ -1,10 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
-import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacade
-import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacadeScript
-import it.poliba.KSTranspiler.facade.SwiftParserFacade
-import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
+import it.poliba.KSTranspiler.facade.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -72,6 +69,29 @@ class SWIFTMappingTest {
 
     }
 
+    @Test
+    fun mapSpacerComposableRef(){
+        val code = "Spacer()"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val expectedAst = AstScript(listOf(
+            SpacerComposableCall(null)
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        //val expectedAst = KotlinScript
+    }
+
+    @Test
+    fun testDividerSwiftUI() {
+        val code = "Divider()"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(
+            listOf(
+                DividerComposableCall(null)
+            )
+        )
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
 
     @Test
     fun mapVStack(){
@@ -122,9 +142,18 @@ class SWIFTMappingTest {
         val column = ast?.statement?.first() as? RowComposableCall
 
         assertEquals(true, column?.scrollable)
-
     }
 
+    @Test
+    fun testSpacerWithFrameSwiftUI(){
+        val code = "Spacer().frame(width: 54.0, height: 54.0)"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            SpacerComposableCall(Frame(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+
+    }
     @Test
     fun parseHStack(){
         val code = """

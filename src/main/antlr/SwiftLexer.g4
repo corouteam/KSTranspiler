@@ -74,6 +74,12 @@ FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';
 
+SPACER_WIDGET: 'Spacer';
+DIVIDER_WIDGET: 'Divider';
+
+FRAME: 'frame';
+WIDTH: 'width';
+HEIGHT: 'height';
 VSTACK_WIDGET: 'VStack';
 HSTACK_WIDGET: 'HStack';
 ALIGNMENT_PARAM: 'alignment';

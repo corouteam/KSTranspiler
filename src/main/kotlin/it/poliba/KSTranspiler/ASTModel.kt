@@ -41,6 +41,8 @@ data class StringType(override var position: Position? = null) : Type()
 data class BoolType(override var position: Position? = null) : Type()
 data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
+
+
 data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String): Type()
 data class DpType(override var position: Position? = null): Type()
@@ -50,6 +52,8 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class TextComposableType: ComposableType()
+class DividerComposableType: ComposableType()
+class SpacerComposableType: ComposableType()
 class ColumnComposableType: ComposableType()
 
 class HorizontalAlignmentType: Type()
@@ -135,6 +139,12 @@ sealed class FontWeightLit: Expression(FontWeightType())
 
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
+
+class DividerComposableCall(val frame: Frame?): ComposableCall(DividerComposableType())
+
+class SpacerComposableCall(val size: Frame?): ComposableCall(SpacerComposableType())
+
+class Frame(val width: Expression, val height: Expression)
 
 data class ColumnComposableCall(
     val spacing: Expression?,

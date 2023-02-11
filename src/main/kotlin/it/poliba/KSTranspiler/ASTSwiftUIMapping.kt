@@ -5,6 +5,7 @@ import it.poliba.KSTranspiler.SwiftParser.BoldSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.BottomAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.CenterVerticalAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.LeadingAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.SpacingParameterContext
 import it.poliba.KSTranspiler.SwiftParser.TopAlignmentContext
@@ -16,6 +17,8 @@ fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
 }
 fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
+    is SwiftParser.DividerWidgetContext -> this.toAst()
+    is SwiftParser.SpacerWidgetContext -> this.toAst()
     is SwiftParser.VStackWidgetContext -> this.toAst()
     is SwiftParser.HStackWidgetContext -> this.toAst()
     is SwiftParser.ScrollViewWidgetContext -> this.toAst()
@@ -31,15 +34,40 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
     return TextComposableCall(expressionAst, color, fontWeight)
 }
 
+fun SwiftParser.DividerWidgetContext.toAst(): Expression {
+    val params = swiftUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Frame } as Frame?
+
+    return DividerComposableCall(frame)
+}
+
+fun SwiftParser.SpacerWidgetContext.toAst(): Expression {
+    val params = swiftUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = params.firstOrNull { it is Frame } as Frame?
+
+    return SpacerComposableCall(frame)
+}
+
 fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
     is ForegroundColorSuffixContext -> color().toAst()
     is BoldSuffixContext -> FontWeightBold()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
+fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(): Any = when(this){
+    is FrameSuffixContext -> toAst()
+    else -> throw IllegalArgumentException("Parametro non riconosciuto")
+}
+
 fun SwiftParser.ColorContext.toAst(): Expression = when(this){
     is SwiftParser.BlueColorContext ->  ColorBlue()
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
+}
+
+fun SwiftParser.FrameSuffixContext.toAst(): Frame {
+
+    return Frame(width = this.width.toAst(), height = this.heigth.toAst())
+
 }
 
 

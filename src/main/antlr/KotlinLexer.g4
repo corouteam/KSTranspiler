@@ -83,6 +83,14 @@ FONT_WEIGHT_BOLD: 'Bold';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR_PARAM: 'color';
 
+SPACER_COMPOSE: 'Spacer';
+DIVIDER_COMPOSE: 'Divider';
+
+
+SIZE: 'size';
+WIDTH: 'width';
+HEIGHT: 'height';
+
 VERTICAL_ARRANGEMENT_PARAM: 'verticalArrangement';
 HORIZONTAL_ARRANGEMENT_PARAM: 'horizontalArrangement';
 HORIZONTAL_ALIGNMENT_PARAM: 'horizontalAlignment';

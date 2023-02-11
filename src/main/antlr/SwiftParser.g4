@@ -151,8 +151,10 @@ type : INT     # integer |
 
 
 widgetCall:
-    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget |
-    VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
+    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
+    | DIVIDER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #dividerWidget
+    | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
+    |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
     HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
     SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget ;
 
@@ -175,6 +177,9 @@ verticalAlignment:
     VERTICAL_ALIGNMENT DOT BOTTOM #bottomAlignment |
     VERTICAL_ALIGNMENT DOT CENTER #centerVerticalAlignment;
 
+
+swiftUIGenericWidgetSuffix:
+    FRAME LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #frameSuffix;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
