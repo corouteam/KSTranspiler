@@ -108,12 +108,12 @@ fun Expression.generateCode() : String = when (this) {
 }
 
 fun DividerComposableCall.generateCode(): String{
-    var suffix = frame?.generateCode()
+    var suffix = frame?.generateCode() ?: ""
     return "Divider()$suffix"
 }
 
 fun SpacerComposableCall.generateCode(): String{
-    val suffix = size?.generateCode()
+    val suffix = size?.generateCode() ?: ""
 
     return "Spacer()$suffix"
 }
