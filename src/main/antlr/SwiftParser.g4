@@ -57,10 +57,13 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
+           | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | RETURN returnExpression=expression                            # returnExpression
            | widgetCall #widgetCallExpression
+           | horizontalAlignment #horizontalAlignmentExpression
+           | verticalAlignment #verticalAlignmentExpression
            | color                       # colorLiteral;
 
 if
@@ -142,18 +145,38 @@ type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
        STRING  # string |
-      ID      #userType;
+       ID      #userType |
+       CG_FLOAT #cgFloat;
 
 
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
     | DIVIDER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #dividerWidget
-    | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget;
+    | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
+    |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
+    HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
+    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget ;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
-    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
+    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix
+    ;
+
+swiftUIColumnParam:
+    ALIGNMENT_PARAM COLON expression # alignmentParameter |
+    SPACING_PARAM COLON expression # spacingParameter;
+
+horizontalAlignment:
+    HORIZONTAL_ALIGNMENT DOT LEADING #leadingAlignment |
+    HORIZONTAL_ALIGNMENT DOT TRAILING #trailingAlignment |
+    HORIZONTAL_ALIGNMENT DOT CENTER #centerHorizontalAlignment;
+
+verticalAlignment:
+    VERTICAL_ALIGNMENT DOT TOP #topAlignment |
+    VERTICAL_ALIGNMENT DOT BOTTOM #bottomAlignment |
+    VERTICAL_ALIGNMENT DOT CENTER #centerVerticalAlignment;
+
 
 swiftUIGenericWidgetSuffix:
     FRAME LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #frameSuffix;

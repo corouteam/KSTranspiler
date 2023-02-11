@@ -110,14 +110,37 @@ class SWIFTLexerTest {
     }
 
 
+    
+    @Test
+    fun parseVStack(){
+        val code = "VStack(alignment: VerticalAlignment.leading, spacing: 10)"
+        val result = listOf(
+            "VSTACK_WIDGET",
+            "LPAREN",
+            "ALIGNMENT_PARAM",
+            "COLON",
+            "VERTICAL_ALIGNMENT",
+            "DOT",
+            "LEADING",
+            "COMMA",
+            "SPACING_PARAM",
+            "COLON",
+            "INT_LIT",
+            "RPAREN",
+            "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+    
     @Test
     fun parseSpacer(){
         val code = "Spacer()"
         val result = listOf("SPACER_WIDGET", "LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
-    }
+      }
 
     @Test
+
     fun parseDivider(){
         val code = "Divider()"
         val result = listOf("DIVIDER_WIDGET", "LPAREN", "RPAREN", "EOF")
@@ -128,6 +151,31 @@ class SWIFTLexerTest {
     fun parseSpacerWithFrame(){
         val code = "Spacer().frame(width: 54.0, height: 54.0)"
         val result = listOf("SPACER_WIDGET","LPAREN","RPAREN", "DOT", "FRAME", "LPAREN", "WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+    
+    @Test
+    fun parseCGFloat(){
+        val code = "let margin = CGFloat(8)"
+        val result = listOf(
+            "LET",
+            "ID",
+            "ASSIGN",
+            "CG_FLOAT",
+            "LPAREN",
+            "INT_LIT",
+            "RPAREN",
+            "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+
+    }
+
+
+    @Test
+    fun parseScrollView(){
+        val code = "ScrollView(.horizontal){}"
+        val result = listOf("SCROLL_VIEW", "LPAREN", "DOT", "ID", "RPAREN", "LCURL", "RCURL", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

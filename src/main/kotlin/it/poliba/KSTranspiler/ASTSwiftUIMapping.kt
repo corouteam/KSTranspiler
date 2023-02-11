@@ -1,8 +1,16 @@
 package it.poliba.KSTranspiler
 
+import it.poliba.KSTranspiler.KotlinParser.CenterVerticalltAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.BoldSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.BottomAlignmentContext
+import it.poliba.KSTranspiler.SwiftParser.CenterVerticalAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.LeadingAlignmentContext
+import it.poliba.KSTranspiler.SwiftParser.SpacingParameterContext
+import it.poliba.KSTranspiler.SwiftParser.TopAlignmentContext
+import it.poliba.KSTranspiler.SwiftParser.TrailingAlignmentContext
+import java.lang.Exception
 
 fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
     return this.widgetCall().toAst()
@@ -11,6 +19,9 @@ fun SwiftParser.WidgetCallContext.toAst(): Expression = when(this){
     is SwiftParser.TextWidgetContext -> this.toAst()
     is SwiftParser.DividerWidgetContext -> this.toAst()
     is SwiftParser.SpacerWidgetContext -> this.toAst()
+    is SwiftParser.VStackWidgetContext -> this.toAst()
+    is SwiftParser.HStackWidgetContext -> this.toAst()
+    is SwiftParser.ScrollViewWidgetContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -67,4 +78,72 @@ fun SwiftParser.StructDeclarationContext.toWidgetAST(): WidgetDeclaration{
     val functionParameters = properties.map { FunctionParameter(it.varName, it.type) }
     val body = bodyInstruction.first() { it is PropertyDeclaration  && it.varName == "body"} as PropertyDeclaration
     return WidgetDeclaration(id, functionParameters,body.getter!!)
+}
+
+
+fun SwiftParser.VStackWidgetContext.toAst(): Expression{
+    val alignment = swiftUIColumnParam().firstOrNull { it is SwiftParser.AlignmentParameterContext } as? SwiftParser.AlignmentParameterContext
+    val alignmentExpression = alignment?.expression()?.toAst()
+
+    val spacing = swiftUIColumnParam().firstOrNull { it is SwiftParser.SpacingParameterContext } as? SpacingParameterContext
+    var spacingExpression = spacing?.expression()?.toAst()
+
+    if (spacingExpression is IntLit){
+        spacingExpression = DpLit(spacingExpression.value)
+    }
+
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+
+    return ColumnComposableCall(spacing = spacingExpression, horizontalAlignment = alignmentExpression, false, block )
+}
+
+fun SwiftParser.HStackWidgetContext.toAst(): Expression{
+    val alignment = swiftUIColumnParam().firstOrNull { it is SwiftParser.AlignmentParameterContext } as? SwiftParser.AlignmentParameterContext
+    val alignmentExpression = alignment?.expression()?.toAst()
+
+    val spacing = swiftUIColumnParam().firstOrNull { it is SwiftParser.SpacingParameterContext } as? SpacingParameterContext
+    var spacingExpression = spacing?.expression()?.toAst()
+
+    if (spacingExpression is IntLit){
+        spacingExpression = DpLit(spacingExpression.value)
+    }
+
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+
+    return RowComposableCall(spacing = spacingExpression, verticalAlignment = alignmentExpression, false, block )
+}
+
+fun SwiftParser.HorizontalAlignmentExpressionContext.toAst(): Expression{
+    when(this.horizontalAlignment()){
+        is LeadingAlignmentContext -> return StartAlignment
+        is TrailingAlignmentContext -> return EndAlignment
+        is SwiftParser.CenterHorizontalAlignmentContext -> return CenterHorizAlignment
+        else -> throw java.lang.IllegalArgumentException("HorizontalAlignmentExpressionContext not recognized")
+    }
+}
+
+fun SwiftParser.VerticalAlignmentExpressionContext.toAst(): Expression{
+    when(this.verticalAlignment()){
+        is TopAlignmentContext -> return TopAlignment
+        is BottomAlignmentContext -> return BottomAlignment
+        is CenterVerticalAlignmentContext-> return CenterVerticallyAlignment
+        else -> throw java.lang.IllegalArgumentException("VerticalAlignmentExpressionContext not recognized")
+    }
+}
+
+
+fun SwiftParser.ScrollViewWidgetContext.toAst(): Expression{
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+    if(this.ID() != null){
+        if(this.ID().text == "vertical"){
+            return ColumnComposableCall(null, null, true, block )
+        }else if(this.ID().text == "horizontal"){
+            return RowComposableCall(null, null, true, block )
+
+        }else{
+            throw java.lang.IllegalArgumentException("Scroll parameter not recognized")
+        }
+    }else{
+        return ColumnComposableCall(null, null, true, block)
+    }
 }

@@ -50,11 +50,12 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
            | LPAREN expression RPAREN                                      # parenExpression
-           | ID                                                            # varReference
+           | ID                                                    # varReference
            | MINUS expression                                              # minusExpression
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
+           | INT_LIT DOT DP_SUFFIX                                             # dpLiteral
            | name=ID NL* functionCallParameters NL*                        # functionCall
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
@@ -63,7 +64,12 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | RETURN returnExpression=expression                            # returnExpression
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral
-           | fontWeight                                                    # fontWeightLiteral;
+           | fontWeight                                                    # fontWeightLiteral
+           | horizontalAlignment                                           #horizhontalAlignmentExpression
+           | verticalAlignment                                             #verticalAlignmentExpression
+           | arrangement                                                   #arrangementExpression;
+
+
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
       (
@@ -137,7 +143,9 @@ typeArguments
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
     | DIVIDER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
-    | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable;
+    | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable
+    |COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable 
+    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable ;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
@@ -145,11 +153,44 @@ textComposeParameter:
 
 composableUIGenericWidgetSuffix:
     SIZE LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #sizeSuffix;
+columnComposeParameter:
+    VERTICAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #verticalArrangementParameter |
+    HORIZONTAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #horizontalAlignmentParameter |
+    modifierParameter #modifierColumnParameter;
+
+rowComposeParameter:
+    VERTICAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #verticalAlignmentParameter |
+    HORIZONTAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #horizontalArrangementParameter |
+    modifierParameter #modifierRawParameter;
+
+arrangement:
+   ARRANGEMENT DOT SPACED_BY LPAREN expression RPAREN;
+
+horizontalAlignment:
+    ALIGNMENT DOT START #startAlignment |
+    ALIGNMENT DOT END #endAlignment |
+    ALIGNMENT DOT CENTER_HORIZONTALLY #centerHorizontallyAlignment;
+
+verticalAlignment:
+    ALIGNMENT DOT TOP #topAlignment |
+    ALIGNMENT DOT BOTTOM #bottomAlignment |
+    ALIGNMENT DOT CENTER_VERTICALLY #centerVerticalltAlignment;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor
-     | COLOR DOT COLOR_BLUE #blueColor;
+     | COLOR DOT COLOR_BLUE #blueColor
+     | ID #idColor ;
 
 fontWeight:
     FONT_WEIGHT LPAREN INT_LIT RPAREN #customWeight
     | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
+modifierParameter:
+    MODIFIER_PARAM NL* ASSIGN NL* modifier;
+
+modifier:
+    MODIFIER (NL* DOT NL* modifierSuffix)*;
+
+modifierSuffix:
+   VERTICAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #verticalScrollSuffix|
+   HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix;

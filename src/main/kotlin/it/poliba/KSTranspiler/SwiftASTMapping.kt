@@ -1,5 +1,7 @@
 package it.poliba.KSTranspiler
 
+import it.poliba.KSTranspiler.SwiftParser.BlockContext
+
 fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
     return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
 }
@@ -94,6 +96,7 @@ fun SwiftParser.PropertyDeclarationContext.toAst(considerPosition: Boolean = fal
 fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is SwiftParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     is SwiftParser.BoolLiteralContext -> BoolLit(text, toPosition(considerPosition))
+    is SwiftParser.CgFloatLiteralContext -> DpLit(INT_LIT().text, toPosition(considerPosition))
     is SwiftParser.StringLiteralExpressionContext -> toAst(considerPosition)
     is SwiftParser.VarReferenceContext -> VarReference(text, type = StringType(),  toPosition(considerPosition))
     is SwiftParser.BinaryOperationContext -> toAst(considerPosition)
@@ -101,6 +104,8 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     is SwiftParser.WidgetCallExpressionContext -> toAst()
+    is SwiftParser.HorizontalAlignmentExpressionContext -> toAst()
+    is SwiftParser.VerticalAlignmentExpressionContext -> toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -112,12 +117,16 @@ fun SwiftParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression
 
 fun SwiftParser.ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
-        return Block(this.block().statement().map { it.toAst(considerPosition) })
+        return this.block().toAst(considerPosition)
     }else if(this.statement() != null){
         return this.statement().toAst()
     }else{
         return Block(listOf())
     }
+}
+
+fun BlockContext.toAst(considerPosition: Boolean = false): Block{
+    return Block(this.statement().map { it.toAst(considerPosition) })
 }
 
 fun SwiftParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression {
@@ -136,6 +145,7 @@ fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = wh
     is SwiftParser.DoubleContext -> DoubleType(toPosition(considerPosition))
     is SwiftParser.UserTypeContext -> UserType(ID().text)
     is SwiftParser.StringContext -> StringType()
+    is SwiftParser.CgFloatContext -> DpType()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

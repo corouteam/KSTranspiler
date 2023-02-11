@@ -188,7 +188,20 @@ class  OutputTest {
     }
 
     @Test
-    fun mapDivider(){
+   
+
+    fun convertColumn(){
+        val code = """
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.Start)
+            """.trimIndent()
+        val result = """
+         VStack(
+         	alignment: HorizontalAlignment.start,
+         	spacing: CGFloat(10)){
+             
+         }
+        """.trimIndent()
+     fun mapDivider(){
         val code = """
             Divider()
             """.trimIndent()
@@ -198,7 +211,24 @@ class  OutputTest {
     }
 
     @Test
-    fun mapDividerWithParams(){
+    
+    fun convertColumnScrollable(){
+        val code = """
+            Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.Start)
+            """.trimIndent()
+        val result = """
+        	ScrollView(.vertical){
+        		VStack(
+        		alignment: HorizontalAlignment.start,
+        		spacing: CGFloat(10)){
+        			
+        		}
+        	}
+    """.trimIndent()
+  fun mapDividerWithParams(){
         val code = """
             Divider().size(width: 54.0, height: 54.0)
             """.trimIndent()
@@ -207,7 +237,28 @@ class  OutputTest {
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
-    @Test
+   
+
+    fun convertColumnScrollableWithText(){
+        val code = """
+            Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.Start){
+                Text("Ciao")
+            }
+            """.trimIndent()
+        val result = """
+        	ScrollView(.vertical){
+        		VStack(
+        		alignment: HorizontalAlignment.start,
+        		spacing: CGFloat(10)){
+        			Text("Ciao")
+        		}
+        	}
+    """.trimIndent()
+
+ @Test
     fun mapSpacerWithParams(){
         val code = """
             Divider().size(width: 54.0, height: 54.0)
