@@ -82,13 +82,16 @@ class SWIFTMappingTest {
     }
 
     @Test
-    fun testDividerSwiftUI(){
+    fun testDividerSwiftUI() {
         val code = "Divider()"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
-        val expectedAst = AstScript(listOf(
-            DividerComposableCall(null)
-        ))
+        val expectedAst = AstScript(
+            listOf(
+                DividerComposableCall(null)
+            )
+        )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
 
     @Test
     fun mapVStack(){
@@ -151,7 +154,7 @@ class SWIFTMappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
 
     }
-
+    @Test
     fun parseHStack(){
         val code = """
             HStack(

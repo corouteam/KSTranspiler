@@ -188,9 +188,7 @@ class  OutputTest {
     }
 
     @Test
-   
-
-    fun convertColumn(){
+    fun convertColumn() {
         val code = """
             Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.Start)
             """.trimIndent()
@@ -201,6 +199,8 @@ class  OutputTest {
              
          }
         """.trimIndent()
+    }
+    @Test
      fun mapDivider(){
         val code = """
             Divider()
@@ -211,7 +211,6 @@ class  OutputTest {
     }
 
     @Test
-    
     fun convertColumnScrollable(){
         val code = """
             Column(
@@ -228,7 +227,10 @@ class  OutputTest {
         		}
         	}
     """.trimIndent()
-  fun mapDividerWithParams(){
+    }
+
+    @Test
+    fun mapDividerWithParams(){
         val code = """
             Divider().size(width: 54.0, height: 54.0)
             """.trimIndent()
@@ -237,9 +239,9 @@ class  OutputTest {
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
-   
 
-    fun convertColumnScrollableWithText(){
+    @Test
+    fun convertColumnScrollableWithText() {
         val code = """
             Column(
             modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -257,6 +259,7 @@ class  OutputTest {
         		}
         	}
     """.trimIndent()
+    }
 
  @Test
     fun mapSpacerWithParams(){

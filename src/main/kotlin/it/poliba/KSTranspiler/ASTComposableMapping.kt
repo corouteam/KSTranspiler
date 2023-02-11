@@ -31,6 +31,8 @@ fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
     is KotlinParser.DividerComposableContext -> this.toAst()
     is KotlinParser.SpacerComposableContext -> this.toAst()
+    is KotlinParser.ColumnComposableContext -> this.toAst()
+    is KotlinParser.RowComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -54,10 +56,10 @@ fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(): Any = when(this
 
 fun KotlinParser.SizeSuffixContext.toAst(): Frame {
     return Frame(width = this.width.toAst(), height = this.heigth.toAst())
-    is KotlinParser.ColumnComposableContext -> this.toAst()
-    is KotlinParser.RowComposableContext -> this.toAst()
-    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
+
+
 
 fun KotlinParser.ColumnComposableContext.toAst(): Expression{
     val verticalArrangement = columnComposeParameter().firstOrNull { it is VerticalArrangementParameterContext } as? VerticalArrangementParameterContext
