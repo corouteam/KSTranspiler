@@ -43,12 +43,17 @@ data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String): Type()
-
+data class DpType(override var position: Position? = null): Type()
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
+
 
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class TextComposableType: ComposableType()
+class ColumnComposableType: ComposableType()
+
+class HorizontalAlignmentType: Type()
+class VerticalAlignmentType: Type()
 // END TEST
 //
 // Expressions
@@ -87,6 +92,7 @@ data class DoubleLit(val value: String, override var position: Position? = null)
 data class StringLit(val value: String, override var position: Position? = null) : Expression(StringType())
 data class BoolLit(val value: String, override var position: Position? = null) : Expression(BoolType())
 
+data class DpLit(val value: String,  override var position: Position? = null) : Expression(DpType())
 data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(
     IntType()
 )
@@ -129,6 +135,30 @@ sealed class FontWeightLit: Expression(FontWeightType())
 
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
+
+data class ColumnComposableCall(
+    val spacing: Expression?,
+    val horizontalAlignment: Expression?,
+    val scrollable: Boolean,
+    val body: ControlStructureBody
+): ComposableCall(ColumnComposableType())
+
+data class RowComposableCall(
+    val spacing: Expression?,
+    val verticalAlignment: Expression?,
+    val scrollable: Boolean,
+    val body: ControlStructureBody
+): ComposableCall(ColumnComposableType())
+
+sealed class HorizontalAlignment: Expression(HorizontalAlignmentType())
+sealed class VerticalAlignment: Expression(VerticalAlignmentType())
+
+object StartAlignment: HorizontalAlignment()
+object EndAlignment: HorizontalAlignment()
+object CenterHorizAlignment: HorizontalAlignment()
+object TopAlignment: VerticalAlignment()
+object BottomAlignment: VerticalAlignment()
+object CenterVerticallyAlignment: VerticalAlignment()
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()
 

@@ -14,11 +14,15 @@ INT                : 'Int';
 DOUBLE             : 'Double';
 BOOL               : 'Boolean';
 STRING             : 'String';
+DP                 : 'Dp';
+
 
 INT_LIT
     : DecDigitNoZero DecDigit*
     | DecDigit
      ;
+
+
 
 BOOL_LIT : 'true' | 'false';
 
@@ -67,6 +71,8 @@ COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 QUOTE_OPEN: '"' -> pushMode(LineString);
 
 TEXT_COMPOSE: 'Text';
+COLUMN_COMPOSE: 'Column';
+ROW_COMPOSE: 'Row';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';
@@ -77,6 +83,26 @@ FONT_WEIGHT_BOLD: 'Bold';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR_PARAM: 'color';
 
+VERTICAL_ARRANGEMENT_PARAM: 'verticalArrangement';
+HORIZONTAL_ARRANGEMENT_PARAM: 'horizontalArrangement';
+HORIZONTAL_ALIGNMENT_PARAM: 'horizontalAlignment';
+VERTICAL_ALIGNMENT_PARAM: 'verticalAlignment';
+
+ARRANGEMENT: 'Arrangement';
+ALIGNMENT: 'Alignment';
+TOP: 'Top';
+START: 'Start';
+BOTTOM: 'Bottom';
+CENTER_HORIZONTALLY: 'CenterHorizontally';
+CENTER_VERTICALLY: 'CenterVertically';
+END: 'End';
+SPACED_BY: 'spacedBy';
+DP_SUFFIX: 'dp';
+MODIFIER_PARAM: 'modifier';
+VERTICAL_SCROLL_SUFFIX: 'verticalScroll';
+HORIZONTAL_SCROLL_SUFFIX: 'horizontalScroll';
+REMEMBER_SCROLL: 'rememberScrollState';
+MODIFIER: 'Modifier';
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

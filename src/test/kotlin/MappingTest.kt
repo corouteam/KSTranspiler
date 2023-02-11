@@ -291,4 +291,100 @@ class MappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun mapColumn(){
+        val code = """
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.Start
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ColumnComposableCall(
+                spacing = DpLit("8"),
+                horizontalAlignment = StartAlignment,
+                scrollable = false,
+                body = ControlStructureBody()
+            )
+        ))
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(StartAlignment, alignment)
+
+    }
+
+    @Test
+    fun mapColumnWEndAlignment(){
+        val code = """
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ColumnComposableCall(
+                spacing = DpLit("8"),
+                horizontalAlignment = EndAlignment,
+                scrollable = false,
+                body = ControlStructureBody()
+
+            )
+        ))
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(EndAlignment, alignment)
+
+    }
+
+    @Test
+    fun mapColumnScroll(){
+        val code = """
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expected = ColumnComposableCall(
+            spacing = DpLit("8"),
+            horizontalAlignment = EndAlignment,
+            scrollable = true,
+            body = ControlStructureBody()
+        )
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(EndAlignment, alignment)
+        assertEquals(expected.scrollable, column?.scrollable)
+
+    }
+
+    @Test
+    fun mapRowScroll(){
+        val code = """
+            Row(
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.Top
+            )
+        """.trimIndent()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val column = ast?.statement?.first() as? RowComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.verticalAlignment as? VerticalAlignment
+        assertEquals(DpLit("8"), spacing)
+        assertEquals(TopAlignment, alignment)
+        assertEquals(true, column?.scrollable)
+
+    }
+
 }

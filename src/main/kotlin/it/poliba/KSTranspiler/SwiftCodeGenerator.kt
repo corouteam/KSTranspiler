@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
+import java.util.StringJoiner
 
 val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
 fun AstFile.generateCode(): String{
@@ -89,6 +90,7 @@ fun PropertyDeclaration.generateCode(): String{
 fun Expression.generateCode() : String = when (this) {
     is IntLit -> this.value
     is DoubleLit -> this.value
+    is DpLit -> "CGFloat(${this.value})"
     is VarReference -> this.varName
     is BinaryExpression -> this.generateCode()
     is StringLit -> "\"${this.value}\""
@@ -100,6 +102,8 @@ fun Expression.generateCode() : String = when (this) {
     is FontWeightLit -> this.generateCode()
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
     is TextComposableCall -> this.generateCode()
+    is ColumnComposableCall -> this.generateCode()
+    is HorizontalAlignment -> this.generateCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -149,4 +153,39 @@ fun WidgetDeclaration.generateCode(): String {
     val convertedProperties = this.parameters.joinToString("\n") { "var ${it.id}: ${it.type.generateCode()}" }
     val body = "var body: some View {\n ${body.generateCode()}\n}"
     return "struct $id: View{\n$convertedProperties\n${body}\n}"
+}
+
+fun ColumnComposableCall.generateCode(): String{
+    val bodyString = body.generateCode()
+    var param1: String? = null
+    horizontalAlignment?.generateCode()?.let {
+        param1 ="\n\talignment: $it"
+    }
+    var param2: String? = null
+    spacing?.generateCode()?.let {
+        param2 = "\n\tspacing: $it"
+    }
+    val parameters = listOf(param1, param2).filterNotNull().joinToString(",")
+    val stack = """
+VStack($parameters){
+    $bodyString
+}
+""".trimIndent()
+    if(scrollable){
+        return "ScrollView(.vertical){\n\tVStack($parameters){\n" +
+                "\t\t$bodyString\n" +
+                "\t}\n}"
+    }else{
+        return """VStack($parameters){
+    $bodyString
+}"""
+    }
+}
+
+fun HorizontalAlignment.generateCode(): String{
+    return when(this){
+        StartAlignment -> "HorizontalAlignment.start"
+        EndAlignment -> "HorizontalAlignment.end"
+        CenterHorizAlignment -> "HorizontalAlignment.center"
+    }
 }

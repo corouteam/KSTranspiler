@@ -72,4 +72,77 @@ class SWIFTMappingTest {
 
     }
 
+
+    @Test
+    fun mapVStack(){
+        val code = "VStack(alignment: HorizontalAlignment.leading, spacing: 10)"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectingSpacing = DpLit("10")
+
+        val column = ast?.statement?.first() as? ColumnComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.horizontalAlignment as? HorizontalAlignment
+
+        assertEquals(expectingSpacing, spacing)
+        assertEquals(StartAlignment, alignment)
+    }
+    @Test
+    fun parseCGFloat(){
+        val code = "let margin = CGFloat(8)"
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+        val expected = AstFile(declarations = listOf(
+            PropertyDeclaration(
+                "margin",
+                DpType(),
+                DpLit("8"),
+                null,
+                false
+            )
+        ))
+
+        assertEquals(expected, ast)
+    }
+
+   @Test
+    fun parseScrollView(){
+        val code = "ScrollView(.vertical){}"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+
+       val column = ast?.statement?.first() as? ColumnComposableCall
+
+       assertEquals(true, column?.scrollable)
+
+   }
+
+    @Test
+    fun parseScrollHorizontalView(){
+        val code = "ScrollView(.horizontal){}"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val column = ast?.statement?.first() as? RowComposableCall
+
+        assertEquals(true, column?.scrollable)
+
+    }
+
+    @Test
+    fun parseHStack(){
+        val code = """
+            HStack(
+                spacing: 10,
+                alignment: VerticalAlignment.center
+            ){
+                
+            }
+        """.trimIndent()
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectingSpacing = DpLit("10")
+
+        val column = ast?.statement?.first() as? RowComposableCall
+        val spacing = column?.spacing as? DpLit
+        val alignment = column?.verticalAlignment as? VerticalAlignment
+
+        assertEquals(expectingSpacing, spacing)
+        assertEquals(CenterVerticallyAlignment, alignment)
+    }
 }

@@ -2,17 +2,63 @@ package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.KotlinParser.BlueColorContext
 import it.poliba.KSTranspiler.KotlinParser.BoldFontWeightContext
+import it.poliba.KSTranspiler.KotlinParser.BottomAlignmentContext
+import it.poliba.KSTranspiler.KotlinParser.CenterHorizontallyAlignmentContext
+import it.poliba.KSTranspiler.KotlinParser.CenterVerticalltAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
+import it.poliba.KSTranspiler.KotlinParser.ColumnComposeParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
+import it.poliba.KSTranspiler.KotlinParser.EndAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import it.poliba.KSTranspiler.KotlinParser.HorizontalAlignmentParameterContext
+import it.poliba.KSTranspiler.KotlinParser.HorizontalScrollSuffixContext
+import it.poliba.KSTranspiler.KotlinParser.ModifierColumnParameterContext
+import it.poliba.KSTranspiler.KotlinParser.ModifierRawParameterContext
+import it.poliba.KSTranspiler.KotlinParser.StartAlignmentContext
+import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
+import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
+import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
+import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
 }
 fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
     is KotlinParser.TextComposableContext -> this.toAst()
+    is KotlinParser.ColumnComposableContext -> this.toAst()
+    is KotlinParser.RowComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun KotlinParser.ColumnComposableContext.toAst(): Expression{
+    val verticalArrangement = columnComposeParameter().firstOrNull { it is VerticalArrangementParameterContext } as? VerticalArrangementParameterContext
+    val verticalArrangementExpression = verticalArrangement?.expression()?.toAst()
+
+    val alignment = columnComposeParameter().firstOrNull { it is HorizontalAlignmentParameterContext } as? HorizontalAlignmentParameterContext
+    val alignmentExpression = alignment?.expression()?.toAst()
+
+    val modifier = columnComposeParameter().firstOrNull() {it is ModifierColumnParameterContext} as? ModifierColumnParameterContext
+    val scroll = modifier?.modifierParameter()?.modifier()?.modifierSuffix()?.firstOrNull { it is VerticalScrollSuffixContext } != null
+
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+
+    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression, scroll, block )
+}
+
+fun KotlinParser.RowComposableContext.toAst(): Expression{
+    val verticalAlignment = rowComposeParameter().firstOrNull { it is VerticalAlignmentParameterContext } as? VerticalAlignmentParameterContext
+    val verticalAlignmentExpression = verticalAlignment?.expression()?.toAst()
+
+    val arrangement = rowComposeParameter().firstOrNull { it is KotlinParser.HorizontalArrangementParameterContext } as? KotlinParser.HorizontalArrangementParameterContext
+    val arrangementExpression = arrangement?.expression()?.toAst()
+
+    val modifier = rowComposeParameter().firstOrNull() {it is ModifierRawParameterContext} as? ModifierRawParameterContext
+    val scroll = modifier?.modifierParameter()?.modifier()?.modifierSuffix()?.firstOrNull { it is HorizontalScrollSuffixContext } != null
+
+    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+
+    return RowComposableCall(arrangementExpression, verticalAlignmentExpression, scroll, block )
 }
 
 fun KotlinParser.TextComposableContext.toAst(): Expression {
@@ -54,4 +100,28 @@ fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolea
 
     }
     return WidgetDeclaration(id, params, block)
+}
+
+
+fun KotlinParser.ArrangementExpressionContext.toAst(): Expression{
+    return this.arrangement().expression().toAst()
+}
+
+fun KotlinParser.HorizhontalAlignmentExpressionContext.toAst(): Expression{
+    when (this.horizontalAlignment()){
+        is StartAlignmentContext -> return StartAlignment
+        is EndAlignmentContext -> return EndAlignment
+        is CenterHorizontallyAlignmentContext -> return CenterHorizAlignment
+        else -> throw  throw java.lang.IllegalArgumentException("Alignment not recognized")
+    }
+}
+
+
+fun KotlinParser.VerticalAlignmentExpressionContext.toAst(): Expression{
+    when (this.verticalAlignment()){
+        is TopAlignmentContext -> return TopAlignment
+        is BottomAlignmentContext -> return BottomAlignment
+        is CenterVerticalltAlignmentContext -> return CenterVerticallyAlignment
+        else -> throw  throw java.lang.IllegalArgumentException("Alignment not recognized")
+    }
 }

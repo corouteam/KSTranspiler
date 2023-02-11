@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
+import it.poliba.KSTranspiler.KotlinParser.BlockContext
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
 import it.poliba.KSTranspiler.KotlinParser.FunctionCallContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
@@ -100,6 +101,7 @@ fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Propert
 fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Expression = when (this) {
     is KotlinParser.IntLiteralContext -> IntLit(text, toPosition(considerPosition))
     is KotlinParser.BoolLiteralContext -> BoolLit(text, toPosition(considerPosition))
+    is KotlinParser.DpLiteralContext -> DpLit(this.INT_LIT().text, toPosition(considerPosition))
     is StringLiteralExpressionContext -> toAst(considerPosition)
     is KotlinParser.VarReferenceContext -> VarReference(text, type = StringType(),  toPosition(considerPosition))
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
@@ -110,6 +112,10 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
     is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst())
     is KotlinParser.ComposableCallExpressionContext -> toAst()
+    is KotlinParser.ArrangementExpressionContext -> toAst()
+    is KotlinParser.HorizhontalAlignmentExpressionContext -> toAst()
+    is KotlinParser.VerticalAlignmentExpressionContext -> toAst()
+
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -152,12 +158,16 @@ fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expressio
 
 fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
-        return Block(this.block().statement().map { it.toAst(considerPosition) })
+        return this.block().toAst(considerPosition)
     }else if(this.statement() != null){
         return this.statement().toAst()
     }else{
         return Block(listOf())
     }
+}
+
+fun BlockContext.toAst(considerPosition: Boolean = false): Block{
+    return Block(statement().map { it.toAst(considerPosition) })
 }
 
 fun KotlinParser.StringLiteralContext.toAst(considerPosition: Boolean): Expression {
