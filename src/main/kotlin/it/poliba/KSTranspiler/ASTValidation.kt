@@ -80,11 +80,11 @@ fun Node.commonValidation(): LinkedList<Error> {
         val itemTypes = it.items.map { it.type }
 
         // Check all items are of the same type
-        val differentTypes = itemTypes.filter { it != listType }
+        val differentTypes = itemTypes.filter { it.nodeType != listType.nodeType }
         if (differentTypes.isNotEmpty()){
             errors.add(Error("""
                     List can't contain different types.
-                    Found ${differentTypes.first().nodeType} in a list of ${listType.nodeType}
+                    Found ${differentTypes.first().generateCode()} in a list of ${listType.generateCode()}
                     """.trimIndent(), this.position))
         }
     }

@@ -104,7 +104,7 @@ class SWIFTMappingTest {
         val alignment = column?.horizontalAlignment as? HorizontalAlignment
 
         assertEquals(expectingSpacing, spacing)
-        assertEquals(StartAlignment, alignment)
+        assertEquals(StartAlignment(), alignment)
     }
     @Test
     fun parseCGFloat(){
@@ -172,6 +172,6 @@ class SWIFTMappingTest {
         val alignment = column?.verticalAlignment as? VerticalAlignment
 
         assertEquals(expectingSpacing, spacing)
-        assertEquals(CenterVerticallyAlignment, alignment)
+        assertEquals(CenterVerticallyAlignment(), alignment)
     }
 }
