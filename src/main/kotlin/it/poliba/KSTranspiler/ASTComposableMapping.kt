@@ -36,6 +36,8 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
     is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
     is KotlinParser.DividerComposableContext -> this.toAst()
     is KotlinParser.SpacerComposableContext -> this.toAst()
+    is KotlinParser.ColumnComposableContext -> this.toAst()
+    is KotlinParser.RowComposableContext -> this.toAst()
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -63,6 +65,9 @@ fun KotlinParser.SizeSuffixContext.toAst(considerPosition: Boolean): Frame {
         height = this.heigth.toAst(considerPosition),
         position = toPosition(considerPosition))
 }
+
+
+
 
 
 
