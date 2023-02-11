@@ -323,7 +323,7 @@ class MappingTest {
         val expectedAst = AstScript(listOf(
             ColumnComposableCall(
                 spacing = DpLit("8"),
-                horizontalAlignment = StartAlignment,
+                horizontalAlignment = StartAlignment(),
                 scrollable = false,
                 body = ControlStructureBody()
             )
@@ -332,7 +332,7 @@ class MappingTest {
         val spacing = column?.spacing as? DpLit
         val alignment = column?.horizontalAlignment as? HorizontalAlignment
         assertEquals(DpLit("8"), spacing)
-        assertEquals(StartAlignment, alignment)
+        assertEquals(StartAlignment(), alignment)
 
     }
 
@@ -348,7 +348,7 @@ class MappingTest {
         val expectedAst = AstScript(listOf(
             ColumnComposableCall(
                 spacing = DpLit("8"),
-                horizontalAlignment = EndAlignment,
+                horizontalAlignment = EndAlignment(),
                 scrollable = false,
                 body = ControlStructureBody()
 
@@ -358,7 +358,7 @@ class MappingTest {
         val spacing = column?.spacing as? DpLit
         val alignment = column?.horizontalAlignment as? HorizontalAlignment
         assertEquals(DpLit("8"), spacing)
-        assertEquals(EndAlignment, alignment)
+        assertEquals(EndAlignment(), alignment)
 
     }
 
@@ -374,7 +374,7 @@ class MappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expected = ColumnComposableCall(
             spacing = DpLit("8"),
-            horizontalAlignment = EndAlignment,
+            horizontalAlignment = EndAlignment(),
             scrollable = true,
             body = ControlStructureBody()
         )
@@ -382,7 +382,7 @@ class MappingTest {
         val spacing = column?.spacing as? DpLit
         val alignment = column?.horizontalAlignment as? HorizontalAlignment
         assertEquals(DpLit("8"), spacing)
-        assertEquals(EndAlignment, alignment)
+        assertEquals(EndAlignment(), alignment)
         assertEquals(expected.scrollable, column?.scrollable)
 
     }
@@ -402,7 +402,7 @@ class MappingTest {
         val spacing = column?.spacing as? DpLit
         val alignment = column?.verticalAlignment as? VerticalAlignment
         assertEquals(DpLit("8"), spacing)
-        assertEquals(TopAlignment, alignment)
+        assertEquals(TopAlignment(), alignment)
         assertEquals(true, column?.scrollable)
 
     }

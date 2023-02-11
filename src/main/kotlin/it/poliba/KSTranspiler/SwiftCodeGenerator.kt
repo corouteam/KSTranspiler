@@ -202,8 +202,8 @@ VStack($parameters){
 
 fun HorizontalAlignment.generateCode(): String{
     return when(this){
-        StartAlignment -> "HorizontalAlignment.start"
-        EndAlignment -> "HorizontalAlignment.end"
-        CenterHorizAlignment -> "HorizontalAlignment.center"
+        is StartAlignment -> "HorizontalAlignment.start"
+        is EndAlignment -> "HorizontalAlignment.end"
+        is CenterHorizAlignment -> "HorizontalAlignment.center"
     }
 }

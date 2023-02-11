@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/KSTranspiler.generated.iml" filepath="$PROJECT_DIR$/.idea/modules/KSTranspiler.generated.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/KSTranspiler.main.iml" filepath="$PROJECT_DIR$/.idea/modules/KSTranspiler.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/KSTranspiler.test.iml" filepath="$PROJECT_DIR$/.idea/modules/KSTranspiler.test.iml" />
     </modules>
   </component>
 </project>
