@@ -43,7 +43,7 @@ fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
-fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(): Expression = when(this){
+fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(): Any = when(this){
     is FrameSuffixContext -> toAst()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
@@ -53,7 +53,7 @@ fun SwiftParser.ColorContext.toAst(): Expression = when(this){
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
-fun SwiftParser.FrameSuffixContext.toAst(): Expression {
+fun SwiftParser.FrameSuffixContext.toAst(): Frame {
 
     return Frame(width = this.width.toAst(), height = this.heigth.toAst())
 

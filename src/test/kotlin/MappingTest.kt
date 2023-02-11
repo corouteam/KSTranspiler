@@ -297,7 +297,6 @@ class MappingTest {
             DividerComposableCall(null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
     }
 
 
@@ -306,7 +305,7 @@ class MappingTest {
         val code = "Spacer().size(width: 54.0, height: 54.0)"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            SpacerComposableCall(Size(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
+            SpacerComposableCall(Frame(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
 

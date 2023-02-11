@@ -5,7 +5,7 @@ import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class OutputTest {
+class  OutputTest {
 
     @Test
     fun convertVarPropertyDefinition(){
@@ -184,6 +184,36 @@ class OutputTest {
                 "}\n" +
                 "}"
         val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapDivider(){
+        val code = """
+            Divider()
+            """.trimIndent()
+        val result = "Divider()"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapDividerWithParams(){
+        val code = """
+            Divider().size(width: 54.0, height: 54.0)
+            """.trimIndent()
+        val result = "Divider()\n\t.frame(width: 54.0, height: 54.0)"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapSpacerWithParams(){
+        val code = """
+            Divider().size(width: 54.0, height: 54.0)
+            """.trimIndent()
+        val result = "Divider()\n\t.frame(width: 54.0, height: 54.0)"
+        val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 

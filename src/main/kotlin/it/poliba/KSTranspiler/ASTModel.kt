@@ -42,7 +42,6 @@ data class BoolType(override var position: Position? = null) : Type()
 data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
 
-data class FrameType(override var position: Position? = null): Type()
 
 data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String): Type()
@@ -135,12 +134,11 @@ sealed class FontWeightLit: Expression(FontWeightType())
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
 
-class DividerComposableCall(val frame: Expression?): ComposableCall(DividerComposableType())
+class DividerComposableCall(val frame: Frame?): ComposableCall(DividerComposableType())
 
-class SpacerComposableCall(val size: Expression?): ComposableCall(SpacerComposableType())
+class SpacerComposableCall(val size: Frame?): ComposableCall(SpacerComposableType())
 
-class Frame(val width: Expression, val height: Expression): Expression(FrameType())
-class Size(val width: Expression, val height: Expression): Expression(FrameType())
+class Frame(val width: Expression, val height: Expression)
 
 
 class WidgetDeclaration(val id: String, val parameters: List<FunctionParameter>, val body: ControlStructureBody): Declaration()

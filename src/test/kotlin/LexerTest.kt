@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import it.poliba.KSTranspiler.tools.ErrorHandler
 import it.poliba.KSTranspiler.tools.ErrorHandler.attachErrorHandler
 import java.util.*
+import kotlin.jvm.internal.Intrinsics.Kotlin
 
 class LexerTest {
    private fun lexerForCode(code: String): KotlinLexer {
@@ -21,7 +22,7 @@ class LexerTest {
 
        return lexer
    }
-    private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer (
+    private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer(
         ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin"))
     ).attachErrorHandler()
 

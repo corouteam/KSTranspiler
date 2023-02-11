@@ -21,27 +21,24 @@ fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
 
 fun KotlinParser.DividerComposableContext.toAst(): Expression {
     val params = composableUIGenericWidgetSuffix().map { it.toAst() }
-    val frame = params.firstOrNull { it is Size } as Size?
+    val frame = params.firstOrNull { it is Frame } as Frame?
 
     return DividerComposableCall(frame)
 }
 
 fun KotlinParser.SpacerComposableContext.toAst(): Expression {
     val params = composableUIGenericWidgetSuffix().map { it.toAst() }
-    val frame = params.firstOrNull { it is Size } as Size?
-
+    val frame = params.firstOrNull { it is Frame } as Frame?
     return SpacerComposableCall(frame)
 }
 
-fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(): Expression = when(this){
+fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(): Any = when(this){
     is SizeSuffixContext -> toAst()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
-fun KotlinParser.SizeSuffixContext.toAst(): Expression {
-
-    return Size(width = this.width.toAst(), height = this.heigth.toAst())
-
+fun KotlinParser.SizeSuffixContext.toAst(): Frame {
+    return Frame(width = this.width.toAst(), height = this.heigth.toAst())
 }
 
 fun KotlinParser.TextComposableContext.toAst(): Expression {
