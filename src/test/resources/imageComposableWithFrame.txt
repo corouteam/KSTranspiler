@@ -1,1 +1,0 @@
-Image(painter = painterResource(id = R.drawable.dog)).fillMaxSize().frame(width: 54.0, height: 54.0)

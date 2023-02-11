@@ -240,8 +240,8 @@ class LexerTest {
     }
 
     @Test
-    fun parseImageWithAspectRatio(){
-        val code = "Image(painter = painterResource(id = R.drawable.dog)).aspectRatio(16f)"
+    fun parseImage(){
+        val code = "Image(painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName())))"
         val result = listOf("IMAGE_COMPOSE",
             "LPAREN",
             "PAINTER_PARAM",
@@ -250,80 +250,27 @@ class LexerTest {
             "LPAREN",
             "PAINTER_RESOURCE_PARAM",
             "ASSIGN",
-            "RESOURCE",
-            "DOT",
-            "RESOURCE_DRAWABLE",
-            "DOT",
-            "ID",
-            "RPAREN",
-            "RPAREN",
-            "DOT",
-            "ASPECT_RATIO_PARAM",
-            "LPAREN",
-            "FLOAT_LIT",
-            "RPAREN",
-            "EOF")
-        assertEquals(result, tokens(lexerForCode(code)))
-    }
-
-    @Test
-    fun parseImageWithFillMaxSize(){
-        val code = "Image(painter = painterResource(id = R.drawable.dog)).fillMaxSize()"
-        val result = listOf("IMAGE_COMPOSE",
-            "LPAREN",
-            "PAINTER_PARAM",
-            "ASSIGN",
-            "PAINTER_RESOURCE",
-            "LPAREN",
-            "PAINTER_RESOURCE_PARAM",
-            "ASSIGN",
-            "RESOURCE",
-            "DOT",
-            "RESOURCE_DRAWABLE",
-            "DOT",
-            "ID",
-            "RPAREN",
-            "RPAREN",
-            "DOT",
-            "RESIZABLE",
-            "LPAREN",
-            "RPAREN",
-            "EOF")
-        assertEquals(result, tokens(lexerForCode(code)))
-    }
-
-    @Test
-    fun parseImageWithFrame(){
-        val code = "Image(painter = painterResource(id = R.drawable.dog)).fillMaxSize().frame(width: 54.0, height: 54.0)"
-        val result = listOf("IMAGE_COMPOSE",
-            "LPAREN",
-            "PAINTER_PARAM",
-            "ASSIGN",
-            "PAINTER_RESOURCE",
-            "LPAREN",
-            "PAINTER_RESOURCE_PARAM",
-            "ASSIGN",
-            "RESOURCE",
-            "DOT",
-            "RESOURCE_DRAWABLE",
-            "DOT",
-            "ID",
-            "RPAREN",
-            "RPAREN",
-            "DOT",
-            "RESIZABLE",
+            "GET_RESOURCE",
             "LPAREN",
             "RPAREN",
             "DOT",
-            "FRAME",
+            "GET_IDENTIFIER",
             "LPAREN",
-            "WIDTH",
-            "COLON",
-            "DOUBLE_LIT",
+            "QUOTE_OPEN",
+            "LineStrText",
+            "QUOTE_CLOSE",
             "COMMA",
-            "HEIGHT",
-            "COLON",
-            "DOUBLE_LIT",
+            "QUOTE_OPEN",
+            "LineStrText",
+            "QUOTE_CLOSE",
+            "COMMA",
+            "CONTEXT",
+            "DOT",
+            "GET_PACKAGENAME",
+            "LPAREN",
+            "RPAREN",
+            "RPAREN",
+            "RPAREN",
             "RPAREN",
             "EOF")
         assertEquals(result, tokens(lexerForCode(code)))

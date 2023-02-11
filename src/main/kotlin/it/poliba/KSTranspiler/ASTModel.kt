@@ -96,9 +96,7 @@ data class StringLit(val value: String, override var position: Position? = null)
 data class BoolLit(val value: String, override var position: Position? = null) : Expression(BoolType())
 
 class Painter(val painterResource: PainterResource, override var position: Position? = null) : Expression(PaintType())
-class PainterResource(val drawable: Resource, override var position: Position? = null) : Expression(PainterResourceType())
-class Resource(val drawable: Drawable, override var position: Position? = null) : Expression(ResourceType())
-class Drawable(val drawable: StringLit, override var position: Position? = null) : Expression(DrawableType())
+class PainterResource(val image: Expression?, override var position: Position? = null) : Expression(PainterResourceType())
 
 data class IfExpression(val condition: Expression, var body: ControlStructureBody, var elseBranch: ControlStructureBody?): Expression(
     IntType()

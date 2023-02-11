@@ -1,1 +1,1 @@
-Image(painter = painterResource(id = R.drawable.dog))
+Image(painter = painterResource(id = getResources().getIdentifier("nome-immagine-test", "drawable", context.getPackageName())))

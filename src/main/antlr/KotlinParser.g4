@@ -164,4 +164,7 @@ painter:
     PAINTER_RESOURCE LPAREN painterResourceParam RPAREN #painterResource;
 
 painterResourceParam:
-    PAINTER_RESOURCE_PARAM ASSIGN RESOURCE DOT RESOURCE_DRAWABLE DOT expression #painterResourceParameter;
+    PAINTER_RESOURCE_PARAM ASSIGN getResource = resource #painterResourceParameter;
+
+resource:
+    GET_RESOURCE LPAREN RPAREN DOT GET_IDENTIFIER LPAREN imageName = expression COMMA expression COMMA CONTEXT DOT GET_PACKAGENAME LPAREN RPAREN RPAREN #drawableResource;

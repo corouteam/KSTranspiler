@@ -90,7 +90,7 @@ class SWIFTMappingTest {
                 "        Text(\"Ciao\")\n" +
                 "    }\n" +
                 "}"
-        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             WidgetDeclaration("MainView", listOf(FunctionParameter("name", StringType())), Block(listOf(TextComposableCall(StringLit("Ciao"), null, null), TextComposableCall(StringLit("Ciao"), null, null))
             ))))

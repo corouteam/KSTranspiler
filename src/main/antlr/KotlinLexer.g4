@@ -76,8 +76,10 @@ HEIGHT: 'height';
 PAINTER_PARAM: 'painter';
 PAINTER_RESOURCE: 'painterResource';
 PAINTER_RESOURCE_PARAM: 'id';
-RESOURCE: 'R';
-RESOURCE_DRAWABLE: 'drawable';
+GET_RESOURCE: 'getResources';
+GET_IDENTIFIER: 'getIdentifier';
+CONTEXT: 'context';
+GET_PACKAGENAME: 'getPackageName';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';

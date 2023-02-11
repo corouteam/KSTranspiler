@@ -6,6 +6,7 @@ import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import java.awt.Paint
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
@@ -45,17 +46,23 @@ fun KotlinParser.FontWeightContext.toAst(): Expression = when(this){
 
 fun KotlinParser.ImageComposableContext.toAst(): Expression {
     val expressionAst = this.imageComposeParameter().toAst()
-    if(expressionAst.type != PaintType()) throw IllegalArgumentException("Painter expected in Image composable")
-    val params = imageComposeParameter().map { it.toAst() }
+    if(expressionAst.type != PainterResourceType()) throw IllegalArgumentException("Painter expected in Image composable")
 
-    val painter = params.firstOrNull { it is Painter } as PaintType?
-    val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
-    val aspectRatio = params.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
-    val frame = params.firstOrNull { it is FrameLit } as FrameLit?
+    val suffixParams = imageComposeSuffix().map { it.toAst() }
 
-    //TODO: mapping
+    val resizable = suffixParams.firstOrNull { it is ResizableLit } as ResizableLit?
+    val aspectRatio = suffixParams.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
+    val frame = suffixParams.firstOrNull { it is FrameLit } as FrameLit?
+
     return ImageComposableCall(expressionAst, resizable, aspectRatio, frame)
 }
+
+fun KotlinParser.ImageComposeSuffixContext.toAst(): Expression = when(this) {
+    is KotlinParser.ResizableContext -> Resizable()
+    is KotlinParser.AspectRatioParameterContext -> FillMaxSize()
+    else -> throw IllegalArgumentException("Parametro non riconosciuto")
+}
+
 
 fun KotlinParser.ImageComposeParameterContext.toAst(): Expression = when(this){
     is KotlinParser.PainterParameterContext -> this.painter().toAst()
@@ -67,16 +74,14 @@ fun KotlinParser.PainterContext.toAst(): Expression = when(this){
     else -> throw java.lang.IllegalArgumentException("Pain not recognized")
 }
 
-fun KotlinParser.PainterResourceContext.toAst(): Expression {
+fun KotlinParser.PainterResourceParamContext.toAst() = when(this){
+    is KotlinParser.PainterResourceParameterContext -> this.getResource.toAst()
+    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
+}
 
-    val expressionAst = this.
-    if(expressionAst.type != PaintType()) throw IllegalArgumentException("Painter expected in Image composable")
-    val params = imageComposeParameter().map { it.toAst() }
-
-    val painter = params.firstOrNull { it is Painter } as PaintType?
-    val resizable = params.firstOrNull { it is ResizableLit } as ResizableLit?
-    val aspectRatio = params.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
-    val frame = params.firstOrNull { it is FrameLit } as FrameLit?
+fun KotlinParser.ResourceContext.toAst() = when(this){
+    is KotlinParser.DrawableResourceContext -> PainterResource(this.imageName.toAst())
+    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
 }
 
 fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration {

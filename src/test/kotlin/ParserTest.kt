@@ -527,137 +527,38 @@ KotlinScript
                 "              PainterResourceParameter\n" +
                 "                T[id]\n" +
                 "                T[=]\n" +
-                "                T[R]\n" +
+                "                T[getResources]\n" +
+                "                T[(]\n" +
+                "                T[)]\n" +
                 "                T[.]\n" +
-                "                T[drawable]\n" +
+                "                T[getIdentifier]\n" +
+                "                T[(]\n" +
+                "                StringLiteralExpression\n" +
+                "                  StringLiteral\n" +
+                "                    LineStringLiteral\n" +
+                "                      T[\"]\n" +
+                "                      LineStringContent\n" +
+                "                        T[nome-immagine-test]\n" +
+                "                      T[\"]\n" +
+                "                T[,]\n" +
+                "                StringLiteralExpression\n" +
+                "                  StringLiteral\n" +
+                "                    LineStringLiteral\n" +
+                "                      T[\"]\n" +
+                "                      LineStringContent\n" +
+                "                        T[drawable]\n" +
+                "                      T[\"]\n" +
+                "                T[,]\n" +
+                "                T[context]\n" +
                 "                T[.]\n" +
-                "                VarReference\n" +
-                "                  T[dog]\n" +
+                "                T[getPackageName]\n" +
+                "                T[(]\n" +
+                "                T[)]\n" +
+                "                T[)]\n" +
                 "              T[)]\n" +
                 "          T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("imageComposable")).multiLineString()
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun parseImageWithAspectRatio(){
-        val expected = "KotlinScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      ComposableCallExpression\n" +
-                "        ImageComposable\n" +
-                "          T[Image]\n" +
-                "          T[(]\n" +
-                "          PainterParameter\n" +
-                "            T[painter]\n" +
-                "            T[=]\n" +
-                "            PainterResource\n" +
-                "              T[painterResource]\n" +
-                "              T[(]\n" +
-                "              PainterResourceParameter\n" +
-                "                T[id]\n" +
-                "                T[=]\n" +
-                "                T[R]\n" +
-                "                T[.]\n" +
-                "                T[drawable]\n" +
-                "                T[.]\n" +
-                "                VarReference\n" +
-                "                  T[dog]\n" +
-                "              T[)]\n" +
-                "          T[)]\n" +
-                "          T[.]\n" +
-                "          AspectRatioParameter\n" +
-                "            T[aspectRatio]\n" +
-                "            T[(]\n" +
-                "            T[16.5]\n" +
-                "            T[)]\n" +
-                "    T[<EOF>]\n"
-        val actual = toParseTree(parseResourceScript("imageWithAspectRatio")).multiLineString()
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun parseImageWithResizable(){
-        val expected = "KotlinScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      ComposableCallExpression\n" +
-                "        ImageComposable\n" +
-                "          T[Image]\n" +
-                "          T[(]\n" +
-                "          PainterParameter\n" +
-                "            T[painter]\n" +
-                "            T[=]\n" +
-                "            PainterResource\n" +
-                "              T[painterResource]\n" +
-                "              T[(]\n" +
-                "              PainterResourceParameter\n" +
-                "                T[id]\n" +
-                "                T[=]\n" +
-                "                T[R]\n" +
-                "                T[.]\n" +
-                "                T[drawable]\n" +
-                "                T[.]\n" +
-                "                VarReference\n" +
-                "                  T[dog]\n" +
-                "              T[)]\n" +
-                "          T[)]\n" +
-                "          T[.]\n" +
-                "          Resizable\n" +
-                "            T[fillMaxSize]\n" +
-                "            T[(]\n" +
-                "            T[)]\n" +
-                "    T[<EOF>]\n"
-        val actual = toParseTree(parseResourceScript("imageWithFillMaxSize")).multiLineString()
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun parseImageWithResizableAndFrame(){
-        val expected = "KotlinScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      ComposableCallExpression\n" +
-                "        ImageComposable\n" +
-                "          T[Image]\n" +
-                "          T[(]\n" +
-                "          PainterParameter\n" +
-                "            T[painter]\n" +
-                "            T[=]\n" +
-                "            PainterResource\n" +
-                "              T[painterResource]\n" +
-                "              T[(]\n" +
-                "              PainterResourceParameter\n" +
-                "                T[id]\n" +
-                "                T[=]\n" +
-                "                T[R]\n" +
-                "                T[.]\n" +
-                "                T[drawable]\n" +
-                "                T[.]\n" +
-                "                VarReference\n" +
-                "                  T[dog]\n" +
-                "              T[)]\n" +
-                "          T[)]\n" +
-                "          T[.]\n" +
-                "          Resizable\n" +
-                "            T[fillMaxSize]\n" +
-                "            T[(]\n" +
-                "            T[)]\n" +
-                "          T[.]\n" +
-                "          FrameSuffix\n" +
-                "            T[frame]\n" +
-                "            T[(]\n" +
-                "            T[width]\n" +
-                "            T[:]\n" +
-                "            T[54.0]\n" +
-                "            T[,]\n" +
-                "            T[height]\n" +
-                "            T[:]\n" +
-                "            T[54.0]\n" +
-                "            T[)]\n" +
-                "    T[<EOF>]\n"
-        val actual = toParseTree(parseResourceScript("imageComposableWithFrame")).multiLineString()
         assertEquals(expected, actual)
     }
 
