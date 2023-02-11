@@ -145,16 +145,12 @@ class FontWeightBold: FontWeightLit()
 class ImageComposableCall(
     val value: Expression,
     val resizable: ResizableLit?,
-    val aspectRatio: Expression?,
-    val frame: FrameLit?,
+    val aspectRatio: Expression?
 ): ComposableCall(ImageComposableType())
 
 sealed class ResizableLit: Expression(ResizableType())
 class Resizable : ResizableLit()
 class FillMaxSize: ResizableLit()
-
-sealed class FrameLit: Expression(FrameType())
-class Frame(val width: Double, val height: Double) : FrameLit()
 
 sealed class AspectRatioLit: Expression(AspectRatioType())
 class ContentFit: AspectRatioLit()

@@ -298,7 +298,7 @@ class MappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(PainterResource(StringLit("nome-immagine-test")), null, null, null)
+            ImageComposableCall(PainterResource(StringLit("nome-immagine-test")), null, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript

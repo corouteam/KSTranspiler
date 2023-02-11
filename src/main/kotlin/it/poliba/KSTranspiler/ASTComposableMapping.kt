@@ -52,9 +52,8 @@ fun KotlinParser.ImageComposableContext.toAst(): Expression {
 
     val resizable = suffixParams.firstOrNull { it is ResizableLit } as ResizableLit?
     val aspectRatio = suffixParams.firstOrNull { it is AspectRatioLit } as AspectRatioLit?
-    val frame = suffixParams.firstOrNull { it is FrameLit } as FrameLit?
 
-    return ImageComposableCall(expressionAst, resizable, aspectRatio, frame)
+    return ImageComposableCall(expressionAst, resizable, aspectRatio)
 }
 
 fun KotlinParser.ImageComposeSuffixContext.toAst(): Expression = when(this) {

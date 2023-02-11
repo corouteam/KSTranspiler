@@ -67,9 +67,6 @@ QUOTE_OPEN: '"' -> pushMode(LineString);
 TEXT_WIDGET: 'Text';
 IMAGE_WIDGET: 'Image';
 RESIZABLE: 'resizable';
-FRAME: 'frame';
-WIDTH: 'width';
-HEIGHT: 'height';
 
 ASPECT_RATIO_PARAM: 'aspectRatio';
 CONTENT_MODE_PARAM: 'contentMode';

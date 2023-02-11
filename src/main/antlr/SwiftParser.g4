@@ -156,8 +156,7 @@ swiftUITextSuffix:
 
 swiftUIImageSuffix:
     RESIZABLE LPAREN RPAREN # resizableSuffix |
-    ASPECT_RATIO_PARAM LPAREN contentMode RPAREN # aspectRatioSuffix |
-    FRAME LPAREN WIDTH COLON DOUBLE_LIT COMMA HEIGHT COLON DOUBLE_LIT RPAREN # frameSuffix;
+    ASPECT_RATIO_PARAM LPAREN contentMode RPAREN # aspectRatioSuffix;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
