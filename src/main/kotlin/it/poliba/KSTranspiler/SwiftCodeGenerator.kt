@@ -112,8 +112,7 @@ fun Expression.generateCode() : String = when (this) {
 }
 
 fun DividerComposableCall.generateCode(): String{
-    var suffix = frame?.generateCode() ?: ""
-    return "Divider()$suffix"
+    return "Divider()"
 }
 
 fun SpacerComposableCall.generateCode(): String{

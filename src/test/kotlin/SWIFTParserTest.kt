@@ -183,6 +183,30 @@ class SWIFTParserTest {
     }
 
     @Test
+    fun parseSwiftDividerWithOverlay(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        DividerWidget\n" +
+                "          T[Divider]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "          T[.]\n" +
+                "          OverlaySuffix\n" +
+                "            T[overlay]\n" +
+                "            T[(]\n" +
+                "            BlueColor\n" +
+                "              T[Color]\n" +
+                "              T[.]\n" +
+                "              T[blue]\n" +
+                "            T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/dividerWithOverlay")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseSpacer(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +

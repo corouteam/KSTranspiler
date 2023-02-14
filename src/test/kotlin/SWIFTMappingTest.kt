@@ -99,7 +99,19 @@ class SWIFTMappingTest {
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(
             listOf(
-                DividerComposableCall(null)
+                DividerComposableCall(null, null, null)
+            )
+        )
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+    @Test
+    fun testDividerWithOverlaySwiftUI() {
+        val code = "Divider().overlay(Color.blue)"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(
+            listOf(
+                DividerComposableCall(null,null,ColorBlue())
             )
         )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))

@@ -294,7 +294,7 @@ class MappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-            DividerComposableCall(null)
+            DividerComposableCall(null, null, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }

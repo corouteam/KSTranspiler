@@ -198,7 +198,7 @@ class SpacerComposableCall(val size: Frame?,
                            override var position: Position? = null
 ): ComposableCall(SpacerComposableType(position))
 
-class DividerComposableCall(val frame: Frame?): ComposableCall(DividerComposableType())
+class DividerComposableCall(val width: Expression?, val height: Expression?, color: Expression? ): ComposableCall(DividerComposableType())
 
 class SpacerComposableCall(val size: Frame?): ComposableCall(SpacerComposableType())
 

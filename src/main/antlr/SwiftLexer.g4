@@ -76,6 +76,7 @@ WEIGHT: 'Weight';
 
 SPACER_WIDGET: 'Spacer';
 DIVIDER_WIDGET: 'Divider';
+OVERLAY: 'overlay';
 
 FRAME: 'frame';
 WIDTH: 'width';
