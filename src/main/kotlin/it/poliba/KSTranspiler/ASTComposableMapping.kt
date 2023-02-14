@@ -38,10 +38,11 @@ fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
 }
 
 fun KotlinParser.DividerComposableContext.toAst(): Expression {
-    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
-    val frame = params.firstOrNull { it is Frame } as Frame?
 
-    return DividerComposableCall(frame?.width, frame?.height, null)
+    val paramsSuffix = composableUIGenericWidgetSuffix().map { it.toAst() }
+    val frame = paramsSuffix.firstOrNull { it is Frame } as Frame?
+
+    return DividerComposableCall(frame?.width, (frame?.height ?: this.thickness.toAst()), null)
 }
 
 fun KotlinParser.SpacerComposableContext.toAst(): Expression {

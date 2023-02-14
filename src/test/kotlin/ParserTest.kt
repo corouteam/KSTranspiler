@@ -551,6 +551,27 @@ KotlinScript
     }
 
     @Test
+    fun parseComposableDividerWithThicknes(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        DividerComposable\n" +
+                "          T[Divider]\n" +
+                "          T[(]\n" +
+                "          T[thickness]\n" +
+                "          T[=]\n" +
+                "          DpLiteral\n" +
+                "            T[8]\n" +
+                "            T[.]\n" +
+                "            T[dp]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("dividerWithThickness")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseSpacer(){
         val expected = "KotlinScript\n" +
                 "  Line\n" +

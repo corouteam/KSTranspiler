@@ -141,7 +141,10 @@ sealed class FontWeightLit: Expression(FontWeightType())
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
 
-class DividerComposableCall(val width: Expression?, val height: Expression?, color: Expression? ): ComposableCall(DividerComposableType())
+class DividerComposableCall(
+    val width: Expression?,
+    val height: Expression?,
+    color: Expression?): ComposableCall(DividerComposableType())
 
 class SpacerComposableCall(val size: Frame?): ComposableCall(SpacerComposableType())
 
