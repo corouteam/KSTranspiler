@@ -41,7 +41,7 @@ fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
 
 fun KotlinParser.IconButtonComposableContext.toAst(): Expression {
 
-    val action = Block(this.action.statement().map { it.toAst() })
+    val action = this.action.block().toAst()
     val body = Block(this.body.statement().map { it.toAst() })
 
     return ButtonComposableCall(action, body)

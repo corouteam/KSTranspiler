@@ -442,9 +442,9 @@ class LexerTest {
 
     @Test
     fun parseButtonComposable(){
-        val code = "IconButton( onClick: {} ) { Icon() }"
-        val result = listOf("ICON_BUTTON_COMPOSABLE", "LPAREN", "ID", "COLON",
-            "LCURL", "RCURL","RPAREN", "LCURL","ICON_COMPOSABLE", "LPAREN", "RPAREN", "RCURL", "EOF")
+        val code = "Button( onClick = {} ) { }"
+        val result = listOf("BUTTON_COMPOSABLE", "LPAREN", "ID", "ASSIGN",
+            "LCURL", "RCURL", "RPAREN", "LCURL","RCURL", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

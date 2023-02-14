@@ -55,7 +55,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
-           | INT_LIT DOT DP_SUFFIX                                             # dpLiteral
+           | INT_LIT DOT DP_SUFFIX                                         # dpLiteral
            | name=ID NL* functionCallParameters NL*                        # functionCall
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
@@ -142,7 +142,7 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
-    | ICON_BUTTON_COMPOSABLE LPAREN ID ASSIGN action = block RPAREN body = block #iconButtonComposable
+    | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody RPAREN body = block #iconButtonComposable
     | ICON_COMPOSABLE LPAREN RPAREN #iconComposable
     | DIVIDER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
     | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable

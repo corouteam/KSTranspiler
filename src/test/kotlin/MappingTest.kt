@@ -1,6 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
+import it.poliba.KSTranspiler.SwiftParser.BlockContext
 import it.poliba.KSTranspiler.facade.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -408,12 +409,12 @@ class MappingTest {
     }
 
     @Test
-    fun mapIconButtonComposableRef(){
-        val code = "IconButton( onClick = {} ) { Icon() }"
+    fun mapButtonComposableRef(){
+        val code = "Button( onClick = {} ) { }"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ButtonComposableCall(action = Block(listOf()), body = Block(listOf( Icon() )))
-        ))
+            ButtonComposableCall(action = Block(body = listOf()), body = Block(body = listOf())
+        )))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 

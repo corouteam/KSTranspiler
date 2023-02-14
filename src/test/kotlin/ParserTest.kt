@@ -536,29 +536,25 @@ KotlinScript
     }
 
 
+
     @Test
-    fun parseKotlinIconButton(){
+    fun parseKotlinButton(){
         val expected = "KotlinScript\n" +
                 "  Line\n" +
                 "    ExpressionStatement\n" +
                 "      ComposableCallExpression\n" +
                 "        IconButtonComposable\n" +
-                "          T[IconButton]\n" +
+                "          T[Button]\n" +
                 "          T[(]\n" +
                 "          T[onClick]\n" +
                 "          T[=]\n" +
-                "          Block\n" +
-                "            T[{]\n" +
-                "            T[}]\n" +
+                "          FunctionBody\n" +
+                "            Block\n" +
+                "              T[{]\n" +
+                "              T[}]\n" +
                 "          T[)]\n" +
                 "          Block\n" +
                 "            T[{]\n" +
-                "            ExpressionStatement\n" +
-                "              ComposableCallExpression\n" +
-                "                IconComposable\n" +
-                "                  T[Icon]\n" +
-                "                  T[(]\n" +
-                "                  T[)]\n" +
                 "            T[}]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("button")).multiLineString()

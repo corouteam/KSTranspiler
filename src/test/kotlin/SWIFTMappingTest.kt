@@ -179,7 +179,7 @@ class SWIFTMappingTest {
         val code = "Button( action: {} ) { }"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ButtonComposableCall(action = Block(listOf()), body = Block(listOf()))
+            ButtonComposableCall(action = Block(body = listOf()), body = Block(listOf()))
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
