@@ -299,6 +299,17 @@ class MappingTest {
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun convertComposableDividerWithThickness(){
+        val code = "Divider(thickness = 8.dp)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val expectedAst = AstScript(listOf(
+            DividerComposableCall(null, IntLit("8"), null)
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
 
     @Test
     fun testSpacerWithSizeComposable() {

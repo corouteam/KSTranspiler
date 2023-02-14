@@ -85,7 +85,7 @@ COLOR_PARAM: 'color';
 
 SPACER_COMPOSE: 'Spacer';
 DIVIDER_COMPOSE: 'Divider';
-
+THICKNESS: 'thickness';
 
 SIZE: 'size';
 WIDTH: 'width';
