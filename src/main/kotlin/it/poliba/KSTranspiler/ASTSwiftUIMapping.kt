@@ -7,6 +7,7 @@ import it.poliba.KSTranspiler.SwiftParser.CenterVerticalAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.LeadingAlignmentContext
+import it.poliba.KSTranspiler.SwiftParser.OverlaySuffixContext
 import it.poliba.KSTranspiler.SwiftParser.SpacingParameterContext
 import it.poliba.KSTranspiler.SwiftParser.TopAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.TrailingAlignmentContext
@@ -37,8 +38,9 @@ fun SwiftParser.TextWidgetContext.toAst(): Expression {
 fun SwiftParser.DividerWidgetContext.toAst(): Expression {
     val params = swiftUIGenericWidgetSuffix().map { it.toAst() }
     val frame = params.firstOrNull { it is Frame } as Frame?
+    val color = params.firstOrNull { it is ColorLit } as ColorLit?
 
-    return DividerComposableCall(frame)
+    return DividerComposableCall(frame?.width, frame?.height, color)
 }
 
 fun SwiftParser.SpacerWidgetContext.toAst(): Expression {
@@ -56,6 +58,7 @@ fun SwiftParser.SwiftUITextSuffixContext.toAst(): Expression = when(this){
 
 fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(): Any = when(this){
     is FrameSuffixContext -> toAst()
+    is OverlaySuffixContext -> this.color().toAst()
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 

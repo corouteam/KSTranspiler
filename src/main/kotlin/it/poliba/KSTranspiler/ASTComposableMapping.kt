@@ -23,6 +23,7 @@ import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.OverlaySuffixContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
@@ -40,7 +41,7 @@ fun KotlinParser.DividerComposableContext.toAst(): Expression {
     val params = composableUIGenericWidgetSuffix().map { it.toAst() }
     val frame = params.firstOrNull { it is Frame } as Frame?
 
-    return DividerComposableCall(frame)
+    return DividerComposableCall(frame?.width, frame?.height, null)
 }
 
 fun KotlinParser.SpacerComposableContext.toAst(): Expression {

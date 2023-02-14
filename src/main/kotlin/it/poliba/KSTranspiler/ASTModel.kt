@@ -2,6 +2,7 @@ package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Position
+import it.poliba.KSTranspiler.SwiftParser.CgFloatContext
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -140,7 +141,7 @@ sealed class FontWeightLit: Expression(FontWeightType())
 class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
 
-class DividerComposableCall(val frame: Frame?): ComposableCall(DividerComposableType())
+class DividerComposableCall(val width: Expression?, val height: Expression?, color: Expression? ): ComposableCall(DividerComposableType())
 
 class SpacerComposableCall(val size: Frame?): ComposableCall(SpacerComposableType())
 
