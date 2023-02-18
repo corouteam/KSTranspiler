@@ -180,8 +180,12 @@ verticalAlignment:
 
 
 swiftUIGenericWidgetSuffix:
-    FRAME LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #frameSuffix
+    FRAME LPAREN ((NL* frameParam) (NL* COMMA NL* frameParam)*)? RPAREN #frameSuffix
     | OVERLAY LPAREN color RPAREN #overlaySuffix;
+
+frameParam:
+     HEIGHT COLON expression #heightParam |
+     WIDTH COLON expression #widthParam;
 
 swiftUIGenericWidgetSuffix:
     FRAME LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #frameSuffix;

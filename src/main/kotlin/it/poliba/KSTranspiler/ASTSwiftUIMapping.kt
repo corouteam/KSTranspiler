@@ -71,6 +71,15 @@ fun SwiftParser.ColorContext.toAst(considerPosition: Boolean = false): Expressio
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
+fun Expression.forceDpIfLiteral(): Expression{
+    return when (this) {
+        is IntLit -> {
+            DpLit(this.value, this.position)
+        }
+
+        is DoubleLit -> {
+            DpLit(this.value, this.position)
+        }
 fun SwiftParser.FrameSuffixContext.toAst(considerPosition: Boolean = false): Frame {
     return Frame(
         width = this.width.toAst(considerPosition),
@@ -78,6 +87,11 @@ fun SwiftParser.FrameSuffixContext.toAst(considerPosition: Boolean = false): Fra
         position = toPosition(considerPosition))
 }
 
+        else -> {
+            this
+        }
+    }
+}
 
 fun SwiftParser.StructDeclarationContext.toWidgetAST(considerPosition: Boolean = false): WidgetDeclaration{
     var id = this.ID().text
