@@ -1,10 +1,6 @@
 package it.poliba.KSTranspiler.facade
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import it.poliba.KSTranspiler.FileExpected
+import it.poliba.KSTranspiler.FileExpectedException
 import it.poliba.KSTranspiler.generateCode
 import it.poliba.KSTranspiler.server.*
 
@@ -12,7 +8,7 @@ object KSTFacade {
     fun transpileKotlinToSwift(code: String): KSTranspileResult {
         return try {
             transpileKotlinToSwiftFile(code)
-        }catch (e: FileExpected){
+        }catch (e: FileExpectedException){
             transpileKotlinToSwiftScript(code)
         }
 
@@ -43,7 +39,7 @@ object KSTFacade {
     fun transpileSwiftToKotlin(code: String): KSTranspileResult {
         return try {
             transpileSwiftToKotlinFile(code)
-        }catch (e: FileExpected){
+        }catch (e: FileExpectedException){
             transpileSwiftToKotlinScript(code)
         }
 
