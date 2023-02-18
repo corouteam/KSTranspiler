@@ -45,14 +45,9 @@ annotation: AT ID;
 
 assignment : ID ASSIGN expression ;
 
-equality : expression operator=(EQUAL | NOT_EQUAL) expression ;
-
-logical: expression operator=(AND | OR) expression;
-
-comparison: expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) expression ;
-
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
+           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
            | LPAREN expression RPAREN                                      # parenExpression
            | ID                                                            # varReference
@@ -61,9 +56,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
-           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # equalityExpression
-           | left=expression operator=(AND | OR) right=expression         # logicalExpression
-           | left=expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) right=expression # comparisonExpression
+           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # logicalOperation
+           | left=expression operator=(AND | OR) right=expression          # logicalOperation
+           | left=expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) right=expression # logicalOperation
            | while                                                         # whileExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression

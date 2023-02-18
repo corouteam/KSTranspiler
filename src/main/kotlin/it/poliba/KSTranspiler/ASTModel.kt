@@ -55,6 +55,8 @@ class TextComposableType: ComposableType()
  class ReturnExpression(val returnExpression: Expression): Expression(returnExpression.type)
 sealed class BinaryExpression(open val left: Expression, open val right: Expression) : Expression(type = left.type)
 
+sealed class LogicalExpression(open val left: Expression, open val right: Expression) : Expression(type = BoolType())
+
 data class SumExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
     BinaryExpression(left, right)
 
@@ -66,6 +68,25 @@ data class MultiplicationExpression(override val left: Expression, override val 
 
 data class DivisionExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
     BinaryExpression(left, right)
+
+data class EqualExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+
+data class NotEqualExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+data class GTEqualExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+data class LTEqualExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+data class GreaterThanExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+data class LessThanExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+data class AndExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+data class OrExpression(override val left: Expression, override val right: Expression, override var position: Position? = null) :
+    LogicalExpression(left, right)
+
 
 data class ListExpression(
     val itemsType: Type,

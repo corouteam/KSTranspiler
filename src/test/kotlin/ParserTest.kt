@@ -269,7 +269,7 @@ class KotlinParserTest {
         If
           T[if]
           T[(]
-          EqualityExpression
+          BinaryOperation
             IntLiteral
               T[1]
             T[==]
@@ -302,7 +302,7 @@ class KotlinParserTest {
         If
           T[if]
           T[(]
-          LogicalExpression
+          LogicalOperation
             BoolLiteral
               T[true]
             T[&&]
@@ -335,7 +335,7 @@ class KotlinParserTest {
         If
           T[if]
           T[(]
-          ComparisonExpression
+          LogicalOperation
             IntLiteral
               T[1]
             T[>]
