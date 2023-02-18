@@ -29,7 +29,7 @@ object SwiftAntlrParserFacade {
         val parser = it.poliba.KSTranspiler.SwiftParser(CommonTokenStream(lexer))
             .attachErrorHandler()
 
-        val antlrRoot = parser.file() as? SwiftFileContext ?: throw FileExpected()
+        val antlrRoot = parser.file() as? SwiftFileContext ?: throw FileExpectedException()
         return AntlrParsingResultSwift(antlrRoot, ErrorHandler.getLexicalAndSyntaticErrors())
     }
 
@@ -56,7 +56,7 @@ object SwiftAntlrParserFacadeScript {
         val parser = it.poliba.KSTranspiler.SwiftParser(CommonTokenStream(lexer))
             .attachErrorHandler()
 
-        val antlrRoot = parser.file() as? SwiftScriptContext ?: throw  ScriptExpected()
+        val antlrRoot = parser.file() as? SwiftScriptContext ?: throw  ScriptExpectedException()
         return AntlrParsingResultScriptSwift(antlrRoot, ErrorHandler.getLexicalAndSyntaticErrors())
     }
 }

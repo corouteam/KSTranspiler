@@ -1,6 +1,6 @@
 package it.poliba.KSTranspiler
 
 
-class ScriptExpected(): Exception("Script expected")
+class ScriptExpectedException(): Exception("Script expected")
 
-class FileExpected(): Exception("Class expected")
+class FileExpectedException(): Exception("Class expected")
