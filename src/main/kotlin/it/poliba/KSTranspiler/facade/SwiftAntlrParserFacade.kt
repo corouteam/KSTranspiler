@@ -1,8 +1,6 @@
 package it.poliba.KSTranspiler.facade
 
-import it.poliba.KSTranspiler.Error
-import it.poliba.KSTranspiler.SwiftLexer
-import it.poliba.KSTranspiler.SwiftParser
+import it.poliba.KSTranspiler.*
 import it.poliba.KSTranspiler.SwiftParser.SwiftFileContext
 import it.poliba.KSTranspiler.SwiftParser.SwiftScriptContext
 import it.poliba.KSTranspiler.tools.ErrorHandler
@@ -25,13 +23,13 @@ object SwiftAntlrParserFacade {
     fun parse(file: File) : AntlrParsingResultSwift = parse(FileInputStream(file))
 
     fun parse(inputStream: InputStream) : AntlrParsingResultSwift {
-        val lexer = SwiftLexer(ANTLRInputStream(inputStream))
+        val lexer = it.poliba.KSTranspiler.SwiftLexer(ANTLRInputStream(inputStream))
             .attachErrorHandler()
 
-        val parser = SwiftParser(CommonTokenStream(lexer))
+        val parser = it.poliba.KSTranspiler.SwiftParser(CommonTokenStream(lexer))
             .attachErrorHandler()
 
-        val antlrRoot = parser.file() as? SwiftFileContext ?: throw  Exception("File expected")
+        val antlrRoot = parser.file() as? SwiftFileContext ?: throw FileExpected()
         return AntlrParsingResultSwift(antlrRoot, ErrorHandler.getLexicalAndSyntaticErrors())
     }
 
@@ -52,13 +50,13 @@ object SwiftAntlrParserFacadeScript {
     fun parse(file: File): AntlrParsingResultScriptSwift = parse(FileInputStream(file))
 
     fun parse(inputStream: InputStream): AntlrParsingResultScriptSwift {
-        val lexer = SwiftLexer(ANTLRInputStream(inputStream))
+        val lexer = it.poliba.KSTranspiler.SwiftLexer(ANTLRInputStream(inputStream))
             .attachErrorHandler()
 
-        val parser = SwiftParser(CommonTokenStream(lexer))
+        val parser = it.poliba.KSTranspiler.SwiftParser(CommonTokenStream(lexer))
             .attachErrorHandler()
 
-        val antlrRoot = parser.file() as? SwiftScriptContext ?: throw  Exception("Script expected")
+        val antlrRoot = parser.file() as? SwiftScriptContext ?: throw  ScriptExpected()
         return AntlrParsingResultScriptSwift(antlrRoot, ErrorHandler.getLexicalAndSyntaticErrors())
     }
 }

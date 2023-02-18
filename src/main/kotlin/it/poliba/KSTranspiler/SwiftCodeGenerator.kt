@@ -6,7 +6,7 @@ import java.lang.Exception
 import java.util.ArrayList
 import java.util.StringJoiner
 
-val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
+//val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
 fun AstFile.generateCode(): String{
     return declarations.joinToString("\n") { it.generateCode() }
 }
@@ -78,14 +78,10 @@ fun Block.generateCode(): String{
     return this.body.joinToString("\n") { it.generateCode() }
 }
 fun PropertyDeclaration.generateCode(): String{
-    val st = group.getInstanceOf("propertyDeclaration")
-    st.add("name",varName)
-    st.add("type", type.generateCode())
-    value?.let {
-        st.add("value", value.generateCode())
-    }
-    st.add("mutable", mutable)
-    return st.render()
+    var prefix = if (mutable) "var" else "let"
+    var type = type.generateCode()
+    var value = value?.let {  " = ${value.generateCode()} "} ?: ""
+    return "$prefix: $type$value"
 }
 
 fun Expression.generateCode() : String = when (this) {
