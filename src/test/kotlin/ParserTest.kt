@@ -624,49 +624,4 @@ KotlinScript
         val actual = toParseTree(parseResourceScript("spacerWithSize")).multiLineString()
         assertEquals(expected, actual)
     }
-
-    @Test
-    fun parseSpacer(){
-        val expected = "KotlinScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      ComposableCallExpression\n" +
-                "        SpacerComposable\n" +
-                "          T[Spacer]\n" +
-                "          T[(]\n" +
-                "          T[)]\n" +
-                "    T[<EOF>]\n"
-        val actual = toParseTree(parseResourceScript("spacer")).multiLineString()
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun parseSpacerWithSize(){
-        val expected = "KotlinScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      ComposableCallExpression\n" +
-                "        SpacerComposable\n" +
-                "          T[Spacer]\n" +
-                "          T[(]\n" +
-                "          T[)]\n" +
-                "          T[.]\n" +
-                "          SizeSuffix\n" +
-                "            T[size]\n" +
-                "            T[(]\n" +
-                "            T[width]\n" +
-                "            T[:]\n" +
-                "            DoubleLiteral\n" +
-                "              T[54.0]\n" +
-                "            T[,]\n" +
-                "            T[height]\n" +
-                "            T[:]\n" +
-                "            DoubleLiteral\n" +
-                "              T[54.0]\n" +
-                "            T[)]\n" +
-                "    T[<EOF>]\n"
-        val actual = toParseTree(parseResourceScript("spacerWithSize")).multiLineString()
-        assertEquals(expected, actual)
-    }
-
 }

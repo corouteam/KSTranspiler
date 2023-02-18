@@ -187,9 +187,6 @@ frameParam:
      HEIGHT COLON expression #heightParam |
      WIDTH COLON expression #widthParam;
 
-swiftUIGenericWidgetSuffix:
-    FRAME LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #frameSuffix;
-
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 

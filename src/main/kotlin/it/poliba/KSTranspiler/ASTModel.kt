@@ -58,7 +58,6 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class TextComposableType(override var position: Position? = null): ComposableType()
-class SpacerComposableType: ComposableType()
 class DividerComposableType(override var position: Position? = null): ComposableType()
 class SpacerComposableType(override var position: Position? = null): ComposableType()
 class ColumnComposableType(override var position: Position? = null): ComposableType()
@@ -190,23 +189,17 @@ sealed class FontWeightLit(): Expression(FontWeightType())
 class CustomFontWeight(val value: IntLit, override var position: Position? = null): FontWeightLit()
 class FontWeightBold(override var position: Position? = null): FontWeightLit()
 
-class DividerComposableCall(val frame: Frame?,
-                            override var position: Position? = null
-): ComposableCall(DividerComposableType(position))
-
-class SpacerComposableCall(val size: Frame?,
-                           override var position: Position? = null
-): ComposableCall(SpacerComposableType(position))
-
 class DividerComposableCall(
     val frame: Frame?,
-    val color: Expression?): ComposableCall(DividerComposableType())
+    val color: Expression?,
+    override var position: Position? = null): ComposableCall(DividerComposableType(position))
 
-class SpacerComposableCall(val size: Frame?): ComposableCall(SpacerComposableType())
+class SpacerComposableCall(
+    val size: Frame?,
+    override var position: Position? = null,
+    ): ComposableCall(SpacerComposableType(position))
 
-class Size(val width: Expression, val height: Expression): Expression(FrameType())
-
-class Frame(val width: Expression, val height: Expression, override var position: Position? = null): Node()
+class Frame(val width: Expression?, val height: Expression?, override var position: Position? = null): Node()
 
 data class ColumnComposableCall(
     val spacing: Expression?,
