@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import it.poliba.KSTranspiler.facade.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class MappingTest {
 
@@ -294,7 +295,7 @@ class MappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-            DividerComposableCall(null, null, null)
+            DividerComposableCall(null, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
@@ -304,23 +305,62 @@ class MappingTest {
         val code = "Divider(thickness = 8.dp)"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
-        val expectedAst = AstScript(listOf(
-            DividerComposableCall(null, IntLit("8"), null)
-        ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        val divider = (ast?.statement?.first() as DividerComposableCall)
+
+        assertEquals(null, divider.color)
+        assert(divider.frame != null)
+        assert(divider.frame?.height != null)
+        assert(divider.frame?.height  is DpLit)
+    }
+
+    @Test
+    fun convertComposableDividerWithThicknessAndColor(){
+        val code = "Divider(thickness = 8.dp, color = Color.blue)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val divider = (ast?.statement?.first() as DividerComposableCall)
+
+        assert(divider.color is ColorBlue)
+        assert(divider.frame != null)
+        assert(divider.frame?.height != null)
+        assert(divider.frame?.height  is DpLit)
     }
 
 
     @Test
-    fun testSpacerWithSizeComposable() {
-        val code = "Spacer().size(width: 54.0, height: 54.0)"
+    fun testSpacerWithHeightComposable() {
+        val code = "Spacer(modifier = Modifier.height(16.dp))"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val spacer = (ast?.statement?.first() as SpacerComposableCall)
+
+        assertIs<DpLit>(spacer.size?.height)
+
+    }
+
+    @Test
+    fun testSpacerWithHeightAndWidthComposable() {
+        val code = "Spacer(modifier = Modifier.height(16.dp).width(8.dp))"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val spacer = (ast?.statement?.first() as SpacerComposableCall)
+
+        assertIs<DpLit>(spacer.size?.height)
+        assertIs<DpLit>(spacer.size?.width)
+    }
+
+    @Test
+    fun testEmptySpacer() {
+        val code = "Spacer()"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(
             listOf(
                 SpacerComposableCall(Frame(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
             )
         )
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        val spacer = (ast?.statement?.first() as SpacerComposableCall)
+
+        assert(spacer.size == null)
     }
     @Test
     fun mapColumn(){

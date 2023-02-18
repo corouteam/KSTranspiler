@@ -6,11 +6,13 @@ import it.poliba.KSTranspiler.SwiftParser.BottomAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.CenterVerticalAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.HeightParamContext
 import it.poliba.KSTranspiler.SwiftParser.LeadingAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.OverlaySuffixContext
 import it.poliba.KSTranspiler.SwiftParser.SpacingParameterContext
 import it.poliba.KSTranspiler.SwiftParser.TopAlignmentContext
 import it.poliba.KSTranspiler.SwiftParser.TrailingAlignmentContext
+import it.poliba.KSTranspiler.SwiftParser.WidthParamContext
 import java.lang.Exception
 
 fun  SwiftParser.WidgetCallExpressionContext.toAst(): Expression {
@@ -40,7 +42,7 @@ fun SwiftParser.DividerWidgetContext.toAst(): Expression {
     val frame = params.firstOrNull { it is Frame } as Frame?
     val color = params.firstOrNull { it is ColorLit } as ColorLit?
 
-    return DividerComposableCall(frame?.width, frame?.height, color)
+    return DividerComposableCall(frame, color)
 }
 
 fun SwiftParser.SpacerWidgetContext.toAst(): Expression {
@@ -68,11 +70,28 @@ fun SwiftParser.ColorContext.toAst(): Expression = when(this){
 }
 
 fun SwiftParser.FrameSuffixContext.toAst(): Frame {
+    var width = frameParam().firstOrNull { it is WidthParamContext } as? WidthParamContext
+    var height = frameParam().firstOrNull { it is HeightParamContext } as? HeightParamContext
 
-    return Frame(width = this.width.toAst(), height = this.heigth.toAst())
+    return Frame(width = width?.expression()?.toAst()?.forceDpIfLiteral(), height = height?.expression()?.toAst()?.forceDpIfLiteral())
 
 }
 
+fun Expression.forceDpIfLiteral(): Expression{
+    return when (this) {
+        is IntLit -> {
+            DpLit(this.value, this.position)
+        }
+
+        is DoubleLit -> {
+            DpLit(this.value, this.position)
+        }
+
+        else -> {
+            this
+        }
+    }
+}
 
 fun SwiftParser.StructDeclarationContext.toWidgetAST(): WidgetDeclaration{
     var id = this.ID().text

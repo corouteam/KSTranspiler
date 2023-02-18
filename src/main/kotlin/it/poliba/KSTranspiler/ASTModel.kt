@@ -142,13 +142,12 @@ class CustomFontWeight(val value: IntLit): FontWeightLit()
 class FontWeightBold: FontWeightLit()
 
 class DividerComposableCall(
-    val width: Expression?,
-    val height: Expression?,
-    color: Expression?): ComposableCall(DividerComposableType())
+    val frame: Frame?,
+    val color: Expression?): ComposableCall(DividerComposableType())
 
 class SpacerComposableCall(val size: Frame?): ComposableCall(SpacerComposableType())
 
-class Frame(val width: Expression, val height: Expression)
+class Frame(val width: Expression?, val height: Expression?)
 
 data class ColumnComposableCall(
     val spacing: Expression?,

@@ -9,8 +9,12 @@ import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ColumnComposeParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
+import it.poliba.KSTranspiler.KotlinParser.DividerColorParameterContext
+import it.poliba.KSTranspiler.KotlinParser.DividerComposeParameterContext
+import it.poliba.KSTranspiler.KotlinParser.DividerTicknessParamaterContext
 import it.poliba.KSTranspiler.KotlinParser.EndAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import it.poliba.KSTranspiler.KotlinParser.HeightSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.SizeSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 
@@ -23,7 +27,9 @@ import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
+import it.poliba.KSTranspiler.KotlinParser.WidthSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.OverlaySuffixContext
+import it.poliba.KSTranspiler.SwiftParser.WidthParamContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
     return this.composableCall().toAst()
@@ -41,13 +47,26 @@ fun KotlinParser.DividerComposableContext.toAst(): Expression {
 
     val paramsSuffix = composableUIGenericWidgetSuffix().map { it.toAst() }
     val frame = paramsSuffix.firstOrNull { it is Frame } as Frame?
+    val thickness = dividerComposeParameter().firstOrNull { it is DividerTicknessParamaterContext } as? DividerTicknessParamaterContext
+    var thicknessExpression = thickness?.expression()?.toAst()
 
-    return DividerComposableCall(frame?.width, (frame?.height ?: this.thickness.toAst()), null)
+    val color = dividerComposeParameter().firstOrNull { it is DividerColorParameterContext } as? DividerColorParameterContext
+    val colorExpression = color?.color()?.toAst()
+    var frameOrThickness = frame ?: thickness?.let { Frame(width = null, height = thicknessExpression) }
+    return DividerComposableCall(frameOrThickness, colorExpression)
 }
 
+
 fun KotlinParser.SpacerComposableContext.toAst(): Expression {
-    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
-    val frame = params.firstOrNull { it is Frame } as Frame?
+    val frame = modifierParameter()?.modifier()?.let {
+        val height = (it.modifierSuffix().firstOrNull { it is HeightSuffixContext } as? HeightSuffixContext)?.expression()?.toAst()
+        val width = (it.modifierSuffix().firstOrNull { it is WidthSuffixContext } as? WidthSuffixContext)?.expression()?.toAst()
+        if (height != null || width != null){
+            return@let Frame(width, height)
+        }else{
+            return@let null
+        }
+    }
     return SpacerComposableCall(frame)
 }
 

@@ -235,15 +235,17 @@ class SWIFTParserTest {
                 "          FrameSuffix\n" +
                 "            T[frame]\n" +
                 "            T[(]\n" +
-                "            T[width]\n" +
-                "            T[:]\n" +
-                "            DoubleLiteral\n" +
-                "              T[54.0]\n" +
+                "            WidthParam\n" +
+                "              T[width]\n" +
+                "              T[:]\n" +
+                "              DoubleLiteral\n" +
+                "                T[54.0]\n" +
                 "            T[,]\n" +
-                "            T[height]\n" +
-                "            T[:]\n" +
-                "            DoubleLiteral\n" +
-                "              T[54.0]\n" +
+                "            HeightParam\n" +
+                "              T[height]\n" +
+                "              T[:]\n" +
+                "              DoubleLiteral\n" +
+                "                T[54.0]\n" +
                 "            T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("swift/spacerWithFrame")).multiLineString()
