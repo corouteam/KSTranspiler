@@ -9,8 +9,12 @@ import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ColumnComposeParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
+import it.poliba.KSTranspiler.KotlinParser.DividerColorParameterContext
+import it.poliba.KSTranspiler.KotlinParser.DividerComposeParameterContext
+import it.poliba.KSTranspiler.KotlinParser.DividerTicknessParamaterContext
 import it.poliba.KSTranspiler.KotlinParser.EndAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import it.poliba.KSTranspiler.KotlinParser.HeightSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.SizeSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 

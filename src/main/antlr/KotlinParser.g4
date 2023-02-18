@@ -143,9 +143,9 @@ typeArguments
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
     | SPACER_COMPOSE LPAREN RPAREN #spacerComposable
-    | DIVIDER_COMPOSE LPAREN THICKNESS ASSIGN thickness = expression? RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
-    | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable
-    |COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
+    | DIVIDER_COMPOSE LPAREN ((NL* dividerComposeParameter) (NL* COMMA NL* dividerComposeParameter)*)? RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
+    | SPACER_COMPOSE LPAREN (NL* modifierParameter NL*)? RPAREN  #spacerComposable
+    | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
     | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable ;
 
 textComposeParameter:
@@ -164,6 +164,10 @@ rowComposeParameter:
     VERTICAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #verticalAlignmentParameter |
     HORIZONTAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #horizontalArrangementParameter |
     modifierParameter #modifierRawParameter;
+
+dividerComposeParameter:
+    THICKNESS ASSIGN expression #dividerTicknessParamater |
+    COLOR_PARAM ASSIGN color #dividerColorParameter;
 
 arrangement:
    ARRANGEMENT DOT SPACED_BY LPAREN expression RPAREN;
@@ -195,4 +199,6 @@ modifier:
 
 modifierSuffix:
    VERTICAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #verticalScrollSuffix|
-   HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix;
+   HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix |
+   HEIGHT LPAREN expression RPAREN #heightSuffix |
+   WIDTH LPAREN expression RPAREN #widthSuffix;

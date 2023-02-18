@@ -559,12 +559,13 @@ KotlinScript
                 "        DividerComposable\n" +
                 "          T[Divider]\n" +
                 "          T[(]\n" +
-                "          T[thickness]\n" +
-                "          T[=]\n" +
-                "          DpLiteral\n" +
-                "            T[8]\n" +
-                "            T[.]\n" +
-                "            T[dp]\n" +
+                "          DividerTicknessParamater\n" +
+                "            T[thickness]\n" +
+                "            T[=]\n" +
+                "            DpLiteral\n" +
+                "              T[8]\n" +
+                "              T[.]\n" +
+                "              T[dp]\n" +
                 "          T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("dividerWithThickness")).multiLineString()
@@ -595,21 +596,30 @@ KotlinScript
                 "        SpacerComposable\n" +
                 "          T[Spacer]\n" +
                 "          T[(]\n" +
+                "          ModifierParameter\n" +
+                "            T[modifier]\n" +
+                "            T[=]\n" +
+                "            Modifier\n" +
+                "              T[Modifier]\n" +
+                "              T[.]\n" +
+                "              HeightSuffix\n" +
+                "                T[height]\n" +
+                "                T[(]\n" +
+                "                DpLiteral\n" +
+                "                  T[16]\n" +
+                "                  T[.]\n" +
+                "                  T[dp]\n" +
+                "                T[)]\n" +
+                "              T[.]\n" +
+                "              WidthSuffix\n" +
+                "                T[width]\n" +
+                "                T[(]\n" +
+                "                DpLiteral\n" +
+                "                  T[8]\n" +
+                "                  T[.]\n" +
+                "                  T[dp]\n" +
+                "                T[)]\n" +
                 "          T[)]\n" +
-                "          T[.]\n" +
-                "          SizeSuffix\n" +
-                "            T[size]\n" +
-                "            T[(]\n" +
-                "            T[width]\n" +
-                "            T[:]\n" +
-                "            DoubleLiteral\n" +
-                "              T[54.0]\n" +
-                "            T[,]\n" +
-                "            T[height]\n" +
-                "            T[:]\n" +
-                "            DoubleLiteral\n" +
-                "              T[54.0]\n" +
-                "            T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("spacerWithSize")).multiLineString()
         assertEquals(expected, actual)

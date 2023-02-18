@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
+import java.util.ArrayList
 import java.util.StringJoiner
 
 val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
@@ -112,17 +113,37 @@ fun Expression.generateCode() : String = when (this) {
 }
 
 fun DividerComposableCall.generateCode(): String{
-    return "Divider()"
+    var params: ArrayList<String> = arrayListOf()
+    color?.let { params.add(".overlay(${it.generateCode()})") }
+    frame?.let { params.add(it.generateCode()) }
+    print("SIZE: ${params.size}")
+    var paramString = params.joinToString("\n\t ")
+    if(paramString.isNotBlank()){
+        paramString = "\n\t$paramString"
+    }
+    return "Divider()$paramString"
 }
 
+
 fun SpacerComposableCall.generateCode(): String{
-    val suffix = size?.generateCode() ?: ""
+    val suffix = size?.let { "\n\t${it.generateCode()}" } ?: ""
 
     return "Spacer()$suffix"
 }
 
 fun Frame.generateCode(): String{
-    return "\n\t.frame(width: ${width.generateCode()}, height: ${height.generateCode()})"
+    var width = width?.let { "width: ${width.generateCode()}" }?: ""
+    var height = height?.let { "height: ${height.generateCode()}" }?: ""
+    var params = ""
+    if (width != "" && height != ""){
+        params = "$width, $height"
+    }else if (width != ""){
+        params = "$width"
+    }else{
+        params = "$height"
+    }
+
+    return ".frame($params)"
 }
 
 
