@@ -80,8 +80,8 @@ fun Block.generateCode(): String{
 fun PropertyDeclaration.generateCode(): String{
     var prefix = if (mutable) "var" else "let"
     var type = type.generateCode()
-    var value = value?.let {  " = ${value.generateCode()} "} ?: ""
-    return "$prefix: $type$value"
+    var value = value?.let {  " = ${value.generateCode()}"} ?: ""
+    return "$prefix $varName:$type$value"
 }
 
 fun Expression.generateCode() : String = when (this) {
