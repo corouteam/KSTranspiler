@@ -38,24 +38,37 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
     is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
     is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
     is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
-    is KotlinParser.DividerComposableContext -> this.toAst()
-    is KotlinParser.SpacerComposableContext -> this.toAst()
-    is KotlinParser.ColumnComposableContext -> this.toAst()
-    is KotlinParser.RowComposableContext -> this.toAst()
+    is KotlinParser.DividerComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun KotlinParser.DividerComposableContext.toAst(considerPosition: Boolean = false): Expression {
-    val params = composableUIGenericWidgetSuffix().map { it.toAst(considerPosition) }
-    val frame = params.firstOrNull { it is Frame } as Frame?
+fun KotlinParser.DividerComposableContext.toAst(considerPosition: Boolean): Expression {
 
-    return DividerComposableCall(frame, toPosition(considerPosition))
+    val paramsSuffix = composableUIGenericWidgetSuffix().map { it.toAst(considerPosition) }
+    val frame = paramsSuffix.firstOrNull { it is Frame } as Frame?
+    val thickness = dividerComposeParameter().firstOrNull { it is DividerTicknessParamaterContext } as? DividerTicknessParamaterContext
+    var thicknessExpression = thickness?.expression()?.toAst(considerPosition)
+
+    val color = dividerComposeParameter().firstOrNull { it is DividerColorParameterContext } as? DividerColorParameterContext
+    val colorExpression = color?.color()?.toAst(considerPosition)
+    var frameOrThickness = frame ?: thickness?.let { Frame(width = null, height = thicknessExpression) }
+    return DividerComposableCall(frameOrThickness, colorExpression)
 }
 
-fun KotlinParser.SpacerComposableContext.toAst(considerPosition: Boolean = false): Expression {
-    val params = composableUIGenericWidgetSuffix().map { it.toAst(considerPosition) }
-    val frame = params.firstOrNull { it is Frame } as Frame?
-    return SpacerComposableCall(frame, toPosition(considerPosition))
+fun KotlinParser.SpacerComposableContext.toAst(considerPosition: Boolean): Expression {
+    val frame = modifierParameter()?.modifier()?.let {
+        val height = (it.modifierSuffix().firstOrNull { it is HeightSuffixContext } as? HeightSuffixContext)?.expression()?.toAst(considerPosition)
+        val width = (it.modifierSuffix().firstOrNull { it is KotlinParser.WidthSuffixContext } as? KotlinParser.WidthSuffixContext)?.expression()?.toAst(considerPosition)
+        if (height != null || width != null){
+            return@let Frame(width, height)
+        }else{
+            return@let null
+        }
+    }
+    return SpacerComposableCall(frame)
 }
 
 fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(considerPosition: Boolean = false): Any = when(this){

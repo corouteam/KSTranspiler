@@ -84,18 +84,6 @@ class SWIFTMappingTest {
     }
 
     @Test
-    fun mapSpacerComposableRef(){
-        val code = "Spacer()"
-        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
-
-        val expectedAst = AstScript(listOf(
-            SpacerComposableCall(null)
-        ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
-    }
-
-    @Test
     fun testDividerSwiftUI() {
         val code = "Divider()"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()

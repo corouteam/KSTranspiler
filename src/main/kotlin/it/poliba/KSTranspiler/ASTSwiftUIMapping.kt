@@ -1,32 +1,19 @@
 package it.poliba.KSTranspiler
 
-import it.poliba.KSTranspiler.KotlinParser.CenterVerticalltAlignmentContext
-import it.poliba.KSTranspiler.SwiftParser.BoldSuffixContext
-import it.poliba.KSTranspiler.SwiftParser.BottomAlignmentContext
-import it.poliba.KSTranspiler.SwiftParser.CenterVerticalAlignmentContext
-import it.poliba.KSTranspiler.SwiftParser.ForegroundColorSuffixContext
-import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
-import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
-import it.poliba.KSTranspiler.SwiftParser.LeadingAlignmentContext
-import it.poliba.KSTranspiler.SwiftParser.OverlaySuffixContext
-import it.poliba.KSTranspiler.SwiftParser.SpacingParameterContext
-import it.poliba.KSTranspiler.SwiftParser.TopAlignmentContext
-import it.poliba.KSTranspiler.SwiftParser.TrailingAlignmentContext
-import org.antlr.v4.runtime.atn.ContextSensitivityInfo
-import java.lang.Exception
+import it.poliba.KSTranspiler.SwiftParser.*
 
 fun  SwiftParser.WidgetCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
     return this.widgetCall().toAst(considerPosition)
 }
 fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression = when(this){
-    is SwiftParser.TextWidgetContext -> this.toAst(considerPosition)
-    is SwiftParser.DividerWidgetContext -> this.toAst(considerPosition)
-    is SwiftParser.SpacerWidgetContext -> this.toAst(considerPosition)
-    is SwiftParser.VStackWidgetContext -> this.toAst(considerPosition)
-    is SwiftParser.HStackWidgetContext -> this.toAst(considerPosition)
-    is SwiftParser.ScrollViewWidgetContext -> this.toAst(considerPosition)
-    is SwiftParser.DividerWidgetContext -> this.toAst()
-    is SwiftParser.SpacerWidgetContext -> this.toAst()
+    is TextWidgetContext -> this.toAst(considerPosition)
+    is DividerWidgetContext -> this.toAst(considerPosition)
+    is SpacerWidgetContext -> this.toAst(considerPosition)
+    is VStackWidgetContext -> this.toAst(considerPosition)
+    is HStackWidgetContext -> this.toAst(considerPosition)
+    is ScrollViewWidgetContext -> this.toAst(considerPosition)
+    is DividerWidgetContext -> this.toAst(considerPosition)
+    is SpacerWidgetContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -39,12 +26,12 @@ fun SwiftParser.TextWidgetContext.toAst(considerPosition: Boolean = false): Expr
     return TextComposableCall(expressionAst, color, fontWeight, toPosition(considerPosition))
 }
 
-fun SwiftParser.DividerWidgetContext.toAst(considerPosition: Boolean = false): Expression {
+fun DividerWidgetContext.toAst(considerPosition: Boolean = false): Expression {
     val params = swiftUIGenericWidgetSuffix().map { it.toAst(considerPosition) }
     val frame = params.firstOrNull { it is Frame } as Frame?
     val color = params.firstOrNull { it is ColorLit } as ColorLit?
 
-    return DividerComposableCall(frame, toPosition(considerPosition))
+    return DividerComposableCall(frame, color, toPosition(considerPosition))
 }
 
 fun SwiftParser.SpacerWidgetContext.toAst(considerPosition: Boolean = false): Expression {
@@ -60,9 +47,9 @@ fun SwiftParser.SwiftUITextSuffixContext.toAst(considerPosition: Boolean = false
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
-fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(considerPosition: Boolean = false): Any = when(this){
+fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(considerPosition: Boolean): Any = when(this){
     is FrameSuffixContext -> toAst(considerPosition)
-    is OverlaySuffixContext -> this.color().toAst()
+    is OverlaySuffixContext -> this.color().toAst(considerPosition)
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
@@ -80,17 +67,20 @@ fun Expression.forceDpIfLiteral(): Expression{
         is DoubleLit -> {
             DpLit(this.value, this.position)
         }
-fun SwiftParser.FrameSuffixContext.toAst(considerPosition: Boolean = false): Frame {
-    return Frame(
-        width = this.width.toAst(considerPosition),
-        height = this.heigth.toAst(considerPosition),
-        position = toPosition(considerPosition))
-}
-
         else -> {
             this
         }
     }
+}
+
+fun FrameSuffixContext.toAst(considerPosition: Boolean): Frame {
+    var width = frameParam().firstOrNull { it is WidthParamContext } as? WidthParamContext
+    var height = frameParam().firstOrNull { it is HeightParamContext } as? HeightParamContext
+
+    return Frame(
+        width = width?.expression()?.toAst(considerPosition)?.forceDpIfLiteral(),
+        height = height?.expression()?.toAst(considerPosition)?.forceDpIfLiteral())
+
 }
 
 fun SwiftParser.StructDeclarationContext.toWidgetAST(considerPosition: Boolean = false): WidgetDeclaration{

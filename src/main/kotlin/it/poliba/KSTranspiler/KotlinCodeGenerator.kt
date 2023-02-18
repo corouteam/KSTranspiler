@@ -124,7 +124,7 @@ fun SpacerComposableCall.generateKotlinCode(): String{
 }
 
 fun Frame.generateKotlinCode(): String{
-    return "\n\t.size(width: ${width.generateKotlinCode()}, height: ${height.generateKotlinCode()})"
+    return "\n\t.size(width: ${width?.generateKotlinCode()}, height: ${height?.generateKotlinCode()})"
 }
 
 
