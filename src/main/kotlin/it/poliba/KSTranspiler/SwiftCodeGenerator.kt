@@ -100,6 +100,8 @@ fun Expression.generateCode() : String = when (this) {
     is FontWeightLit -> this.generateCode()
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
     is TextComposableCall -> this.generateCode()
+    is ImageComposableCall -> this.generateCode()
+    is PainterResource -> this.generateCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -133,6 +135,30 @@ fun TextComposableCall.generateCode(): String{
         boldSuffix = "\n.fontWeight($it)"
     }
     return "$base$colorSuffix$boldSuffix"
+}
+
+fun ImageComposableCall.generateCode(): String{
+    val base =  "Image(${this.value.generateCode()})"
+
+    var resizableSuffix = ""
+    var aspectRatioSuffix = ""
+
+    this.resizable?.generateCode()?.let {
+        resizableSuffix = "\n.resizable()"
+    }
+    this.aspectRatio?.generateCode()?.let {
+        aspectRatioSuffix = "\n.aspectRatio(contentMode: $it)"
+    }
+    return "$base$resizableSuffix$aspectRatioSuffix"
+}
+
+fun PainterResource.generateCode(): String{
+    var imageName = ""
+
+    this.image?.generateCode().let {
+        imageName = it ?: ""
+    }
+    return imageName
 }
 
 fun ColorLit.generateCode(): String = when(this){

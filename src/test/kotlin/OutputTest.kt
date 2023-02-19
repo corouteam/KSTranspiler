@@ -187,4 +187,15 @@ class OutputTest {
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
+    @Test
+    fun mapImageWithSuffix(){
+        val code = """
+            Image(painter = painterResource(id = getResources().getIdentifier("nome-immagine-test", "drawable", context.getPackageName())))
+            """.trimIndent()
+
+        val result = "Image(\"nome-immagine-test\")"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
 }
