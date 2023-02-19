@@ -445,4 +445,11 @@ class LexerTest {
         val result = listOf("SPACER_COMPOSE","LPAREN","RPAREN", "DOT", "SIZE", "LPAREN", "WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseBox(){
+        val code = "Box( Modifier.zIndex(1.0) ) {}"
+        val result = listOf("BOX","LPAREN","MODIFIER", "DOT", "ZINDEX", "LPAREN", "FLOAT_LIT", "RPAREN", "RPAREN", "LCURL","RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

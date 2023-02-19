@@ -362,6 +362,17 @@ class MappingTest {
 
         assert(spacer.size == null)
     }
+
+    @Test
+    fun testBox() {
+        val code = "Box( Modifier.zIndex(1.0) ) {}"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val zstack = (ast?.statement?.first() as ZStackComposableCall)
+
+        assertEquals(zstack.body, Block(listOf()))
+    }
+
     @Test
     fun mapColumn(){
         val code = """
@@ -457,4 +468,5 @@ class MappingTest {
         assertEquals(true, column?.scrollable)
 
     }
+
 }

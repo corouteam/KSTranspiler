@@ -27,6 +27,7 @@ import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
+import it.poliba.KSTranspiler.KotlinParser.ZIndexSuffixContext
 import org.antlr.v4.runtime.atn.ContextSensitivityInfo
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
@@ -42,7 +43,29 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
     is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
     is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
     is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.BoxComposableContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+fun KotlinParser.BoxComposableContext.toAst(considerPosition: Boolean): Expression {
+
+    //TODO: check this
+    //NOTA: se è presente zindex allora verrà mappato come ZStack { Widget }
+    val block = if (this.block() != null) this.block().toAst(considerPosition) else Block(
+        listOf(),
+        toPosition(considerPosition)
+    )
+
+    val zindex = (modifier().modifierSuffix()
+        .firstOrNull { it is ZIndexSuffixContext } as? ZIndexSuffixContext)?.expression()
+        ?.toAst(considerPosition)
+
+    if (zindex != null) {
+        return ZStackComposableCall(block)
+    } else {
+        return BoxComposableCall(block)
+    }
+
+
 }
 
 fun KotlinParser.DividerComposableContext.toAst(considerPosition: Boolean): Expression {

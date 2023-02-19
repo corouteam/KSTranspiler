@@ -64,6 +64,8 @@ class ColumnComposableType(override var position: Position? = null): ComposableT
 
 class ZStackComposableType(override var position: Position? = null): ComposableType()
 
+class BoxComposableType(override var position: Position? = null): ComposableType()
+
 class HorizontalAlignmentType(override var position: Position? = null): Type()
 class VerticalAlignmentType(override var position: Position? = null): Type()
 
@@ -206,6 +208,11 @@ class ZStackComposableCall(
     val body: ControlStructureBody,
     override var position: Position? = null,
 ): ComposableCall(ZStackComposableType(position))
+
+class BoxComposableCall(
+    val body: ControlStructureBody,
+    override var position: Position? = null,
+): ComposableCall(BoxComposableType(position))
 
 class Frame(val width: Expression?, val height: Expression?, override var position: Position? = null): Node()
 
