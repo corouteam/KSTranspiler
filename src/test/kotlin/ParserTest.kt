@@ -641,7 +641,7 @@ KotlinScript
                 "              T[zIndex]\n" +
                 "              T[(]\n" +
                 "              DoubleLiteral\n" +
-                "                T[54.0]\n" +
+                "                T[1.0]\n" +
                 "              T[)]\n" +
                 "          T[)]\n" +
                 "    T[<EOF>]\n"
