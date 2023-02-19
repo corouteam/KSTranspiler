@@ -1,6 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.google.gson.Gson
+import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacade
 import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacadeScript
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -80,7 +81,7 @@ class SWIFTMappingTest {
                 "        Text(\"Ciao\")\n" +
                 "    }\n" +
                 "}"
-        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
         val expectedAst = AstFile(listOf(
             WidgetDeclaration("MainView", listOf(FunctionParameter("name", StringType())), Block(listOf(TextComposableCall(StringLit("Ciao"), null, null), TextComposableCall(StringLit("Ciao"), null, null))
             ))))

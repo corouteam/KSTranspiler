@@ -527,34 +527,35 @@ KotlinScript
                 "              PainterResourceParameter\n" +
                 "                T[id]\n" +
                 "                T[=]\n" +
-                "                T[getResources]\n" +
-                "                T[(]\n" +
-                "                T[)]\n" +
-                "                T[.]\n" +
-                "                T[getIdentifier]\n" +
-                "                T[(]\n" +
-                "                StringLiteralExpression\n" +
-                "                  StringLiteral\n" +
-                "                    LineStringLiteral\n" +
-                "                      T[\"]\n" +
-                "                      LineStringContent\n" +
-                "                        T[nome-immagine-test]\n" +
-                "                      T[\"]\n" +
-                "                T[,]\n" +
-                "                StringLiteralExpression\n" +
-                "                  StringLiteral\n" +
-                "                    LineStringLiteral\n" +
-                "                      T[\"]\n" +
-                "                      LineStringContent\n" +
-                "                        T[drawable]\n" +
-                "                      T[\"]\n" +
-                "                T[,]\n" +
-                "                T[context]\n" +
-                "                T[.]\n" +
-                "                T[getPackageName]\n" +
-                "                T[(]\n" +
-                "                T[)]\n" +
-                "                T[)]\n" +
+                "                DrawableResource\n" +
+                "                  T[getResources]\n" +
+                "                  T[(]\n" +
+                "                  T[)]\n" +
+                "                  T[.]\n" +
+                "                  T[getIdentifier]\n" +
+                "                  T[(]\n" +
+                "                  StringLiteralExpression\n" +
+                "                    StringLiteral\n" +
+                "                      LineStringLiteral\n" +
+                "                        T[\"]\n" +
+                "                        LineStringContent\n" +
+                "                          T[nome-immagine-test]\n" +
+                "                        T[\"]\n" +
+                "                  T[,]\n" +
+                "                  StringLiteralExpression\n" +
+                "                    StringLiteral\n" +
+                "                      LineStringLiteral\n" +
+                "                        T[\"]\n" +
+                "                        LineStringContent\n" +
+                "                          T[drawable]\n" +
+                "                        T[\"]\n" +
+                "                  T[,]\n" +
+                "                  T[context]\n" +
+                "                  T[.]\n" +
+                "                  T[getPackageName]\n" +
+                "                  T[(]\n" +
+                "                  T[)]\n" +
+                "                  T[)]\n" +
                 "              T[)]\n" +
                 "          T[)]\n" +
                 "    T[<EOF>]\n"

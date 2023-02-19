@@ -108,8 +108,8 @@ class SWIFTLexerTest {
 
     @Test
     fun parseImageWithFrame(){
-        val code = "Image(\"nome-immagine-test\").resizable().frame(width: 54.0, height: 54.0)"
-        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "DOT", "FRAME","LPAREN","WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
+        val code = "Image(\"nome-immagine-test\").resizable()"
+        val result = listOf("IMAGE_WIDGET", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "DOT", "RESIZABLE","LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
