@@ -12,8 +12,7 @@ fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression =
     is VStackWidgetContext -> this.toAst(considerPosition)
     is HStackWidgetContext -> this.toAst(considerPosition)
     is ScrollViewWidgetContext -> this.toAst(considerPosition)
-    is DividerWidgetContext -> this.toAst(considerPosition)
-    is SpacerWidgetContext -> this.toAst(considerPosition)
+    is ZStackWidgetContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -39,6 +38,13 @@ fun SwiftParser.SpacerWidgetContext.toAst(considerPosition: Boolean = false): Ex
     val frame = params.firstOrNull { it is Frame } as Frame?
 
     return SpacerComposableCall(frame, toPosition(considerPosition))
+}
+
+fun SwiftParser.ZStackWidgetContext.toAst(considerPosition: Boolean = false): Expression {
+
+    val block = if(this.block() != null) this.block().toAst(considerPosition) else Block(listOf(), toPosition(considerPosition))
+
+    return ZStackComposableCall(block, toPosition(considerPosition))
 }
 
 fun SwiftParser.SwiftUITextSuffixContext.toAst(considerPosition: Boolean = false): Expression = when(this){

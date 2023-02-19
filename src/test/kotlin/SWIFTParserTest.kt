@@ -252,4 +252,20 @@ class SWIFTParserTest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun parseZStack(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        ZStackWidget\n" +
+                "          T[ZStack]\n" +
+                "          Block\n" +
+                "            T[{]\n" +
+                "            T[}]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/zstack")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
 }

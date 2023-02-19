@@ -210,4 +210,15 @@ class SWIFTMappingTest {
         assertEquals(expectingSpacing, spacing)
         assertEquals(CenterVerticallyAlignment(), alignment)
     }
+
+    @Test
+    fun mapZStackRef(){
+        val code = "ZStack {}"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val zstack = ast?.statement?.first() as? ZStackComposableCall
+
+        assertEquals(Block(listOf()), zstack?.body)
+
+    }
 }

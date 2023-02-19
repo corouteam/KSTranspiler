@@ -62,8 +62,11 @@ class DividerComposableType(override var position: Position? = null): Composable
 class SpacerComposableType(override var position: Position? = null): ComposableType()
 class ColumnComposableType(override var position: Position? = null): ComposableType()
 
+class ZStackComposableType(override var position: Position? = null): ComposableType()
+
 class HorizontalAlignmentType(override var position: Position? = null): Type()
 class VerticalAlignmentType(override var position: Position? = null): Type()
+
 // END TEST
 //
 // Expressions
@@ -198,6 +201,11 @@ class SpacerComposableCall(
     val size: Frame?,
     override var position: Position? = null,
     ): ComposableCall(SpacerComposableType(position))
+
+class ZStackComposableCall(
+    val body: ControlStructureBody,
+    override var position: Position? = null,
+): ComposableCall(ZStackComposableType(position))
 
 class Frame(val width: Expression?, val height: Expression?, override var position: Position? = null): Node()
 

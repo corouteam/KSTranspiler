@@ -71,6 +71,7 @@ VERTICAL_ALIGNMENT=64
 WIDTH=65
 HEIGHT=66
 FRAME=67
+ZSTACK=68
 'var'=3
 'let'=4
 'print'=5
@@ -130,4 +131,4 @@ FRAME=67
 'width'=62
 'height'=63
 'frame'=64
-
+'ZStack'=65
