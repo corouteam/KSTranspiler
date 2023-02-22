@@ -2,7 +2,6 @@ package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.traversing.searchByType
-import com.strumenta.kolasu.traversing.walkAncestors
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -97,6 +96,57 @@ fun Node.commonValidation(): LinkedList<Error> {
             errors.add(Error("""
                 Type mismatch (${it.value.type.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
             """.trimIndent(), this.position))
+        }
+    }
+
+    // check if assignment type matches declaration
+    this.specificProcess(ControlStructureBody::class.java) { block ->
+        if (block is Block) {
+            block.searchByType(Assignment::class.java).forEach {
+                val assignmentName = it.varName
+                val assignmentType = it.value.type
+
+                val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
+
+                if (declarationsInBlock.isNotEmpty()) {
+                    declarationsInBlock.forEach {
+                        if (it.varName == assignmentName) {
+                            // Search if assignment type matches declaration type
+                            if (assignmentType.generateCode() != it.type.generateCode()) {
+                                errors.add(
+                                    Error(
+                                        """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                    )
+                                )
+                            }
+
+                            // match found, no need to iterate anymore
+                            return@specificProcess
+                        }
+                    }
+                }
+
+                // If a declaration is not found in scope, search in global variables
+                globalVariables.forEach {
+                    if (it.varName == assignmentName) {
+                        // Search if assignment type matches declaration type
+                        if (assignmentType.generateCode() != it.type.generateCode()) {
+                            errors.add(
+                                Error(
+                                    """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                )
+                            )
+                        }
+
+                        // match found, no need to iterate anymore
+                        return@specificProcess
+                    }
+                }
+            }
         }
     }
 
