@@ -36,7 +36,7 @@ fun Statement.generateCode(): String {
 fun FunctionDeclaration.generateCode(): String{
     val returnType = if(this.returnType != null) "-> ${this.returnType.generateCode()}" else ""
     return "func ${this.id}(${this.parameters.joinToString(", "){it.generateCode()}})"+returnType +
-            "{\n\t${this.body.generateCode()}\n}"
+            "{\n${this.body.generateCode()}\n}"
 }
 
 
@@ -54,12 +54,12 @@ fun Print.generateCode(): String{
 
 fun IfExpression.generateCode(): String{
     var result =  "if(${condition.generateCode()}){\n"+
-            "\t${body.generateCode()}\n"+
+            "${body.generateCode()}\n"+
             "}"
     elseBranch?.let {
         when (it){
             is IfExpression ->result += "else "+ it.generateCode()
-            else -> result += "else{\n\t${it.generateCode()}\n}"
+            else -> result += "else{\n${it.generateCode()}\n}"
 
         }
     }
@@ -75,7 +75,7 @@ fun ControlStructureBody.generateCode(): String{
 }
 
 fun Block.generateCode(): String{
-    return this.body.joinToString("\n") { it.generateCode() }
+    return this.body.joinToString("\n") { "\t${it.generateCode()}" }
 }
 fun PropertyDeclaration.generateCode(): String{
     var prefix = if (mutable) "var" else "let"
@@ -103,6 +103,7 @@ fun Expression.generateCode() : String = when (this) {
     is SpacerComposableCall -> this.generateCode()
     is ColumnComposableCall -> this.generateCode()
     is HorizontalAlignment -> this.generateCode()
+    is ButtonComposableCall -> this.generateCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -119,8 +120,9 @@ fun DividerComposableCall.generateCode(): String{
     }
     return "Divider()$paramString"
 }
-
-
+fun ButtonComposableCall.generateCode(): String{
+    return "Button(action: {\n${this.action.generateCode()}\n}){\n${this.body.generateCode()}\n} "
+}
 fun SpacerComposableCall.generateCode(): String{
     val suffix = size?.let { "\n\t${it.generateCode()}" } ?: ""
 

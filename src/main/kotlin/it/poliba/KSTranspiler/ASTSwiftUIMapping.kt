@@ -14,6 +14,8 @@ fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression =
     is ScrollViewWidgetContext -> this.toAst(considerPosition)
     is DividerWidgetContext -> this.toAst(considerPosition)
     is SpacerWidgetContext -> this.toAst(considerPosition)
+    is SwiftParser.ButtonWidgetContext -> this.toAst(considerPosition)
+
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -24,6 +26,15 @@ fun SwiftParser.TextWidgetContext.toAst(considerPosition: Boolean = false): Expr
     val color = params.firstOrNull { it is ColorLit } as ColorLit?
     val fontWeight = params.firstOrNull { it is FontWeightLit } as FontWeightLit?
     return TextComposableCall(expressionAst, color, fontWeight, toPosition(considerPosition))
+}
+
+
+fun SwiftParser.ButtonWidgetContext.toAst(considerPosition: Boolean = false): Expression {
+
+    val action = this.action.block().toAst(considerPosition)
+    val body = Block(this.body.statement().map { it.toAst(considerPosition) })
+
+    return ButtonComposableCall(action, body)
 }
 
 fun DividerWidgetContext.toAst(considerPosition: Boolean = false): Expression {

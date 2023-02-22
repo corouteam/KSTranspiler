@@ -65,7 +65,7 @@ class  OutputTest {
     }
     @Test
     fun convertIf(){
-        val code = "if(true){ print(\"Is true \") }"
+        val code = "if(true){ print(\"Is true \")}"
         val result = "if(true){\n\tprint(\"Is true \")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
@@ -176,13 +176,15 @@ class  OutputTest {
             @Composable
             fun test(x: Int, y: Int) { Text("Hello") }
             """.trimIndent()
-        val result = "struct test: View{\n" +
-                "var x: Int\n" +
-                "var y: Int\n" +
-                "var body: some View {\n" +
-                " Text(\"Hello\")\n" +
-                "}\n" +
-                "}"
+        val result = """
+            struct test: View{
+            var x: Int
+            var y: Int
+            var body: some View {
+             	Text("Hello")
+            }
+            }
+        """.trimIndent()
         val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
@@ -264,12 +266,32 @@ class  OutputTest {
     """.trimIndent()
     }
 
- @Test
+    @Test
     fun mapSpacerWithParams(){
         val code = """
             Spacer(modifier = Modifier.width(54.dp).height(54.dp))
             """.trimIndent()
         val result = "Spacer()\n\t.frame(width: CGFloat(54), height: CGFloat(54))"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapButton(){
+        val code = """
+            Button( onClick = {
+                print("Ok")
+            }){
+                Text("Ciao") 
+            }
+            """.trimIndent()
+        val result = """
+            Button(action: {
+            	print("Ok")
+            }){
+            	Text("Ciao")
+            } 
+        """.trimIndent()
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }

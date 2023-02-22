@@ -145,7 +145,8 @@ composableCall:
     | DIVIDER_COMPOSE LPAREN ((NL* dividerComposeParameter) (NL* COMMA NL* dividerComposeParameter)*)? RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
     | SPACER_COMPOSE LPAREN (NL* modifierParameter NL*)? RPAREN  #spacerComposable
     | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
-    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable ;
+    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable
+    |  BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody RPAREN body = block #iconButtonComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
