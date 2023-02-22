@@ -157,7 +157,7 @@ widgetCall:
     | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
     |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
     HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
-    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget;
+    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget ;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
@@ -180,7 +180,12 @@ verticalAlignment:
 
 
 swiftUIGenericWidgetSuffix:
-    FRAME LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #frameSuffix;
+    FRAME LPAREN ((NL* frameParam) (NL* COMMA NL* frameParam)*)? RPAREN #frameSuffix
+    | OVERLAY LPAREN color RPAREN #overlaySuffix;
+
+frameParam:
+     HEIGHT COLON expression #heightParam |
+     WIDTH COLON expression #widthParam;
 
 fontWeight:
      FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;

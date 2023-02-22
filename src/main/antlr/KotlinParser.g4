@@ -55,7 +55,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
-           | INT_LIT DOT DP_SUFFIX                                         # dpLiteral
+           | INT_LIT DOT DP_SUFFIX                                             # dpLiteral
            | name=ID NL* functionCallParameters NL*                        # functionCall
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
@@ -142,12 +142,11 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
-    | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody RPAREN body = block #iconButtonComposable
-    | ICON_COMPOSABLE LPAREN RPAREN #iconComposable
-    | DIVIDER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
-    | SPACER_COMPOSE LPAREN RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #spacerComposable
+    | DIVIDER_COMPOSE LPAREN ((NL* dividerComposeParameter) (NL* COMMA NL* dividerComposeParameter)*)? RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
+    | SPACER_COMPOSE LPAREN (NL* modifierParameter NL*)? RPAREN  #spacerComposable
     | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
-    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable;
+    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable
+    |  BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody RPAREN body = block #iconButtonComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
@@ -155,6 +154,7 @@ textComposeParameter:
 
 composableUIGenericWidgetSuffix:
     SIZE LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #sizeSuffix;
+
 columnComposeParameter:
     VERTICAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #verticalArrangementParameter |
     HORIZONTAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #horizontalAlignmentParameter |
@@ -164,6 +164,10 @@ rowComposeParameter:
     VERTICAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #verticalAlignmentParameter |
     HORIZONTAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #horizontalArrangementParameter |
     modifierParameter #modifierRawParameter;
+
+dividerComposeParameter:
+    THICKNESS ASSIGN expression #dividerTicknessParamater |
+    COLOR_PARAM ASSIGN color #dividerColorParameter;
 
 arrangement:
    ARRANGEMENT DOT SPACED_BY LPAREN expression RPAREN;
@@ -195,4 +199,6 @@ modifier:
 
 modifierSuffix:
    VERTICAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #verticalScrollSuffix|
-   HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix;
+   HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix |
+   HEIGHT LPAREN expression RPAREN #heightSuffix |
+   WIDTH LPAREN expression RPAREN #widthSuffix;

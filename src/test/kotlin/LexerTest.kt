@@ -23,7 +23,7 @@ class LexerTest {
        return lexer
    }
 
-        
+
 
     private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer(
         ANTLRInputStream(this.javaClass.getResourceAsStream("/${resourceName}.Kotlin"))
@@ -431,6 +431,12 @@ class LexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
+    @Test
+    fun parseDividerWithThickness(){
+        val code = "Divider(thickness = 8.dp)"
+        val result = listOf("DIVIDER_COMPOSE", "LPAREN", "THICKNESS", "ASSIGN", "INT_LIT", "DOT", "DP_SUFFIX", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 
 
     @Test

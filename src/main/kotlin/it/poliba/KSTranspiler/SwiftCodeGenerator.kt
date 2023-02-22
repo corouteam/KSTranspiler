@@ -3,9 +3,10 @@ package it.poliba.KSTranspiler
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
+import java.util.ArrayList
 import java.util.StringJoiner
 
-val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
+//val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
 fun AstFile.generateCode(): String{
     return declarations.joinToString("\n") { it.generateCode() }
 }
@@ -77,14 +78,10 @@ fun Block.generateCode(): String{
     return this.body.joinToString("\n") { "\t${it.generateCode()}" }
 }
 fun PropertyDeclaration.generateCode(): String{
-    val st = group.getInstanceOf("propertyDeclaration")
-    st.add("name",varName)
-    st.add("type", type.generateCode())
-    value?.let {
-        st.add("value", value.generateCode())
-    }
-    st.add("mutable", mutable)
-    return st.render()
+    var prefix = if (mutable) "var" else "let"
+    var type = type.generateCode()
+    var value = value?.let {  " = ${value.generateCode()}"} ?: ""
+    return "$prefix $varName:$type$value"
 }
 
 fun Expression.generateCode() : String = when (this) {
@@ -113,20 +110,38 @@ fun Expression.generateCode() : String = when (this) {
 }
 
 fun DividerComposableCall.generateCode(): String{
-    var suffix = frame?.generateCode() ?: ""
-    return "Divider()$suffix"
+    var params: ArrayList<String> = arrayListOf()
+    color?.let { params.add(".overlay(${it.generateCode()})") }
+    frame?.let { params.add(it.generateCode()) }
+    print("SIZE: ${params.size}")
+    var paramString = params.joinToString("\n\t ")
+    if(paramString.isNotBlank()){
+        paramString = "\n\t$paramString"
+    }
+    return "Divider()$paramString"
 }
 fun ButtonComposableCall.generateCode(): String{
     return "Button(action: {\n${this.action.generateCode()}\n}){\n${this.body.generateCode()}\n} "
 }
 fun SpacerComposableCall.generateCode(): String{
-    val suffix = size?.generateCode() ?: ""
+    val suffix = size?.let { "\n\t${it.generateCode()}" } ?: ""
 
     return "Spacer()$suffix"
 }
 
 fun Frame.generateCode(): String{
-    return "\n\t.frame(width: ${width.generateCode()}, height: ${height.generateCode()})"
+    var width = width?.let { "width: ${width.generateCode()}" }?: ""
+    var height = height?.let { "height: ${height.generateCode()}" }?: ""
+    var params = ""
+    if (width != "" && height != ""){
+        params = "$width, $height"
+    }else if (width != ""){
+        params = "$width"
+    }else{
+        params = "$height"
+    }
+
+    return ".frame($params)"
 }
 
 
@@ -205,8 +220,8 @@ VStack($parameters){
 
 fun HorizontalAlignment.generateCode(): String{
     return when(this){
-        StartAlignment -> "HorizontalAlignment.start"
-        EndAlignment -> "HorizontalAlignment.end"
-        CenterHorizAlignment -> "HorizontalAlignment.center"
+        is StartAlignment -> "HorizontalAlignment.start"
+        is EndAlignment -> "HorizontalAlignment.end"
+        is CenterHorizAlignment -> "HorizontalAlignment.center"
     }
 }

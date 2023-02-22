@@ -25,7 +25,7 @@ object App {
         if (!parseResult.isCorrect()) {
             println("ERRORS FOUND")
             parseResult.errors.forEach {
-                println(" * ${it.position?.start}: ${it.message}")
+                println(" * ${it.position}: ${it.message}")
             }
         }
 

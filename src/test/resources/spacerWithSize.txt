@@ -1,1 +1,1 @@
-Spacer().size(width: 54.0, height: 54.0)
+Spacer(modifier = Modifier.height(16.dp).width(8.dp))

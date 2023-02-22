@@ -140,10 +140,16 @@ class SWIFTLexerTest {
       }
 
     @Test
-
     fun parseDivider(){
         val code = "Divider()"
         val result = listOf("DIVIDER_WIDGET", "LPAREN", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseDividerWithOverlay(){
+        val code = "Divider().overlay(Color.blue)"
+        val result = listOf("DIVIDER_WIDGET", "LPAREN", "RPAREN","DOT", "OVERLAY", "LPAREN", "COLOR", "DOT", "COLOR_BLUE", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 

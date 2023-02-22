@@ -9,8 +9,12 @@ import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ColumnComposeParameterContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
+import it.poliba.KSTranspiler.KotlinParser.DividerColorParameterContext
+import it.poliba.KSTranspiler.KotlinParser.DividerComposeParameterContext
+import it.poliba.KSTranspiler.KotlinParser.DividerTicknessParamaterContext
 import it.poliba.KSTranspiler.KotlinParser.EndAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.FontWeightParameterContext
+import it.poliba.KSTranspiler.KotlinParser.HeightSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.SizeSuffixContext
 import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 
@@ -23,147 +27,167 @@ import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
+import org.antlr.v4.runtime.atn.ContextSensitivityInfo
 
-fun  KotlinParser.ComposableCallExpressionContext.toAst(): Expression {
-    return this.composableCall().toAst()
+fun  KotlinParser.ComposableCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
+    return this.composableCall().toAst(considerPosition)
 }
-fun KotlinParser.ComposableCallContext.toAst(): Expression = when(this){
-    is KotlinParser.TextComposableContext -> this.toAst()
-    is KotlinParser.IconButtonComposableContext -> this.toAst()
-    is KotlinParser.IconComposableContext -> Icon()
-    is KotlinParser.DividerComposableContext -> this.toAst()
-    is KotlinParser.SpacerComposableContext -> this.toAst()
-    is KotlinParser.ColumnComposableContext -> this.toAst()
-    is KotlinParser.RowComposableContext -> this.toAst()
+fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false): Expression = when(this){
+    is KotlinParser.TextComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.DividerComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.DividerComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.IconButtonComposableContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+fun KotlinParser.IconButtonComposableContext.toAst(considerPosition: Boolean): Expression {
 
-
-fun KotlinParser.IconButtonComposableContext.toAst(): Expression {
-
-    val action = this.action.block().toAst()
-    val body = Block(this.body.statement().map { it.toAst() })
+    val action = this.action.block().toAst(considerPosition)
+    val body = Block(this.body.statement().map { it.toAst(considerPosition) })
 
     return ButtonComposableCall(action, body)
 }
 
+fun KotlinParser.DividerComposableContext.toAst(considerPosition: Boolean): Expression {
 
-fun KotlinParser.DividerComposableContext.toAst(): Expression {
-    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
-    val frame = params.firstOrNull { it is Frame } as Frame?
+    val paramsSuffix = composableUIGenericWidgetSuffix().map { it.toAst(considerPosition) }
+    val frame = paramsSuffix.firstOrNull { it is Frame } as Frame?
+    val thickness = dividerComposeParameter().firstOrNull { it is DividerTicknessParamaterContext } as? DividerTicknessParamaterContext
+    var thicknessExpression = thickness?.expression()?.toAst(considerPosition)
 
-    return DividerComposableCall(frame)
+    val color = dividerComposeParameter().firstOrNull { it is DividerColorParameterContext } as? DividerColorParameterContext
+    val colorExpression = color?.color()?.toAst(considerPosition)
+    var frameOrThickness = frame ?: thickness?.let { Frame(width = null, height = thicknessExpression) }
+    return DividerComposableCall(frameOrThickness, colorExpression)
 }
 
-fun KotlinParser.SpacerComposableContext.toAst(): Expression {
-    val params = composableUIGenericWidgetSuffix().map { it.toAst() }
-    val frame = params.firstOrNull { it is Frame } as Frame?
+fun KotlinParser.SpacerComposableContext.toAst(considerPosition: Boolean): Expression {
+    val frame = modifierParameter()?.modifier()?.let {
+        val height = (it.modifierSuffix().firstOrNull { it is HeightSuffixContext } as? HeightSuffixContext)?.expression()?.toAst(considerPosition)
+        val width = (it.modifierSuffix().firstOrNull { it is KotlinParser.WidthSuffixContext } as? KotlinParser.WidthSuffixContext)?.expression()?.toAst(considerPosition)
+        if (height != null || width != null){
+            return@let Frame(width, height)
+        }else{
+            return@let null
+        }
+    }
     return SpacerComposableCall(frame)
 }
 
-fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(): Any = when(this){
-    is SizeSuffixContext -> toAst()
+fun KotlinParser.ComposableUIGenericWidgetSuffixContext.toAst(considerPosition: Boolean = false): Any = when(this){
+    is SizeSuffixContext -> toAst(considerPosition)
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 
-fun KotlinParser.SizeSuffixContext.toAst(): Frame {
-    return Frame(width = this.width.toAst(), height = this.heigth.toAst())
+fun KotlinParser.SizeSuffixContext.toAst(considerPosition: Boolean): Frame {
+    return Frame(
+        width = this.width.toAst(considerPosition),
+        height = this.heigth.toAst(considerPosition),
+        position = toPosition(considerPosition))
 }
 
 
 
 
-fun KotlinParser.ColumnComposableContext.toAst(): Expression{
+
+
+
+fun KotlinParser.ColumnComposableContext.toAst(considerPosition: Boolean = false): Expression{
     val verticalArrangement = columnComposeParameter().firstOrNull { it is VerticalArrangementParameterContext } as? VerticalArrangementParameterContext
-    val verticalArrangementExpression = verticalArrangement?.expression()?.toAst()
+    val verticalArrangementExpression = verticalArrangement?.expression()?.toAst(considerPosition)
 
     val alignment = columnComposeParameter().firstOrNull { it is HorizontalAlignmentParameterContext } as? HorizontalAlignmentParameterContext
-    val alignmentExpression = alignment?.expression()?.toAst()
+    val alignmentExpression = alignment?.expression()?.toAst(considerPosition)
 
     val modifier = columnComposeParameter().firstOrNull() {it is ModifierColumnParameterContext} as? ModifierColumnParameterContext
     val scroll = modifier?.modifierParameter()?.modifier()?.modifierSuffix()?.firstOrNull { it is VerticalScrollSuffixContext } != null
 
-    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+    val block = if(this.block() != null) this.block().toAst(considerPosition) else Block(listOf(), toPosition(considerPosition))
 
-    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression, scroll, block )
+    return ColumnComposableCall(verticalArrangementExpression, alignmentExpression, scroll, block, toPosition(considerPosition))
 }
 
-fun KotlinParser.RowComposableContext.toAst(): Expression{
+fun KotlinParser.RowComposableContext.toAst(considerPosition: Boolean = false): Expression{
     val verticalAlignment = rowComposeParameter().firstOrNull { it is VerticalAlignmentParameterContext } as? VerticalAlignmentParameterContext
-    val verticalAlignmentExpression = verticalAlignment?.expression()?.toAst()
+    val verticalAlignmentExpression = verticalAlignment?.expression()?.toAst(considerPosition)
 
     val arrangement = rowComposeParameter().firstOrNull { it is KotlinParser.HorizontalArrangementParameterContext } as? KotlinParser.HorizontalArrangementParameterContext
-    val arrangementExpression = arrangement?.expression()?.toAst()
+    val arrangementExpression = arrangement?.expression()?.toAst(considerPosition)
 
     val modifier = rowComposeParameter().firstOrNull() {it is ModifierRawParameterContext} as? ModifierRawParameterContext
     val scroll = modifier?.modifierParameter()?.modifier()?.modifierSuffix()?.firstOrNull { it is HorizontalScrollSuffixContext } != null
 
-    val block = if(this.block() != null) this.block().toAst() else Block(listOf())
+    val block = if(this.block() != null) this.block().toAst(considerPosition) else Block(listOf(), toPosition(considerPosition))
 
-    return RowComposableCall(arrangementExpression, verticalAlignmentExpression, scroll, block )
+    return RowComposableCall(arrangementExpression, verticalAlignmentExpression, scroll, block, toPosition(considerPosition))
 }
 
-fun KotlinParser.TextComposableContext.toAst(): Expression {
-    val expressionAst = this.expression().toAst()
-    if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Text composable")
-    val params = textComposeParameter().map { it.toAst() }
+fun KotlinParser.TextComposableContext.toAst(considerPosition: Boolean = false): Expression {
+    val expressionAst = this.expression().toAst(considerPosition)
+    if(expressionAst.type.nodeType != StringType(toPosition(considerPosition)).nodeType) throw IllegalArgumentException("String expected in Text composable")
+    val params = textComposeParameter().map { it.toAst(considerPosition) }
     val color = params.firstOrNull { it is ColorLit } as ColorLit?
     val fontWeight = params.firstOrNull { it is FontWeightLit } as FontWeightLit?
-    return TextComposableCall(expressionAst, color, fontWeight)
+    return TextComposableCall(expressionAst, color, fontWeight, toPosition(considerPosition))
 }
 
-fun KotlinParser.TextComposeParameterContext.toAst(): Expression = when(this){
-    is ColorParameterContext -> this.color().toAst()
-    is FontWeightParameterContext -> this.fontWeight().toAst()
+fun KotlinParser.TextComposeParameterContext.toAst(considerPosition: Boolean = false): Expression = when(this){
+    is ColorParameterContext -> this.color().toAst(considerPosition)
+    is FontWeightParameterContext -> this.fontWeight().toAst(considerPosition)
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
-fun KotlinParser.ColorContext.toAst(): Expression = when(this){
-        is CustomColorContext -> CustomColor(StringLit(COLOR_LITERAL().text))
-        is BlueColorContext ->  ColorBlue()
-        else -> throw java.lang.IllegalArgumentException("Color not recognized")
+fun KotlinParser.ColorContext.toAst(considerPosition: Boolean = false): Expression = when(this){
+    is CustomColorContext -> CustomColor(StringLit(COLOR_LITERAL().text, toPosition(considerPosition)), toPosition(considerPosition))
+    is BlueColorContext ->  ColorBlue(toPosition(considerPosition))
+    else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
-fun KotlinParser.FontWeightContext.toAst(): Expression = when(this){
-    is CustomWeightContext -> CustomFontWeight(IntLit(INT_LIT().text))
-    is BoldFontWeightContext ->  FontWeightBold()
+fun KotlinParser.FontWeightContext.toAst(considerPosition: Boolean = false): Expression = when(this){
+    is CustomWeightContext -> CustomFontWeight(IntLit(INT_LIT().text, toPosition(considerPosition)), toPosition(considerPosition))
+    is BoldFontWeightContext ->  FontWeightBold(toPosition(considerPosition))
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
 fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration {
     val id = this.ID().text
-    val params = this.functionValueParameters().functionValueParameter().map { it.toAst() }
-    var block = Block(listOf())
+    val params = this.functionValueParameters().functionValueParameter().map { it.toAst(considerPosition) }
+    var block: Block
     if(this.functionBody().block() != null){
-        block =  Block(this.functionBody().block().statement().map { it.toAst(considerPosition) })
+        block =  Block(this.functionBody().block().statement().map { it.toAst(considerPosition) }, toPosition(considerPosition))
     }else{
-        val returnExpression = ReturnExpression(this.functionBody().expression().toAst())
-        block = Block(listOf(returnExpression))
+        val returnExpression = ReturnExpression(this.functionBody().expression().toAst(considerPosition), toPosition(considerPosition))
+        block = Block(listOf(returnExpression), toPosition(considerPosition))
 
     }
-    return WidgetDeclaration(id, params, block)
+    return WidgetDeclaration(id, params, block, toPosition(considerPosition))
 }
 
 
-fun KotlinParser.ArrangementExpressionContext.toAst(): Expression{
-    return this.arrangement().expression().toAst()
+fun KotlinParser.ArrangementExpressionContext.toAst(considerPosition: Boolean = false): Expression{
+    return this.arrangement().expression().toAst(considerPosition)
 }
 
-fun KotlinParser.HorizhontalAlignmentExpressionContext.toAst(): Expression{
+fun KotlinParser.HorizhontalAlignmentExpressionContext.toAst(considerPosition: Boolean = false): Expression{
     when (this.horizontalAlignment()){
-        is StartAlignmentContext -> return StartAlignment
-        is EndAlignmentContext -> return EndAlignment
-        is CenterHorizontallyAlignmentContext -> return CenterHorizAlignment
+        is StartAlignmentContext -> return StartAlignment(toPosition(considerPosition))
+        is EndAlignmentContext -> return EndAlignment(toPosition(considerPosition))
+        is CenterHorizontallyAlignmentContext -> return CenterHorizAlignment(toPosition(considerPosition))
         else -> throw  throw java.lang.IllegalArgumentException("Alignment not recognized")
     }
 }
 
 
-fun KotlinParser.VerticalAlignmentExpressionContext.toAst(): Expression{
+fun KotlinParser.VerticalAlignmentExpressionContext.toAst(considerPosition: Boolean = false): Expression{
     when (this.verticalAlignment()){
-        is TopAlignmentContext -> return TopAlignment
-        is BottomAlignmentContext -> return BottomAlignment
-        is CenterVerticalltAlignmentContext -> return CenterVerticallyAlignment
+        is TopAlignmentContext -> return TopAlignment(toPosition(considerPosition))
+        is BottomAlignmentContext -> return BottomAlignment(toPosition(considerPosition))
+        is CenterVerticalltAlignmentContext -> return CenterVerticallyAlignment(toPosition(considerPosition))
         else -> throw  throw java.lang.IllegalArgumentException("Alignment not recognized")
     }
 }

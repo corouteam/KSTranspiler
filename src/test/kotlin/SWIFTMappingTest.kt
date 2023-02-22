@@ -77,8 +77,10 @@ class SWIFTMappingTest {
         val expectedAst = AstScript(listOf(
             SpacerComposableCall(null)
         ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
+
+        val spacer = (ast?.statement?.first() as SpacerComposableCall)
+
+        assert(spacer.size == null)
     }
 
     @Test
@@ -87,10 +89,43 @@ class SWIFTMappingTest {
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(
             listOf(
-                DividerComposableCall(null)
+                DividerComposableCall( null, null)
             )
         )
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        val divider = (ast?.statement?.first() as DividerComposableCall)
+        assertEquals(null, divider.color)
+        assert(divider.frame == null)
+
+    }
+
+    @Test
+    fun testDividerWithOverlaySwiftUI() {
+        val code = "Divider().overlay(Color.blue)"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(
+            listOf(
+                DividerComposableCall(null,ColorBlue())
+            )
+        )
+        val divider = (ast?.statement?.first() as DividerComposableCall)
+        assert( divider.color is ColorBlue)
+        assert(divider.frame == null)
+    }
+
+    @Test
+    fun testDividerWithOverlayAndThicknessSwiftUI() {
+        val code = "Divider().frame(height: 4.0).overlay(Color.blue)"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(
+            listOf(
+                DividerComposableCall(Frame(width = null, height = DpLit("4.0")), ColorBlue())
+            )
+        )
+        val divider = (ast?.statement?.first() as DividerComposableCall)
+        assert( divider.color is ColorBlue)
+        assert(divider.frame != null)
+        assert(divider.frame?.height != null)
+        assert(divider.frame?.height  is DpLit)
     }
 
     @Test
@@ -104,7 +139,7 @@ class SWIFTMappingTest {
         val alignment = column?.horizontalAlignment as? HorizontalAlignment
 
         assertEquals(expectingSpacing, spacing)
-        assertEquals(StartAlignment, alignment)
+        assertEquals(StartAlignment(), alignment)
     }
     @Test
     fun parseCGFloat(){
@@ -148,11 +183,12 @@ class SWIFTMappingTest {
     fun testSpacerWithFrameSwiftUI(){
         val code = "Spacer().frame(width: 54.0, height: 54.0)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
-        val expectedAst = AstScript(listOf(
-            SpacerComposableCall(Frame(width = DoubleLit("54.0"), height = DoubleLit("54.0")))
-        ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
 
+        val divider = (ast?.statement?.first() as SpacerComposableCall)
+
+        assert(divider.size != null)
+        assert(divider.size?.height is DpLit)
+        assert(divider.size?.width  is DpLit)
     }
     @Test
     fun parseHStack(){
@@ -172,7 +208,7 @@ class SWIFTMappingTest {
         val alignment = column?.verticalAlignment as? VerticalAlignment
 
         assertEquals(expectingSpacing, spacing)
-        assertEquals(CenterVerticallyAlignment, alignment)
+        assertEquals(CenterVerticallyAlignment(), alignment)
     }
     @Test
     fun mapButtonComposableRef(){

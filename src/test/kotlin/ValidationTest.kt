@@ -15,7 +15,7 @@ class ValidationTest {
         assert(parseResult.errors.isNotEmpty())
         assertEquals(parseResult.errors.first().message, """
             List can't contain different types.
-            Found it.poliba.KSTranspiler.StringType in a list of it.poliba.KSTranspiler.IntType
+            Found String in a list of Int
         """.trimIndent())
     }
 

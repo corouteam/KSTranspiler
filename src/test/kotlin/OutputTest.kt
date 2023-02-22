@@ -229,14 +229,17 @@ class  OutputTest {
         		}
         	}
     """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+
+        assertEquals(result, parseResult.root!!.generateCode())
     }
 
     @Test
     fun mapDividerWithParams(){
         val code = """
-            Divider().size(width: 54.0, height: 54.0)
+            Divider(thickness = 8.dp)
             """.trimIndent()
-        val result = "Divider()\n\t.frame(width: 54.0, height: 54.0)"
+        val result = "Divider()\n\t.frame(height: CGFloat(8))"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
@@ -266,9 +269,9 @@ class  OutputTest {
     @Test
     fun mapSpacerWithParams(){
         val code = """
-            Divider().size(width: 54.0, height: 54.0)
+            Spacer(modifier = Modifier.width(54.dp).height(54.dp))
             """.trimIndent()
-        val result = "Divider()\n\t.frame(width: 54.0, height: 54.0)"
+        val result = "Spacer()\n\t.frame(width: CGFloat(54), height: CGFloat(54))"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
