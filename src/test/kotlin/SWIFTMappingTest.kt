@@ -185,4 +185,21 @@ class SWIFTMappingTest {
         //val expectedAst = KotlinScript
     }
 
+    @Test
+    fun mapButtonComposable(){
+        val code = """
+            Button( action = {
+                print("Ok")
+            }){
+                Text("Ciao") 
+            }""".trimMargin()
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ButtonComposableCall(action = Block(body = listOf(Print(StringLit("Ok")))), body = Block(body = listOf(
+                TextComposableCall(StringLit("Ciao"), color = null, fontWeight = null)
+            ))
+            )))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
 }

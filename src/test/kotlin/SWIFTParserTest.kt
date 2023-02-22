@@ -178,9 +178,10 @@ class SWIFTParserTest {
                 "          T[(]\n" +
                 "          T[action]\n" +
                 "          T[:]\n" +
-                "          Block\n" +
-                "            T[{]\n" +
-                "            T[}]\n" +
+                "          FunctionBody\n" +
+                "            Block\n" +
+                "              T[{]\n" +
+                "              T[}]\n" +
                 "          T[)]\n" +
                 "          Block\n" +
                 "            T[{]\n" +
