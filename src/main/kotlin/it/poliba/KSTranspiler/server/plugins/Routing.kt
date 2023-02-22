@@ -7,13 +7,14 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import it.poliba.KSTranspiler.facade.KSTFacade
 import it.poliba.KSTranspiler.server.*
+import it.poliba.KSTranspiler.server.plugins.TranspileRequest
 
 fun Application.configureRouting() {
     routing {
-        get("/kotlin/transpileToSwift") {
+        post("/kotlin/transpileToSwift") {
             try{
-                var code = call.receiveText().trimIndent()
-                val result = KSTFacade.transpileKotlinToSwift(code)
+                var request = call.receive<TranspileRequest>()
+                val result = KSTFacade.transpileKotlinToSwift(request.code)
                 when (result){
                     is KSTranspileResultSuccess -> call.respond(result.code)
                     is KSTranspileResultError -> call.respond(HttpStatusCode.BadRequest, result.error)
@@ -23,10 +24,10 @@ fun Application.configureRouting() {
             }
         }
 
-        get("/swift/transpileToKotlin") {
+        post("/swift/transpileToKotlin") {
             try{
-                var code = call.receiveText().trimIndent()
-                val result = KSTFacade.transpileSwiftToKotlin(code)
+                var request = call.receive<TranspileRequest>()
+                val result = KSTFacade.transpileSwiftToKotlin(request.code)
                 when (result){
                     is KSTranspileResultSuccess -> call.respond(result.code)
                     is KSTranspileResultError -> call.respond(HttpStatusCode.BadRequest, result.error)
