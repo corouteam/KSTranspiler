@@ -100,6 +100,13 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // Check if condition is a boolean expression
+    specificProcess(IfExpression::class.java) {
+        if (it.condition.type !is BoolType) {
+            errors.add(Error("If condition must be a boolean expression.", this.position))
+        }
+    }
+
     // check val is not reassigned
     this.specificProcess(ControlStructureBody::class.java) { block ->
         if (block is Block) {
