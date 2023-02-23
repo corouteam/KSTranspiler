@@ -103,6 +103,21 @@ class ValidationTest {
     }
 
     @Test
+    fun `if condition must be boolean`() {
+        var code = """
+            fun main(){
+                if (42) {
+                    print("hello")
+                }
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("If condition must be a boolean expression.", parseResult.errors.first().message)
+    }
+
+    @Test
     fun `global val can not be reassigned`() {
         var code = """
             val a = 1
