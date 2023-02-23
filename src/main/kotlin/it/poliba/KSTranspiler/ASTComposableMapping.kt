@@ -7,6 +7,7 @@ import it.poliba.KSTranspiler.KotlinParser.CenterHorizontallyAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.CenterVerticalltAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ColumnComposeParameterContext
+import it.poliba.KSTranspiler.KotlinParser.ComposableCallContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.DividerColorParameterContext
@@ -28,6 +29,7 @@ import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.ZIndexSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.WidgetCallContext
 import org.antlr.v4.runtime.atn.ContextSensitivityInfo
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
@@ -54,16 +56,11 @@ fun KotlinParser.BoxComposableContext.toAst(considerPosition: Boolean): Expressi
         listOf(),
         toPosition(considerPosition)
     )
-
     val zindex = (modifier().modifierSuffix()
         .firstOrNull { it is ZIndexSuffixContext } as? ZIndexSuffixContext)?.expression()
         ?.toAst(considerPosition)
 
-    if (zindex != null) {
-        return ZStackComposableCall(block)
-    } else {
-        return BoxComposableCall(block)
-    }
+    return ZStackComposableCall(block)
 
 
 }
