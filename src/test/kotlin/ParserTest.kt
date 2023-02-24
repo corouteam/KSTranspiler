@@ -634,15 +634,18 @@ KotlinScript
                 "        BoxComposable\n" +
                 "          T[Box]\n" +
                 "          T[(]\n" +
-                "          Modifier\n" +
-                "            T[Modifier]\n" +
-                "            T[.]\n" +
-                "            ZIndexSuffix\n" +
-                "              T[zIndex]\n" +
-                "              T[(]\n" +
-                "              DoubleLiteral\n" +
-                "                T[1.0]\n" +
-                "              T[)]\n" +
+                "          ModifierParameter\n" +
+                "            T[modifier]\n" +
+                "            T[=]\n" +
+                "            Modifier\n" +
+                "              T[Modifier]\n" +
+                "              T[.]\n" +
+                "              ZIndexSuffix\n" +
+                "                T[zIndex]\n" +
+                "                T[(]\n" +
+                "                IntLiteral\n" +
+                "                  T[1]\n" +
+                "                T[)]\n" +
                 "          T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("box")).multiLineString()

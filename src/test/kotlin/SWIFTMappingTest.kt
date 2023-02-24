@@ -213,12 +213,27 @@ class SWIFTMappingTest {
 
     @Test
     fun mapZStackRef(){
-        val code = "ZStack {}"
+        val code = """
+             ZStack {
+                Text("Ciao")
+                Text("Ciao2")
+                Text("Ciao3")
+            }
+        """.trimIndent()
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
 
-        val zstack = ast?.statement?.first() as? ZStackComposableCall
+        val zstack = (ast?.statement?.first() as ZStackComposableCall)
+        val block = zstack.body as Block
+        val text = block.body.first() as TextComposableCall
 
-        assertEquals(Block(listOf()), zstack?.body)
+        val text2 = block.body[1] as TextComposableCall
+        val text3 = block.body[2] as TextComposableCall
+
+
+        assertEquals(text.zIndex, IntLit("0"))
+        assertEquals(text2.zIndex, IntLit("1"))
+        assertEquals(text3.zIndex, IntLit("2"))
+
 
     }
 }

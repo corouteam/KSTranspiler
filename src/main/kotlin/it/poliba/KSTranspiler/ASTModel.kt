@@ -178,14 +178,14 @@ data class FunctionCall(val name: String,
 ): Expression(FunctionCallType(position))
 
 sealed class ComposableCall(
-    open val zIndex: Int?,
+    open var zIndex: Expression??,
     type: ComposableType): Expression(type)
 
 class TextComposableCall(
     val value: Expression,
     val color: Expression?,
     val fontWeight: Expression?,
-    zIndex: Int? = null,
+    zIndex: Expression?? = null,
     override var position: Position? = null,
 ): ComposableCall( zIndex, TextComposableType(position))
 
@@ -200,18 +200,18 @@ class FontWeightBold(override var position: Position? = null): FontWeightLit()
 class DividerComposableCall(
     val frame: Frame?,
     val color: Expression?,
-    override var zIndex: Int? = null,
+    zIndex: Expression?? = null,
     override var position: Position? = null): ComposableCall(zIndex, DividerComposableType(position))
 
 class SpacerComposableCall(
     val size: Frame?,
-    override var zIndex: Int? = null,
+    zIndex: Expression?? = null,
     override var position: Position? = null,
     ): ComposableCall(zIndex, SpacerComposableType(position))
 
 class ZStackComposableCall(
-    zIndex: Int? = null,
     val body: ControlStructureBody,
+    zIndex: Expression?? = null,
     override var position: Position? = null,
 ): ComposableCall(zIndex, ZStackComposableType(position))
 
@@ -223,7 +223,7 @@ data class ColumnComposableCall(
     val horizontalAlignment: Expression?,
     val scrollable: Boolean,
     val body: ControlStructureBody,
-    override var zIndex: Int? = null,
+    override var zIndex: Expression?? = null,
     override var position: Position? = null,
 ): ComposableCall(zIndex, ColumnComposableType(position))
 
@@ -232,7 +232,7 @@ data class RowComposableCall(
     val verticalAlignment: Expression?,
     val scrollable: Boolean,
     val body: ControlStructureBody,
-    override var zIndex: Int? = null,
+    override var zIndex: Expression?? = null,
     override var position: Position? = null
 ): ComposableCall(zIndex, ColumnComposableType(position))
 
