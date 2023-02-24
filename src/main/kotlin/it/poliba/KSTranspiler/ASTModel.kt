@@ -57,15 +57,13 @@ data class ListType(val itemsType: Type, override var position: Position? = null
 
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
+class ButtonComposableType(override var position: Position? = null): ComposableType()
 class TextComposableType(override var position: Position? = null): ComposableType()
 class DividerComposableType(override var position: Position? = null): ComposableType()
 class SpacerComposableType(override var position: Position? = null): ComposableType()
 class ColumnComposableType(override var position: Position? = null): ComposableType()
-
 class ZStackComposableType(override var position: Position? = null): ComposableType()
-
 class BoxComposableType(override var position: Position? = null): ComposableType()
-
 class HorizontalAlignmentType(override var position: Position? = null): Type()
 class VerticalAlignmentType(override var position: Position? = null): Type()
 
@@ -252,6 +250,11 @@ class WidgetDeclaration(val id: String,
                         override var position: Position? = null,
 ): Declaration()
 
+class ButtonComposableCall(
+    val action: Block,
+    val body: Block,
+    override var position: Position? = null,
+    ): ComposableCall(ButtonComposableType())
 data class Error(override val message: String, val position: Position?): Throwable(message)
 
 /**

@@ -74,6 +74,7 @@ FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';
 
+BUTTON_WIDGET: 'Button';
 SPACER_WIDGET: 'Spacer';
 DIVIDER_WIDGET: 'Divider';
 OVERLAY: 'overlay';

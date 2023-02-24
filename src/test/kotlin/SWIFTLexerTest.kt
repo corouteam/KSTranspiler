@@ -191,4 +191,13 @@ class SWIFTLexerTest {
         val result = listOf("SCROLL_VIEW", "LPAREN", "DOT", "ID", "RPAREN", "LCURL", "RCURL", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseButtonWidget(){
+        val code = "Button( action: {} ) { }"
+        val result = listOf("BUTTON_WIDGET", "LPAREN", "ID", "COLON",
+            "LCURL", "RCURL","RPAREN", "LCURL", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
 }

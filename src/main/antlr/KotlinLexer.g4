@@ -114,6 +114,9 @@ VERTICAL_SCROLL_SUFFIX: 'verticalScroll';
 HORIZONTAL_SCROLL_SUFFIX: 'horizontalScroll';
 REMEMBER_SCROLL: 'rememberScrollState';
 MODIFIER: 'Modifier';
+BUTTON_COMPOSABLE: 'Button';
+ICON_COMPOSABLE: 'Icon';
+
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

@@ -447,9 +447,17 @@ class LexerTest {
     }
 
     @Test
+
     fun parseBox(){
         val code = "Box( Modifier.zIndex(1.0) ) {}"
         val result = listOf("BOX","LPAREN","MODIFIER", "DOT", "ZINDEX", "LPAREN", "DOUBLE_LIT", "RPAREN", "RPAREN", "LCURL","RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+    
+    fun parseButtonComposable(){
+        val code = "Button( onClick = {} ) { }"
+        val result = listOf("BUTTON_COMPOSABLE", "LPAREN", "ID", "ASSIGN",
+            "LCURL", "RCURL", "RPAREN", "LCURL","RCURL", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 }

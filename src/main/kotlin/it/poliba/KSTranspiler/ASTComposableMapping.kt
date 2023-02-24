@@ -51,6 +51,7 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
     is KotlinParser.BoxComposableContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
 fun KotlinParser.BoxComposableContext.toAst(considerPosition: Boolean): Expression {
     val modifier =  modifierParameter()?.modifier()?.toModifier(considerPosition)
 
@@ -59,8 +60,14 @@ fun KotlinParser.BoxComposableContext.toAst(considerPosition: Boolean): Expressi
         toPosition(considerPosition)
     )
     return ZStackComposableCall(block, modifier?.zIndex)
+}
 
+fun KotlinParser.IconButtonComposableContext.toAst(considerPosition: Boolean): Expression {
 
+    val action = this.action.block().toAst(considerPosition)
+    val body = Block(this.body.statement().map { it.toAst(considerPosition) })
+
+    return ButtonComposableCall(action, body)
 }
 
 fun KotlinParser.DividerComposableContext.toAst(considerPosition: Boolean): Expression {
@@ -152,9 +159,9 @@ fun KotlinParser.TextComposeParameterContext.toAst(considerPosition: Boolean = f
 }
 
 fun KotlinParser.ColorContext.toAst(considerPosition: Boolean = false): Expression = when(this){
-        is CustomColorContext -> CustomColor(StringLit(COLOR_LITERAL().text, toPosition(considerPosition)), toPosition(considerPosition))
-        is BlueColorContext ->  ColorBlue(toPosition(considerPosition))
-        else -> throw java.lang.IllegalArgumentException("Color not recognized")
+    is CustomColorContext -> CustomColor(StringLit(COLOR_LITERAL().text, toPosition(considerPosition)), toPosition(considerPosition))
+    is BlueColorContext ->  ColorBlue(toPosition(considerPosition))
+    else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
 fun KotlinParser.FontWeightContext.toAst(considerPosition: Boolean = false): Expression = when(this){
