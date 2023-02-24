@@ -100,6 +100,35 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // check if function return expression is present
+    // if required, and it's same return type
+    this.specificProcess(FunctionDeclaration::class.java) { function ->
+        if (function.returnType != null) {
+            val returnExpressions = function.body.searchByType(ReturnExpression::class.java).toList()
+
+            if (returnExpressions.isEmpty()){
+                errors.add(Error("""
+                    A return expression is required for the function ${function.id}.
+                """.trimIndent(), this.position))
+            } else {
+                // check if return type matches
+                val returnExpressionType = returnExpressions.last().type
+
+                if (function.returnType::class != returnExpressionType::class) {
+                    errors.add(
+                        Error(
+                            """
+                    The return type ${returnExpressionType.generateCode()} does not
+                    conform to the expected type ${function.returnType.generateCode()}
+                    of the function ${function.id}.
+                            """.trimIndent(), this.position
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     return errors
 }
 
