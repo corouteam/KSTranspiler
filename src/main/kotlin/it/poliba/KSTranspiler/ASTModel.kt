@@ -28,7 +28,7 @@ class FunctionDeclaration(val id: String,
                           val body: ControlStructureBody,
                           override var position: Position? = null) : Declaration()
 
-sealed class Expression(open val type: Type) : Statement()
+sealed class Expression(open var type: Type) : Statement()
 
 sealed class Type : Node()
 
@@ -163,7 +163,7 @@ data class Print(val value: Expression, override var position: Position? = null)
 
 data class RangeExpression(val leftExpression: Expression,
                            val rightExpression: Expression,
-                           override val type: Type,
+                           override var type: Type,
                            override var position: Position? = null,
 ): Expression(type)
 
