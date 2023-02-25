@@ -237,4 +237,20 @@ class ValidationTest {
             of the function testReturnType.
         """.trimIndent(), parseResult.errors.first().message)
     }
+
+    @Test
+    fun `composable function always return a composable`() {
+        var code = """
+            @Composable
+            fun testComposable(){
+                print("hello without composable")
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Function testComposable is expected to declare a Composable
+        """.trimIndent(), parseResult.errors.first().message)
+    }
 }
