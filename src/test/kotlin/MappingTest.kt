@@ -298,19 +298,23 @@ class MappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(PainterResource(StringLit("nome-immagine-test")), null, null)
+            ImageComposableCall(StringLit("nome-immagine-test"), null, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
     }
 
     @Test
-    fun mapImageComposableRefWithFillMaxSize(){
-        val code = "Image(painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))).fillMaxSize()"
+    fun mapImageComposableRefWithFillMaxSizeAndContent(){
+        val code = "Image(" +
+                "painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))," +
+                "modifier = Modifier.fillMaxSize()," +
+                "contentScale = ContentScale.FillWidth" +
+                ")"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-                ImageComposableCall(PainterResource(StringLit("nome-immagine-test")), null, null)
+                ImageComposableCall(StringLit("nome-immagine-test"), Resizable(), ContentFill())
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
