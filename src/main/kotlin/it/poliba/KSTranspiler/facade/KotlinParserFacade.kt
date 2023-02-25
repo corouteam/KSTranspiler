@@ -22,7 +22,11 @@ object KotlinParserFacade {
         val (antlrRoot, lexicalAndSyntacticErrors) = antlrResult
 
         val astRoot = if (lexicalAndSyntacticErrors.isEmpty()) {
-            antlrRoot?.toAst(considerPosition = true)
+            try {
+                antlrRoot?.toAst(considerPosition = true)
+            } catch (e: Error) {
+                return KotlinParsingResult(null, listOf(e))
+            }
         } else {
             null
         }
@@ -49,7 +53,11 @@ object KotlinParserFacadeScript {
         val (antlrRoot, lexicalAndSyntacticErrors) = antlrResult
 
         val astRoot: AstScript? = if (lexicalAndSyntacticErrors.isEmpty()) {
-            antlrRoot?.toAst(considerPosition = true)
+            try {
+                antlrRoot?.toAst()
+            } catch (e: Error) {
+                return KotlinScriptParsingResult(null, listOf(e))
+            }
         } else {
             null
         }

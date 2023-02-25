@@ -2,6 +2,7 @@ package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -251,6 +252,22 @@ class ValidationTest {
         assert(parseResult.errors.isNotEmpty())
         assertEquals("""
             Function testComposable is expected to declare a Composable
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `SwiftUi funciton always returns a widget`(){
+        var code = """
+            struct test: View{
+                var x: Int
+                var y: Int
+            }
+        """.trimIndent()
+        val parseResult = SwiftParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Struct declaration is required to return a widget
         """.trimIndent(), parseResult.errors.first().message)
     }
 }
