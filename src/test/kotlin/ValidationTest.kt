@@ -103,6 +103,40 @@ class ValidationTest {
     }
 
     @Test
+    fun `global val can not be reassigned`() {
+        var code = """
+            val a = 1
+            
+            fun main(){
+                a = 2
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Final variable a can not be reassigned.
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `val can not be reassigned`() {
+        var code = """
+            
+            fun main(){
+                val a = 1
+                a = 2
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Final variable a can not be reassigned.
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
     fun `global var type mismatch between different declaration and assignment is reported`() {
         var code = """
             var a = 1

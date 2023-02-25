@@ -100,6 +100,44 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // check val is not reassigned
+    this.specificProcess(ControlStructureBody::class.java) { block ->
+        if (block is Block) {
+            block.searchByType(Assignment::class.java).forEach {
+                val assignmentName = it.varName
+
+                val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
+
+                if (declarationsInBlock.isNotEmpty()) {
+                    declarationsInBlock.forEach {
+                        if (it.varName == assignmentName && !it.mutable) {
+                            errors.add(Error("""
+                                Final variable ${it.varName} can not be reassigned.
+                            """.trimIndent(), this.position
+                                ))
+
+                            // match found, no need to iterate anymore
+                            return@specificProcess
+                        }
+                    }
+                }
+
+                // If a declaration is not found in scope, search in global variables
+                globalVariables.forEach {
+                    if (it.varName == assignmentName && !it.mutable) {
+                        errors.add(Error("""
+                                Final variable ${it.varName} can not be reassigned.
+                            """.trimIndent(), this.position
+                        ))
+
+                        // match found, no need to iterate anymore
+                        return@specificProcess
+                    }
+                }
+            }
+        }
+    }
+
     // check if assignment type matches declaration
     this.specificProcess(ControlStructureBody::class.java) { block ->
         if (block is Block) {
