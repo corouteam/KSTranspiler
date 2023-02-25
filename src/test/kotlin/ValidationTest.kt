@@ -103,6 +103,39 @@ class ValidationTest {
     }
 
     @Test
+    fun `global var type mismatch between different declaration and assignment is reported`() {
+        var code = """
+            var a = 1
+            
+            fun main() {
+                a = "hello"
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Type mismatch (String assigned to a variable of type Int).
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `var type mismatch between different declaration and assignment is reported`() {
+        var code = """            
+            fun main() {
+                var a = 1
+                a = "hello"
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Type mismatch (String assigned to a variable of type Int).
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
     fun `function return required is reported`() {
         var code = """
             fun testReturn(): String {

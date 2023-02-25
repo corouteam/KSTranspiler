@@ -100,6 +100,57 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // check if assignment type matches declaration
+    this.specificProcess(ControlStructureBody::class.java) { block ->
+        if (block is Block) {
+            block.searchByType(Assignment::class.java).forEach {
+                val assignmentName = it.varName
+                val assignmentType = it.value.type
+
+                val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
+
+                if (declarationsInBlock.isNotEmpty()) {
+                    declarationsInBlock.forEach {
+                        if (it.varName == assignmentName) {
+                            // Search if assignment type matches declaration type
+                            if (assignmentType.generateCode() != it.type.generateCode()) {
+                                errors.add(
+                                    Error(
+                                        """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                    )
+                                )
+                            }
+
+                            // match found, no need to iterate anymore
+                            return@specificProcess
+                        }
+                    }
+                }
+
+                // If a declaration is not found in scope, search in global variables
+                globalVariables.forEach {
+                    if (it.varName == assignmentName) {
+                        // Search if assignment type matches declaration type
+                        if (assignmentType.generateCode() != it.type.generateCode()) {
+                            errors.add(
+                                Error(
+                                    """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                )
+                            )
+                        }
+
+                        // match found, no need to iterate anymore
+                        return@specificProcess
+                    }
+                }
+            }
+        }
+    }
+
     // check if function return expression is present
     // if required, and it's same return type
     this.specificProcess(FunctionDeclaration::class.java) { function ->
