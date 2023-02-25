@@ -564,6 +564,76 @@ KotlinScript
     }
 
     @Test
+    fun parseImageComposebaleWithModifiers(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        ImageComposable\n" +
+                "          T[Image]\n" +
+                "          T[(]\n" +
+                "          PainterParameter\n" +
+                "            T[painter]\n" +
+                "            T[=]\n" +
+                "            PainterResource\n" +
+                "              T[painterResource]\n" +
+                "              T[(]\n" +
+                "              PainterResourceParameter\n" +
+                "                T[id]\n" +
+                "                T[=]\n" +
+                "                DrawableResource\n" +
+                "                  T[getResources]\n" +
+                "                  T[(]\n" +
+                "                  T[)]\n" +
+                "                  T[.]\n" +
+                "                  T[getIdentifier]\n" +
+                "                  T[(]\n" +
+                "                  StringLiteralExpression\n" +
+                "                    StringLiteral\n" +
+                "                      LineStringLiteral\n" +
+                "                        T[\"]\n" +
+                "                        LineStringContent\n" +
+                "                          T[nome-immagine-test]\n" +
+                "                        T[\"]\n" +
+                "                  T[,]\n" +
+                "                  StringLiteralExpression\n" +
+                "                    StringLiteral\n" +
+                "                      LineStringLiteral\n" +
+                "                        T[\"]\n" +
+                "                        LineStringContent\n" +
+                "                          T[drawable]\n" +
+                "                        T[\"]\n" +
+                "                  T[,]\n" +
+                "                  T[context]\n" +
+                "                  T[.]\n" +
+                "                  T[getPackageName]\n" +
+                "                  T[(]\n" +
+                "                  T[)]\n" +
+                "                  T[)]\n" +
+                "              T[)]\n" +
+                "          T[,]\n" +
+                "          Resizable\n" +
+                "            T[modifier]\n" +
+                "            T[=]\n" +
+                "            T[Modifier]\n" +
+                "            T[.]\n" +
+                "            T[fillMaxSize]\n" +
+                "            T[(]\n" +
+                "            T[)]\n" +
+                "          T[,]\n" +
+                "          ContentScaleFillWidth\n" +
+                "            T[contentScale]\n" +
+                "            T[=]\n" +
+                "            T[ContentScale]\n" +
+                "            T[.]\n" +
+                "            T[FillWidth]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("imageComposableWithFillMaxSizeAndContentScale")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun testAnnotation(){
         val expected = "KotlinFile\n" +
                 "  Declaration\n" +

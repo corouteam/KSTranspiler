@@ -253,14 +253,14 @@ class LexerTest {
     @Test
     fun parseImageWithModifierAndScale(){
         val code = "Image(" +
-                "painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))" +
-                "modifier = Modifier.fillMaxSize().aspectRatio(1f)" +
+                "painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))," +
+                "modifier = Modifier.fillMaxSize()," +
                 "contentScale = ContentScale.FillWidth" +
                 ")"
         val result = listOf("IMAGE_COMPOSE",
             "LPAREN",
-            "PAINTER_PARAM", "ASSIGN", "PAINTER_RESOURCE", "LPAREN", "PAINTER_RESOURCE_PARAM", "ASSIGN", "GET_RESOURCE", "LPAREN", "RPAREN", "DOT", "GET_IDENTIFIER", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "CONTEXT", "DOT", "GET_PACKAGENAME", "LPAREN", "RPAREN", "RPAREN", "RPAREN",
-            "MODIFIER_PARAM", "ASSIGN", "MODIFIER", "DOT", "RESIZABLE", "LPAREN", "RPAREN", "DOT","ASPECT_RATIO_PARAM", "LPAREN", "FLOAT_LIT", "RPAREN",
+            "PAINTER_PARAM", "ASSIGN", "PAINTER_RESOURCE", "LPAREN", "PAINTER_RESOURCE_PARAM", "ASSIGN", "GET_RESOURCE", "LPAREN", "RPAREN", "DOT", "GET_IDENTIFIER", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "CONTEXT", "DOT", "GET_PACKAGENAME", "LPAREN", "RPAREN", "RPAREN", "RPAREN","COMMA",
+            "MODIFIER_PARAM", "ASSIGN", "MODIFIER", "DOT", "RESIZABLE", "LPAREN", "RPAREN","COMMA",
             "CONTENTSCALE_PARAM", "ASSIGN", "CONTENTSCALE", "DOT", "FILLWIDTH",
             "RPAREN",
             "EOF")

@@ -138,18 +138,17 @@ typeArguments
 
 composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable |
-    IMAGE_COMPOSE LPAREN NL* imageComposeParameter RPAREN (NL* DOT NL* imageComposeSuffix)*? #imageComposable;
+    IMAGE_COMPOSE LPAREN (NL* imageComposeParameter) ((NL* COMMA NL* imageComposeParameter) (NL* COMMA NL* imageComposeParameter)*)? RPAREN #imageComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
     | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter;
 
 imageComposeParameter:
-    PAINTER_PARAM ASSIGN painter #painterParameter;
-
-imageComposeSuffix:
-    RESIZABLE LPAREN RPAREN # resizable |
-    ASPECT_RATIO_PARAM LPAREN DOUBLE_LIT RPAREN #aspectRatioParameter;
+    PAINTER_PARAM ASSIGN painter #painterParameter |
+    MODIFIER_PARAM ASSIGN MODIFIER DOT RESIZABLE LPAREN RPAREN  #resizable |
+    CONTENTSCALE_PARAM ASSIGN CONTENTSCALE DOT FILLWIDTH #contentScaleFillWidth |
+    CONTENTSCALE_PARAM ASSIGN CONTENTSCALE DOT FIT #contentScaleFit;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor

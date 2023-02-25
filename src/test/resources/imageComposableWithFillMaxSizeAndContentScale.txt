@@ -1,0 +1,1 @@
+Image(painter = painterResource(id = getResources().getIdentifier("nome-immagine-test", "drawable", context.getPackageName())), modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillWidth)
