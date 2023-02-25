@@ -34,7 +34,7 @@ fun SwiftParser.ButtonWidgetContext.toAst(considerPosition: Boolean = false): Ex
     val action = this.action.block().toAst(considerPosition)
     val body = Block(this.body.statement().map { it.toAst(considerPosition) })
 
-    return ButtonComposableCall(action, body)
+    return ButtonComposableCall(action, body, null)
 }
 
 fun DividerWidgetContext.toAst(considerPosition: Boolean = false): Expression {

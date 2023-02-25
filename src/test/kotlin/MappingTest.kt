@@ -451,6 +451,7 @@ class MappingTest {
             Column(modifier = Modifier.zIndex(4)){}
             Row(modifier = Modifier.zIndex(5)){}
             Box(modifier = Modifier.zIndex(6)){}
+            Button(action = {}, modifier = Modifier.zIndex(6)){}
             }
         """.trimIndent()
 
@@ -465,6 +466,7 @@ class MappingTest {
         val column = block.body[3] as ColumnComposableCall
         val row = block.body[4] as RowComposableCall
         val box = block.body[5] as ZStackComposableCall
+        val button = block.body[6] as ButtonComposableCall
 
         assertEquals(text.zIndex, IntLit("2"))
         assertEquals(divider.zIndex, IntLit("1"))
@@ -472,6 +474,7 @@ class MappingTest {
         assertEquals(column.zIndex, IntLit("4"))
         assertEquals(row.zIndex, IntLit("5"))
         assertEquals(box.zIndex, IntLit("6"))
+        assertEquals(button.zIndex, IntLit("6"))
     }
 
     @Test
@@ -581,7 +584,7 @@ class MappingTest {
         val expectedAst = AstScript(
             listOf(
                 ButtonComposableCall(
-                    action = Block(body = listOf()), body = Block(body = listOf())
+                    action = Block(body = listOf()), body = Block(body = listOf(), )
                 )
             )
         )

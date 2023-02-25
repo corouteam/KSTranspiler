@@ -49,6 +49,7 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
     is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
     is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
     is KotlinParser.BoxComposableContext -> this.toAst(considerPosition)
+    is KotlinParser.IconButtonComposableContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -66,8 +67,8 @@ fun KotlinParser.IconButtonComposableContext.toAst(considerPosition: Boolean): E
 
     val action = this.action.block().toAst(considerPosition)
     val body = Block(this.body.statement().map { it.toAst(considerPosition) })
-
-    return ButtonComposableCall(action, body)
+    val modifier =  modifierParameter()?.modifier()?.toModifier(considerPosition)
+    return ButtonComposableCall(action, body, modifier?.zIndex, toPosition(considerPosition))
 }
 
 fun KotlinParser.DividerComposableContext.toAst(considerPosition: Boolean): Expression {

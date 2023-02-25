@@ -147,7 +147,7 @@ composableCall:
     | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
     | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable
     | BOX LPAREN (NL* modifierParameter NL*)? RPAREN block? #boxComposable
-    |  BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody RPAREN body = block #iconButtonComposable;
+    | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter

@@ -253,8 +253,9 @@ class WidgetDeclaration(val id: String,
 class ButtonComposableCall(
     val action: Block,
     val body: Block,
+    zIndex: Expression? = null,
     override var position: Position? = null,
-    ): ComposableCall(ButtonComposableType())
+    ): ComposableCall(zIndex, ButtonComposableType())
 data class Error(override val message: String, val position: Position?): Throwable(message)
 
 /**
