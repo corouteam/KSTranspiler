@@ -77,6 +77,12 @@ GET_RESOURCE: 'getResources';
 GET_IDENTIFIER: 'getIdentifier';
 CONTEXT: 'context';
 GET_PACKAGENAME: 'getPackageName';
+MODIFIER: 'Modifier';
+MODIFIER_PARAM: 'modifier';
+CONTENTSCALE: 'ContentScale';
+CONTENTSCALE_PARAM: 'contentScale';
+FILLWIDTH: 'FillWidth';
+FIT: 'Fit';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';

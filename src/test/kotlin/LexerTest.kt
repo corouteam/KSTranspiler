@@ -243,34 +243,25 @@ class LexerTest {
     fun parseImage(){
         val code = "Image(painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName())))"
         val result = listOf("IMAGE_COMPOSE",
+                "LPAREN",
+                "PAINTER_PARAM", "ASSIGN", "PAINTER_RESOURCE", "LPAREN", "PAINTER_RESOURCE_PARAM", "ASSIGN", "GET_RESOURCE", "LPAREN", "RPAREN", "DOT", "GET_IDENTIFIER", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "CONTEXT", "DOT", "GET_PACKAGENAME", "LPAREN", "RPAREN", "RPAREN", "RPAREN",
+                "RPAREN",
+                "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseImageWithModifierAndScale(){
+        val code = "Image(" +
+                "painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))" +
+                "modifier = Modifier.fillMaxSize().aspectRatio(1f)" +
+                "contentScale = ContentScale.FillWidth" +
+                ")"
+        val result = listOf("IMAGE_COMPOSE",
             "LPAREN",
-            "PAINTER_PARAM",
-            "ASSIGN",
-            "PAINTER_RESOURCE",
-            "LPAREN",
-            "PAINTER_RESOURCE_PARAM",
-            "ASSIGN",
-            "GET_RESOURCE",
-            "LPAREN",
-            "RPAREN",
-            "DOT",
-            "GET_IDENTIFIER",
-            "LPAREN",
-            "QUOTE_OPEN",
-            "LineStrText",
-            "QUOTE_CLOSE",
-            "COMMA",
-            "QUOTE_OPEN",
-            "LineStrText",
-            "QUOTE_CLOSE",
-            "COMMA",
-            "CONTEXT",
-            "DOT",
-            "GET_PACKAGENAME",
-            "LPAREN",
-            "RPAREN",
-            "RPAREN",
-            "RPAREN",
+            "PAINTER_PARAM", "ASSIGN", "PAINTER_RESOURCE", "LPAREN", "PAINTER_RESOURCE_PARAM", "ASSIGN", "GET_RESOURCE", "LPAREN", "RPAREN", "DOT", "GET_IDENTIFIER", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "CONTEXT", "DOT", "GET_PACKAGENAME", "LPAREN", "RPAREN", "RPAREN", "RPAREN",
+            "MODIFIER_PARAM", "ASSIGN", "MODIFIER", "DOT", "RESIZABLE", "LPAREN", "RPAREN", "DOT","ASPECT_RATIO_PARAM", "LPAREN", "FLOAT_LIT", "RPAREN",
+            "CONTENTSCALE_PARAM", "ASSIGN", "CONTENTSCALE", "DOT", "FILLWIDTH",
             "RPAREN",
             "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
