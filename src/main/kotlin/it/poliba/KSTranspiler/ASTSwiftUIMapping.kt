@@ -1,6 +1,8 @@
 package it.poliba.KSTranspiler
 
+import com.strumenta.kolasu.parsing.position
 import it.poliba.KSTranspiler.SwiftParser.*
+import it.poliba.KSTranspiler.Error
 
 fun  SwiftParser.WidgetCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
     return this.widgetCall().toAst(considerPosition)
@@ -99,7 +101,9 @@ fun SwiftParser.StructDeclarationContext.toWidgetAST(considerPosition: Boolean =
     val bodyInstruction = this.classBody().classMemberDeclarations().declaration().map { it.toAst(considerPosition) }
     val properties = bodyInstruction.filter { it is PropertyDeclaration  && it.varName != "body"}.map { it as PropertyDeclaration }
     val functionParameters = properties.map { FunctionParameter(it.varName, it.type, toPosition(considerPosition)) }
-    val body = bodyInstruction.first() { it is PropertyDeclaration  && it.varName == "body"} as PropertyDeclaration
+    val body = bodyInstruction.firstOrNull { it is PropertyDeclaration  && it.varName == "body"} as PropertyDeclaration?
+
+    if (body == null) { throw Error("Struct declaration is required to return a widget", this.position) }
     return WidgetDeclaration(id, functionParameters,body.getter!!, toPosition(considerPosition))
 }
 
