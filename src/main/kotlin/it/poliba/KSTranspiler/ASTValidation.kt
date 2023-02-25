@@ -253,6 +253,20 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // Check composable functions always return one composable
+    this.specificProcess(WidgetDeclaration::class.java) {
+        val body = it.body
+        if (body is Block) {
+            val composables = body.body.filterIsInstance<ComposableCall>()
+            if (composables.isEmpty()) {
+                errors.add(
+                    Error("Function ${it.id} is expected to declare a Composable",
+                        it.position?.start?.asPosition)
+                )
+            }
+        }
+    }
+
     return errors
 }
 
