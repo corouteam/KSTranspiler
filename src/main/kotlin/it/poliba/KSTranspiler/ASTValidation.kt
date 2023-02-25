@@ -138,6 +138,86 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // check if assignment type matches declaration
+    this.specificProcess(ControlStructureBody::class.java) { block ->
+        if (block is Block) {
+            block.searchByType(Assignment::class.java).forEach {
+                val assignmentName = it.varName
+                val assignmentType = it.value.type
+
+                val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
+
+                if (declarationsInBlock.isNotEmpty()) {
+                    declarationsInBlock.forEach {
+                        if (it.varName == assignmentName) {
+                            // Search if assignment type matches declaration type
+                            if (assignmentType.generateCode() != it.type.generateCode()) {
+                                errors.add(
+                                    Error(
+                                        """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                    )
+                                )
+                            }
+
+                            // match found, no need to iterate anymore
+                            return@specificProcess
+                        }
+                    }
+                }
+
+                // If a declaration is not found in scope, search in global variables
+                globalVariables.forEach {
+                    if (it.varName == assignmentName) {
+                        // Search if assignment type matches declaration type
+                        if (assignmentType.generateCode() != it.type.generateCode()) {
+                            errors.add(
+                                Error(
+                                    """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                )
+                            )
+                        }
+
+                        // match found, no need to iterate anymore
+                        return@specificProcess
+                    }
+                }
+            }
+        }
+    }
+
+    // check if function return expression is present
+    // if required, and it's same return type
+    this.specificProcess(FunctionDeclaration::class.java) { function ->
+        if (function.returnType != null) {
+            val returnExpressions = function.body.searchByType(ReturnExpression::class.java).toList()
+
+            if (returnExpressions.isEmpty()){
+                errors.add(Error("""
+                    A return expression is required for the function ${function.id}.
+                """.trimIndent(), this.position))
+            } else {
+                // check if return type matches
+                val returnExpressionType = returnExpressions.last().type
+
+                if (function.returnType::class != returnExpressionType::class) {
+                    errors.add(
+                        Error(
+                            """
+                    The return type ${returnExpressionType.generateCode()} does not
+                    conform to the expected type ${function.returnType.generateCode()}
+                    of the function ${function.id}.
+                            """.trimIndent(), this.position
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     return errors
 }
 

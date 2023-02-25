@@ -135,4 +135,70 @@ class ValidationTest {
             Final variable a can not be reassigned.
         """.trimIndent(), parseResult.errors.first().message)
     }
+
+    @Test
+    fun `global var type mismatch between different declaration and assignment is reported`() {
+        var code = """
+            var a = 1
+            
+            fun main() {
+                a = "hello"
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Type mismatch (String assigned to a variable of type Int).
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `var type mismatch between different declaration and assignment is reported`() {
+        var code = """            
+            fun main() {
+                var a = 1
+                a = "hello"
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Type mismatch (String assigned to a variable of type Int).
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `function return required is reported`() {
+        var code = """
+            fun testReturn(): String {
+                print("hello")
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            A return expression is required for the function testReturn.
+        """.trimIndent(), parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `function return with different type is reported`() {
+        var code = """
+            fun testReturnType(): String {
+                print("hello")
+                return true
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            The return type Boolean does not
+            conform to the expected type String
+            of the function testReturnType.
+        """.trimIndent(), parseResult.errors.first().message)
+    }
 }
