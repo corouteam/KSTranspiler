@@ -201,4 +201,25 @@ class ValidationTest {
             of the function testReturnType.
         """.trimIndent(), parseResult.errors.first().message)
     }
+
+    @Test
+    fun `function return reference with different type is reported`() {
+        var code = """
+            val a: Boolean = true
+
+            fun testReturnType(): String {
+
+                print("hello")
+                return a
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            The return type Boolean does not
+            conform to the expected type String
+            of the function testReturnType.
+        """.trimIndent(), parseResult.errors.first().message)
+    }
 }
