@@ -26,7 +26,7 @@ object SwiftParserFacade {
             try {
                 antlrRoot?.toAst()
             } catch (e: Error) {
-                return SwiftParsingResult(null, listOf(e))
+                return SwiftParsingResult(null, lexicalAndSyntacticErrors + e)
             }
         } else {
             null
@@ -61,7 +61,7 @@ object SwiftParserFacadeScript {
             try {
                 antlrRoot?.toAst(considerPosition = true)
             } catch (e: Error) {
-                return SwiftScriptParsingResult(null, listOf(e))
+                return SwiftScriptParsingResult(null, lexicalAndSyntacticErrors + e)
             }
         } else {
             null
