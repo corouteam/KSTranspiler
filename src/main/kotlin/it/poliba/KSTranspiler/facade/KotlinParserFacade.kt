@@ -25,7 +25,7 @@ object KotlinParserFacade {
             try {
                 antlrRoot?.toAst(considerPosition = true)
             } catch (e: Error) {
-                return KotlinParsingResult(null, listOf(e))
+                return KotlinParsingResult(null, lexicalAndSyntacticErrors + e)
             }
         } else {
             null
@@ -56,7 +56,7 @@ object KotlinParserFacadeScript {
             try {
                 antlrRoot?.toAst()
             } catch (e: Error) {
-                return KotlinScriptParsingResult(null, listOf(e))
+                return KotlinScriptParsingResult(null, lexicalAndSyntacticErrors + e)
             }
         } else {
             null
