@@ -19,6 +19,7 @@ fun Declaration.generateCode(depth: Int = 0): String{
         is PropertyDeclaration -> this.generateCode(depth)
         is WidgetDeclaration -> this.generateCode(depth)
         is FunctionDeclaration -> this.generateCode(depth)
+        is ClassDeclaration -> TODO()
     }
 }
 fun Statement.generateCode(depth: Int = 0): String {

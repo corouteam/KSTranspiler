@@ -22,10 +22,10 @@ importHeader
     ;
 
 declaration:
-    functionDeclaration
+    classDeclaration
+    |functionDeclaration
     | propertyDeclaration
-    | structDeclaration
-    ;
+    | structDeclaration;
 
 
 statement : propertyDeclaration # propertyDeclarationStatement
@@ -131,17 +131,25 @@ structDeclaration:
     (NL* classBody)?
     ;
 
+classDeclaration:
+    CLASS ID (NL* COLON NL* delegationSpecifiers)?
+    (NL* classBody)?
+    ;
+
 classBody
-    : LCURL NL* classMemberDeclarations NL* RCURL
+    : LCURL NL* (classMemberDeclaration semis?)* NL* RCURL
     ;
 delegationSpecifiers
-    : ID (NL* COMMA NL* ID)*
+    : type (NL* COMMA NL* type)*
     ;
 
-classMemberDeclarations
-    : (declaration semis?)*
-    ;
+classMemberDeclaration
+    : declaration
+    | primaryConstructor;
 
+primaryConstructor
+    : CONSTRUCTOR NL* functionValueParameters  NL* block?
+    ;
 semis
     : (SEMICOLON | NL)+
     ;

@@ -30,6 +30,14 @@ class FunctionDeclaration(val id: String,
 
 sealed class Expression(open var type: Type) : Statement()
 
+class ClassDeclaration(
+    val name: String,
+    val constructor: FunctionDeclaration?,
+    val body: List<Declaration>,
+    val baseClasses: List<Type>,
+    override var position: Position? = null
+): Declaration()
+
 sealed class Type : Node()
 
 class FunctionParameter(val id: String,val  type: Type, override var position: Position? = null): Node()
@@ -53,6 +61,7 @@ data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String, override var position: Position? = null): Type()
 data class DpType(override var position: Position? = null): Type()
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
+
 
 
 // EXPERIMENTAL COMPOSABLE

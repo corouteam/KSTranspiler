@@ -460,4 +460,20 @@ class LexerTest {
             "LCURL", "RCURL", "RPAREN", "LCURL","RCURL", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
+
+    @Test
+    fun parseClass(){
+        val code = """
+            class Person(
+    val firstName: String,
+    val lastName: String,
+    var age: Int
+): Parent {}
+        """.trimIndent()
+        val result = listOf("CLASS", "ID", "LPAREN", "NL", "VAL", "ID", "COLON",
+            "STRING","COMMA", "NL", "VAL", "ID", "COLON",
+            "STRING","COMMA", "NL", "VAR", "ID", "COLON", "INT",
+            "NL", "RPAREN", "COLON", "ID", "LCURL", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }

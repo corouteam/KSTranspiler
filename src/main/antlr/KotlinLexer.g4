@@ -15,7 +15,7 @@ DOUBLE             : 'Double';
 BOOL               : 'Boolean';
 STRING             : 'String';
 DP                 : 'Dp';
-
+INIT               : 'init';
 
 INT_LIT
     : DecDigitNoZero DecDigit*
@@ -61,6 +61,8 @@ FUN: 'fun';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
 LISTOF: 'listOf';
+CLASS: 'class';
+DATA: 'data';
 
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;

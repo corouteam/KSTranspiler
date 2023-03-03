@@ -5,6 +5,7 @@ import it.poliba.KSTranspiler.SwiftParser.BlockContext
 import it.poliba.KSTranspiler.facade.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.reflect.jvm.internal.impl.types.CustomTypeParameter
 import kotlin.test.assertIs
 
 class MappingTest {
@@ -612,6 +613,55 @@ class MappingTest {
             )
         )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+    }
+
+    @Test
+    fun mapClassDeclaration() {
+        val code = """
+        class Person(
+    val firstName: String,
+    val lastName: String,
+    var age: Int,
+    val address: Address
+): Address, Jks {
+    val a: String = "Hello"
+}
+        """.trimMargin()
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
+
+
+        val classDecl = ast?.declarations?.first() as ClassDeclaration
+
+
+
+        val dec = classDecl.body.first() as PropertyDeclaration
+        var decl = classDecl.baseClasses.get(0)
+
+        assertEquals("Person", classDecl.name)
+        assertEquals("a", dec.varName)
+        assertIs<UserType>(decl)
+    }
+
+    @Test
+    fun mapClassDeclaration2() {
+        val code = """
+        class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+            init {
+                print("Hello")
+            }
+        }""".trimMargin()
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
+
+
+        val classDecl = ast?.declarations?.first() as ClassDeclaration
+        val constructor = classDecl.constructor
+
+        assertEquals("Person", classDecl.name)
+        assertEquals(2, constructor?.parameters?.count())
+
     }
 
 }

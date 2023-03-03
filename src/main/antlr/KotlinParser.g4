@@ -22,8 +22,10 @@ importHeader
     ;
 
 declaration:
-    functionDeclaration
-    | propertyDeclaration
+     propertyDeclaration
+    | classDeclaration
+    | functionDeclaration
+
     ;
 
 
@@ -45,12 +47,41 @@ annotation: AT ID;
 
 assignment : ID ASSIGN expression ;
 
+//Section class
+classDeclaration
+    : DATA? CLASS NL* ID
+      (NL* primaryConstructor)?
+      (NL* COLON  NL* extendedClasses)?
+      (NL* classBody)?
+
+;
+
+primaryConstructor
+    : LPAREN NL* (classParameter (NL* COMMA NL* classParameter)* (NL* COMMA)?)? NL* RPAREN
+    ;
+
+classBody
+    : LCURL NL* ((declaration|constructor) semis?)* NL* RCURL
+    ;
+
+constructor:
+    INIT NL* functionBody
+    ;
+
+classParameter
+    : (VAL | VAR)? NL* ID COLON NL* type
+    ;
+
+extendedClasses
+    : type (NL* COMMA  type NL* )*
+    ;
+
 
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
            | LPAREN expression RPAREN                                      # parenExpression
-           | ID                                                    # varReference
+           | ID                                                            # varReference
            | MINUS expression                                              # minusExpression
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
@@ -134,6 +165,7 @@ semis
 type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
+       ID      #userType |
        STRING  # string;
 
 typeArguments

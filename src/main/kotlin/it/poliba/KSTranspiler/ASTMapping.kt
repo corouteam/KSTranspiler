@@ -4,12 +4,14 @@ import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
 import com.strumenta.kolasu.model.pos
+import io.ktor.util.*
 import it.poliba.KSTranspiler.KotlinParser.BlockContext
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
 import it.poliba.KSTranspiler.KotlinParser.FunctionCallContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
 import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
+import org.antlr.v4.codegen.model.decl.Decl
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 import kotlin.jvm.internal.Intrinsics.Kotlin
@@ -37,6 +39,8 @@ fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): De
         this.functionDeclaration().toAst(considerPosition)
     }else if(this.propertyDeclaration() != null){
         this.propertyDeclaration().toAst(considerPosition)
+    }else if(this.classDeclaration() != null){
+        this.classDeclaration().toAst(considerPosition)
     }else{
         throw UnsupportedOperationException("")
     }
@@ -53,6 +57,34 @@ fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fa
     }else{
         return this.toNormalAst(considerPosition)
     }
+}
+
+fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
+    var constProp = listOf<FunctionParameter>()
+    var constructor: FunctionDeclaration? = null
+
+    if(primaryConstructor() != null && primaryConstructor().classParameter() != null){
+        constProp = primaryConstructor().classParameter().map {
+            if(it.VAR() != null || it.VAL() != null){
+                //TODO ADD PROPERTY AND ASSIGNMENT
+            }
+            FunctionParameter(it.ID().text, it.type().toAst(considerPosition))
+        }
+    }
+    var body = listOf<Declaration>()
+    if (classBody() != null && classBody().declaration() != null){
+        body = classBody().declaration().map { it.toAst(considerPosition) }
+    }
+    val baseClasses = extendedClasses().type().map { it.toAst(considerPosition) }
+    var constructorBody: ControlStructureBody = Block(listOf())
+    if(classBody() != null && classBody().constructor() != null){
+        constructorBody = classBody().constructor().first().functionBody().block().toAst(considerPosition)
+    }
+    if(constProp.isNotEmpty()){
+       constructor = FunctionDeclaration("init", constProp, null, constructorBody, toPosition(considerPosition))
+    }
+
+    return ClassDeclaration(ID().text, constructor, body, baseClasses, toPosition(considerPosition))
 }
 
 
@@ -199,6 +231,7 @@ fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression 
 fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
     is KotlinParser.IntegerContext -> IntType(toPosition(considerPosition))
     is KotlinParser.DoubleContext -> DoubleType(toPosition(considerPosition))
+    is KotlinParser.UserTypeContext -> UserType(this.ID().text, toPosition(considerPosition))
     is KotlinParser.StringContext -> StringType(toPosition(considerPosition))
     is KotlinParser.BoolContext -> BoolType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)

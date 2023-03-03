@@ -58,7 +58,7 @@ RETURN                  : 'return' ;
 FUNCTION_RETURN           : '->';
 STRUCT: 'struct';
 SOME:'some';
-
+CLASS: 'class';
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 

@@ -20,6 +20,7 @@ fun Declaration.generateKotlinCode(): String{
         is PropertyDeclaration -> this.generateKotlinCode()
         is WidgetDeclaration -> this.generateKotlinCode()
         is FunctionDeclaration -> this.generateKotlinCode()
+        is ClassDeclaration -> TODO()
     }
 }
 fun Statement.generateKotlinCode(): String {

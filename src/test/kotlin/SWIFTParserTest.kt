@@ -127,37 +127,38 @@ class SWIFTParserTest {
                 "        T[\n" +
                 "]\n" +
                 "        ClassMemberDeclarations\n" +
-                "          Declaration\n" +
-                "            PropertyDeclaration\n" +
-                "              VarDeclaration\n" +
-                "                T[var]\n" +
-                "                T[body]\n" +
-                "                T[:]\n" +
-                "                T[some]\n" +
-                "                UserType\n" +
-                "                  T[View]\n" +
-                "              ComputedPropertyDeclarationBody\n" +
-                "                Block\n" +
-                "                  T[{]\n" +
-                "                  T[\n" +
-                "]\n" +
-                "                  ExpressionStatement\n" +
-                "                    WidgetCallExpression\n" +
-                "                      TextWidget\n" +
-                "                        T[Text]\n" +
-                "                        T[(]\n" +
-                "                        StringLiteralExpression\n" +
-                "                          StringLiteral\n" +
-                "                            LineStringLiteral\n" +
-                "                              T[\"]\n" +
-                "                              LineStringContent\n" +
-                "                                T[Ciao]\n" +
-                "                              T[\"]\n" +
-                "                        T[)]\n" +
-                "                  Semis\n" +
+                "          ClassMemberDeclaration\n" +
+                "            Declaration\n" +
+                "              PropertyDeclaration\n" +
+                "                VarDeclaration\n" +
+                "                  T[var]\n" +
+                "                  T[body]\n" +
+                "                  T[:]\n" +
+                "                  T[some]\n" +
+                "                  UserType\n" +
+                "                    T[View]\n" +
+                "                ComputedPropertyDeclarationBody\n" +
+                "                  Block\n" +
+                "                    T[{]\n" +
                 "                    T[\n" +
                 "]\n" +
-                "                  T[}]\n" +
+                "                    ExpressionStatement\n" +
+                "                      WidgetCallExpression\n" +
+                "                        TextWidget\n" +
+                "                          T[Text]\n" +
+                "                          T[(]\n" +
+                "                          StringLiteralExpression\n" +
+                "                            StringLiteral\n" +
+                "                              LineStringLiteral\n" +
+                "                                T[\"]\n" +
+                "                                LineStringContent\n" +
+                "                                  T[Ciao]\n" +
+                "                                T[\"]\n" +
+                "                          T[)]\n" +
+                "                    Semis\n" +
+                "                      T[\n" +
+                "]\n" +
+                "                    T[}]\n" +
                 "          Semis\n" +
                 "            T[\n" +
                 "]\n" +
