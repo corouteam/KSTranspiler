@@ -57,6 +57,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
            | while                                                         # whileExpression
+           | for                                                           # forExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
@@ -76,6 +77,9 @@ if
       | body=controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (elseBody=controlStructureBody | SEMICOLON)
       | SEMICOLON)
     ;
+
+for
+    : FOR NL* LPAREN NL* ID NL* IN NL* expression NL* RPAREN NL* body=controlStructureBody;
 
 controlStructureBody
     : block

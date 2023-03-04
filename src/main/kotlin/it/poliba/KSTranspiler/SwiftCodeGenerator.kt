@@ -71,6 +71,12 @@ fun WhileExpression.generateCode(): String{
             "}"
 }
 
+fun ForExpression.generateCode(): String{
+    return "for $varName in ${range.generateCode()} {\n"+
+            "\t${body.generateCode()}\n"+
+            "}"
+}
+
 fun ControlStructureBody.generateCode(): String{
     return when(this){
         is Block -> this.generateCode()
@@ -105,6 +111,7 @@ fun Expression.generateCode() : String = when (this) {
     is FontWeightLit -> this.generateCode()
     is ReturnExpression -> "return ${this.returnExpression.generateCode()}"
     is TextComposableCall -> this.generateCode()
+    is ForExpression -> this.generateCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)

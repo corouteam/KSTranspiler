@@ -55,6 +55,8 @@ DOT                : '.' ;
 
 IF: 'if';
 ELSE: 'else';
+FOR: 'for';
+IN: 'in';
 FUN: 'fun';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
