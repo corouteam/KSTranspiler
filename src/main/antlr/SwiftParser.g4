@@ -57,7 +57,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | BOOL_LIT                                                      # boolLiteral
            | if                                                            # ifExpression
            | while                                                         # whileExpression
+           | for                                                           # forExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression
            | widgetCall #widgetCallExpression
            | color                       # colorLiteral;
@@ -71,6 +73,8 @@ if
     ;
 
 while : WHILE NL* LPAREN NL* expression NL* RPAREN NL* body=controlStructureBody;
+
+for: FOR NL* ID NL* IN NL* expression NL* body=controlStructureBody;
 
 controlStructureBody
     : block

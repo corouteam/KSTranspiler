@@ -23,7 +23,7 @@ INT_LIT
 BOOL_LIT : 'true' | 'false';
 
 DOUBLE_LIT
-     : DecDigits? '.' DecDigits
+     : DecDigits '.' DecDigits
      | DecDigits
      ;
 
@@ -47,10 +47,13 @@ SEMICOLON          : ';';
 COMMA              : ',';
 AT                 : '@';
 DOT                : '.';
+RANGE              : '...';
 
 IF: 'if';
 ELSE: 'else';
 WHILE: 'while';
+FOR: 'for';
+IN: 'in';
 FUN: 'func';
 PACKAGE: 'package';
 RETURN                  : 'return' ;

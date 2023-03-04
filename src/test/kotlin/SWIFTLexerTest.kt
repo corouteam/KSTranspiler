@@ -62,6 +62,15 @@ class SWIFTLexerTest {
     }
 
     @Test
+    fun parseForStatement(){
+        val code = "for i in 1...5 {"+
+                "   print(\"Hello world\")" +
+                "}"
+        val result = listOf("FOR", "ID", "IN", "INT_LIT", "DOT", "DOT","DOT", "INT_LIT", "LCURL", "PRINT", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
     fun parseBoldFontWeight(){
         val code = ".fontWeight(Font.Weight.bold)"
         val result = listOf("DOT", "FONT_WEIGHT_PARAM","LPAREN","FONT","DOT", "WEIGHT","DOT","FONT_WEIGHT_BOLD", "RPAREN", "EOF")

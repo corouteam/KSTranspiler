@@ -23,7 +23,7 @@ INT_LIT
 BOOL_LIT : 'true' | 'false';
 
 DOUBLE_LIT
-     : DecDigits? '.' DecDigits
+     : DecDigits '.' DecDigits
      | DecDigits
      ;
 
