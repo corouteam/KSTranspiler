@@ -96,6 +96,7 @@ fun Expression.generateCode() : String = when (this) {
     is DoubleLit -> this.value
     is VarReference -> this.varName
     is BinaryExpression -> this.generateCode()
+    is LogicalExpression -> this.generateCode()
     is StringLit -> "\"${this.value}\""
     is BoolLit -> "${this.value}"
     is RangeExpression -> "${this.leftExpression.generateCode()}...${this.rightExpression.generateCode()}"
@@ -126,6 +127,18 @@ fun BinaryExpression.generateCode(): String = when(this) {
     is SubtractionExpression -> "${left.generateCode()} - ${right.generateCode()}"
     is MultiplicationExpression -> "${left.generateCode()} * ${right.generateCode()}"
     is DivisionExpression -> "${left.generateCode()} / ${right.generateCode()}"
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun LogicalExpression.generateCode(): String = when(this) {
+    is EqualExpression -> "${left.generateCode()} == ${right.generateCode()}"
+    is NotEqualExpression -> "${left.generateCode()} != ${right.generateCode()}"
+    is GTEqualExpression -> "${left.generateCode()} >= ${right.generateCode()}"
+    is LTEqualExpression -> "${left.generateCode()} <= ${right.generateCode()}"
+    is GreaterThanExpression -> "${left.generateCode()} > ${right.generateCode()}"
+    is LessThanExpression -> "${left.generateCode()} < ${right.generateCode()}"
+    is AndExpression -> "${left.generateCode()} && ${right.generateCode()}"
+    is OrExpression -> "${left.generateCode()} || ${right.generateCode()}"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 fun TextComposableCall.generateCode(): String{

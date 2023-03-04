@@ -47,7 +47,6 @@ assignment : ID ASSIGN expression ;
 
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
-           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
            | LPAREN expression RPAREN                                      # parenExpression
            | ID                                                            # varReference

@@ -7,10 +7,11 @@ import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 object App {
     @JvmStatic
     fun main(args: Array<String>) {
-        var code = """val test = listOf<Int>(1, 2, "a")""".trim()
-        var code2 = "let a = 5 + 2"
+        var code = """if (1 <= 2) {
+                print("1")
+            }""".trimMargin().trim()
         var actual = code
-        val parseResult = KotlinParserFacade.parse(actual)
+        val parseResult = KotlinParserFacadeScript.parse(actual)
 
         if (!parseResult.isCorrect()) {
             println("ERRORS FOUND")
