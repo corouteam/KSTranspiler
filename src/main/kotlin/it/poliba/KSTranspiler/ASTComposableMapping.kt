@@ -38,10 +38,6 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
     is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
     is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
     is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
-    is KotlinParser.DividerComposableContext -> this.toAst(considerPosition)
-    is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
-    is KotlinParser.ColumnComposableContext -> this.toAst(considerPosition)
-    is KotlinParser.RowComposableContext -> this.toAst(considerPosition)
     is KotlinParser.IconButtonComposableContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
