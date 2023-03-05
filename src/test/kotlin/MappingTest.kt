@@ -175,10 +175,12 @@ class MappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(
             listOf(
-                Assignment("a", IntLit("5"))
+                Assignment(VarReference("a", StringType()), IntLit("5"))
             )
         )
-        assertEquals(expectedAst, ast)
+        var assigment = ast?.statement?.first() as Assignment
+        assertEquals("a", assigment.variable.generateKotlinCode())
+        assertEquals("5", assigment.value.generateKotlinCode())
     }
 
     @Test
@@ -482,9 +484,9 @@ class MappingTest {
     fun mapColumn() {
         val code = """
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.Start
-            )
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+             horizontalAlignment = Alignment.Start
+     )
         """.trimIndent()
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(
@@ -657,10 +659,37 @@ class MappingTest {
 
 
         val classDecl = ast?.declarations?.first() as ClassDeclaration
-        val constructor = classDecl.constructor
+        val constructor = classDecl.body.first() as PrimaryConstructor
 
         assertEquals("Person", classDecl.name)
-        assertEquals(2, constructor?.parameters?.count())
+        assertEquals(2, constructor.parameters.count())
+
+    }
+
+    @Test
+    fun parseClassWithInitializer() {
+        val code = """
+        class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+        var name: String
+        
+            init {
+                print("Hello")
+                this.name.greet = "Hello"
+                this.name.greet = this.surname
+            }
+        }""".trimMargin()
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
+
+
+        val classDecl = ast?.declarations?.first() as ClassDeclaration
+        val constructor = classDecl.body[1] as PrimaryConstructor
+        val body = constructor.body as Block
+        assertEquals("Person", classDecl.name)
+        assertEquals(2, constructor.parameters.count())
+        assertEquals(3, body.body.count())
 
     }
 

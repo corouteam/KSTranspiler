@@ -312,7 +312,7 @@ class SWIFTMappingTest {
     fun mapClassDeclaration() {
         val code = """
         class Person: Address{
-            func init(firstName: String, lastName: String){
+             init(firstName: String, lastName: String){
                print("Hello world")
             }
         }""".trimMargin()
@@ -322,11 +322,48 @@ class SWIFTMappingTest {
 
         val classDecl = ast?.declarations?.first() as ClassDeclaration
         var decl = classDecl.baseClasses.get(0)
-
+        var constructor = classDecl.body.first() as PrimaryConstructor
         assertEquals("Person", classDecl.name)
         assertIs<UserType>(decl)
+        assertEquals(2, constructor.parameters.count())
 
-        assertEquals(2, classDecl.constructor?.parameters?.count())
+    }
+
+    @Test
+    fun mapClassDeclarationComplex() {
+        val code = """
+        class Person: Address{
+            var firstName: String
+            var lastName: String
+            var fullName: String
+            
+            init(firstName: String, lastName: String){
+               print("Hello world")
+               self.firstName = firstName
+               self.lastName = lastName
+            }
+            
+            func testFunction(){
+                self.sayHello()
+            }
+            
+            func sayHello(){
+                print("Hello world")
+            }
+            
+        }""".trimMargin()
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+
+
+
+        val classDecl = ast?.declarations?.first() as ClassDeclaration
+        var decl = classDecl.baseClasses.get(0)
+        var constructor = classDecl.body.get(2) as PrimaryConstructor
+        var constructorBlock = (constructor.body as Block)
+        assertEquals("Person", classDecl.name)
+        assertIs<UserType>(decl)
+        assertEquals(2, constructor.parameters.count())
+        assertEquals(3, constructorBlock.body.count())
 
     }
 }

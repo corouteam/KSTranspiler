@@ -651,6 +651,28 @@ KotlinScript
         assertEquals(expected, actual)
     }
 
+
+    @Test
+    fun parseColumn(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        TextComposable\n" +
+                "          T[Text]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[Hello world]\n" +
+                "                T[\"]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("column")).multiLineString()
+        assertEquals(expected, actual)
+    }
     @Test
     fun parseBoxWithModifierZIndex(){
         val expected = "KotlinScript\n" +

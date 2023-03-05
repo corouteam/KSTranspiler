@@ -2,7 +2,6 @@ package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Position
-import com.strumenta.kolasu.model.pos
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -32,7 +31,6 @@ sealed class Expression(open var type: Type) : Statement()
 
 class ClassDeclaration(
     val name: String,
-    val constructor: FunctionDeclaration?,
     val body: List<Declaration>,
     val baseClasses: List<Type>,
     override var position: Position? = null
@@ -166,7 +164,7 @@ data class PropertyDeclaration(
 ) : Declaration()
 
 data class Assignment(
-    val varName: String,
+    val variable: Expression,
     val value: Expression,
     override var position: Position? = null
 ) : Statement()
@@ -182,8 +180,13 @@ data class RangeExpression(val leftExpression: Expression,
 data class FunctionCall(val name: String,
                         val parameters: List<Expression>,
                         override var position: Position? = null,
-): Expression(FunctionCallType(position))
+): Expression(FunctionCallType(position)) // FunctionCallType not right
 
+class PrimaryConstructor(
+    val parameters: List<FunctionParameter>,
+    val body: ControlStructureBody,
+    override var position: Position?
+): Declaration()
 sealed class ComposableCall(
     open var zIndex: Expression??,
     type: ComposableType): Expression(type)
@@ -266,6 +269,20 @@ class ButtonComposableCall(
     override var position: Position? = null,
     ): ComposableCall(zIndex, ButtonComposableType())
 data class Error(override val message: String, val position: Position?): Throwable(message)
+
+class AccessExpression(val child: Expression,val prefix: Expression,val accessOperator: AccessOperator): Expression(StringType())
+
+sealed class AccessOperator(position: Position?)
+
+class DotOperator(position: Position?): AccessOperator(position)
+
+class ElvisOperator(position: Position?): AccessOperator(position)
+
+class ThisExpression(position: Position?): Expression(StringType())
+
+
+
+
 
 /**
  * Define a function for each node;

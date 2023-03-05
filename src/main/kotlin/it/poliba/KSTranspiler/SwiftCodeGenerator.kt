@@ -19,7 +19,8 @@ fun Declaration.generateCode(depth: Int = 0): String{
         is PropertyDeclaration -> this.generateCode(depth)
         is WidgetDeclaration -> this.generateCode(depth)
         is FunctionDeclaration -> this.generateCode(depth)
-        is ClassDeclaration -> TODO()
+        is ClassDeclaration -> this.generateCode()
+        is PrimaryConstructor -> TODO()
     }
 }
 fun Statement.generateCode(depth: Int = 0): String {
@@ -46,7 +47,7 @@ fun FunctionParameter.generateCode(): String{
 }
 
 fun Assignment.generateCode(depth: Int = 0): String{
-    return "$varName = ${value.generateCode(depth)}"
+    return "${variable.generateCode()} = ${value.generateCode(depth)}"
 }
 
 fun Print.generateCode(depth: Int = 0): String{

@@ -43,7 +43,7 @@ propertyDeclaration:  (varDeclaration|letDeclaration) ((ASSIGN expression)|compu
 
 annotation: AT ID;
 
-assignment : ID ASSIGN expression ;
+assignment : left=expression ASSIGN right=expression ;
 
 computedPropertyDeclarationBody:
     NL* block;
@@ -60,13 +60,16 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | functionCallExpression                                        # functionCall
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression
            | name=ID NL* functionCallParameters NL*                        # functionCall
-           | widgetCall #widgetCallExpression
-           | horizontalAlignment #horizontalAlignmentExpression
-           | verticalAlignment #verticalAlignmentExpression
-           | color                       # colorLiteral;
+           | widgetCall                                                    # widgetCallExpression
+           | horizontalAlignment                                           # horizontalAlignmentExpression
+           | verticalAlignment                                             # verticalAlignmentExpression
+           | color                                                         # colorLiteral
+           | SELF                                                          # selfExpression
+           | (ID | functionCallExpression | SELF) (accessSuffix)*          # complexExpression;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -76,9 +79,23 @@ if
       | SEMICOLON)
     ;
 
+accessSuffix:
+(navSuffix expression);
+
+navSuffix:
+    DOT #dotNavigation
+    | ELVIS DOT #elvisNavigation;
+
+functionCallExpression:
+    name=ID NL* functionCallParameters NL* ;
+
 controlStructureBody
     : block
     | statement
+    ;
+
+functionCallParameters
+    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
     ;
 
 block
@@ -144,8 +161,8 @@ delegationSpecifiers
     ;
 
 classMemberDeclaration
-    : declaration
-    | primaryConstructor;
+    :  primaryConstructor
+    |  declaration;
 
 primaryConstructor
     : CONSTRUCTOR NL* functionValueParameters  NL* block?
@@ -165,14 +182,13 @@ type : INT     # integer |
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
-    | BUTTON_WIDGET LPAREN ID COLON action = functionBody RPAREN body = block #buttonWidget
+    | BUTTON_WIDGET LPAREN ID COLON action = functionBody NL* RPAREN body = block #buttonWidget
     | DIVIDER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #dividerWidget
     | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
-    |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
-    HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
-    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget |
+    |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #vStackWidget |
+    HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #hStackWidget |
+    SCROLL_VIEW LPAREN (DOT ID)? NL*RPAREN block #scrollViewWidget |
     ZSTACK block? #zStackWidget;
-
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix

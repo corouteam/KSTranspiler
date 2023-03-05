@@ -58,7 +58,9 @@ RETURN                  : 'return' ;
 FUNCTION_RETURN           : '->';
 STRUCT: 'struct';
 SOME:'some';
+CONSTRUCTOR: 'init';
 CLASS: 'class';
+
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 
@@ -101,6 +103,7 @@ TOP: 'top';
 CENTER: 'center';
 TRAILING: 'trailing';
 BOTTOM: 'bottom';
+SELF: 'self';
 // Identifiers
 ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
 

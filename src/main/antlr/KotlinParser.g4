@@ -45,7 +45,7 @@ propertyDeclaration:  (varDeclaration|valDeclaration) (ASSIGN expression)?;
 
 annotation: AT ID;
 
-assignment : ID ASSIGN expression ;
+assignment : left=expression ASSIGN right=expression ;
 
 //Section class
 classDeclaration
@@ -86,8 +86,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
-           | INT_LIT DOT DP_SUFFIX                                             # dpLiteral
-           | name=ID NL* functionCallParameters NL*                        # functionCall
+           | INT_LIT DOT DP_SUFFIX                                         # dpLiteral
+           | functionCallExpression                        # functionCall
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
@@ -98,9 +98,19 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | fontWeight                                                    # fontWeightLiteral
            | horizontalAlignment                                           #horizhontalAlignmentExpression
            | verticalAlignment                                             #verticalAlignmentExpression
-           | arrangement                                                   #arrangementExpression;
+           | arrangement                                                   #arrangementExpression
+           | THIS                                                          #thisExpression
+           | (ID | functionCallExpression | THIS) (accessSuffix)*  #complexExpression ;
 
+functionCallExpression:
+    name=ID NL* functionCallParameters NL* ;
 
+accessSuffix:
+(navSuffix expression);
+
+navSuffix:
+    DOT #dotNavigation
+    | ELVIS DOT #elvisNavigation;
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
       (
@@ -176,8 +186,8 @@ composableCall:
     TEXT_COMPOSE LPAREN expression ((NL* COMMA NL* textComposeParameter) (NL* COMMA NL* textComposeParameter)*)?  RPAREN #textComposable
     | DIVIDER_COMPOSE LPAREN ((NL* dividerComposeParameter) (NL* COMMA NL* dividerComposeParameter)*)? RPAREN (NL* DOT NL* composableUIGenericWidgetSuffix)*? #dividerComposable
     | SPACER_COMPOSE LPAREN (NL* modifierParameter NL*)? RPAREN  #spacerComposable
-    | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
-    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable
+    | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  NL* RPAREN block? #columnComposable
+    | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  NL* RPAREN block? #rowComposable
     | BOX LPAREN (NL* modifierParameter NL*)? RPAREN block? #boxComposable
     | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable;
 

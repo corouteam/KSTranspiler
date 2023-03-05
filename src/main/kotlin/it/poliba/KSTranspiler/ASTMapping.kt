@@ -5,8 +5,10 @@ import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
 import com.strumenta.kolasu.model.pos
 import io.ktor.util.*
+import it.poliba.KSTranspiler.KotlinParser.AccessSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.BlockContext
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
+import it.poliba.KSTranspiler.KotlinParser.ElvisNavigationContext
 import it.poliba.KSTranspiler.KotlinParser.FunctionCallContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
@@ -61,7 +63,7 @@ fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fa
 
 fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     var constProp = listOf<FunctionParameter>()
-    var constructor: FunctionDeclaration? = null
+    var constructor: PrimaryConstructor? = null
 
     if(primaryConstructor() != null && primaryConstructor().classParameter() != null){
         constProp = primaryConstructor().classParameter().map {
@@ -71,20 +73,23 @@ fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false
             FunctionParameter(it.ID().text, it.type().toAst(considerPosition))
         }
     }
-    var body = listOf<Declaration>()
+    var body = arrayListOf<Declaration>()
     if (classBody() != null && classBody().declaration() != null){
-        body = classBody().declaration().map { it.toAst(considerPosition) }
+        body = ArrayList(classBody().declaration().map { it.toAst(considerPosition) })
     }
     val baseClasses = extendedClasses().type().map { it.toAst(considerPosition) }
     var constructorBody: ControlStructureBody = Block(listOf())
-    if(classBody() != null && classBody().constructor() != null){
+    if(classBody() != null && classBody().constructor() != null && classBody().constructor().isNotEmpty()){
         constructorBody = classBody().constructor().first().functionBody().block().toAst(considerPosition)
     }
     if(constProp.isNotEmpty()){
-       constructor = FunctionDeclaration("init", constProp, null, constructorBody, toPosition(considerPosition))
+       constructor = PrimaryConstructor(constProp, constructorBody, toPosition(considerPosition))
+    }
+    constructor?.let {
+        body.add(it)
     }
 
-    return ClassDeclaration(ID().text, constructor, body, baseClasses, toPosition(considerPosition))
+    return ClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
 }
 
 
@@ -114,7 +119,7 @@ fun KotlinParser.FunctionValueParameterContext.toAst(considerPosition: Boolean =
 fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
     is PropertyDeclarationStatementContext -> this.propertyDeclaration().toAst(considerPosition)
     is KotlinParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
-    is KotlinParser.AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
+    is KotlinParser.AssignmentStatementContext -> Assignment(assignment().left.toAst(considerPosition), assignment().right.toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.ExpressionStatementContext -> expression().toAst(considerPosition)
 
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -122,15 +127,23 @@ fun KotlinParser.StatementContext.toAst(considerPosition: Boolean = false) : Sta
 
 fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): PropertyDeclaration {
     return if(varDeclaration() != null){
-
-        val type = if(varDeclaration().type() != null) varDeclaration().type().toAst(considerPosition) else expression().toAst(considerPosition).type
-        PropertyDeclaration(varDeclaration().ID().text, type, expression().toAst(considerPosition),
+        var expression: Expression? = null
+        if(expression() != null){
+            expression = expression().toAst(considerPosition)
+        }
+        val type = if(varDeclaration().type() != null) varDeclaration().type().toAst(considerPosition) else  expression?.type ?: throw Exception("Type missing")
+        PropertyDeclaration(varDeclaration().ID().text, type, expression,
             mutable = true,
             position = toPosition(considerPosition))
     }else{
-        val type = if(valDeclaration().type() != null) valDeclaration().type().toAst(considerPosition) else expression().toAst(considerPosition).type
+        var expression: Expression? = null
 
-        PropertyDeclaration(valDeclaration().ID().text, type, expression().toAst(considerPosition),
+        if(expression() != null){
+            expression = expression().toAst(considerPosition)
+        }
+        val type = if(valDeclaration().type() != null) valDeclaration().type().toAst(considerPosition) else expression?.type ?: throw Exception("Type missing")
+
+        PropertyDeclaration(valDeclaration().ID().text, type, expression,
             mutable = false,
             position = toPosition(considerPosition))
 
@@ -154,10 +167,47 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.ArrangementExpressionContext -> toAst(considerPosition)
     is KotlinParser.HorizhontalAlignmentExpressionContext -> toAst(considerPosition)
     is KotlinParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
-
+    is KotlinParser.ComplexExpressionContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
+fun KotlinParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expression{
+    var base = if(ID() != null){
+        VarReference(ID().text, StringType())
+    }else if(functionCallExpression()!= null){
+        functionCallExpression().toAst(considerPosition)
+    }else if(THIS() != null){
+        ThisExpression(toPosition(considerPosition))
+    }else{
+        throw Exception("Not recognized id at ${toPosition(considerPosition)}")
+    }
+
+    if(accessSuffix().isNotEmpty()){
+      return getAccessSuffix(accessSuffix(), base)
+    }else{
+        return base
+    }
+}
+
+fun getAccessSuffix(value: List<AccessSuffixContext>, base: Expression): AccessExpression{
+    if(value.size == 1){
+        var access = value.last().navSuffix().toAst(true)
+        var exp = value.last().expression().toAst(true)
+        return AccessExpression( exp, base, access)
+    }else{
+        var access = value.last().navSuffix().toAst(true)
+        var exp = value.last().expression().toAst(true)
+        return AccessExpression( exp, getAccessSuffix(value.dropLast(1), base), access)
+    }
+}
+
+fun KotlinParser.NavSuffixContext.toAst(considerPosition: Boolean): AccessOperator{
+    return if(this  is ElvisNavigationContext){
+        ElvisOperator(toPosition(considerPosition))
+    }else{
+        DotOperator(toPosition(considerPosition))
+    }
+}
 fun KotlinParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expression {
     return RangeExpression(
         leftExpression = this.left.toAst(considerPosition),
@@ -167,6 +217,14 @@ fun KotlinParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expres
 }
 
 fun KotlinParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression {
+    return FunctionCall(
+        name = this.functionCallExpression().name.text,
+        parameters = this.functionCallExpression().functionCallParameters().expression().map { it.toAst(considerPosition) },
+        position = toPosition(considerPosition)
+    )
+}
+
+fun KotlinParser.FunctionCallExpressionContext.toAst(considerPosition: Boolean): Expression {
     return FunctionCall(
         name = this.name.text,
         parameters = this.functionCallParameters().expression().map { it.toAst(considerPosition) },

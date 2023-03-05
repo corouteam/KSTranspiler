@@ -124,6 +124,10 @@ fun SwiftParser.StructDeclarationContext.toWidgetAST(considerPosition: Boolean =
 fun ClassMemberDeclarationContext.toAst(considerPosition: Boolean = false): Any{
     if(this.declaration() != null){
         return this.declaration().toAst(considerPosition)
+    }else if(this.primaryConstructor() != null){
+        var params = primaryConstructor().functionValueParameters().functionValueParameter().map { it.toAst(considerPosition) }
+        var body = primaryConstructor().block().toAst(considerPosition)
+        return PrimaryConstructor(params, body, toPosition(considerPosition))
     }else{
         throw Exception("Not implemented yet")
     }

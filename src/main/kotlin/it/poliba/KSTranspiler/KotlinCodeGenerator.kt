@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
+import java.lang.reflect.Constructor
 import java.util.ArrayList
 import java.util.StringJoiner
 
@@ -21,6 +22,7 @@ fun Declaration.generateKotlinCode(): String{
         is WidgetDeclaration -> this.generateKotlinCode()
         is FunctionDeclaration -> this.generateKotlinCode()
         is ClassDeclaration -> TODO()
+        is PrimaryConstructor -> TODO()
     }
 }
 fun Statement.generateKotlinCode(): String {
@@ -47,7 +49,7 @@ fun FunctionParameter.generateKotlinCode(): String{
 }
 
 fun Assignment.generateKotlinCode(): String{
-    return "$varName = ${value.generateKotlinCode()}"
+    return "${variable.generateKotlinCode()} = ${value.generateKotlinCode()}"
 }
 
 fun Print.generateKotlinCode(): String{

@@ -54,7 +54,7 @@ LANGLE: '<';
 RANGLE: '>';
 AT                 : '@';
 DOT                : '.';
-
+ELVIS : '?';
 IF: 'if';
 ELSE: 'else';
 FUN: 'fun';
