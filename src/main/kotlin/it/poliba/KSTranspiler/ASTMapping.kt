@@ -88,8 +88,12 @@ fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false
     constructor?.let {
         body.add(it)
     }
+    if(DATA() != null){
+        return DataClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
 
-    return ClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
+    }else{
+        return ClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
+    }
 }
 
 

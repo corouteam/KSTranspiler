@@ -33,7 +33,14 @@ class ClassDeclaration(
     val name: String,
     val body: List<Declaration>,
     val baseClasses: List<Type>,
-    override var position: Position? = null
+    override var position: Position? = null,
+): Declaration()
+
+class DataClassDeclaration(
+    val name: String,
+    val body: List<Declaration>,
+    val baseClasses: List<Type>,
+    override var position: Position? = null,
 ): Declaration()
 
 sealed class Type : Node()

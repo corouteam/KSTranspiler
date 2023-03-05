@@ -109,7 +109,7 @@ fun FrameSuffixContext.toAst(considerPosition: Boolean): Frame {
 
 }
 
-fun SwiftParser.StructDeclarationContext.toWidgetAST(considerPosition: Boolean = false): WidgetDeclaration{
+fun SwiftParser.ClassDeclarationContext.toWidgetAST(considerPosition: Boolean = false): WidgetDeclaration{
     var id = this.ID().text
     this.classBody().classMemberDeclaration().map { it.toAst(considerPosition) }
     val bodyInstruction = this.classBody().classMemberDeclaration().map { it.toAst(considerPosition) }

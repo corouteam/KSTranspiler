@@ -24,8 +24,7 @@ importHeader
 declaration:
     classDeclaration
     |functionDeclaration
-    | propertyDeclaration
-    | structDeclaration;
+    | propertyDeclaration;
 
 
 statement : propertyDeclaration # propertyDeclarationStatement
@@ -149,7 +148,7 @@ structDeclaration:
     ;
 
 classDeclaration:
-    CLASS ID (NL* COLON NL* delegationSpecifiers)?
+    (CLASS|STRUCT) ID (NL* COLON NL* delegationSpecifiers)?
     (NL* classBody)?
     ;
 

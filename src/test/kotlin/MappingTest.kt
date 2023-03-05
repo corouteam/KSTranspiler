@@ -693,4 +693,31 @@ class MappingTest {
 
     }
 
+    @Test
+    fun parseDataClassWithInitializer() {
+        val code = """
+        data class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+        var name: String
+        
+            init {
+                print("Hello")
+                this.name.greet = "Hello"
+                this.name.greet = this.surname
+            }
+        }""".trimMargin()
+        val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
+
+
+        val classDecl = ast?.declarations?.first() as DataClassDeclaration
+        val constructor = classDecl.body[1] as PrimaryConstructor
+        val body = constructor.body as Block
+        assertEquals("Person", classDecl.name)
+        assertEquals(2, constructor.parameters.count())
+        assertEquals(3, body.body.count())
+
+    }
+
 }

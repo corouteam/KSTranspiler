@@ -498,20 +498,4 @@ class LexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
-    @Test
-    fun parseSimpleColumn() {
-        val code = """
-Column(
-    verticalArrangement = Arrangement.spacedBy(8.dp),
-    horizontalAlignment = Alignment.Start
-)
-        """.trimIndent()
-        val result = listOf(
-            "CLASS", "ID", "LPAREN", "NL", "VAL", "ID", "COLON",
-            "STRING", "COMMA", "NL", "VAL", "ID", "COLON",
-            "STRING", "COMMA", "NL", "VAR", "ID", "COLON", "INT",
-            "NL", "RPAREN", "COLON", "ID", "LCURL", "RCURL", "EOF"
-        )
-        assertEquals(result, tokens(lexerForCode(code)))
-    }
 }

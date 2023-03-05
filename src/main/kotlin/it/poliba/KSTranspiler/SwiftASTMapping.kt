@@ -16,8 +16,6 @@ fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Dec
         this.functionDeclaration().toAst(considerPosition)
     }else if(this.propertyDeclaration() != null){
         this.propertyDeclaration().toAst(considerPosition)
-    }else if(this.structDeclaration() != null){
-        this.structDeclaration().toAst(considerPosition)
     }else if(this.classDeclaration() != null){
         this.classDeclaration().toAst(considerPosition)
     }else{
@@ -25,25 +23,20 @@ fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Dec
     }
 }
 
-fun SwiftParser.StructDeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
-    if(delegationSpecifiers().type() != null){
-        if(delegationSpecifiers().type().map { it.toAst(false) }.contains(UserType("View"))){
-            return this.toWidgetAST(considerPosition)
-        }else{
-            throw UnsupportedOperationException("")
-        }
-    }else{
-        throw UnsupportedOperationException("")
-    }
-
-}
 
 fun SwiftParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
     var name = ID().text
     var baseClasses = delegationSpecifiers().type().map { it.toAst(considerPosition) }
     var body = classBody().classMemberDeclaration().map { it.toAst(considerPosition) as? Declaration}.filterNotNull()
-
-    return ClassDeclaration(name,body, baseClasses)
+    if(CLASS() != null){
+        return ClassDeclaration(name,body, baseClasses)
+    }else{
+        if(delegationSpecifiers().type().map { it.toAst(false) }.contains(UserType("View"))){
+            return this.toWidgetAST(considerPosition)
+        }else{
+            return DataClassDeclaration(name,body, baseClasses)
+        }
+    }
 
 }
 fun SwiftParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): FunctionDeclaration {

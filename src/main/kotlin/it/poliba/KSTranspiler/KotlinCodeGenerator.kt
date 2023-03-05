@@ -22,6 +22,7 @@ fun Declaration.generateKotlinCode(): String{
         is WidgetDeclaration -> this.generateKotlinCode()
         is FunctionDeclaration -> this.generateKotlinCode()
         is ClassDeclaration -> TODO()
+        is DataClassDeclaration -> TODO()
         is PrimaryConstructor -> TODO()
     }
 }
