@@ -61,6 +61,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
            | RETURN returnExpression=expression                            # returnExpression
+           | name=ID NL* functionCallParameters NL*                        # functionCall
            | widgetCall #widgetCallExpression
            | horizontalAlignment #horizontalAlignmentExpression
            | verticalAlignment #verticalAlignmentExpression
@@ -103,6 +104,10 @@ functionValueParameters
 
 functionValueParameter
     : parameter (NL* ASSIGN NL* expression)?
+    ;
+
+functionCallParameters
+    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
     ;
 
 parameter

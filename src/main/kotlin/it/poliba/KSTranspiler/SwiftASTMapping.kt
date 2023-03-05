@@ -105,12 +105,21 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.VarReferenceContext -> VarReference(text, type = StringType(toPosition(considerPosition)),  toPosition(considerPosition))
     is SwiftParser.BinaryOperationContext -> toAst(considerPosition)
     is SwiftParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
+    is SwiftParser.FunctionCallContext ->toAst(considerPosition)
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst(considerPosition), toPosition(considerPosition))
     is SwiftParser.WidgetCallExpressionContext -> toAst(considerPosition)
     is SwiftParser.HorizontalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun SwiftParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression {
+    return FunctionCall(
+        name = this.name.text,
+        parameters = this.functionCallParameters().expression().map { it.toAst(considerPosition) },
+        position = toPosition(considerPosition)
+    )
 }
 
 fun SwiftParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression {
