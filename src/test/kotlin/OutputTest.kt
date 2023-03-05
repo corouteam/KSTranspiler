@@ -196,7 +196,7 @@ class  OutputTest {
             """.trimIndent()
         val result = """
          VStack(
-         	alignment: HorizontalAlignment.start,
+         	alignment: HorizontalAlignment.leading,
          	spacing: CGFloat(10)){
              
          }
@@ -227,7 +227,7 @@ class  OutputTest {
         val result = """
         	ScrollView(.vertical){
         		VStack(
-        		alignment: HorizontalAlignment.start,
+        		alignment: HorizontalAlignment.leading,
         		spacing: CGFloat(10)){
         			
         		}
