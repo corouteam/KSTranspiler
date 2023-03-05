@@ -43,13 +43,8 @@ fun SwiftParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fal
     var block = Block(listOf(), toPosition(considerPosition))
     if(this.functionBody().block() != null){
         block =  Block(this.functionBody().block().statement().map { it.toAst(considerPosition) }, toPosition(considerPosition))
-    }else{
-        val returnExpression = ReturnExpression(this.functionBody().expression().toAst(considerPosition), toPosition(considerPosition))
-        block = Block(listOf(returnExpression), toPosition(considerPosition))
-        if(type == null){
-            type = returnExpression.type
-        }
     }
+
     return FunctionDeclaration(id, params,type, block, toPosition(considerPosition))
 }
 

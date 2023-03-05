@@ -112,13 +112,12 @@ parameter
 functionDeclaration:
     annotation? FUN NL* ID
     NL* functionValueParameters
-    (NL* COLON NL* type)?
+    (NL* FUNCTION_RETURN NL* type)?
     (NL* functionBody)?
     ;
 
 functionBody
     : block
-    | ASSIGN NL* expression
     ;
 
 structDeclaration:

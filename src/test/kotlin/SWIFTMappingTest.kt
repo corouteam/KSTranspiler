@@ -7,6 +7,19 @@ import org.junit.jupiter.api.Test
 
 class SWIFTMappingTest {
     @Test
+    fun mapFunction(){
+        val code = "func test() -> Int { return 3 }"
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+        val expectedAst = AstFile(listOf(
+            FunctionDeclaration("test", listOf(), IntType(), Block(
+                listOf(ReturnExpression(IntLit("3"))))
+            )
+        ))
+        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        //val expectedAst = KotlinScript
+    }
+
+    @Test
     fun mapTextComposable(){
         val code = "Text(\"Hello world\")"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
