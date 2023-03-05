@@ -23,7 +23,7 @@ fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression =
 
 fun SwiftParser.TextWidgetContext.toAst(considerPosition: Boolean = false): Expression {
     val expressionAst = this.expression().toAst(considerPosition)
-    if(expressionAst.type != StringType(toPosition(considerPosition))) throw IllegalArgumentException("String expected in Text composable")
+    if(expressionAst.type.nodeType != StringType(toPosition(considerPosition)).nodeType) throw IllegalArgumentException("String expected in Text composable")
     val params = swiftUITextSuffix().map { it.toAst(considerPosition) }
     val color = params.firstOrNull { it is ColorLit } as ColorLit?
     val fontWeight = params.firstOrNull { it is FontWeightLit } as FontWeightLit?
