@@ -201,7 +201,11 @@ class  OutputTest {
              
          }
         """.trimIndent()
+
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
     }
+
     @Test
      fun mapDivider(){
         val code = """
