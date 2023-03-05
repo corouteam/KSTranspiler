@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
+import java.util.ArrayList
 import java.util.StringJoiner
 
 val kotlinGroup: STGroup = STGroupFile("src/main/antlr/KotlinTemplate.stg")
@@ -36,7 +37,7 @@ fun Statement.generateKotlinCode(): String {
 fun FunctionDeclaration.generateKotlinCode(): String{
     val returnType = if(this.returnType != null) ": ${this.returnType.generateKotlinCode()}" else ""
     return "fun ${this.id}(${this.parameters.joinToString(", "){it.generateKotlinCode()}})"+returnType +
-            "{\n\t${this.body.generateKotlinCode()}\n}"
+            "{\n${this.body.generateKotlinCode()}\n}"
 }
 
 
@@ -54,12 +55,12 @@ fun Print.generateKotlinCode(): String{
 
 fun IfExpression.generateKotlinCode(): String{
     var result =  "if(${condition.generateKotlinCode()}){\n"+
-            "\t${body.generateKotlinCode()}\n"+
+            "${body.generateKotlinCode()}\n"+
             "}"
     elseBranch?.let {
         when (it){
             is IfExpression ->result += "else "+ it.generateKotlinCode()
-            else -> result += "else{\n\t${it.generateKotlinCode()}\n}"
+            else -> result += "else{\n${it.generateKotlinCode()}\n}"
 
         }
     }
@@ -75,17 +76,13 @@ fun ControlStructureBody.generateKotlinCode(): String{
 }
 
 fun Block.generateKotlinCode(): String{
-    return this.body.joinToString("\n") { it.generateKotlinCode() }
+    return this.body.joinToString("\n") { "\t${it.generateKotlinCode()}" }
 }
 fun PropertyDeclaration.generateKotlinCode(): String{
-    val st = kotlinGroup.getInstanceOf("propertyDeclaration")
-    st.add("name",varName)
-    st.add("type", type.generateKotlinCode())
-    value?.let {
-        st.add("value", value.generateKotlinCode())
-    }
-    st.add("mutable", mutable)
-    return st.render()
+    var prefix = if (mutable) "var" else "val"
+    var type = type.generateKotlinCode()
+    var value = value?.let {  " = ${value.generateKotlinCode()}"} ?: ""
+    return "$prefix $varName:$type$value"
 }
 
 fun Expression.generateKotlinCode() : String = when (this) {
@@ -97,7 +94,7 @@ fun Expression.generateKotlinCode() : String = when (this) {
     is StringLit -> "\"${this.value}\""
     is BoolLit -> "${this.value}"
     is FunctionCall -> "${this.name}(${this.parameters.map { it.generateKotlinCode() }.joinToString(", " )})"
-    is RangeExpression -> "${this.leftExpression.generateKotlinCode()}...${this.rightExpression.generateKotlinCode()}"
+    is RangeExpression -> "${this.leftExpression.generateKotlinCode()}..${this.rightExpression.generateKotlinCode()}"
     is ListExpression -> "[${this.items.map { it.generateKotlinCode() }.joinToString(", ")}]"
     is ColorLit -> this.generateKotlinCode()
     is FontWeightLit -> this.generateKotlinCode()
@@ -107,24 +104,38 @@ fun Expression.generateKotlinCode() : String = when (this) {
     is SpacerComposableCall -> this.generateKotlinCode()
     is ColumnComposableCall -> this.generateKotlinCode()
     is HorizontalAlignment -> this.generateKotlinCode()
+    is ButtonComposableCall -> this.generateKotlinCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun DividerComposableCall.generateKotlinCode(): String{
-    var suffix = frame?.generateKotlinCode() ?: ""
-    return "Divider()$suffix"
+    var params: ArrayList<String> = arrayListOf()
+
+    color?.let { params.add("color: ${it.generateKotlinCode()}") }
+    frame?.let { params.add("modifier: ${it.generateKotlinCode()}") }
+
+    print("SIZE: ${params.size}")
+    var paramString = params.joinToString("")
+    return "Divider($paramString)"
 }
-
+fun ButtonComposableCall.generateKotlinCode(): String{
+    return "Button(onClick = {\n${this.action.generateKotlinCode()}\n}){\n${this.body.generateKotlinCode()}\n} "
+}
 fun SpacerComposableCall.generateKotlinCode(): String{
-    val suffix = size?.generateKotlinCode() ?: ""
+    val suffix = size?.let { "${it.generateKotlinCode()}" } ?: ""
 
-    return "Spacer()$suffix"
+    return "Spacer(modifier = $suffix)"
 }
 
 fun Frame.generateKotlinCode(): String{
-    return "\n\t.size(width: ${width?.generateKotlinCode()}, height: ${height?.generateKotlinCode()})"
+    var width = width?.let { ".width(${width.generateKotlinCode()})" }
+    var height = height?.let { ".height(${height.generateKotlinCode()})" }
+
+    val params = listOf(width, height).filterNotNull()
+
+    return "Modifier${params.joinToString("")}"
 }
 
 
@@ -132,14 +143,12 @@ fun Type.generateKotlinCode() : String = when (this) {
     is IntType -> "Int"
     is DoubleType -> "Double"
     is StringType -> "String"
-    is BoolType -> "Bool"
-    //TODO is RangeType -> "ClosedRange<${this.type.generateKotlinCode()}>"
-    //TODO is ListType -> "[${this.itemsType.generateKotlinCode()}]"
+    is BoolType -> "Boolean"
+    is RangeType -> "ClosedRange<${this.type.generateKotlinCode()}>"
+    is ListType -> "[${this.itemsType.generateKotlinCode()}]"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-//TODO: Implement this
-/*
 fun BinaryExpression.generateKotlinCode(): String = when(this) {
     is SumExpression -> "${left.generateKotlinCode()} + ${right.generateKotlinCode()}"
     is SubtractionExpression -> "${left.generateKotlinCode()} - ${right.generateKotlinCode()}"
@@ -147,47 +156,51 @@ fun BinaryExpression.generateKotlinCode(): String = when(this) {
     is DivisionExpression -> "${left.generateKotlinCode()} / ${right.generateKotlinCode()}"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
-
 fun TextComposableCall.generateKotlinCode(): String{
-    val base =  "Text(${this.value.generateKotlinCode()})"
-    var colorSuffix = ""
-    var boldSuffix = ""
+    val parameters = arrayListOf<String>()
+
+    parameters.add("${this.value.generateKotlinCode()}")
+
     this.color?.generateKotlinCode()?.let {
-        colorSuffix = "\n.foregroundColor($it)"
+        parameters.add("color = $it")
     }
+
     this.fontWeight?.generateKotlinCode()?.let {
-        boldSuffix = "\n.fontWeight($it)"
+        parameters.add("fontWeight = $it")
     }
-    return "$base$colorSuffix$boldSuffix"
+
+    return "Text(${parameters.joinToString(", ") { it }})"
 }
 
 fun ColorLit.generateKotlinCode(): String = when(this){
-    is ColorBlue -> "Color.blue"
+    is ColorBlue -> "Color.Blue"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun FontWeightLit.generateKotlinCode(): String = when(this){
-    is FontWeightBold -> "Font.Weight.bold"
+    is FontWeightBold -> "FontWeight.Bold"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun WidgetDeclaration.generateKotlinCode(): String {
-    val convertedProperties = this.parameters.joinToString("\n") { "var ${it.id}: ${it.type.generateKotlinCode()}" }
-    val body = "var body: some View {\n ${body.generateKotlinCode()}\n}"
-    return "struct $id: View{\n$convertedProperties\n${body}\n}"
+    val convertedProperties = this.parameters.joinToString(", ") { "${it.id}: ${it.type.generateKotlinCode()}" }
+    val body = "${body.generateKotlinCode()}"
+    return "@Composable\nfun $id($convertedProperties){\n${body}\n}"
 }
 
 fun ColumnComposableCall.generateKotlinCode(): String{
     val bodyString = body.generateKotlinCode()
-    var param1: String? = null
+
+    val arguments = arrayListOf<String>()
+
     horizontalAlignment?.generateKotlinCode()?.let {
-        param1 ="\n\talignment: $it"
+        arguments.add("horizontalAlignment = $it")
     }
-    var param2: String? = null
+
     spacing?.generateKotlinCode()?.let {
-        param2 = "\n\tspacing: $it"
+        arguments.add("verticalArrangement = $it")
     }
-    val parameters = listOf(param1, param2).filterNotNull().joinToString(",")
+    val parameters = arguments.joinToString(", ")
     val stack = """
 VStack($parameters){
     $bodyString
@@ -198,7 +211,7 @@ VStack($parameters){
                 "\t\t$bodyString\n" +
                 "\t}\n}"
     }else{
-        return """VStack($parameters){
+        return """Column($parameters){
     $bodyString
 }"""
     }
@@ -206,8 +219,8 @@ VStack($parameters){
 
 fun HorizontalAlignment.generateKotlinCode(): String{
     return when(this){
-        StartAlignment -> "HorizontalAlignment.start"
-        EndAlignment -> "HorizontalAlignment.end"
-        CenterHorizAlignment -> "HorizontalAlignment.center"
+        is StartAlignment -> "Alignment.Start"
+        is EndAlignment -> "Alignment.End"
+        is CenterHorizAlignment -> "Alignment.Center"
     }
-}*/
+}
