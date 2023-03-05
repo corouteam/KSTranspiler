@@ -207,9 +207,7 @@ fun ColumnComposableCall.generateCode(depth: Int = 0): String{
                 "${getPrefix(depth)}}"
     }else{
         val bodyString = body.generateCode(depth)
-        return """VStack($parameters){
-    $bodyString
-}"""
+        return """VStack($parameters)$bodyString"""
     }
 }
 

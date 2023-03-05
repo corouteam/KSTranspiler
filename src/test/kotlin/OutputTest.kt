@@ -215,7 +215,7 @@ struct test: View{
          VStack(
          	alignment: HorizontalAlignment.leading,
          	spacing: CGFloat(10)){
-             
+   
          }
         """.trimIndent()
 
