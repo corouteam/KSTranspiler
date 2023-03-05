@@ -107,6 +107,7 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is SwiftParser.FunctionCallContext ->toAst(considerPosition)
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
+    is SwiftParser.RangeExpressionContext -> toAst(considerPosition)
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst(considerPosition), toPosition(considerPosition))
     is SwiftParser.WidgetCallExpressionContext -> toAst(considerPosition)
     is SwiftParser.HorizontalAlignmentExpressionContext -> toAst(considerPosition)
@@ -120,6 +121,19 @@ fun SwiftParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression
         parameters = this.functionCallParameters().expression().map { it.toAst(considerPosition) },
         position = toPosition(considerPosition)
     )
+}
+
+fun SwiftParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return RangeExpression(
+        leftExpression = this.left.toAst(considerPosition),
+        rightExpression = this.right.toAst(considerPosition),
+        type = toRangeType(considerPosition),
+        position = toPosition(considerPosition),)
+}
+
+fun SwiftParser.RangeExpressionContext.toRangeType(considerPosition: Boolean): Type {
+    // TODO don't just check left type
+    return RangeType(this.left.toAst(considerPosition).type, toPosition(considerPosition))
 }
 
 fun SwiftParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression {

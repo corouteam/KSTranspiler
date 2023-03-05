@@ -60,6 +60,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression
            | name=ID NL* functionCallParameters NL*                        # functionCall
            | widgetCall #widgetCallExpression

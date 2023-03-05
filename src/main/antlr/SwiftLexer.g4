@@ -46,6 +46,7 @@ LCURL              : '{';
 RCURL              : '}';
 SEMICOLON          : ';';
 COMMA              : ',';
+RANGE              : '...';
 AT                 : '@';
 DOT                : '.';
 
