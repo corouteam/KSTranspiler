@@ -50,6 +50,7 @@ test {
 }
 
 dependencies {
+    implementation 'io.ktor:ktor-server-cors-jvm:2.2.3'
     antlr 'org.antlr:antlr4:4.11.1'
     implementation 'org.antlr:antlr4-runtime:4.11.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
