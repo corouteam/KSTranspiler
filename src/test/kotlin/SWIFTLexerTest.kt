@@ -39,6 +39,12 @@ class SWIFTLexerTest {
         return tokens
     }
 
+    @Test
+    fun parseFunc(){
+        val code = "func test() -> Int { return 3 }"
+        val result = listOf("FUN", "ID", "LPAREN", "RPAREN", "FUNCTION_RETURN", "INT", "LCURL", "RETURN", "INT_LIT", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 
     @Test
     fun parseTextComposable(){

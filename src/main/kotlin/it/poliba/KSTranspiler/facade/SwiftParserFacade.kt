@@ -23,7 +23,11 @@ object SwiftParserFacade {
         val (antlrRoot, lexicalAndSyntacticErrors) = antlrResult
 
         val astRoot = if (lexicalAndSyntacticErrors.isEmpty()) {
-            antlrRoot?.toAst()
+            try {
+                antlrRoot?.toAst()
+            } catch (e: Error) {
+                return SwiftParsingResult(null, lexicalAndSyntacticErrors + e)
+            }
         } else {
             null
         }
@@ -54,7 +58,11 @@ object SwiftParserFacadeScript {
         val (antlrRoot, lexicalAndSyntacticErrors) = antlrResult
 
         val astRoot: AstScript? = if (lexicalAndSyntacticErrors.isEmpty()) {
-            antlrRoot?.toAst(considerPosition = true)
+            try {
+                antlrRoot?.toAst(considerPosition = true)
+            } catch (e: Error) {
+                return SwiftScriptParsingResult(null, lexicalAndSyntacticErrors + e)
+            }
         } else {
             null
         }

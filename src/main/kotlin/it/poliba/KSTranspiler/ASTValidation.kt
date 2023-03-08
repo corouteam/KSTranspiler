@@ -1,15 +1,24 @@
 package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
+import com.strumenta.kolasu.model.Position
 import com.strumenta.kolasu.traversing.searchByType
 import com.strumenta.kolasu.traversing.walkAncestors
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-fun Node.commonValidation(): LinkedList<Error> {
+val allVariables = ArrayList<PropertyDeclaration>()
+val globalVariables: ArrayList<PropertyDeclaration> = ArrayList()
+
+fun clearValues() {
+    allVariables.clear()
+    globalVariables.clear()
+}
+
+fun Node.validateVariablesAndInferType(): LinkedList<Error> {
     val errors = LinkedList<Error>()
 
-    val allVariables = ArrayList<PropertyDeclaration>()
     this.specificProcess(PropertyDeclaration::class.java) {
         allVariables.add(it)
     }
@@ -38,7 +47,7 @@ fun Node.commonValidation(): LinkedList<Error> {
     }
 
     // check for duplicates in global variables
-    val globalVariables = allVariables.filterNot { variablesInFunctions.containsKey(it.varName) }
+    globalVariables.addAll(allVariables.filterNot { variablesInFunctions.containsKey(it.varName) })
     globalVariables
         .groupBy { it.varName }
         .forEach {
@@ -53,26 +62,46 @@ fun Node.commonValidation(): LinkedList<Error> {
             }
         }
 
-    // check if used variable is declared before
+
+    // check if used variable is declared before and assign type
     this.specificProcess(ControlStructureBody::class.java) { block ->
         if (block is Block) {
-            block.searchByType(VarReference::class.java).forEach {
-                val name = it.varName
+            block.searchByType(VarReference::class.java).forEach { varReference ->
+                val name = varReference.varName
                 // check in function scope first
-                if (block.body.filterIsInstance(PropertyDeclaration::class.java).none { it.varName == name }) {
+                val varDeclarations = block.body
+                    .filterIsInstance(PropertyDeclaration::class.java)
+                    .filter { it.varName == name }
+
+                if (varDeclarations.isEmpty()) {
                     // not found, check global variables then
-                    if (globalVariables.none { it.varName == name }) {
+                    val globalDeclarations = globalVariables.filter { it.varName == name }
+                    if (globalDeclarations.isEmpty()) {
                         errors.add(
                             Error(
                                 "A variable named '${name}' is used but never declared",
-                                it.position?.start?.asPosition
+                                varReference.position?.start?.asPosition
                             )
                         )
+                    } else {
+                        // var found, copy type from declaration
+                        val declaration = globalDeclarations.first()
+                        varReference.type = declaration.type
                     }
+                } else {
+                    // var found, copy type from declaration
+                    val declaration = varDeclarations.first()
+                    varReference.type = declaration.type
                 }
             }
         }
     }
+
+    return errors
+}
+
+fun Node.commonValidation(): LinkedList<Error> {
+    val errors = LinkedList<Error>()
 
     // check for list correct types
     this.specificProcess(ListExpression::class.java) {
@@ -93,10 +122,106 @@ fun Node.commonValidation(): LinkedList<Error> {
     this.specificProcess(PropertyDeclaration::class.java) {
         if (it.value == null) return@specificProcess
 
-        if (it.type != it.value.type) {
+        if (it.type.generateCode() != it.value.type.generateCode()) {
             errors.add(Error("""
                 Type mismatch (${it.value.type.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
             """.trimIndent(), this.position))
+        }
+    }
+
+    // Check if condition is a boolean expression
+    specificProcess(IfExpression::class.java) {
+        if (it.condition.type !is BoolType) {
+            errors.add(Error("If condition must be a boolean expression.", this.position))
+        }
+    }
+
+    // check val is not reassigned
+    this.specificProcess(ControlStructureBody::class.java) { block ->
+        if (block is Block) {
+            block.searchByType(Assignment::class.java).forEach {
+                val assignmentName = it.varName
+
+                val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
+
+                if (declarationsInBlock.isNotEmpty()) {
+                    declarationsInBlock.forEach {
+                        if (it.varName == assignmentName && !it.mutable) {
+                            errors.add(Error("""
+                                Final variable ${it.varName} can not be reassigned.
+                            """.trimIndent(), this.position
+                                ))
+
+                            // match found, no need to iterate anymore
+                            return@specificProcess
+                        }
+                    }
+                }
+
+                // If a declaration is not found in scope, search in global variables
+                globalVariables.forEach {
+                    if (it.varName == assignmentName && !it.mutable) {
+                        errors.add(Error("""
+                                Final variable ${it.varName} can not be reassigned.
+                            """.trimIndent(), this.position
+                        ))
+
+                        // match found, no need to iterate anymore
+                        return@specificProcess
+                    }
+                }
+            }
+        }
+    }
+
+    // check if assignment type matches declaration
+    this.specificProcess(ControlStructureBody::class.java) { block ->
+        if (block is Block) {
+            block.searchByType(Assignment::class.java).forEach {
+                val assignmentName = it.varName
+                val assignmentType = it.value.type
+
+                val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
+
+                if (declarationsInBlock.isNotEmpty()) {
+                    declarationsInBlock.forEach {
+                        if (it.varName == assignmentName) {
+                            // Search if assignment type matches declaration type
+                            if (assignmentType.generateCode() != it.type.generateCode()) {
+                                errors.add(
+                                    Error(
+                                        """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                    )
+                                )
+                            }
+
+                            // match found, no need to iterate anymore
+                            return@specificProcess
+                        }
+                    }
+                }
+
+                // If a declaration is not found in scope, search in global variables
+                globalVariables.forEach {
+                    if (it.varName == assignmentName) {
+                        // Search if assignment type matches declaration type
+                        if (assignmentType.generateCode() != it.type.generateCode()) {
+                            errors.add(
+                                Error(
+                                    """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                )
+                            )
+                        }
+
+                        // match found, no need to iterate anymore
+                        return@specificProcess
+                    }
+                }
+            }
         }
     }
 
@@ -112,8 +237,7 @@ fun Node.commonValidation(): LinkedList<Error> {
                 """.trimIndent(), this.position))
             } else {
                 // check if return type matches
-                val returnExpressionType = returnExpressions.last().type
-
+                val returnExpressionType = returnExpressions.last().returnExpression.type
                 if (function.returnType::class != returnExpressionType::class) {
                     errors.add(
                         Error(
@@ -129,12 +253,28 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    // Check composable functions always return one composable
+    this.specificProcess(WidgetDeclaration::class.java) {
+        val body = it.body
+        if (body is Block) {
+            val composables = body.body.filterIsInstance<ComposableCall>()
+            if (composables.isEmpty()) {
+                errors.add(
+                    Error("Function ${it.id} is expected to declare a Composable",
+                        it.position?.start?.asPosition)
+                )
+            }
+        }
+    }
+
     return errors
 }
 
 fun AstFile.validate(): List<Error> {
     val errors = LinkedList<Error>()
 
+    clearValues()
+    errors.addAll(validateVariablesAndInferType())
     errors.addAll(commonValidation())
     return errors
 }
@@ -142,6 +282,8 @@ fun AstFile.validate(): List<Error> {
 fun AstScript.validate(): List<Error> {
     val errors = LinkedList<Error>()
 
+    clearValues()
+    errors.addAll(validateVariablesAndInferType())
     errors.addAll(commonValidation())
     return errors
 }

@@ -46,6 +46,7 @@ LCURL              : '{';
 RCURL              : '}';
 SEMICOLON          : ';';
 COMMA              : ',';
+RANGE              : '...';
 AT                 : '@';
 DOT                : '.';
 
@@ -54,6 +55,7 @@ ELSE: 'else';
 FUN: 'func';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
+FUNCTION_RETURN           : '->';
 STRUCT: 'struct';
 SOME:'some';
 

@@ -12,6 +12,7 @@ import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
 import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
+import kotlin.jvm.internal.Intrinsics.Kotlin
 
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
@@ -199,6 +200,7 @@ fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = w
     is KotlinParser.IntegerContext -> IntType(toPosition(considerPosition))
     is KotlinParser.DoubleContext -> DoubleType(toPosition(considerPosition))
     is KotlinParser.StringContext -> StringType(toPosition(considerPosition))
+    is KotlinParser.BoolContext -> BoolType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

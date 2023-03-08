@@ -43,13 +43,8 @@ fun SwiftParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fal
     var block = Block(listOf(), toPosition(considerPosition))
     if(this.functionBody().block() != null){
         block =  Block(this.functionBody().block().statement().map { it.toAst(considerPosition) }, toPosition(considerPosition))
-    }else{
-        val returnExpression = ReturnExpression(this.functionBody().expression().toAst(considerPosition), toPosition(considerPosition))
-        block = Block(listOf(returnExpression), toPosition(considerPosition))
-        if(type == null){
-            type = returnExpression.type
-        }
     }
+
     return FunctionDeclaration(id, params,type, block, toPosition(considerPosition))
 }
 
@@ -110,12 +105,35 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.VarReferenceContext -> VarReference(text, type = StringType(toPosition(considerPosition)),  toPosition(considerPosition))
     is SwiftParser.BinaryOperationContext -> toAst(considerPosition)
     is SwiftParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
+    is SwiftParser.FunctionCallContext ->toAst(considerPosition)
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
+    is SwiftParser.RangeExpressionContext -> toAst(considerPosition)
     is SwiftParser.ReturnExpressionContext -> ReturnExpression(expression().toAst(considerPosition), toPosition(considerPosition))
     is SwiftParser.WidgetCallExpressionContext -> toAst(considerPosition)
     is SwiftParser.HorizontalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun SwiftParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression {
+    return FunctionCall(
+        name = this.name.text,
+        parameters = this.functionCallParameters().expression().map { it.toAst(considerPosition) },
+        position = toPosition(considerPosition)
+    )
+}
+
+fun SwiftParser.RangeExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return RangeExpression(
+        leftExpression = this.left.toAst(considerPosition),
+        rightExpression = this.right.toAst(considerPosition),
+        type = toRangeType(considerPosition),
+        position = toPosition(considerPosition),)
+}
+
+fun SwiftParser.RangeExpressionContext.toRangeType(considerPosition: Boolean): Type {
+    // TODO don't just check left type
+    return RangeType(this.left.toAst(considerPosition).type, toPosition(considerPosition))
 }
 
 fun SwiftParser.IfExpressionContext.toAst(considerPosition: Boolean): Expression {

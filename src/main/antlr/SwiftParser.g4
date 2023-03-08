@@ -60,7 +60,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression
+           | name=ID NL* functionCallParameters NL*                        # functionCall
            | widgetCall #widgetCallExpression
            | horizontalAlignment #horizontalAlignmentExpression
            | verticalAlignment #verticalAlignmentExpression
@@ -105,6 +107,10 @@ functionValueParameter
     : parameter (NL* ASSIGN NL* expression)?
     ;
 
+functionCallParameters
+    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
+    ;
+
 parameter
     : ID NL* COLON NL* SOME? type
     ;
@@ -112,13 +118,12 @@ parameter
 functionDeclaration:
     annotation? FUN NL* ID
     NL* functionValueParameters
-    (NL* COLON NL* type)?
+    (NL* FUNCTION_RETURN NL* type)?
     (NL* functionBody)?
     ;
 
 functionBody
     : block
-    | ASSIGN NL* expression
     ;
 
 structDeclaration:
