@@ -16,6 +16,7 @@ import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
 import org.antlr.v4.codegen.model.decl.Decl
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
+import java.util.ArrayList
 import kotlin.jvm.internal.Intrinsics.Kotlin
 
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
@@ -64,18 +65,21 @@ fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fa
 fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     var constProp = listOf<FunctionParameter>()
     var constructor: PrimaryConstructor? = null
-
+    var defaultConstructorParams = arrayListOf<PropertyDeclaration>()
     if(primaryConstructor() != null && primaryConstructor().classParameter() != null){
         constProp = primaryConstructor().classParameter().map {
             if(it.VAR() != null || it.VAL() != null){
-                //TODO ADD PROPERTY AND ASSIGNMENT
+                var prop = PropertyDeclaration(it.ID().text, it.type().toAst(), null, null,it.VAR() != null)
+                defaultConstructorParams.add(prop)
             }
             FunctionParameter(it.ID().text, it.type().toAst(considerPosition))
         }
     }
     var body = arrayListOf<Declaration>()
     if (classBody() != null && classBody().declaration() != null){
-        body = ArrayList(classBody().declaration().map { it.toAst(considerPosition) })
+        body.addAll(defaultConstructorParams)
+        body.addAll(classBody().declaration().map { it.toAst(considerPosition) })
+
     }
     val baseClasses = extendedClasses().type().map { it.toAst(considerPosition) }
     var constructorBody: ControlStructureBody = Block(listOf())
@@ -83,6 +87,14 @@ fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false
         constructorBody = classBody().constructor().first().functionBody().block().toAst(considerPosition)
     }
     if(constProp.isNotEmpty()){
+       if(defaultConstructorParams.isNotEmpty()){
+           var body = ArrayList((constructorBody as Block).body)
+           body.addAll(defaultConstructorParams.map {
+               var variable = AccessExpression(VarReference(it.varName, it.type, it.position), ThisExpression(null),  DotOperator(null))
+               Assignment(variable, VarReference(it.varName, it.type))
+           })
+           constructorBody = Block(body.toList())
+       }
        constructor = PrimaryConstructor(constProp, constructorBody, toPosition(considerPosition))
     }
     constructor?.let {

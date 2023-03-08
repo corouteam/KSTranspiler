@@ -384,4 +384,26 @@ class Person: Address, Jks {
         assertEquals(expect, parseResult.root!!.generateCode())
     }
 
+    @Test
+    fun convertClassDefaultConstructor(){
+        val code = """
+        class Person(
+        var firstName: String,
+        val lastName: String
+        ): Address, Jks {
+        
+        }""".trimMargin()
+        val expect = """
+class Person: Address, Jks {
+	var firstName:String
+	let lastName:String
+	init(firstName: String, lastName: String) {
+		self.firstName = firstName
+		self.lastName = lastName
+	}
+}""".trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(expect, parseResult.root!!.generateCode())
+    }
+
 }

@@ -621,10 +621,10 @@ class MappingTest {
     fun mapClassDeclaration() {
         val code = """
         class Person(
-    val firstName: String,
-    val lastName: String,
-    var age: Int,
-    val address: Address
+    firstName: String,
+    lastName: String,
+    age: Int,
+    address: Address
 ): Address, Jks {
     val a: String = "Hello"
 }
