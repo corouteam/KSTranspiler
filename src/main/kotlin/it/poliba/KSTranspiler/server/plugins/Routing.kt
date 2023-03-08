@@ -16,7 +16,7 @@ fun Application.configureRouting() {
                 var request = call.receive<TranspileRequest>()
                 val result = KSTFacade.transpileKotlinToSwift(request.code)
                 when (result){
-                    is KSTranspileResultSuccess -> call.respond(TranspileRequest(code = request.code))
+                    is KSTranspileResultSuccess -> call.respond(TranspileRequest(code = result.code))
                     is KSTranspileResultError -> call.respond(HttpStatusCode.BadRequest, result.error)
                 }
             }catch (e: Throwable){
@@ -29,7 +29,7 @@ fun Application.configureRouting() {
                 var request = call.receive<TranspileRequest>()
                 val result = KSTFacade.transpileSwiftToKotlin(request.code)
                 when (result){
-                    is KSTranspileResultSuccess -> call.respond(TranspileRequest(code = request.code))
+                    is KSTranspileResultSuccess -> call.respond(TranspileRequest(code = result.code))
                     is KSTranspileResultError -> call.respond(HttpStatusCode.BadRequest, result.error)
                 }
             }catch (e: Throwable){
