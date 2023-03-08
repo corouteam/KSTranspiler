@@ -63,6 +63,7 @@ RETURN                  : 'return' ;
 LISTOF: 'listOf';
 CLASS: 'class';
 DATA: 'data';
+THIS: 'this';
 
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;

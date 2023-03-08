@@ -60,6 +60,7 @@ STRUCT: 'struct';
 SOME:'some';
 CONSTRUCTOR: 'init';
 CLASS: 'class';
+ELVIS : '?';
 
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;

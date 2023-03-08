@@ -13,12 +13,18 @@ fun Application.configureRouting() {
     routing {
         post("/kotlin/transpileToSwift") {
             try{
-                var request = call.receive<TranspileRequest>()
-                val result = KSTFacade.transpileKotlinToSwift(request.code)
+               // var request = call.receive<TranspileRequest>()
+                var code = call.receiveText()
+                val result = KSTFacade.transpileKotlinToSwift(code)
+                when (result){
+                    is KSTranspileResultSuccess -> call.respondText(result.code)
+                    is KSTranspileResultError -> call.respond(HttpStatusCode.BadRequest, result.error)
+                }
+                /*
                 when (result){
                     is KSTranspileResultSuccess -> call.respond(TranspileRequest(code = result.code))
                     is KSTranspileResultError -> call.respond(HttpStatusCode.BadRequest, result.error)
-                }
+                }*/
             }catch (e: Throwable){
                     call.respond(HttpStatusCode.InternalServerError, "Si è verificato un errore nella traduzione\n${e.localizedMessage}" )
             }
