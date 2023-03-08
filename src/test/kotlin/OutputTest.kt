@@ -317,4 +317,71 @@ ScrollView(.vertical){
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
+    @Test
+    fun convertSimpleClass(){
+        val code = """
+        class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+            init {
+                print("Hello")
+            }
+        }""".trimMargin()
+        val expect = """
+class Person: Address, Jks {
+	init(firstName: String, lastName: String) {
+		print("Hello")
+	}
+}""".trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(expect, parseResult.root!!.generateCode())
+    }
+
+@Test
+fun convertDataClass(){
+    val code = """
+        data class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+            init {
+                print("Hello")
+            }
+        }""".trimMargin()
+    val expect = """
+struct Person: Address, Jks {
+	init(firstName: String, lastName: String) {
+		print("Hello")
+	}
+}""".trimIndent()
+    val parseResult = KotlinParserFacade.parse(code)
+    assertEquals(expect, parseResult.root!!.generateCode())
+}
+
+    @Test
+    fun convertClassWithThis(){
+        val code = """
+        class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+        var firstName: String
+            init {
+                print("Hello")
+                this.firstName = firstName
+            }
+        }""".trimMargin()
+        val expect = """
+class Person: Address, Jks {
+	var firstName:String
+	init(firstName: String, lastName: String) {
+		print("Hello")
+		self.firstName = firstName
+	}
+}""".trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(expect, parseResult.root!!.generateCode())
+    }
+
 }

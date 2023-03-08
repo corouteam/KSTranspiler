@@ -20,15 +20,29 @@ fun Declaration.generateCode(depth: Int = 0): String{
         is WidgetDeclaration -> this.generateCode(depth)
         is FunctionDeclaration -> this.generateCode(depth)
         is ClassDeclaration -> this.generateCode(depth)
-        is DataClassDeclaration -> TODO()
+        is DataClassDeclaration -> this.generateCode(depth)
         is PrimaryConstructor -> this.generateCode(depth)
     }
 }
 
 fun PrimaryConstructor.generateCode(depth: Int = 0): String{
-    return "${getPrefix(depth)}init(${this.parameters.joinToString(", "){it.generateCode()}})"+
+    return "${getPrefix(depth)}init(${this.parameters.joinToString(", "){it.generateCode()}}) "+
             this.body.generateCode(depth)
 }
+
+fun DataClassDeclaration.generateCode(depth: Int = 0): String{
+    var baseClassesString = ""
+    if(baseClasses.isNotEmpty()){
+        baseClassesString += ": "
+        baseClassesString += baseClasses.joinToString(", "){it.generateCode()}
+    }
+
+    var bodyString = body.joinToString("\n"){"${it.generateCode(depth+1)}"}
+
+    var res = "${getPrefix(depth)}struct $name$baseClassesString {\n$bodyString\n${getPrefix(depth)}}"
+    return res
+}
+
 fun ClassDeclaration.generateCode(depth: Int = 0): String{
     var baseClassesString = ""
     if(baseClasses.isNotEmpty()){
@@ -38,7 +52,7 @@ fun ClassDeclaration.generateCode(depth: Int = 0): String{
 
     var bodyString = body.joinToString("\n"){"${it.generateCode(depth+1)}"}
 
-    var res = "${getPrefix(depth)}class $name$baseClassesString{\n$bodyString\n${getPrefix(depth)}}"
+    var res = "${getPrefix(depth)}class $name$baseClassesString {\n$bodyString\n${getPrefix(depth)}}"
     return res
 }
 
@@ -123,6 +137,8 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     is ColumnComposableCall -> this.generateCode(depth)
     is HorizontalAlignment -> this.generateCode(depth)
     is ButtonComposableCall -> this.generateCode(depth)
+    is AccessExpression -> this.generateCode(depth)
+    is ThisExpression -> this.generateCode(depth)
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -245,6 +261,22 @@ fun HorizontalAlignment.generateCode(depth: Int = 0): String{
     }
     return "${getPrefix(depth)}$alignment"
 }
+
+fun AccessExpression.generateCode(depth: Int): String{
+    return "${prefix.generateCode(depth)}${accessOperator.generateCode()}${child.generateCode()}"
+}
+
+fun AccessOperator.generateCode(): String{
+    return when (this){
+        is DotOperator -> "."
+        is ElvisOperator -> "?."
+    }
+}
+
+fun ThisExpression.generateCode(depth: Int): String{
+    return "${getPrefix(depth)}self"
+}
+
 
 fun getPrefix(depth: Int): String{
     var prefix = ""
