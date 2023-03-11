@@ -14,6 +14,7 @@ INT                : 'Int';
 DOUBLE             : 'Double';
 BOOL               : 'Bool';
 STRING             : 'String';
+CG_FLOAT           : 'CGFloat';
 
 INT_LIT
     : DecDigitNoZero DecDigit*
@@ -45,6 +46,7 @@ LCURL              : '{';
 RCURL              : '}';
 SEMICOLON          : ';';
 COMMA              : ',';
+RANGE              : '...';
 AT                 : '@';
 DOT                : '.';
 
@@ -53,6 +55,7 @@ ELSE: 'else';
 FUN: 'func';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
+FUNCTION_RETURN           : '->';
 STRUCT: 'struct';
 SOME:'some';
 
@@ -77,13 +80,36 @@ CONTENT_FILL: 'fill';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';
-
 FONT_WEIGHT_BOLD: 'bold';
 FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';
 
+BUTTON_WIDGET: 'Button';
+SPACER_WIDGET: 'Spacer';
+DIVIDER_WIDGET: 'Divider';
+OVERLAY: 'overlay';
 
+FRAME: 'frame';
+WIDTH: 'width';
+HEIGHT: 'height';
+VSTACK_WIDGET: 'VStack';
+HSTACK_WIDGET: 'HStack';
+ALIGNMENT_PARAM: 'alignment';
+SPACING_PARAM: 'spacing';
+
+SCROLL_VIEW: 'ScrollView';
+
+ZSTACK: 'ZStack';
+
+VERTICAL_ALIGNMENT: 'VerticalAlignment';
+HORIZONTAL_ALIGNMENT: 'HorizontalAlignment';
+
+LEADING: 'leading';
+TOP: 'top';
+CENTER: 'center';
+TRAILING: 'trailing';
+BOTTOM: 'bottom';
 // Identifiers
 ID                 : [_]*[a-zA-Z][A-Za-z0-9_]* ;
 

@@ -659,4 +659,146 @@ KotlinScript
         assertEquals(expected, actual)
     }
 
+
+
+    @Test
+    fun parseKotlinButton(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        IconButtonComposable\n" +
+                "          T[Button]\n" +
+                "          T[(]\n" +
+                "          T[onClick]\n" +
+                "          T[=]\n" +
+                "          FunctionBody\n" +
+                "            Block\n" +
+                "              T[{]\n" +
+                "              T[}]\n" +
+                "          T[)]\n" +
+                "          Block\n" +
+                "            T[{]\n" +
+                "            T[}]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("button")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseComposableDivider(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        DividerComposable\n" +
+                "          T[Divider]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("divider")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseComposableDividerWithThicknes(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        DividerComposable\n" +
+                "          T[Divider]\n" +
+                "          T[(]\n" +
+                "          DividerTicknessParamater\n" +
+                "            T[thickness]\n" +
+                "            T[=]\n" +
+                "            DpLiteral\n" +
+                "              T[8]\n" +
+                "              T[.]\n" +
+                "              T[dp]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("dividerWithThickness")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseSpacer(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        SpacerComposable\n" +
+                "          T[Spacer]\n" +
+                "          T[(]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("spacer")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseSpacerWithSize(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        SpacerComposable\n" +
+                "          T[Spacer]\n" +
+                "          T[(]\n" +
+                "          ModifierParameter\n" +
+                "            T[modifier]\n" +
+                "            T[=]\n" +
+                "            Modifier\n" +
+                "              T[Modifier]\n" +
+                "              T[.]\n" +
+                "              HeightSuffix\n" +
+                "                T[height]\n" +
+                "                T[(]\n" +
+                "                DpLiteral\n" +
+                "                  T[16]\n" +
+                "                  T[.]\n" +
+                "                  T[dp]\n" +
+                "                T[)]\n" +
+                "              T[.]\n" +
+                "              WidthSuffix\n" +
+                "                T[width]\n" +
+                "                T[(]\n" +
+                "                DpLiteral\n" +
+                "                  T[8]\n" +
+                "                  T[.]\n" +
+                "                  T[dp]\n" +
+                "                T[)]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("spacerWithSize")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseBoxWithModifierZIndex(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        BoxComposable\n" +
+                "          T[Box]\n" +
+                "          T[(]\n" +
+                "          ModifierParameter\n" +
+                "            T[modifier]\n" +
+                "            T[=]\n" +
+                "            Modifier\n" +
+                "              T[Modifier]\n" +
+                "              T[.]\n" +
+                "              ZIndexSuffix\n" +
+                "                T[zIndex]\n" +
+                "                T[(]\n" +
+                "                IntLiteral\n" +
+                "                  T[1]\n" +
+                "                T[)]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("box")).multiLineString()
+        assertEquals(expected, actual)
+    }
 }

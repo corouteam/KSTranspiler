@@ -5,7 +5,7 @@ import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class OutputTest {
+class  OutputTest {
 
     @Test
     fun convertVarPropertyDefinition(){
@@ -65,8 +65,25 @@ class OutputTest {
     }
     @Test
     fun convertIf(){
-        val code = "if(true){ print(\"Is true \") }"
+        val code = "if(true){ print(\"Is true \")}"
         val result = "if(true){\n\tprint(\"Is true \")\n}"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+
+    }
+
+    @Test
+    fun convertIfExpression(){
+        val code = "if(true) print(\"Is true \")"
+        val result = "if(true) print(\"Is true \")"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+
+    }
+    @Test
+    fun convertIfElseExpression(){
+        val code = "if(true) print(\"Is true \") else print(\"Is false \")"
+        val result = "if(true) print(\"Is true \") else print(\"Is false \")"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
 
@@ -75,7 +92,7 @@ class OutputTest {
     @Test
     fun convertIfElse(){
         val code = "if(true){ print(\"Is true \") }else{print(\"Is false\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n}else{\n\tprint(\"Is false\")\n}"
+        val result = "if(true){\n\tprint(\"Is true \")\n} else{\n\tprint(\"Is false\")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
 
@@ -84,7 +101,7 @@ class OutputTest {
     @Test
     fun convertIfElseIf(){
         val code = "if(true){ print(\"Is true \") }else if(false){print(\"Is false\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n}else if(false){\n\tprint(\"Is false\")\n}"
+        val result = "if(true){\n\tprint(\"Is true \")\n} else if(false){\n\tprint(\"Is false\")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
@@ -92,7 +109,7 @@ class OutputTest {
     @Test
     fun convertIfElseIfElse(){
         val code = "if(true){ print(\"Is true \") }else if(false){print(\"Is false\")}else{print(\"never\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n}else if(false){\n\tprint(\"Is false\")\n}else{\n\tprint(\"never\")\n}"
+        val result = "if(true){\n\tprint(\"Is true \")\n} else if(false){\n\tprint(\"Is false\")\n} else{\n\tprint(\"never\")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
@@ -176,14 +193,127 @@ class OutputTest {
             @Composable
             fun test(x: Int, y: Int) { Text("Hello") }
             """.trimIndent()
-        val result = "struct test: View{\n" +
-                "var x: Int\n" +
-                "var y: Int\n" +
-                "var body: some View {\n" +
-                " Text(\"Hello\")\n" +
-                "}\n" +
-                "}"
+        val result = """
+struct test: View{
+	var x: Int
+	var y: Int
+	var body: some View {
+		Text("Hello")
+	}
+}
+        """.trimIndent()
         val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun convertColumn() {
+        val code = """
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.Start)
+            """.trimIndent()
+        val result = """
+         VStack(
+         	alignment: HorizontalAlignment.leading,
+         	spacing: CGFloat(10)){
+   
+         }
+        """.trimIndent()
+
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+     fun mapDivider(){
+        val code = """
+            Divider()
+            """.trimIndent()
+        val result = "Divider()"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun convertColumnScrollable(){
+        val code = """
+            Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.Start)
+            """.trimIndent()
+        val result = """
+ScrollView(.vertical){
+	VStack(
+	alignment: HorizontalAlignment.leading,
+	spacing: CGFloat(10)){
+
+	}
+}
+    """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapDividerWithParams(){
+        val code = """
+            Divider(thickness = 8.dp)
+            """.trimIndent()
+        val result = "Divider()\n\t.frame(height: CGFloat(8))"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+
+    @Test
+    fun convertColumnScrollableWithText() {
+        val code = """
+            Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.Start){
+                Text("Ciao")
+            }
+            """.trimIndent()
+        val result = """
+        	ScrollView(.vertical){
+        		VStack(
+        		alignment: HorizontalAlignment.start,
+        		spacing: CGFloat(10)){
+        			Text("Ciao")
+        		}
+        	}
+    """.trimIndent()
+    }
+
+    @Test
+    fun mapSpacerWithParams(){
+        val code = """
+            Spacer(modifier = Modifier.width(54.dp).height(54.dp))
+            """.trimIndent()
+        val result = "Spacer()\n\t.frame(width: CGFloat(54), height: CGFloat(54))"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapButton(){
+        val code = """
+            Button( onClick = {
+                print("Ok")
+            }){
+                Text("Ciao") 
+            }
+            """.trimIndent()
+        val result = """
+            Button(action: {
+            	print("Ok")
+            }){
+            	Text("Ciao")
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 

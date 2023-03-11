@@ -57,11 +57,16 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
+           | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression
-           | widgetCall                                                    # widgetCallExpression
-           | color                                                         # colorLiteral;
+           | name=ID NL* functionCallParameters NL*                        # functionCall
+           | widgetCall #widgetCallExpression
+           | horizontalAlignment #horizontalAlignmentExpression
+           | verticalAlignment #verticalAlignmentExpression
+           | color                       # colorLiteral;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -102,6 +107,10 @@ functionValueParameter
     : parameter (NL* ASSIGN NL* expression)?
     ;
 
+functionCallParameters
+    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
+    ;
+
 parameter
     : ID NL* COLON NL* SOME? type
     ;
@@ -109,13 +118,12 @@ parameter
 functionDeclaration:
     annotation? FUN NL* ID
     NL* functionValueParameters
-    (NL* COLON NL* type)?
+    (NL* FUNCTION_RETURN NL* type)?
     (NL* functionBody)?
     ;
 
 functionBody
     : block
-    | ASSIGN NL* expression
     ;
 
 structDeclaration:
@@ -142,28 +150,61 @@ type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
        STRING  # string |
-      ID      #userType;
+       ID      #userType |
+       CG_FLOAT #cgFloat;
 
 
 
 widgetCall:
-    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget |
-    IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUIImageSuffix) (NL* DOT NL* swiftUIImageSuffix)*)?  #imageWidget;
+    TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
+    | BUTTON_WIDGET LPAREN ID COLON action = functionBody RPAREN body = block #buttonWidget
+    | DIVIDER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #dividerWidget
+    | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
+    |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
+    HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
+    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget |
+    ZSTACK block? #zStackWidget
+    | IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUIImageSuffix) (NL* DOT NL* swiftUIImageSuffix)*)?  #imageWidget;
+
 
 swiftUITextSuffix:
-    FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix |
-    FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix;
+    FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
+    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix
+    ;
+
+swiftUIColumnParam:
+    ALIGNMENT_PARAM COLON expression # alignmentParameter |
+    SPACING_PARAM COLON expression # spacingParameter;
+
+horizontalAlignment:
+    HORIZONTAL_ALIGNMENT DOT LEADING #leadingAlignment |
+    HORIZONTAL_ALIGNMENT DOT TRAILING #trailingAlignment |
+    HORIZONTAL_ALIGNMENT DOT CENTER #centerHorizontalAlignment;
+
+verticalAlignment:
+    VERTICAL_ALIGNMENT DOT TOP #topAlignment |
+    VERTICAL_ALIGNMENT DOT BOTTOM #bottomAlignment |
+    VERTICAL_ALIGNMENT DOT CENTER #centerVerticalAlignment;
+
+
+swiftUIGenericWidgetSuffix:
+    FRAME LPAREN ((NL* frameParam) (NL* COMMA NL* frameParam)*)? RPAREN #frameSuffix
+    | OVERLAY LPAREN color RPAREN #overlaySuffix;
+
+frameParam:
+     HEIGHT COLON expression #heightParam |
+     WIDTH COLON expression #widthParam;
+
+fontWeight:
+     FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+
+color:
+     COLOR DOT COLOR_BLUE #blueColor;
 
 swiftUIImageSuffix:
     RESIZABLE LPAREN RPAREN # resizableSuffix |
     ASPECT_RATIO_PARAM LPAREN contentMode RPAREN # aspectRatioSuffix;
 
-fontWeight:
-     FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
-
 contentMode:
      CONTENT_MODE_PARAM COLON CONTENT_MODE DOT CONTENT_FIT #contentModeFit |
      CONTENT_MODE_PARAM COLON CONTENT_MODE DOT CONTENT_FILL #contentModeFill;
-
-color:
-     COLOR DOT COLOR_BLUE #blueColor;
