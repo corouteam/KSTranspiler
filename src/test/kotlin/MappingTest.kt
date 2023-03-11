@@ -442,6 +442,42 @@ class MappingTest {
     }
 
     @Test
+    fun testBox() {
+        val code = """
+            Box() {
+            Text("Ciao", modifier = Modifier.zIndex(2))
+            Divider(modifier = Modifier.zIndex(1))
+            Spacer(modifier = Modifier.zIndex(3))
+            Column(modifier = Modifier.zIndex(4)){}
+            Row(modifier = Modifier.zIndex(5)){}
+            Box(modifier = Modifier.zIndex(6)){}
+            Button(action = {}, modifier = Modifier.zIndex(6)){}
+            }
+        """.trimIndent()
+
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val zstack = (ast?.statement?.first() as ZStackComposableCall)
+        val block = zstack.body as Block
+        val text = block.body.first() as TextComposableCall
+
+        val divider = block.body[1] as DividerComposableCall
+        val spacer = block.body[2] as SpacerComposableCall
+        val column = block.body[3] as ColumnComposableCall
+        val row = block.body[4] as RowComposableCall
+        val box = block.body[5] as ZStackComposableCall
+        val button = block.body[6] as ButtonComposableCall
+
+        assertEquals(text.zIndex, IntLit("2"))
+        assertEquals(divider.zIndex, IntLit("1"))
+        assertEquals(spacer.zIndex, IntLit("3"))
+        assertEquals(column.zIndex, IntLit("4"))
+        assertEquals(row.zIndex, IntLit("5"))
+        assertEquals(box.zIndex, IntLit("6"))
+        assertEquals(button.zIndex, IntLit("6"))
+    }
+
+    @Test
     fun mapColumn() {
         val code = """
             Column(
@@ -548,7 +584,7 @@ class MappingTest {
         val expectedAst = AstScript(
             listOf(
                 ButtonComposableCall(
-                    action = Block(body = listOf()), body = Block(body = listOf())
+                    action = Block(body = listOf()), body = Block(body = listOf(), )
                 )
             )
         )
@@ -577,6 +613,5 @@ class MappingTest {
         )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
-
 
 }

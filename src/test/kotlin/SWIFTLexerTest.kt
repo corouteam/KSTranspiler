@@ -83,6 +83,13 @@ class SWIFTLexerTest {
     }
 
     @Test
+    fun parseZStack(){
+        val code = "ZStack {}"
+        val result = listOf("ZSTACK", "LCURL", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
     fun parseStruct(){
         val code = """struct MainView: View {
     var body: some View {

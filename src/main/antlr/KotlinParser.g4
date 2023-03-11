@@ -146,11 +146,13 @@ composableCall:
     | SPACER_COMPOSE LPAREN (NL* modifierParameter NL*)? RPAREN  #spacerComposable
     | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  RPAREN block? #columnComposable
     | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable
-    |  BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody RPAREN body = block #iconButtonComposable;
+    | BOX LPAREN (NL* modifierParameter NL*)? RPAREN block? #boxComposable
+    | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
-    | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter;
+    | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter
+    | modifierParameter #modifierTextParameter;
 
 composableUIGenericWidgetSuffix:
     SIZE LPAREN WIDTH COLON width = expression COMMA HEIGHT COLON heigth = expression RPAREN #sizeSuffix;
@@ -163,11 +165,12 @@ columnComposeParameter:
 rowComposeParameter:
     VERTICAL_ALIGNMENT_PARAM NL* ASSIGN NL* expression #verticalAlignmentParameter |
     HORIZONTAL_ARRANGEMENT_PARAM NL* ASSIGN NL* expression #horizontalArrangementParameter |
-    modifierParameter #modifierRawParameter;
+    modifierParameter #modifierRowParameter;
 
 dividerComposeParameter:
     THICKNESS ASSIGN expression #dividerTicknessParamater |
-    COLOR_PARAM ASSIGN color #dividerColorParameter;
+    COLOR_PARAM ASSIGN color #dividerColorParameter |
+    modifierParameter #dividerModifierParameter;
 
 arrangement:
    ARRANGEMENT DOT SPACED_BY LPAREN expression RPAREN;
@@ -201,4 +204,5 @@ modifierSuffix:
    VERTICAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #verticalScrollSuffix|
    HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix |
    HEIGHT LPAREN expression RPAREN #heightSuffix |
-   WIDTH LPAREN expression RPAREN #widthSuffix;
+   WIDTH LPAREN expression RPAREN #widthSuffix |
+   ZINDEX LPAREN expression RPAREN #zIndexSuffix;

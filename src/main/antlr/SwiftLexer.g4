@@ -91,6 +91,8 @@ SPACING_PARAM: 'spacing';
 
 SCROLL_VIEW: 'ScrollView';
 
+ZSTACK: 'ZStack';
+
 VERTICAL_ALIGNMENT: 'VerticalAlignment';
 HORIZONTAL_ALIGNMENT: 'HorizontalAlignment';
 

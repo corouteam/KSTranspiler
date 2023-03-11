@@ -162,7 +162,9 @@ widgetCall:
     | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
     |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
     HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
-    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget ;
+    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget |
+    ZSTACK block? #zStackWidget;
+
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix

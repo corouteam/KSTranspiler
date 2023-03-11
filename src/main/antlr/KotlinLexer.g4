@@ -91,6 +91,9 @@ SIZE: 'size';
 WIDTH: 'width';
 HEIGHT: 'height';
 
+BOX: 'Box';
+ZINDEX: 'zIndex';
+
 VERTICAL_ARRANGEMENT_PARAM: 'verticalArrangement';
 HORIZONTAL_ARRANGEMENT_PARAM: 'horizontalArrangement';
 HORIZONTAL_ALIGNMENT_PARAM: 'horizontalAlignment';

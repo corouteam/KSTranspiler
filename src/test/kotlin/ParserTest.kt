@@ -650,4 +650,31 @@ KotlinScript
         val actual = toParseTree(parseResourceScript("spacerWithSize")).multiLineString()
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun parseBoxWithModifierZIndex(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        BoxComposable\n" +
+                "          T[Box]\n" +
+                "          T[(]\n" +
+                "          ModifierParameter\n" +
+                "            T[modifier]\n" +
+                "            T[=]\n" +
+                "            Modifier\n" +
+                "              T[Modifier]\n" +
+                "              T[.]\n" +
+                "              ZIndexSuffix\n" +
+                "                T[zIndex]\n" +
+                "                T[(]\n" +
+                "                IntLiteral\n" +
+                "                  T[1]\n" +
+                "                T[)]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("box")).multiLineString()
+        assertEquals(expected, actual)
+    }
 }

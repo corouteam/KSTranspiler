@@ -62,8 +62,11 @@ class TextComposableType(override var position: Position? = null): ComposableTyp
 class DividerComposableType(override var position: Position? = null): ComposableType()
 class SpacerComposableType(override var position: Position? = null): ComposableType()
 class ColumnComposableType(override var position: Position? = null): ComposableType()
+class ZStackComposableType(override var position: Position? = null): ComposableType()
+class BoxComposableType(override var position: Position? = null): ComposableType()
 class HorizontalAlignmentType(override var position: Position? = null): Type()
 class VerticalAlignmentType(override var position: Position? = null): Type()
+
 // END TEST
 //
 // Expressions
@@ -172,14 +175,17 @@ data class FunctionCall(val name: String,
                         override var position: Position? = null,
 ): Expression(FunctionCallType(position))
 
-sealed class ComposableCall(type: ComposableType): Expression(type)
+sealed class ComposableCall(
+    open var zIndex: Expression??,
+    type: ComposableType): Expression(type)
 
 class TextComposableCall(
     val value: Expression,
     val color: Expression?,
     val fontWeight: Expression?,
+    zIndex: Expression?? = null,
     override var position: Position? = null,
-): ComposableCall(TextComposableType(position))
+): ComposableCall( zIndex, TextComposableType(position))
 
 sealed class ColorLit(): Expression(ColorType())
 class CustomColor(val hex: StringLit, override var position: Position? = null): ColorLit()
@@ -192,12 +198,21 @@ class FontWeightBold(override var position: Position? = null): FontWeightLit()
 class DividerComposableCall(
     val frame: Frame?,
     val color: Expression?,
-    override var position: Position? = null): ComposableCall(DividerComposableType(position))
+    zIndex: Expression?? = null,
+    override var position: Position? = null): ComposableCall(zIndex, DividerComposableType(position))
 
 class SpacerComposableCall(
     val size: Frame?,
+    zIndex: Expression?? = null,
     override var position: Position? = null,
-    ): ComposableCall(SpacerComposableType(position))
+    ): ComposableCall(zIndex, SpacerComposableType(position))
+
+class ZStackComposableCall(
+    val body: ControlStructureBody,
+    zIndex: Expression?? = null,
+    override var position: Position? = null,
+): ComposableCall(zIndex, ZStackComposableType(position))
+
 
 class Frame(val width: Expression?, val height: Expression?, override var position: Position? = null): Node()
 
@@ -206,16 +221,18 @@ data class ColumnComposableCall(
     val horizontalAlignment: Expression?,
     val scrollable: Boolean,
     val body: ControlStructureBody,
+    override var zIndex: Expression?? = null,
     override var position: Position? = null,
-): ComposableCall(ColumnComposableType(position))
+): ComposableCall(zIndex, ColumnComposableType(position))
 
 data class RowComposableCall(
     val spacing: Expression?,
     val verticalAlignment: Expression?,
     val scrollable: Boolean,
     val body: ControlStructureBody,
+    override var zIndex: Expression?? = null,
     override var position: Position? = null
-): ComposableCall(ColumnComposableType(position))
+): ComposableCall(zIndex, ColumnComposableType(position))
 
 sealed class HorizontalAlignment: Expression(HorizontalAlignmentType())
 sealed class VerticalAlignment: Expression(VerticalAlignmentType())
@@ -236,8 +253,9 @@ class WidgetDeclaration(val id: String,
 class ButtonComposableCall(
     val action: Block,
     val body: Block,
+    zIndex: Expression? = null,
     override var position: Position? = null,
-    ): ComposableCall(ButtonComposableType())
+    ): ComposableCall(zIndex, ButtonComposableType())
 data class Error(override val message: String, val position: Position?): Throwable(message)
 
 /**
