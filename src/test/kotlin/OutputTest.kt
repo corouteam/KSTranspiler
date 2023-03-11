@@ -342,8 +342,8 @@ class Person: Address, Jks {
 fun convertDataClass(){
     val code = """
         data class Person(
-        firstName: String,
-        lastName: String
+        val firstName: String,
+        val lastName: String
         ): Address, Jks {
             init {
                 print("Hello")
@@ -351,8 +351,12 @@ fun convertDataClass(){
         }""".trimMargin()
     val expect = """
 struct Person: Address, Jks {
+	let firstName:String
+	let lastName:String
 	init(firstName: String, lastName: String) {
 		print("Hello")
+		self.firstName = firstName
+		self.lastName = lastName
 	}
 }""".trimIndent()
     val parseResult = KotlinParserFacade.parse(code)

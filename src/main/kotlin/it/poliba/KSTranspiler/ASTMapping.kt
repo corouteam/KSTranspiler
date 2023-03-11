@@ -3,21 +3,16 @@ package it.poliba.KSTranspiler
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
-import com.strumenta.kolasu.model.pos
-import io.ktor.util.*
 import it.poliba.KSTranspiler.KotlinParser.AccessSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.BlockContext
 import it.poliba.KSTranspiler.KotlinParser.ControlStructureBodyContext
 import it.poliba.KSTranspiler.KotlinParser.ElvisNavigationContext
-import it.poliba.KSTranspiler.KotlinParser.FunctionCallContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationContext
 import it.poliba.KSTranspiler.KotlinParser.PropertyDeclarationStatementContext
 import it.poliba.KSTranspiler.KotlinParser.StringLiteralExpressionContext
-import org.antlr.v4.codegen.model.decl.Decl
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.Token
 import java.util.ArrayList
-import kotlin.jvm.internal.Intrinsics.Kotlin
 
 interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
     fun map(parseTreeNode: PTN) : ASTN
@@ -65,19 +60,23 @@ fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fa
 fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     var constProp = listOf<FunctionParameter>()
     var constructor: PrimaryConstructor? = null
-    var defaultConstructorParams = arrayListOf<PropertyDeclaration>()
+    val defaultConstructorPropertiesParams = arrayListOf<PropertyDeclaration>()
+    var classPropertiesNumber = 0
+
     if(primaryConstructor() != null && primaryConstructor().classParameter() != null){
         constProp = primaryConstructor().classParameter().map {
             if(it.VAR() != null || it.VAL() != null){
                 var prop = PropertyDeclaration(it.ID().text, it.type().toAst(), null, null,it.VAR() != null)
-                defaultConstructorParams.add(prop)
+                defaultConstructorPropertiesParams.add(prop)
+                classPropertiesNumber += 1
             }
+
             FunctionParameter(it.ID().text, it.type().toAst(considerPosition))
         }
     }
     var body = arrayListOf<Declaration>()
     if (classBody() != null && classBody().declaration() != null){
-        body.addAll(defaultConstructorParams)
+        body.addAll(defaultConstructorPropertiesParams)
         body.addAll(classBody().declaration().map { it.toAst(considerPosition) })
 
     }
@@ -87,9 +86,9 @@ fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false
         constructorBody = classBody().constructor().first().functionBody().block().toAst(considerPosition)
     }
     if(constProp.isNotEmpty()){
-       if(defaultConstructorParams.isNotEmpty()){
+       if(defaultConstructorPropertiesParams.isNotEmpty()){
            var body = ArrayList((constructorBody as Block).body)
-           body.addAll(defaultConstructorParams.map {
+           body.addAll(defaultConstructorPropertiesParams.map {
                var variable = AccessExpression(VarReference(it.varName, it.type, it.position), ThisExpression(null),  DotOperator(null))
                Assignment(variable, VarReference(it.varName, it.type))
            })
@@ -101,8 +100,11 @@ fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false
         body.add(it)
     }
     if(DATA() != null){
+        // data class must have only property parameters
+        if (defaultConstructorPropertiesParams.size != (primaryConstructor()?.classParameter()?.size ?: 0)) {
+            throw Error("Data class must have only property parameters", this.toPosition(true))
+        }
         return DataClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
-
     }else{
         return ClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
     }
