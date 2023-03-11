@@ -140,7 +140,7 @@ fun Node.commonValidation(): LinkedList<Error> {
     this.specificProcess(ControlStructureBody::class.java) { block ->
         if (block is Block) {
             block.searchByType(Assignment::class.java).forEach {
-                val assignmentName = it.varName
+                val assignmentName = it.variable.generateCode()
 
                 val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
 

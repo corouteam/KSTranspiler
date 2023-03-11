@@ -119,7 +119,6 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.HorizontalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.ComplexExpressionContext -> toAst(considerPosition)
-    is SwiftParser.FunctionCallContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -172,13 +171,6 @@ fun SwiftParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression
     return FunctionCall(
         name = this.functionCallExpression().name.text,
         parameters = this.functionCallExpression().functionCallParameters().expression().map { it.toAst(considerPosition) },
-        position = toPosition(considerPosition)
-    )
-}
-fun SwiftParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression {
-    return FunctionCall(
-        name = this.name.text,
-        parameters = this.functionCallParameters().expression().map { it.toAst(considerPosition) },
         position = toPosition(considerPosition)
     )
 }

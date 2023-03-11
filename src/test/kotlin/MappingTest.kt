@@ -697,8 +697,8 @@ class MappingTest {
     fun parseDataClassWithInitializer() {
         val code = """
         data class Person(
-        firstName: String,
-        lastName: String
+        val firstName: String,
+        val lastName: String
         ): Address, Jks {
         var name: String
         
@@ -712,7 +712,7 @@ class MappingTest {
 
 
         val classDecl = ast?.declarations?.first() as DataClassDeclaration
-        val constructor = classDecl.body[1] as PrimaryConstructor
+        val constructor = classDecl.body.filterIsInstance(PrimaryConstructor::class.java).first()
         val body = constructor.body as Block
         assertEquals("Person", classDecl.name)
         assertEquals(2, constructor.parameters.count())

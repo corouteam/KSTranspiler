@@ -123,10 +123,6 @@ functionValueParameter
     : parameter (NL* ASSIGN NL* expression)?
     ;
 
-functionCallParameters
-    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
-    ;
-
 parameter
     : ID NL* COLON NL* SOME? type
     ;
