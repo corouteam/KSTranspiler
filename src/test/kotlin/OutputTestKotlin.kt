@@ -68,7 +68,7 @@ class  OutputTestKotlin {
     @Test
     fun convertIf() {
         val code = "if(true){ print(\"Is true \")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n}"
+        val result = "if(true) {\n\tprint(\"Is true \")\n}"
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
 
@@ -77,7 +77,7 @@ class  OutputTestKotlin {
     @Test
     fun convertIfElse() {
         val code = "if(true){ print(\"Is true \") }else{print(\"Is false\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n}else{\n\tprint(\"Is false\")\n}"
+        val result = "if(true) {\n\tprint(\"Is true \")\n}else {\n\tprint(\"Is false\")\n}"
         val parseResult = SwiftParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateKotlinCode())
 
@@ -86,7 +86,7 @@ class  OutputTestKotlin {
     @Test
     fun convertIfElseIf() {
         val code = "if(true){ print(\"Is true \") }else if(false){print(\"Is false\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n}else if(false){\n\tprint(\"Is false\")\n}"
+        val result = "if(true) {\n\tprint(\"Is true \")\n}else if(false) {\n\tprint(\"Is false\")\n}"
         val parseResult = SwiftParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateKotlinCode())
     }
@@ -95,7 +95,7 @@ class  OutputTestKotlin {
     fun convertIfElseIfElse() {
         val code = "if(true){ print(\"Is true \") }else if(false){print(\"Is false\")}else{print(\"never\")}"
         val result =
-            "if(true){\n\tprint(\"Is true \")\n}else if(false){\n\tprint(\"Is false\")\n}else{\n\tprint(\"never\")\n}"
+            "if(true) {\n\tprint(\"Is true \")\n}else if(false) {\n\tprint(\"Is false\")\n}else {\n\tprint(\"never\")\n}"
         val parseResult = SwiftParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateKotlinCode())
     }
@@ -206,9 +206,8 @@ class  OutputTestKotlin {
 
         val result = """
 Column(horizontalAlignment = Alignment.Start, verticalArrangement = 10.dp){
-    
-}
-            """.trimIndent()
+
+}""".trimIndent()
 
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
@@ -317,14 +316,14 @@ Button(onClick = {
     @Test
     fun convertSimpleClass() {
         val result = """
-        class Person(
-        firstName: String,
-        lastName: String
-        ): Address, Jks {
-            init {
-                print("Hello")
-            }
-        }""".trimMargin()
+class Person(
+firstName: String,
+lastName: String
+): Address, Jks {
+	init {
+		print("Hello")
+	}
+}""".trimMargin()
         val code = """
 class Person: Address, Jks {
 	init(firstName: String, lastName: String) {
@@ -338,16 +337,16 @@ class Person: Address, Jks {
     @Test
     fun convertClassWithThis(){
         val expect = """
-        class Person(
-        firstName: String,
-        lastName: String
-        ): Address, Jks {
-        var firstName: String
-            init {
-                print("Hello")
-                this.firstName = firstName
-            }
-        }""".trimMargin()
+class Person(
+firstName: String,
+lastName: String
+): Address, Jks {
+	var firstName:String
+	init {
+		print("Hello")
+		this.firstName = firstName
+	}
+}""".trimMargin()
         val code = """
 class Person: Address, Jks {
 	var firstName:String

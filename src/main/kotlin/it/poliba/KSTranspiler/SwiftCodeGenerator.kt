@@ -154,7 +154,7 @@ fun DividerComposableCall.generateCode(depth: Int = 0): String{
     if(paramString.isNotBlank()){
         paramString = "\n\t$paramString"
     }
-    return "Divider()$paramString"
+    return "${getPrefix(depth)}Divider()$paramString"
 }
 fun ButtonComposableCall.generateCode(depth: Int = 0): String{
     return "${getPrefix(depth)}Button(action: ${this.action.generateCode(depth)})${this.body.generateCode(depth)}"
