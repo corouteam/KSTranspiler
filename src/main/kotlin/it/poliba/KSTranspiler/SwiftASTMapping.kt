@@ -112,6 +112,7 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.WidgetCallExpressionContext -> toAst(considerPosition)
     is SwiftParser.HorizontalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
+    is SwiftParser.ContentModeExpressionContext -> contentMode().toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -173,6 +174,7 @@ fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = wh
     is SwiftParser.UserTypeContext -> UserType(ID().text, toPosition(considerPosition))
     is SwiftParser.StringContext -> StringType(toPosition(considerPosition))
     is SwiftParser.CgFloatContext -> DpType(toPosition(considerPosition))
+    is SwiftParser.ContentModeTypeContext -> AspectRatioType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

@@ -66,7 +66,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | widgetCall #widgetCallExpression
            | horizontalAlignment #horizontalAlignmentExpression
            | verticalAlignment #verticalAlignmentExpression
-           | color                       # colorLiteral;
+           | color                       # colorLiteral
+           | CONTENT_MODE DOT contentMode #contentModeExpression;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -151,7 +152,8 @@ type : INT     # integer |
        BOOL    # bool |
        STRING  # string |
        ID      #userType |
-       CG_FLOAT #cgFloat;
+       CG_FLOAT #cgFloat |
+       CONTENT_MODE #contentModeType;
 
 
 
@@ -203,8 +205,8 @@ color:
 
 swiftUIImageSuffix:
     RESIZABLE LPAREN RPAREN # resizableSuffix |
-    ASPECT_RATIO_PARAM LPAREN contentMode RPAREN # aspectRatioSuffix;
+    ASPECT_RATIO_PARAM LPAREN  CONTENT_MODE_PARAM COLON expression RPAREN # aspectRatioSuffix;
 
-contentMode:
-     CONTENT_MODE_PARAM COLON CONTENT_MODE DOT CONTENT_FIT #contentModeFit |
-     CONTENT_MODE_PARAM COLON CONTENT_MODE DOT CONTENT_FILL #contentModeFill;
+ contentMode:
+     CONTENT_FIT  #contentModeFit |
+     CONTENT_FILL #contentModeFill;

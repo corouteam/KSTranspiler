@@ -327,5 +327,26 @@ ScrollView(.vertical){
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
+    @Test
+    fun mapImageWithSuffixComplete(){
+        val code = """
+            Image(
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillWidth,
+            painter = painterResource(id = getResources().getIdentifier("nome-immagine-test", "drawable", context.getPackageName())))
+ 
+            """.trimIndent()
+
+        val result = "Image(\"nome-immagine-test\")\n.resizable()\n.aspectRatio(contentMode: ContentMode.fill)"
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+    @Test
+    fun mapContentScale(){
+        val code = """  var a = ContentScale.FillWidth  """.trimIndent()
+        val result = "var a:ContentMode = ContentMode.fill"
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
 
 }

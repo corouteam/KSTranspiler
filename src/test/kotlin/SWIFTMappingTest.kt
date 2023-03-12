@@ -71,7 +71,7 @@ class SWIFTMappingTest {
         val code = "Image(\"nome-immagine-test\")"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(StringLit("nome-immagine-test"), null, null)
+            ImageComposableCall(StringLit("nome-immagine-test"), false, null)
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
@@ -81,7 +81,7 @@ class SWIFTMappingTest {
         val code = "Image(\"nome-immagine-test\").resizable().aspectRatio(contentMode: ContentMode.fit)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(StringLit("nome-immagine-test"), Resizable(), ContentFit())
+            ImageComposableCall(StringLit("nome-immagine-test"),true, ContentFit())
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }

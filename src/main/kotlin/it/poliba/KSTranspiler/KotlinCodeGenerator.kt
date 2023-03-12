@@ -105,6 +105,8 @@ fun Expression.generateKotlinCode() : String = when (this) {
     is ColumnComposableCall -> this.generateKotlinCode()
     is HorizontalAlignment -> this.generateKotlinCode()
     is ButtonComposableCall -> this.generateKotlinCode()
+    is AspectRatioLit -> this.generateKotlinCode()
+    is ImageComposableCall -> this.generateKotlinCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -146,6 +148,7 @@ fun Type.generateKotlinCode() : String = when (this) {
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateKotlinCode()}>"
     is ListType -> "[${this.itemsType.generateKotlinCode()}]"
+    is AspectRatioType -> "ContentScale"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -216,6 +219,49 @@ VStack($parameters){
 }"""
     }
 }
+
+fun AspectRatioLit.generateKotlinCode(depth: Int = 0): String{
+    var res = when(this){
+        is ContentFit -> "ContentScale.Fit"
+        is ContentFill -> "ContentScale.FillWidth"
+        else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+    }
+    return "$res" //TODO: ADD PREFIX
+}
+
+
+fun ImageComposableCall.generateKotlinCode(): String{
+    var imageName = this.value.generateKotlinCode()
+    var painter = "painter = painterResource(id = getResources().getIdentifier($imageName, \"drawable\", context.getPackageName()))"
+
+    var parameters = arrayListOf<String>()
+    var modifierParams = arrayListOf<String>()
+        //TODO: resizable
+    this.aspectRatio?.generateKotlinCode()?.let {
+        parameters.add("contentScale = $it")
+    }
+    if(resizable){
+        modifierParams.add(".fillMaxSize()")
+    }
+    zIndex?.let {
+        modifierParams.add(".zIndex(${it.generateKotlinCode()}")
+    }
+    if(modifierParams.isNotEmpty()){
+        var modifierParamsString = modifierParams.joinToString("")
+        parameters.add("modifier = Modifier$modifierParamsString")
+    }
+    if(parameters.isEmpty()){
+        return "Image($painter)"
+    }else{
+        var param = parameters.joinToString ( ",\n" )
+        return "Image(\n$painter,\n$param)"
+
+    }
+}
+
+
+
+
 
 fun HorizontalAlignment.generateKotlinCode(): String{
     return when(this){

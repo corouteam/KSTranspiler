@@ -49,7 +49,6 @@ assignment : ID ASSIGN expression ;
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
-           | LPAREN expression RPAREN                                      # parenExpression
            | ID                                                            # varReference
            | MINUS expression                                              # minusExpression
            | INT_LIT                                                       # intLiteral
@@ -65,11 +64,11 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral
            | fontWeight                                                    # fontWeightLiteral
-           | painter                                                       # painterLiteral
            | fontWeight                                                    # fontWeightLiteral
            | horizontalAlignment                                           #horizhontalAlignmentExpression
            | verticalAlignment                                             #verticalAlignmentExpression
-           | arrangement                                                   #arrangementExpression;
+           | arrangement                                                   #arrangementExpression
+           | CONTENTSCALE DOT contentScadeMode                             #contentScaleExpression;
 
 
 if
@@ -150,7 +149,7 @@ composableCall:
     | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  RPAREN block? #rowComposable
     | BOX LPAREN (NL* modifierParameter NL*)? RPAREN block? #boxComposable
     | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable
-    | IMAGE_COMPOSE LPAREN (NL* imageComposeParameter) ((NL* COMMA NL* imageComposeParameter) (NL* COMMA NL* imageComposeParameter)*)? RPAREN #imageComposable;
+    | IMAGE_COMPOSE LPAREN (NL* imageComposeParameter) ((NL* COMMA NL* imageComposeParameter)*)? NL* RPAREN #imageComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
@@ -189,10 +188,13 @@ verticalAlignment:
     ALIGNMENT DOT CENTER_VERTICALLY #centerVerticalltAlignment;
 
 imageComposeParameter:
-    PAINTER_PARAM ASSIGN painter #painterParameter |
-    MODIFIER_PARAM ASSIGN MODIFIER DOT RESIZABLE LPAREN RPAREN  #resizable |
-    CONTENTSCALE_PARAM ASSIGN CONTENTSCALE DOT FILLWIDTH #contentScaleFillWidth |
-    CONTENTSCALE_PARAM ASSIGN CONTENTSCALE DOT FIT #contentScaleFit;
+     PAINTER_PARAM ASSIGN PAINTER_RESOURCE LPAREN PAINTER_RESOURCE_PARAM ASSIGN resource RPAREN #painterParameter |
+     modifierParameter #modifierImageParameter |
+     CONTENTSCALE_PARAM ASSIGN expression #contentScale ;
+
+contentScadeMode:
+    FIT  #contentScaleFit |
+    FILLWIDTH #contentScaleFillWidth;
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor
@@ -214,13 +216,10 @@ modifierSuffix:
    HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix |
    HEIGHT LPAREN expression RPAREN #heightSuffix |
    WIDTH LPAREN expression RPAREN #widthSuffix |
+   RESIZABLE LPAREN RPAREN  #resizableSuffix |
    ZINDEX LPAREN expression RPAREN #zIndexSuffix;
 
-painter:
-    PAINTER_RESOURCE LPAREN painterResourceParam RPAREN #painterResource;
 
-painterResourceParam:
-    PAINTER_RESOURCE_PARAM ASSIGN getResource = resource #painterResourceParameter;
 
 resource:
-    GET_RESOURCE LPAREN RPAREN DOT GET_IDENTIFIER LPAREN imageName = expression COMMA expression COMMA CONTEXT DOT GET_PACKAGENAME LPAREN RPAREN RPAREN #drawableResource;
+    GET_RESOURCE LPAREN RPAREN DOT GET_IDENTIFIER LPAREN imageName = expression COMMA expression COMMA CONTEXT DOT GET_PACKAGENAME LPAREN RPAREN RPAREN;

@@ -122,7 +122,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.ArrangementExpressionContext -> toAst(considerPosition)
     is KotlinParser.HorizhontalAlignmentExpressionContext -> toAst(considerPosition)
     is KotlinParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
-
+    is KotlinParser.ContentScaleExpressionContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

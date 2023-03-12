@@ -8,6 +8,10 @@ import it.poliba.KSTranspiler.KotlinParser.CenterVerticalltAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ColumnComposeParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ComposableCallContext
+import it.poliba.KSTranspiler.KotlinParser.ContentScaleContext
+import it.poliba.KSTranspiler.KotlinParser.ContentScaleExpressionContext
+import it.poliba.KSTranspiler.KotlinParser.ContentScaleFillWidthContext
+import it.poliba.KSTranspiler.KotlinParser.ContentScaleFitContext
 import it.poliba.KSTranspiler.KotlinParser.CustomColorContext
 import it.poliba.KSTranspiler.KotlinParser.CustomWeightContext
 import it.poliba.KSTranspiler.KotlinParser.DividerColorParameterContext
@@ -24,8 +28,10 @@ import it.poliba.KSTranspiler.SwiftParser.FrameSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.HorizontalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.HorizontalScrollSuffixContext
 import it.poliba.KSTranspiler.KotlinParser.ModifierColumnParameterContext
+import it.poliba.KSTranspiler.KotlinParser.ModifierImageParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ModifierRowParameterContext
 import it.poliba.KSTranspiler.KotlinParser.ModifierTextParameterContext
+import it.poliba.KSTranspiler.KotlinParser.PainterParameterContext
 import it.poliba.KSTranspiler.KotlinParser.RowComposeParameterContext
 import it.poliba.KSTranspiler.KotlinParser.StartAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.TextComposeParameterContext
@@ -33,15 +39,12 @@ import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
-import it.poliba.KSTranspiler.KotlinParser.ZIndexSuffixContext
-import it.poliba.KSTranspiler.SwiftParser.WidgetCallContext
-import org.antlr.v4.runtime.atn.ContextSensitivityInfo
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
     return this.composableCall().toAst(considerPosition)
 }
 fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false): Expression = when(this){
-    is KotlinParser.ImageComposableContext -> this.toAst()
+    is KotlinParser.ImageComposableContext -> this.toAst(considerPosition)
 
     is KotlinParser.TextComposableContext -> this.toAst(considerPosition)
     is KotlinParser.SpacerComposableContext -> this.toAst(considerPosition)
@@ -171,43 +174,33 @@ fun KotlinParser.FontWeightContext.toAst(considerPosition: Boolean = false): Exp
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 
-fun KotlinParser.ImageComposableContext.toAst(): Expression {
-    val params = this.imageComposeParameter().map { it.toAst() }
+fun KotlinParser.ImageComposableContext.toAst(considerPosition: Boolean): Expression {
+    val name = (this.imageComposeParameter()
+        .first{it is PainterParameterContext} as PainterParameterContext)
+        .resource().imageName.toAst(considerPosition)
+    print("SIZE: "+this.imageComposeParameter().size)
+    var modifier = (this.imageComposeParameter()
+        .firstOrNull { it is ModifierImageParameterContext } as? ModifierImageParameterContext)
+        ?.modifierParameter()?.modifier()?.toModifier(considerPosition)
 
-    val painter = params.firstOrNull { it is PainterResource } as PainterResource? ?: throw IllegalArgumentException("PainterResource expected in Image composable")
-
-    val resizable = params.firstOrNull { it is Resizable } as Resizable?
-    val contentFill = params.firstOrNull { it is ContentFill } as ContentFill?
-    val contentFit = params.firstOrNull { it is ContentFit } as ContentFit?
-
-    return ImageComposableCall(painter.image!!, resizable, contentFill ?: contentFit)
-
-
+    val aspectRation = (this.imageComposeParameter().firstOrNull { it is ContentScaleContext } as? ContentScaleContext)
+        ?.expression()?.toAst(true)
+    return  ImageComposableCall(
+        name,
+        modifier?.resizable ?: false,
+        aspectRation,
+        modifier?.zIndex,
+        toPosition(considerPosition))
 }
 
-
-fun KotlinParser.ImageComposeParameterContext.toAst(): Expression = when(this){
-    is KotlinParser.PainterParameterContext -> this.painter().toAst()
-    is KotlinParser.ResizableContext -> Resizable()
-    is KotlinParser.ContentScaleFillWidthContext -> ContentFill()
-    is KotlinParser.ContentScaleFitContext -> ContentFit()
-    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
+fun ContentScaleExpressionContext.toAst(considerPosition: Boolean): AspectRatioLit{
+    return when(this.contentScadeMode()){
+        is ContentScaleFitContext -> ContentFit()
+        is ContentScaleFillWidthContext -> ContentFill()
+        else -> throw Exception("Aspect Ratio not recognized")
+    }
 }
 
-fun KotlinParser.PainterContext.toAst(): Expression = when(this){
-    is KotlinParser.PainterResourceContext -> this.painterResourceParam().toAst()
-    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
-}
-
-fun KotlinParser.PainterResourceParamContext.toAst() = when(this){
-    is KotlinParser.PainterResourceParameterContext -> this.getResource.toAst()
-    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
-}
-
-fun KotlinParser.ResourceContext.toAst() = when(this){
-    is KotlinParser.DrawableResourceContext -> PainterResource(this.imageName.toAst())
-    else -> throw java.lang.IllegalArgumentException("Pain not recognized")
-}
 
 fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration {
     val id = this.ID().text
@@ -253,7 +246,8 @@ fun KotlinParser.ModifierContext.toModifier(considerPosition: Boolean): Modifier
     val height = (modifierSuffix().firstOrNull { it is HeightSuffixContext } as? HeightSuffixContext)?.expression()?.toAst(considerPosition)
     val width = (modifierSuffix().firstOrNull { it is KotlinParser.WidthSuffixContext } as? KotlinParser.WidthSuffixContext)?.expression()?.toAst(considerPosition)
     val zindex = (modifierSuffix().firstOrNull { it is KotlinParser.ZIndexSuffixContext } as? KotlinParser.ZIndexSuffixContext)?.expression()?.toAst(considerPosition)
-    return Modifier(verticalScroll, horizontalScroll, height, width, zindex)
+    val resizable =  modifierSuffix().firstOrNull { it is KotlinParser.ResizableSuffixContext } != null
+    return Modifier(verticalScroll, horizontalScroll, height, width, zindex, resizable)
 }
 
 class Modifier(
@@ -261,5 +255,6 @@ class Modifier(
     val horizontalScroll: Boolean = false,
     val height: Expression? = null,
     val width: Expression? = null,
-    val zIndex: Expression? = null
+    val zIndex: Expression? = null,
+    val resizable: Boolean = false
 )

@@ -50,11 +50,6 @@ data class FontWeightType(override var position: Position? = null): Type()
 data class ResizableType(override var position: Position? = null): Type()
 data class AspectRatioType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
-data class PaintType(override var position: Position? = null) : Type()
-data class PainterResourceType(override var position: Position? = null) : Type()
-data class ResourceType(override var position: Position? = null) : Type()
-data class DrawableType(override var position: Position? = null) : Type()
-data class FrameType(override var position: Position? = null): Type()
 data class UserType(var name: String, override var position: Position? = null): Type()
 data class DpType(override var position: Position? = null): Type()
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
@@ -144,9 +139,6 @@ data class IfExpression(
     var elseBranch: ControlStructureBody?,
     override var position: Position? = null
 ): Expression(IntType(position))
-
-class Painter(val painterResource: PainterResource, override var position: Position? = null) : Expression(PaintType())
-class PainterResource(val image: Expression?, override var position: Position? = null) : Expression(PainterResourceType())
 
 open class ControlStructureBody : Node()
 
@@ -270,9 +262,10 @@ data class Error(override val message: String, val position: Position?): Throwab
 
 class ImageComposableCall(
     val value: Expression,
-    val resizable: ResizableLit?,
+    val resizable: Boolean,
     val aspectRatio: Expression?,
     zIndex: Expression? = null,
+    override var position: Position? = null,
 ): ComposableCall(zIndex, ImageComposableType())
 
 sealed class ResizableLit: Expression(ResizableType())

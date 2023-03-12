@@ -329,7 +329,6 @@ class MappingTest {
             )
         )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
     }
 
     @Test
@@ -620,26 +619,31 @@ class MappingTest {
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
         val expectedAst = AstScript(listOf(
-            ImageComposableCall(StringLit("nome-immagine-test"), null, null)
+            ImageComposableCall(StringLit("nome-immagine-test"), false, null)
         ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
+        val image = ast?.statement?.first() as ImageComposableCall
+        val name = image.value as StringLit
+        assertEquals("nome-immagine-test", name.value)
+        assertEquals(false, image.resizable)
         //val expectedAst = KotlinScript
     }
 
     @Test
     fun mapImageComposableRefWithFillMaxSizeAndContent(){
-        val code = "Image(" +
-                "painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))," +
-                "modifier = Modifier.fillMaxSize()," +
-                "contentScale = ContentScale.FillWidth" +
-                ")"
-        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val code = """
+            Image(
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillWidth,
+            painter = painterResource(id = getResources().getIdentifier("nome-immagine-test", "drawable", context.getPackageName())))
+        """.trimIndent()
 
-        val expectedAst = AstScript(listOf(
-                ImageComposableCall(StringLit("nome-immagine-test"), Resizable(), ContentFill())
-        ))
-        assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
-        //val expectedAst = KotlinScript
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val image = ast?.statement?.first() as ImageComposableCall
+        val name = image.value as StringLit
+        assertEquals("nome-immagine-test", name.value)
+        assertEquals(true, image.resizable)
+        assertIs<ContentFill>(image.aspectRatio)
+
     }
 
 }
