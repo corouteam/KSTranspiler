@@ -358,4 +358,23 @@ class Person: Address, Jks {
         val parseResult = SwiftParserFacade.parse(code)
         assertEquals(expect, parseResult.root!!.generateKotlinCode())
     }
+
+    @Test
+    fun convertStruct() {
+        val code = """
+struct Person: Address, Jks {
+	let firstName:String
+	let lastName:String
+}""".trimIndent()
+
+        val result = """
+data class Person(
+	val firstName:String,
+	val lastName:String
+): Address, Jks {
+
+}""".trimIndent()
+        val parseResult = SwiftParserFacade.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
+    }
 }

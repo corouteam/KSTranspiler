@@ -60,7 +60,7 @@ fun DataClassDeclaration.generateKotlinCode(depth: Int = 0): String{
     var bodyString = bodyStatement.joinToString("\n"){"$it"}
     var constructor = ""
     if(propertyList.isNotEmpty()){
-        var params = propertyList.joinToString(",\n") { it.generateKotlinCode() }
+        var params = propertyList.joinToString(",\n") { it.generateKotlinCode(depth +1) }
         constructor = "(\n$params\n)"
     }
 
