@@ -56,8 +56,7 @@ fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = fa
         return this.toNormalAst(considerPosition)
     }
 }
-
-fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
+fun KotlinParser.ClassDeclarationContext.toClassAst(considerPosition: Boolean = false): Declaration {
     var constProp = listOf<FunctionParameter>()
     var constructor: PrimaryConstructor? = null
     val defaultConstructorPropertiesParams = arrayListOf<PropertyDeclaration>()
@@ -86,28 +85,42 @@ fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false
         constructorBody = classBody().constructor().first().functionBody().block().toAst(considerPosition)
     }
     if(constProp.isNotEmpty()){
-       if(defaultConstructorPropertiesParams.isNotEmpty()){
-           var body = ArrayList((constructorBody as Block).body)
-           body.addAll(defaultConstructorPropertiesParams.map {
-               var variable = AccessExpression(VarReference(it.varName, it.type, it.position), ThisExpression(null),  DotOperator(null))
-               Assignment(variable, VarReference(it.varName, it.type))
-           })
-           constructorBody = Block(body.toList())
-       }
-       constructor = PrimaryConstructor(constProp, constructorBody, toPosition(considerPosition))
+        if(defaultConstructorPropertiesParams.isNotEmpty()){
+            var body = ArrayList((constructorBody as Block).body)
+            body.addAll(defaultConstructorPropertiesParams.map {
+                var variable = AccessExpression(VarReference(it.varName, it.type, it.position), ThisExpression(null),  DotOperator(null))
+                Assignment(variable, VarReference(it.varName, it.type))
+            })
+            constructorBody = Block(body.toList())
+        }
+        constructor = PrimaryConstructor(constProp, constructorBody, toPosition(considerPosition))
     }
     constructor?.let {
         body.add(it)
     }
-    if(DATA() != null){
+    return ClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
+
+}
+fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
+    return if(DATA() != null){
         // data class must have only property parameters
-        if (defaultConstructorPropertiesParams.size != (primaryConstructor()?.classParameter()?.size ?: 0)) {
+        this.toDataClass(considerPosition)
+    }else{
+        this.toClassAst(considerPosition)
+    }
+}
+
+fun KotlinParser.ClassDeclarationContext.toDataClass(considerPosition: Boolean): DataClassDeclaration{
+    val bodyDecl = classBody().declaration().map { it.toAst(considerPosition)}
+    val baseClasses = extendedClasses().type().map { it.toAst(considerPosition) }
+    var properties = listOf<PropertyDeclaration>()
+    if(primaryConstructor() != null && primaryConstructor().classParameter().isNotEmpty()){
+        if(primaryConstructor().classParameter().firstOrNull { it.VAR() == null && it .VAL() == null } != null){
             throw Error("Data class must have only property parameters", this.toPosition(true))
         }
-        return DataClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
-    }else{
-        return ClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
+        properties = primaryConstructor().classParameter().map { PropertyDeclaration(it.ID().text, it.type().toAst(considerPosition), null, null, it.VAR() != null, toPosition(considerPosition)) }
     }
+   return DataClassDeclaration(ID().text, properties, bodyDecl, baseClasses, toPosition(considerPosition))
 }
 
 

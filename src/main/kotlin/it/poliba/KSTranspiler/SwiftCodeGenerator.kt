@@ -37,9 +37,10 @@ fun DataClassDeclaration.generateCode(depth: Int = 0): String{
         baseClassesString += baseClasses.joinToString(", "){it.generateCode()}
     }
 
-    var bodyString = body.joinToString("\n"){"${it.generateCode(depth+1)}"}
+    var bodyString = body.joinToString(""){"\n${it.generateCode(depth+1)}"}
+    var params = propertyList.joinToString("\n"){"${it.generateCode(depth+1)}"}
 
-    var res = "${getPrefix(depth)}struct $name$baseClassesString {\n$bodyString\n${getPrefix(depth)}}"
+    var res = "${getPrefix(depth)}struct $name$baseClassesString {\n$params$bodyString\n${getPrefix(depth)}}"
     return res
 }
 

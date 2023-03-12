@@ -16,15 +16,39 @@ fun AstScript.generateKotlinCode(): String{
     return statement.joinToString("\n") { it.generateKotlinCode() }
 }
 
-fun Declaration.generateKotlinCode(): String{
+fun Declaration.generateKotlinCode(depth: Int = 0): String{
     return when(this){
         is PropertyDeclaration -> this.generateKotlinCode()
         is WidgetDeclaration -> this.generateKotlinCode()
         is FunctionDeclaration -> this.generateKotlinCode()
-        is ClassDeclaration -> TODO()
+        is ClassDeclaration -> this.generateKotlinCode()
         is DataClassDeclaration -> TODO()
-        is PrimaryConstructor -> TODO()
+        is PrimaryConstructor -> this.generateKotlinCode()
     }
+}
+
+fun PrimaryConstructor.generateKotlinCode(depth: Int = 0): String{
+    return "${getPrefix(depth)}init {\n"+
+            this.body.generateKotlinCode(depth)+"\n}"
+}
+
+fun ClassDeclaration.generateKotlinCode(depth: Int = 0): String{
+    var baseClassesString = ""
+    if(baseClasses.isNotEmpty()){
+        baseClassesString += ": "
+        baseClassesString += baseClasses.joinToString(", "){it.generateCode()}
+    }
+    var bodyStatement = body.map { it.generateKotlinCode(depth+1) }
+    var bodyString = bodyStatement.joinToString("\n"){"$it"}
+    var constructor = ""
+    (body.firstOrNull { it is PrimaryConstructor } as PrimaryConstructor).parameters?.let {
+        if(it.isNotEmpty()){
+            var params = it.joinToString(",\n") { it.generateKotlinCode() }
+            constructor = "(\n$params\n)"
+        }
+    }
+    var res = "${getPrefix(depth)}class $name$constructor$baseClassesString {\n$bodyString\n${getPrefix(depth)}}"
+    return res
 }
 fun Statement.generateKotlinCode(): String {
     return when (this) {
@@ -71,7 +95,7 @@ fun IfExpression.generateKotlinCode(): String{
     return result
 }
 
-fun ControlStructureBody.generateKotlinCode(): String{
+fun ControlStructureBody.generateKotlinCode(depth: Int = 0): String{
     return when(this){
         is Block -> this.generateKotlinCode()
         is Statement -> this.generateKotlinCode()
@@ -89,7 +113,7 @@ fun PropertyDeclaration.generateKotlinCode(): String{
     return "$prefix $varName:$type$value"
 }
 
-fun Expression.generateKotlinCode() : String = when (this) {
+fun Expression.generateKotlinCode(depth: Int=0) : String = when (this) {
     is IntLit -> this.value
     is DoubleLit -> this.value
     is DpLit -> "${this.value}.dp"
@@ -109,6 +133,8 @@ fun Expression.generateKotlinCode() : String = when (this) {
     is ColumnComposableCall -> this.generateKotlinCode()
     is HorizontalAlignment -> this.generateKotlinCode()
     is ButtonComposableCall -> this.generateKotlinCode()
+    is AccessExpression -> this.generateKotlinCode()
+    is ThisExpression -> this.generateKotlinCode()
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -205,11 +231,6 @@ fun ColumnComposableCall.generateKotlinCode(): String{
         arguments.add("verticalArrangement = $it")
     }
     val parameters = arguments.joinToString(", ")
-    val stack = """
-VStack($parameters){
-    $bodyString
-}
-""".trimIndent()
     if(scrollable){
         return "ScrollView(.vertical){\n\tVStack($parameters){\n" +
                 "\t\t$bodyString\n" +
@@ -227,4 +248,17 @@ fun HorizontalAlignment.generateKotlinCode(): String{
         is EndAlignment -> "Alignment.End"
         is CenterHorizAlignment -> "Alignment.Center"
     }
+}
+fun AccessExpression.generateKotlinCode(depth: Int = 0): String{
+    return "${prefix.generateKotlinCode(depth)}${accessOperator.generateKotlinCode()}${child.generateKotlinCode()}"
+}
+
+fun AccessOperator.generateKotlinCode(depth: Int=0): String{
+    return when (this){
+        is DotOperator -> "."
+        is ElvisOperator -> "?."
+    }
+}
+fun ThisExpression.generateKotlinCode(depth: Int=0): String{
+    return "${getPrefix(depth)}this"
 }

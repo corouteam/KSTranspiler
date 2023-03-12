@@ -38,6 +38,7 @@ class ClassDeclaration(
 
 class DataClassDeclaration(
     val name: String,
+    val propertyList: List<PropertyDeclaration>,
     val body: List<Declaration>,
     val baseClasses: List<Type>,
     override var position: Position? = null,

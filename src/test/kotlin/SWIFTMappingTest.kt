@@ -373,12 +373,6 @@ class SWIFTMappingTest {
             var firstName: String
             var lastName: String
             
-            init(firstName: String, lastName: String){
-               print("Hello world")
-               self.firstName = firstName
-               self.lastName = lastName
-            }
-            
             func testFunction(){
                 self.sayHello()
             }
@@ -394,12 +388,10 @@ class SWIFTMappingTest {
 
         val classDecl = ast?.declarations?.first() as DataClassDeclaration
         var decl = classDecl.baseClasses.get(0)
-        var constructor = classDecl.body.get(2) as PrimaryConstructor
-        var constructorBlock = (constructor.body as Block)
+
         assertEquals("Person", classDecl.name)
         assertIs<UserType>(decl)
-        assertEquals(2, constructor.parameters.count())
-        assertEquals(3, constructorBlock.body.count())
+        assertEquals(2, classDecl.propertyList.count())
 
     }
 }

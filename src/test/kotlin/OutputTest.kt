@@ -345,19 +345,12 @@ fun convertDataClass(){
         val firstName: String,
         val lastName: String
         ): Address, Jks {
-            init {
-                print("Hello")
-            }
+            
         }""".trimMargin()
     val expect = """
 struct Person: Address, Jks {
 	let firstName:String
 	let lastName:String
-	init(firstName: String, lastName: String) {
-		print("Hello")
-		self.firstName = firstName
-		self.lastName = lastName
-	}
 }""".trimIndent()
     val parseResult = KotlinParserFacade.parse(code)
     assertEquals(expect, parseResult.root!!.generateCode())

@@ -700,23 +700,15 @@ class MappingTest {
         val firstName: String,
         val lastName: String
         ): Address, Jks {
-        var name: String
         
-            init {
-                print("Hello")
-                this.name.greet = "Hello"
-                this.name.greet = this.surname
-            }
         }""".trimMargin()
         val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()
 
 
         val classDecl = ast?.declarations?.first() as DataClassDeclaration
-        val constructor = classDecl.body.filterIsInstance(PrimaryConstructor::class.java).first()
-        val body = constructor.body as Block
         assertEquals("Person", classDecl.name)
-        assertEquals(2, constructor.parameters.count())
-        assertEquals(3, body.body.count())
+        assertEquals(2, classDecl.propertyList.count())
+
 
     }
 

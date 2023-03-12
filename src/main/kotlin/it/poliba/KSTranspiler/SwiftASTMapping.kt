@@ -34,7 +34,9 @@ fun SwiftParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false)
         if(delegationSpecifiers().type().map { it.toAst(false) }.contains(UserType("View"))){
             return this.toWidgetAST(considerPosition)
         }else{
-            return DataClassDeclaration(name,body, baseClasses)
+            var parameters = body.filter { it is PropertyDeclaration }.map { it as PropertyDeclaration }
+            var bodyWithoutParams = body.filterNot { it is PropertyDeclaration }
+            return DataClassDeclaration(name, parameters, bodyWithoutParams, baseClasses)
         }
     }
 
