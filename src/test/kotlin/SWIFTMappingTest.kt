@@ -6,6 +6,7 @@ import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacade
 import it.poliba.KSTranspiler.facade.SwiftAntlrParserFacadeScript
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertIs
 
 class SWIFTMappingTest {
     @Test
@@ -22,46 +23,52 @@ class SWIFTMappingTest {
     }
 
     @Test
-    fun mapTextComposable(){
+    fun mapTextComposable() {
         val code = "Text(\"Hello world\")"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
-        val expectedAst = AstScript(listOf(
-            TextComposableCall(StringLit("Hello world"), null, null)
-        ))
+        val expectedAst = AstScript(
+            listOf(
+                TextComposableCall(StringLit("Hello world"), null, null)
+            )
+        )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
     }
 
     @Test
-    fun mapTextComposableThrowsIfNotString(){
+    fun mapTextComposableThrowsIfNotString() {
         val code = "Text(2)"
         val expected = IllegalArgumentException("String expected in Text composable")
         var res: Exception? = null
-        try{
+        try {
             val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             res = e
         }
         assertEquals(res.toString(), expected.toString())
     }
 
     @Test
-    fun mapTextComposableWithParams(){
+    fun mapTextComposableWithParams() {
         val code = "Text(\"Hello world\").foregroundColor(Color.blue).fontWeight(Font.Weight.bold)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
-        val expectedAst = AstScript(listOf(
-            TextComposableCall(StringLit("Hello world"), ColorBlue(), FontWeightBold())
-        ))
+        val expectedAst = AstScript(
+            listOf(
+                TextComposableCall(StringLit("Hello world"), ColorBlue(), FontWeightBold())
+            )
+        )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
     @Test
-    fun mapTextComposableRef(){
+    fun mapTextComposableRef() {
         val code = "Text(greet)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
-        val expectedAst = AstScript(listOf(
-            TextComposableCall(VarReference("greet", type = StringType()), null, null)
-        ))
+        val expectedAst = AstScript(
+            listOf(
+                TextComposableCall(VarReference("greet", type = StringType()), null, null)
+            )
+        )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
     }
@@ -87,7 +94,7 @@ class SWIFTMappingTest {
     }
 
     @Test
-    fun mapWidget(){
+    fun mapWidget() {
         val code = "struct MainView: View {\n" +
                 "var name: String\n" +
                 "    var body: some View {\n" +
@@ -96,22 +103,33 @@ class SWIFTMappingTest {
                 "    }\n" +
                 "}"
         val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
-        val expectedAst = AstFile(listOf(
-            WidgetDeclaration("MainView", listOf(FunctionParameter("name", StringType())), Block(listOf(TextComposableCall(StringLit("Ciao"), null, null), TextComposableCall(StringLit("Ciao"), null, null))
-            ))))
+        val expectedAst = AstFile(
+            listOf(
+                WidgetDeclaration(
+                    "MainView", listOf(FunctionParameter("name", StringType())), Block(
+                        listOf(
+                            TextComposableCall(StringLit("Ciao"), null, null),
+                            TextComposableCall(StringLit("Ciao"), null, null)
+                        )
+                    )
+                )
+            )
+        )
 
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
 
     }
 
     @Test
-    fun mapSpacerComposableRef(){
+    fun mapSpacerComposableRef() {
         val code = "Spacer()"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
 
-        val expectedAst = AstScript(listOf(
-            SpacerComposableCall(null)
-        ))
+        val expectedAst = AstScript(
+            listOf(
+                SpacerComposableCall(null)
+            )
+        )
 
         val spacer = (ast?.statement?.first() as SpacerComposableCall)
 
@@ -124,7 +142,7 @@ class SWIFTMappingTest {
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(
             listOf(
-                DividerComposableCall( null, null)
+                DividerComposableCall(null, null)
             )
         )
         val divider = (ast?.statement?.first() as DividerComposableCall)
@@ -139,11 +157,11 @@ class SWIFTMappingTest {
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(
             listOf(
-                DividerComposableCall(null,ColorBlue())
+                DividerComposableCall(null, ColorBlue())
             )
         )
         val divider = (ast?.statement?.first() as DividerComposableCall)
-        assert( divider.color is ColorBlue)
+        assert(divider.color is ColorBlue)
         assert(divider.frame == null)
     }
 
@@ -157,14 +175,14 @@ class SWIFTMappingTest {
             )
         )
         val divider = (ast?.statement?.first() as DividerComposableCall)
-        assert( divider.color is ColorBlue)
+        assert(divider.color is ColorBlue)
         assert(divider.frame != null)
         assert(divider.frame?.height != null)
-        assert(divider.frame?.height  is DpLit)
+        assert(divider.frame?.height is DpLit)
     }
 
     @Test
-    fun mapVStack(){
+    fun mapVStack() {
         val code = "VStack(alignment: HorizontalAlignment.leading, spacing: 10)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectingSpacing = DpLit("10")
@@ -176,36 +194,39 @@ class SWIFTMappingTest {
         assertEquals(expectingSpacing, spacing)
         assertEquals(StartAlignment(), alignment)
     }
+
     @Test
-    fun parseCGFloat(){
+    fun parseCGFloat() {
         val code = "let margin = CGFloat(8)"
         val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
-        val expected = AstFile(declarations = listOf(
-            PropertyDeclaration(
-                "margin",
-                DpType(),
-                DpLit("8"),
-                null,
-                false
+        val expected = AstFile(
+            declarations = listOf(
+                PropertyDeclaration(
+                    "margin",
+                    DpType(),
+                    DpLit("8"),
+                    null,
+                    false
+                )
             )
-        ))
+        )
 
         assertEquals(expected, ast)
     }
 
-   @Test
-    fun parseScrollView(){
+    @Test
+    fun parseScrollView() {
         val code = "ScrollView(.vertical){}"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
 
-       val column = ast?.statement?.first() as? ColumnComposableCall
+        val column = ast?.statement?.first() as? ColumnComposableCall
 
-       assertEquals(true, column?.scrollable)
+        assertEquals(true, column?.scrollable)
 
-   }
+    }
 
     @Test
-    fun parseScrollHorizontalView(){
+    fun parseScrollHorizontalView() {
         val code = "ScrollView(.horizontal){}"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
 
@@ -215,7 +236,7 @@ class SWIFTMappingTest {
     }
 
     @Test
-    fun testSpacerWithFrameSwiftUI(){
+    fun testSpacerWithFrameSwiftUI() {
         val code = "Spacer().frame(width: 54.0, height: 54.0)"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
 
@@ -223,10 +244,11 @@ class SWIFTMappingTest {
 
         assert(divider.size != null)
         assert(divider.size?.height is DpLit)
-        assert(divider.size?.width  is DpLit)
+        assert(divider.size?.width is DpLit)
     }
+
     @Test
-    fun parseHStack(){
+    fun parseHStack() {
         val code = """
             HStack(
                 spacing: 10,
@@ -273,18 +295,20 @@ class SWIFTMappingTest {
     }
 
   @Test
-    fun mapButtonComposableRef(){
+    fun mapButtonComposableRef() {
         val code = "Button( action: {} ) { }"
         val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
-        val expectedAst = AstScript(listOf(
-            ButtonComposableCall(action = Block(body = listOf()), body = Block(listOf()))
-        ))
+        val expectedAst = AstScript(
+            listOf(
+                ButtonComposableCall(action = Block(body = listOf()), body = Block(listOf()))
+            )
+        )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
         //val expectedAst = KotlinScript
     }
 
     @Test
-    fun mapButtonComposable(){
+    fun mapButtonComposable() {
         val code = """
             Button( action = {
                 print("Ok")
@@ -292,12 +316,104 @@ class SWIFTMappingTest {
                 Text("Ciao") 
             }""".trimMargin()
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
-        val expectedAst = AstScript(listOf(
-            ButtonComposableCall(action = Block(body = listOf(Print(StringLit("Ok")))), body = Block(body = listOf(
-                TextComposableCall(StringLit("Ciao"), color = null, fontWeight = null)
-            ))
-            )))
+        val expectedAst = AstScript(
+            listOf(
+                ButtonComposableCall(
+                    action = Block(body = listOf(Print(StringLit("Ok")))), body = Block(
+                        body = listOf(
+                            TextComposableCall(StringLit("Ciao"), color = null, fontWeight = null)
+                        )
+                    )
+                )
+            )
+        )
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
 
+    @Test
+    fun mapClassDeclaration() {
+        val code = """
+        class Person: Address{
+             init(firstName: String, lastName: String){
+               print("Hello world")
+            }
+        }""".trimMargin()
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+
+
+
+        val classDecl = ast?.declarations?.first() as ClassDeclaration
+        var decl = classDecl.baseClasses.get(0)
+        var constructor = classDecl.body.first() as PrimaryConstructor
+        assertEquals("Person", classDecl.name)
+        assertIs<UserType>(decl)
+        assertEquals(2, constructor.parameters.count())
+
+    }
+
+    @Test
+    fun mapClassDeclarationComplex() {
+        val code = """
+        class Person: Address{
+            var firstName: String
+            var lastName: String
+            
+            init(firstName: String, lastName: String){
+               print("Hello world")
+               self.firstName = firstName
+               self.lastName = lastName
+            }
+            
+            func testFunction(){
+                self.sayHello()
+            }
+            
+            func sayHello(){
+                print("Hello world")
+            }
+            
+        }""".trimMargin()
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+
+
+
+        val classDecl = ast?.declarations?.first() as ClassDeclaration
+        var decl = classDecl.baseClasses.get(0)
+        var constructor = classDecl.body.get(2) as PrimaryConstructor
+        var constructorBlock = (constructor.body as Block)
+        assertEquals("Person", classDecl.name)
+        assertIs<UserType>(decl)
+        assertEquals(2, constructor.parameters.count())
+        assertEquals(3, constructorBlock.body.count())
+
+    }
+
+    @Test
+    fun mapStructDeclarationComplex() {
+        val code = """
+        struct Person: Address{
+            var firstName: String
+            var lastName: String
+            
+            func testFunction(){
+                self.sayHello()
+            }
+            
+            func sayHello(){
+                print("Hello world")
+            }
+            
+        }""".trimMargin()
+        val ast = SwiftAntlrParserFacade.parse(code).root?.toAst()
+
+
+
+        val classDecl = ast?.declarations?.first() as DataClassDeclaration
+        var decl = classDecl.baseClasses.get(0)
+
+        assertEquals("Person", classDecl.name)
+        assertIs<UserType>(decl)
+        assertEquals(2, classDecl.propertyList.count())
+
+    }
 }

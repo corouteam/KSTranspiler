@@ -1,6 +1,8 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.SwiftParser.BlockContext
+import it.poliba.KSTranspiler.SwiftParser.FunctionCallContext
+import it.poliba.KSTranspiler.SwiftParser.SELF
 
 fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
     return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
@@ -14,22 +16,28 @@ fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Dec
         this.functionDeclaration().toAst(considerPosition)
     }else if(this.propertyDeclaration() != null){
         this.propertyDeclaration().toAst(considerPosition)
-    } else if(this.structDeclaration() != null){
-        this.structDeclaration().toAst(considerPosition)
+    }else if(this.classDeclaration() != null){
+        this.classDeclaration().toAst(considerPosition)
     }else{
         throw UnsupportedOperationException("")
     }
 }
 
-fun SwiftParser.StructDeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
-    if(delegationSpecifiers().ID() != null){
-        if(delegationSpecifiers().ID().map { it.text }.contains("View")){
+
+fun SwiftParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration{
+    var name = ID().text
+    var baseClasses = delegationSpecifiers().type().map { it.toAst(considerPosition) }
+    var body = classBody().classMemberDeclaration().map { it.toAst(considerPosition) as? Declaration}.filterNotNull()
+    if(CLASS() != null){
+        return ClassDeclaration(name,body, baseClasses)
+    }else{
+        if(delegationSpecifiers().type().map { it.toAst(false) }.contains(UserType("View"))){
             return this.toWidgetAST(considerPosition)
         }else{
-            throw UnsupportedOperationException("")
+            var parameters = body.filter { it is PropertyDeclaration }.map { it as PropertyDeclaration }
+            var bodyWithoutParams = body.filterNot { it is PropertyDeclaration }
+            return DataClassDeclaration(name, parameters, bodyWithoutParams, baseClasses)
         }
-    }else{
-        throw UnsupportedOperationException("")
     }
 
 }
@@ -54,7 +62,7 @@ fun SwiftParser.FunctionValueParameterContext.toAst(considerPosition: Boolean = 
 fun SwiftParser.StatementContext.toAst(considerPosition: Boolean = false) : Statement = when (this) {
     is SwiftParser.PropertyDeclarationStatementContext -> this.propertyDeclaration().toAst(considerPosition)
     is SwiftParser.PrintStatementContext -> Print(print().expression().toAst(considerPosition), toPosition(considerPosition))
-    is SwiftParser.AssignmentStatementContext -> Assignment(assignment().ID().text, assignment().expression().toAst(considerPosition), toPosition(considerPosition))
+    is SwiftParser.AssignmentStatementContext -> Assignment(assignment().left.toAst(considerPosition), assignment().right.toAst(considerPosition), toPosition(considerPosition))
     is SwiftParser.ExpressionStatementContext -> expression().toAst(considerPosition)
 
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -113,13 +121,59 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.HorizontalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.ContentModeExpressionContext -> contentMode().toAst(considerPosition)
+    is SwiftParser.ComplexExpressionContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun SwiftParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression {
+fun SwiftParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expression{
+    var base = if(ID() != null){
+        VarReference(ID().text, StringType())
+    }else if(functionCallExpression()!= null){
+        functionCallExpression().toAst(considerPosition)
+    }else if(SELF() != null){
+        ThisExpression(toPosition(considerPosition))
+    }else{
+        throw Exception("Not recognized id at ${toPosition(considerPosition)}")
+    }
+
+    if(accessSuffix().isNotEmpty()){
+        return getAccessSuffix(accessSuffix(), base)
+    }else{
+        return base
+    }
+}
+
+
+fun getAccessSuffix(value: List<SwiftParser.AccessSuffixContext>, base: Expression): AccessExpression{
+    if(value.size == 1){
+        var access = value.last().navSuffix().toAst(true)
+        var exp = value.last().expression().toAst(true)
+        return AccessExpression( exp, base, access)
+    }else{
+        var access = value.last().navSuffix().toAst(true)
+        var exp = value.last().expression().toAst(true)
+        return AccessExpression( exp, getAccessSuffix(value.dropLast(1), base), access)
+    }
+}
+
+fun SwiftParser.NavSuffixContext.toAst(considerPosition: Boolean): AccessOperator{
+    return if(this  is SwiftParser.ElvisNavigationContext){
+        ElvisOperator(toPosition(considerPosition))
+    }else{
+        DotOperator(toPosition(considerPosition))
+    }
+}
+fun SwiftParser.FunctionCallExpressionContext.toAst(considerPosition: Boolean): Expression {
     return FunctionCall(
         name = this.name.text,
         parameters = this.functionCallParameters().expression().map { it.toAst(considerPosition) },
+        position = toPosition(considerPosition)
+    )
+}
+fun SwiftParser.FunctionCallContext.toAst(considerPosition: Boolean): Expression {
+    return FunctionCall(
+        name = this.functionCallExpression().name.text,
+        parameters = this.functionCallExpression().functionCallParameters().expression().map { it.toAst(considerPosition) },
         position = toPosition(considerPosition)
     )
 }

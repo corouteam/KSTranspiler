@@ -20,9 +20,8 @@ class LexerTest {
             throw errors.first
         }
 
-       return lexer
-   }
-
+        return lexer
+    }
 
 
     private fun lexerForResource(resourceName: String) = it.poliba.KSTranspiler.KotlinLexer(
@@ -237,10 +236,11 @@ class LexerTest {
     }
 
     @Test
-    fun parseFunctionCall(){
+    fun parseFunctionCall() {
         val code = "test(\"test\", 42)"
 
-        val result = listOf("ID", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "INT_LIT", "RPAREN", "EOF")
+        val result =
+            listOf("ID", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "INT_LIT", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
@@ -388,8 +388,10 @@ class LexerTest {
     @Test
     fun scrollModifier() {
         val code = "val mod = Modifier.verticalScroll(rememberScrollState())"
-        val result = listOf("VAL", "ID", "ASSIGN", "MODIFIER", "DOT", "VERTICAL_SCROLL_SUFFIX",
-            "LPAREN", "REMEMBER_SCROLL", "LPAREN", "RPAREN", "RPAREN", "EOF")
+        val result = listOf(
+            "VAL", "ID", "ASSIGN", "MODIFIER", "DOT", "VERTICAL_SCROLL_SUFFIX",
+            "LPAREN", "REMEMBER_SCROLL", "LPAREN", "RPAREN", "RPAREN", "EOF"
+        )
         assertEquals(result, tokens(lexerForCode(code)))
 
     }
@@ -415,34 +417,49 @@ class LexerTest {
     }
 
 
-
-
     @Test
-    fun parseSpacer(){
+    fun parseSpacer() {
         val code = "Spacer()"
         val result = listOf("SPACER_COMPOSE", "LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
-    fun parseDivider(){
+    fun parseDivider() {
         val code = "Divider()"
         val result = listOf("DIVIDER_COMPOSE", "LPAREN", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
     @Test
-    fun parseDividerWithThickness(){
+    fun parseDividerWithThickness() {
         val code = "Divider(thickness = 8.dp)"
-        val result = listOf("DIVIDER_COMPOSE", "LPAREN", "THICKNESS", "ASSIGN", "INT_LIT", "DOT", "DP_SUFFIX", "RPAREN", "EOF")
+        val result =
+            listOf("DIVIDER_COMPOSE", "LPAREN", "THICKNESS", "ASSIGN", "INT_LIT", "DOT", "DP_SUFFIX", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
 
     @Test
-    fun parseSpacerWithSize(){
+    fun parseSpacerWithSize() {
         val code = "Spacer().size(width: 54.0, height: 54.0)"
-        val result = listOf("SPACER_COMPOSE","LPAREN","RPAREN", "DOT", "SIZE", "LPAREN", "WIDTH", "COLON", "DOUBLE_LIT", "COMMA", "HEIGHT", "COLON", "DOUBLE_LIT", "RPAREN", "EOF")
+        val result = listOf(
+            "SPACER_COMPOSE",
+            "LPAREN",
+            "RPAREN",
+            "DOT",
+            "SIZE",
+            "LPAREN",
+            "WIDTH",
+            "COLON",
+            "DOUBLE_LIT",
+            "COMMA",
+            "HEIGHT",
+            "COLON",
+            "DOUBLE_LIT",
+            "RPAREN",
+            "EOF"
+        )
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
@@ -453,11 +470,31 @@ class LexerTest {
         val result = listOf("BOX","LPAREN","MODIFIER", "DOT", "ZINDEX", "LPAREN", "DOUBLE_LIT", "RPAREN", "RPAREN", "LCURL","RCURL", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
-    
-    fun parseButtonComposable(){
+
+    fun parseButtonComposable() {
         val code = "Button( onClick = {} ) { }"
-        val result = listOf("BUTTON_COMPOSABLE", "LPAREN", "ID", "ASSIGN",
-            "LCURL", "RCURL", "RPAREN", "LCURL","RCURL", "EOF")
+        val result = listOf(
+            "BUTTON_COMPOSABLE", "LPAREN", "ID", "ASSIGN",
+            "LCURL", "RCURL", "RPAREN", "LCURL", "RCURL", "EOF"
+        )
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseClass() {
+        val code = """
+            class Person(
+    val firstName: String,
+    val lastName: String,
+    var age: Int
+): Parent {}
+        """.trimIndent()
+        val result = listOf(
+            "CLASS", "ID", "LPAREN", "NL", "VAL", "ID", "COLON",
+            "STRING", "COMMA", "NL", "VAL", "ID", "COLON",
+            "STRING", "COMMA", "NL", "VAR", "ID", "COLON", "INT",
+            "NL", "RPAREN", "COLON", "ID", "LCURL", "RCURL", "EOF"
+        )
         assertEquals(result, tokens(lexerForCode(code)))
     }
 

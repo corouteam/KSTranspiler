@@ -19,8 +19,44 @@ fun Declaration.generateCode(depth: Int = 0): String{
         is PropertyDeclaration -> this.generateCode(depth)
         is WidgetDeclaration -> this.generateCode(depth)
         is FunctionDeclaration -> this.generateCode(depth)
+        is ClassDeclaration -> this.generateCode(depth)
+        is DataClassDeclaration -> this.generateCode(depth)
+        is PrimaryConstructor -> this.generateCode(depth)
     }
 }
+
+fun PrimaryConstructor.generateCode(depth: Int = 0): String{
+    return "${getPrefix(depth)}init(${this.parameters.joinToString(", "){it.generateCode()}}) "+
+            this.body.generateCode(depth)
+}
+
+fun DataClassDeclaration.generateCode(depth: Int = 0): String{
+    var baseClassesString = ""
+    if(baseClasses.isNotEmpty()){
+        baseClassesString += ": "
+        baseClassesString += baseClasses.joinToString(", "){it.generateCode()}
+    }
+
+    var bodyString = body.joinToString(""){"\n${it.generateCode(depth+1)}"}
+    var params = propertyList.joinToString("\n"){"${it.generateCode(depth+1)}"}
+
+    var res = "${getPrefix(depth)}struct $name$baseClassesString {\n$params$bodyString\n${getPrefix(depth)}}"
+    return res
+}
+
+fun ClassDeclaration.generateCode(depth: Int = 0): String{
+    var baseClassesString = ""
+    if(baseClasses.isNotEmpty()){
+        baseClassesString += ": "
+        baseClassesString += baseClasses.joinToString(", "){it.generateCode()}
+    }
+
+    var bodyString = body.joinToString("\n"){"${it.generateCode(depth+1)}"}
+
+    var res = "${getPrefix(depth)}class $name$baseClassesString {\n$bodyString\n${getPrefix(depth)}}"
+    return res
+}
+
 fun Statement.generateCode(depth: Int = 0): String {
     return when (this) {
         is PropertyDeclaration -> this.generateCode(depth)
@@ -35,7 +71,7 @@ fun Statement.generateCode(depth: Int = 0): String {
 
 fun FunctionDeclaration.generateCode(depth: Int = 0): String{
     val returnType = if(this.returnType != null) "-> ${this.returnType.generateCode()}" else ""
-    return "func ${this.id}(${this.parameters.joinToString(", "){it.generateCode()}})"+returnType +
+    return "${getPrefix(depth)}func ${this.id}(${this.parameters.joinToString(", "){it.generateCode()}})"+returnType +
             "${this.body.generateCode(depth)}"
 }
 
@@ -45,19 +81,19 @@ fun FunctionParameter.generateCode(): String{
 }
 
 fun Assignment.generateCode(depth: Int = 0): String{
-    return "$varName = ${value.generateCode(depth)}"
+    return "${getPrefix(depth)}${variable.generateCode()} = ${value.generateCode()}"
 }
 
 fun Print.generateCode(depth: Int = 0): String{
-    return "print(${value.generateCode(depth)})"
+    return "${getPrefix(depth)}print(${value.generateCode()})"
 }
 
 fun IfExpression.generateCode(depth: Int = 0): String{
-    var result =  "if(${condition.generateCode(depth)})${body.generateCode(depth)}"
+    var result =  "${getPrefix(depth)}if(${condition.generateCode()}) ${body.generateCode(depth)}"
     elseBranch?.let {
         when (it){
             is IfExpression ->result += " else "+ it.generateCode(depth)
-            else -> result += " else${it.generateCode(depth)}"
+            else -> result += " else ${it.generateCode(depth)}"
 
         }
     }
@@ -67,41 +103,43 @@ fun IfExpression.generateCode(depth: Int = 0): String{
 fun ControlStructureBody.generateCode(depth: Int = 0): String{
     return when(this){
         is Block -> "${this.generateCode(depth)}"
-        is Statement -> "${getPrefix(depth)} ${this.generateCode(depth+1)}"
+        is Statement -> "${this.generateCode(depth)}"
         else -> throw Exception("Not implemented")
     }
 }
 
 fun Block.generateCode(depth: Int = 0): String{
-    return "{\n${this.body.joinToString("\n") { "${getPrefix(depth+1)}${it.generateCode(depth)}" }}\n${getPrefix(depth)}}"
+    return "{\n${this.body.joinToString("\n") { it.generateCode(depth+1) }}\n${getPrefix(depth)}}"
 }
 fun PropertyDeclaration.generateCode(depth: Int = 0): String{
     var prefix = if (mutable) "var" else "let"
     var type = type.generateCode()
-    var value = value?.let {  " = ${value.generateCode(depth)}"} ?: ""
-    return "$prefix $varName:$type$value"
+    var value = value?.let {  " = ${value.generateCode()}"} ?: ""
+    return "${getPrefix(depth)}$prefix $varName:$type$value"
 }
 
 fun Expression.generateCode(depth: Int = 0) : String = when (this) {
-    is IntLit -> this.value
-    is DoubleLit -> this.value
-    is DpLit -> "CGFloat(${this.value})"
-    is VarReference -> this.varName
+    is IntLit -> "${getPrefix(depth)}${this.value}"
+    is DoubleLit -> "${getPrefix(depth)}${this.value}"
+    is DpLit -> "${getPrefix(depth)}CGFloat(${this.value})"
+    is VarReference ->"${getPrefix(depth)}${this.varName}"
     is BinaryExpression -> this.generateCode(depth)
-    is StringLit -> "\"${this.value}\""
-    is BoolLit -> "${this.value}"
-    is FunctionCall -> "${this.name}(${this.parameters.map { it.generateCode(depth) }.joinToString(", " )})"
-    is RangeExpression -> "${this.leftExpression.generateCode(depth)}...${this.rightExpression.generateCode(depth)}"
-    is ListExpression -> "[${this.items.map { it.generateCode(depth) }.joinToString(", ")}]"
+    is StringLit -> "${getPrefix(depth)}\"${this.value}\""
+    is BoolLit -> "${getPrefix(depth)}${this.value}"
+    is FunctionCall -> "${getPrefix(depth)}${this.name}(${this.parameters.map { it.generateCode(depth) }.joinToString(", " )})"
+    is RangeExpression -> "${getPrefix(depth)}${this.leftExpression.generateCode(depth)}...${this.rightExpression.generateCode(depth)}"
+    is ListExpression -> "${getPrefix(depth)}[${this.items.map { it.generateCode(depth) }.joinToString(", ")}]"
     is ColorLit -> this.generateCode(depth)
     is FontWeightLit -> this.generateCode(depth)
-    is ReturnExpression -> "return ${this.returnExpression.generateCode(depth)}"
+    is ReturnExpression -> "${getPrefix(depth)}return ${this.returnExpression.generateCode()}"
     is TextComposableCall -> this.generateCode(depth)
     is DividerComposableCall -> this.generateCode(depth)
     is SpacerComposableCall -> this.generateCode(depth)
     is ColumnComposableCall -> this.generateCode(depth)
     is HorizontalAlignment -> this.generateCode(depth)
     is ButtonComposableCall -> this.generateCode(depth)
+    is AccessExpression -> this.generateCode(depth)
+    is ThisExpression -> this.generateCode(depth)
     is AspectRatioLit -> this.generateCode(depth)
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
@@ -127,20 +165,20 @@ fun DividerComposableCall.generateCode(depth: Int = 0): String{
     if(paramString.isNotBlank()){
         paramString = "\n\t$paramString"
     }
-    return "Divider()$paramString"
+    return "${getPrefix(depth)}Divider()$paramString"
 }
 fun ButtonComposableCall.generateCode(depth: Int = 0): String{
-    return "Button(action: ${this.action.generateCode(depth)})${this.body.generateCode(depth)}"
+    return "${getPrefix(depth)}Button(action: ${this.action.generateCode(depth)})${this.body.generateCode(depth)}"
 }
 fun SpacerComposableCall.generateCode(depth: Int = 0): String{
     val suffix = size?.let { "\n\t${it.generateCode(depth)}" } ?: ""
 
-    return "Spacer()$suffix"
+    return "${getPrefix(depth)}Spacer()$suffix"
 }
 
 fun Frame.generateCode(depth: Int = 0): String{
-    var width = width?.let { "width: ${width.generateCode(depth)}" }?: ""
-    var height = height?.let { "height: ${height.generateCode(depth)}" }?: ""
+    var width = width?.let { "width: ${width.generateCode()}" }?: ""
+    var height = height?.let { "height: ${height.generateCode()}" }?: ""
     var params = ""
     if (width != "" && height != ""){
         params = "$width, $height"
@@ -161,6 +199,7 @@ fun Type.generateCode() : String = when (this) {
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     is ListType -> "[${this.itemsType.generateCode()}]"
+    is UserType -> this.name
     is ImageComposableType -> "Image"
     is TextComposableType -> "Text"
     is ColumnComposableType -> "VStack"
@@ -174,15 +213,19 @@ fun Type.generateCode() : String = when (this) {
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-fun BinaryExpression.generateCode(depth: Int = 0): String = when(this) {
-    is SumExpression -> "${left.generateCode(depth)} + ${right.generateCode(depth)}"
-    is SubtractionExpression -> "${left.generateCode(depth)} - ${right.generateCode(depth)}"
-    is MultiplicationExpression -> "${left.generateCode(depth)} * ${right.generateCode(depth)}"
-    is DivisionExpression -> "${left.generateCode(depth)} / ${right.generateCode(depth)}"
-    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+fun BinaryExpression.generateCode(depth: Int = 0): String {
+    var exp = when(this) {
+        is SumExpression -> "${left.generateCode()} + ${right.generateCode()}"
+        is SubtractionExpression -> "${left.generateCode()} - ${right.generateCode()}"
+        is MultiplicationExpression -> "${left.generateCode()} * ${right.generateCode()}"
+        is DivisionExpression -> "${left.generateCode()} / ${right.generateCode()}"
+        else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+    }
+    return "${getPrefix(depth)}${exp}"
 }
 fun TextComposableCall.generateCode(depth: Int = 0): String{
-    val base =  "Text(${this.value.generateCode(depth)})"
+
+    val base =  "Text(${this.value.generateCode()})"
     var colorSuffix = ""
     var boldSuffix = ""
     this.color?.generateCode(depth)?.let {
@@ -191,23 +234,23 @@ fun TextComposableCall.generateCode(depth: Int = 0): String{
     this.fontWeight?.generateCode(depth)?.let {
         boldSuffix = "\n.fontWeight($it)"
     }
-    return "$base$colorSuffix$boldSuffix"
+    return "${getPrefix(depth)}$base$colorSuffix$boldSuffix"
 }
 
 fun ColorLit.generateCode(depth: Int = 0): String = when(this){
-    is ColorBlue -> "Color.blue"
+    is ColorBlue -> "${getPrefix(depth)}Color.blue"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun FontWeightLit.generateCode(depth: Int = 0): String = when(this){
-    is FontWeightBold -> "Font.Weight.bold"
+    is FontWeightBold -> "${getPrefix(depth)}Font.Weight.bold"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
 fun WidgetDeclaration.generateCode(depth: Int = 0): String {
     val convertedProperties = this.parameters.joinToString("\n") { "${getPrefix(depth+1)}var ${it.id}: ${it.type.generateCode()}" }
     val body = "${getPrefix(depth+1)}var body: some View ${body.generateCode(depth + 1)}"
-    return "struct $id: View{\n$convertedProperties\n${body}\n}"
+    return "${getPrefix(depth)}struct $id: View{\n$convertedProperties\n${body}\n}"
 }
 
 
@@ -225,22 +268,39 @@ fun ColumnComposableCall.generateCode(depth: Int = 0): String{
 
     if(scrollable){
         val bodyString = body.generateCode(depth+1)
-        return "ScrollView(.vertical){\n${getPrefix(depth + 1)}VStack($parameters)" +
+        return "${getPrefix(depth)}ScrollView(.vertical){\n${getPrefix(depth + 1)}VStack($parameters)" +
                 "$bodyString\n" +
                 "${getPrefix(depth)}}"
     }else{
         val bodyString = body.generateCode(depth)
-        return """VStack($parameters)$bodyString"""
+        return """${getPrefix(depth)}VStack($parameters)$bodyString"""
     }
 }
 
 fun HorizontalAlignment.generateCode(depth: Int = 0): String{
-    return when(this){
+    var alignment = when(this){
         is StartAlignment -> "HorizontalAlignment.leading"
         is EndAlignment -> "HorizontalAlignment.trailing"
         is CenterHorizAlignment -> "HorizontalAlignment.center"
     }
+    return "${getPrefix(depth)}$alignment"
 }
+
+fun AccessExpression.generateCode(depth: Int): String{
+    return "${prefix.generateCode(depth)}${accessOperator.generateCode()}${child.generateCode()}"
+}
+
+fun AccessOperator.generateCode(): String{
+    return when (this){
+        is DotOperator -> "."
+        is ElvisOperator -> "?."
+    }
+}
+
+fun ThisExpression.generateCode(depth: Int): String{
+    return "${getPrefix(depth)}self"
+}
+
 
 fun getPrefix(depth: Int): String{
     var prefix = ""

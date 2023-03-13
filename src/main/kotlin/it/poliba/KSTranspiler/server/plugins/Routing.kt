@@ -13,7 +13,7 @@ fun Application.configureRouting() {
     routing {
         post("/kotlin/transpileToSwift") {
             try{
-                var request = call.receive<TranspileRequest>()
+               var request = call.receive<TranspileRequest>()
                 val result = KSTFacade.transpileKotlinToSwift(request.code)
                 when (result){
                     is KSTranspileResultSuccess -> call.respond(TranspileRequest(code = result.code))

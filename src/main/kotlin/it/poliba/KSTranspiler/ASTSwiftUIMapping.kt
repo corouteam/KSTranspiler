@@ -110,15 +110,28 @@ fun FrameSuffixContext.toAst(considerPosition: Boolean): Frame {
 
 }
 
-fun SwiftParser.StructDeclarationContext.toWidgetAST(considerPosition: Boolean = false): WidgetDeclaration{
+fun SwiftParser.ClassDeclarationContext.toWidgetAST(considerPosition: Boolean = false): WidgetDeclaration{
     var id = this.ID().text
-    val bodyInstruction = this.classBody().classMemberDeclarations().declaration().map { it.toAst(considerPosition) }
+    this.classBody().classMemberDeclaration().map { it.toAst(considerPosition) }
+    val bodyInstruction = this.classBody().classMemberDeclaration().map { it.toAst(considerPosition) }
     val properties = bodyInstruction.filter { it is PropertyDeclaration  && it.varName != "body"}.map { it as PropertyDeclaration }
     val functionParameters = properties.map { FunctionParameter(it.varName, it.type, toPosition(considerPosition)) }
     val body = bodyInstruction.firstOrNull { it is PropertyDeclaration  && it.varName == "body"} as PropertyDeclaration?
 
     if (body == null) { throw Error("Struct declaration is required to return a widget", this.position) }
     return WidgetDeclaration(id, functionParameters,body.getter!!, toPosition(considerPosition))
+}
+
+fun ClassMemberDeclarationContext.toAst(considerPosition: Boolean = false): Any{
+    if(this.declaration() != null){
+        return this.declaration().toAst(considerPosition)
+    }else if(this.primaryConstructor() != null){
+        var params = primaryConstructor().functionValueParameters().functionValueParameter().map { it.toAst(considerPosition) }
+        var body = primaryConstructor().block().toAst(considerPosition)
+        return PrimaryConstructor(params, body, toPosition(considerPosition))
+    }else{
+        throw Exception("Not implemented yet")
+    }
 }
 
 
