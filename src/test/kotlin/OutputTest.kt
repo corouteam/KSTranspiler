@@ -66,7 +66,7 @@ class  OutputTest {
     @Test
     fun convertIf(){
         val code = "if(true){ print(\"Is true \")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n}"
+        val result = "if(true) {\n\tprint(\"Is true \")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
 
@@ -91,8 +91,8 @@ class  OutputTest {
 
     @Test
     fun convertIfElse(){
-        val code = "if(true){ print(\"Is true \") }else{print(\"Is false\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n} else{\n\tprint(\"Is false\")\n}"
+        val code = "if(true) { print(\"Is true \") }else{print(\"Is false\")}"
+        val result = "if(true) {\n\tprint(\"Is true \")\n} else {\n\tprint(\"Is false\")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
 
@@ -100,16 +100,16 @@ class  OutputTest {
 
     @Test
     fun convertIfElseIf(){
-        val code = "if(true){ print(\"Is true \") }else if(false){print(\"Is false\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n} else if(false){\n\tprint(\"Is false\")\n}"
+        val code = "if(true) { print(\"Is true \") }else if(false){print(\"Is false\")}"
+        val result = "if(true) {\n\tprint(\"Is true \")\n} else if(false) {\n\tprint(\"Is false\")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
     @Test
     fun convertIfElseIfElse(){
-        val code = "if(true){ print(\"Is true \") }else if(false){print(\"Is false\")}else{print(\"never\")}"
-        val result = "if(true){\n\tprint(\"Is true \")\n} else if(false){\n\tprint(\"Is false\")\n} else{\n\tprint(\"never\")\n}"
+        val code = "if(true) { print(\"Is true \") }else if(false){print(\"Is false\")}else{print(\"never\")}"
+        val result = "if(true) {\n\tprint(\"Is true \")\n} else if(false) {\n\tprint(\"Is false\")\n} else {\n\tprint(\"never\")\n}"
         val parseResult = KotlinParserFacadeScript.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
@@ -315,6 +315,92 @@ ScrollView(.vertical){
         """.trimIndent()
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun convertSimpleClass(){
+        val code = """
+        class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+            init {
+                print("Hello")
+            }
+        }""".trimMargin()
+        val expect = """
+class Person: Address, Jks {
+	init(firstName: String, lastName: String) {
+		print("Hello")
+	}
+}""".trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(expect, parseResult.root!!.generateCode())
+    }
+
+@Test
+fun convertDataClass(){
+    val code = """
+        data class Person(
+        val firstName: String,
+        val lastName: String
+        ): Address, Jks {
+            
+        }""".trimMargin()
+    val expect = """
+struct Person: Address, Jks {
+	let firstName:String
+	let lastName:String
+}""".trimIndent()
+    val parseResult = KotlinParserFacade.parse(code)
+    assertEquals(expect, parseResult.root!!.generateCode())
+}
+
+    @Test
+    fun convertClassWithThis(){
+        val code = """
+        class Person(
+        firstName: String,
+        lastName: String
+        ): Address, Jks {
+        var firstName: String
+            init {
+                print("Hello")
+                this.firstName = firstName
+            }
+        }""".trimMargin()
+        val expect = """
+class Person: Address, Jks {
+	var firstName:String
+	init(firstName: String, lastName: String) {
+		print("Hello")
+		self.firstName = firstName
+	}
+}""".trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(expect, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun convertClassDefaultConstructor(){
+        val code = """
+        class Person(
+        var firstName: String,
+        val lastName: String
+        ): Address, Jks {
+        
+        }""".trimMargin()
+        val expect = """
+class Person: Address, Jks {
+	var firstName:String
+	let lastName:String
+	init(firstName: String, lastName: String) {
+		self.firstName = firstName
+		self.lastName = lastName
+	}
+}""".trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(expect, parseResult.root!!.generateCode())
     }
 
 }

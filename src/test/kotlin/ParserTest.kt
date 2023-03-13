@@ -43,7 +43,8 @@ class KotlinParserTest {
   Line
     AssignmentStatement
       Assignment
-        T[a]
+        VarReference
+          T[a]
         T[=]
         BinaryOperation
           IntLiteral
@@ -293,28 +294,27 @@ class KotlinParserTest {
 
     @Test
     fun parseFunctionCall(){
-        var expected = """
-KotlinScript
+        var expected = """KotlinScript
   Line
     ExpressionStatement
       FunctionCall
-        T[test]
-        FunctionCallParameters
-          T[(]
-          StringLiteralExpression
-            StringLiteral
-              LineStringLiteral
-                T["]
-                LineStringContent
-                  T[a]
-                T["]
-          T[,]
-          IntLiteral
-            T[42]
-          T[)]
+        FunctionCallExpression
+          T[test]
+          FunctionCallParameters
+            T[(]
+            StringLiteralExpression
+              StringLiteral
+                LineStringLiteral
+                  T["]
+                  LineStringContent
+                    T[a]
+                  T["]
+            T[,]
+            IntLiteral
+              T[42]
+            T[)]
     T[<EOF>]
-
-        """.trimIndent()
+"""
         val actual = toParseTree(parseResourceScript("function_call")).multiLineString()
         assertEquals(expected, actual)
     }
@@ -651,6 +651,50 @@ KotlinScript
         assertEquals(expected, actual)
     }
 
+
+    @Test
+    fun parseColumn(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        ColumnComposable\n" +
+                "          T[Column]\n" +
+                "          T[(]\n" +
+                "          T[\n" +
+                "]\n" +
+                "          VerticalArrangementParameter\n" +
+                "            T[verticalArrangement]\n" +
+                "            T[=]\n" +
+                "            ArrangementExpression\n" +
+                "              Arrangement\n" +
+                "                T[Arrangement]\n" +
+                "                T[.]\n" +
+                "                T[spacedBy]\n" +
+                "                T[(]\n" +
+                "                DpLiteral\n" +
+                "                  T[8]\n" +
+                "                  T[.]\n" +
+                "                  T[dp]\n" +
+                "                T[)]\n" +
+                "          T[,]\n" +
+                "          T[\n" +
+                "]\n" +
+                "          HorizontalAlignmentParameter\n" +
+                "            T[horizontalAlignment]\n" +
+                "            T[=]\n" +
+                "            HorizhontalAlignmentExpression\n" +
+                "              StartAlignment\n" +
+                "                T[Alignment]\n" +
+                "                T[.]\n" +
+                "                T[Start]\n" +
+                "          T[\n" +
+                "]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("column")).multiLineString()
+        assertEquals(expected, actual)
+    }
     @Test
     fun parseBoxWithModifierZIndex(){
         val expected = "KotlinScript\n" +
@@ -677,4 +721,6 @@ KotlinScript
         val actual = toParseTree(parseResourceScript("box")).multiLineString()
         assertEquals(expected, actual)
     }
+
+
 }

@@ -116,17 +116,18 @@ class SWIFTParserTest {
     fun parseStruct(){
         val expected = "SwiftFile\n" +
                 "  Declaration\n" +
-                "    StructDeclaration\n" +
+                "    ClassDeclaration\n" +
                 "      T[struct]\n" +
                 "      T[MainView]\n" +
                 "      T[:]\n" +
                 "      DelegationSpecifiers\n" +
-                "        T[View]\n" +
+                "        UserType\n" +
+                "          T[View]\n" +
                 "      ClassBody\n" +
                 "        T[{]\n" +
                 "        T[\n" +
                 "]\n" +
-                "        ClassMemberDeclarations\n" +
+                "        ClassMemberDeclaration\n" +
                 "          Declaration\n" +
                 "            PropertyDeclaration\n" +
                 "              VarDeclaration\n" +
@@ -158,8 +159,8 @@ class SWIFTParserTest {
                 "                    T[\n" +
                 "]\n" +
                 "                  T[}]\n" +
-                "          Semis\n" +
-                "            T[\n" +
+                "        Semis\n" +
+                "          T[\n" +
                 "]\n" +
                 "        T[}]\n" +
                 "  T[<EOF>]\n"

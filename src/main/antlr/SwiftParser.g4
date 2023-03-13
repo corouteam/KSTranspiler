@@ -22,10 +22,9 @@ importHeader
     ;
 
 declaration:
-    functionDeclaration
-    | propertyDeclaration
-    | structDeclaration
-    ;
+    classDeclaration
+    |functionDeclaration
+    | propertyDeclaration;
 
 
 statement : propertyDeclaration # propertyDeclarationStatement
@@ -43,7 +42,7 @@ propertyDeclaration:  (varDeclaration|letDeclaration) ((ASSIGN expression)|compu
 
 annotation: AT ID;
 
-assignment : ID ASSIGN expression ;
+assignment : left=expression ASSIGN right=expression ;
 
 computedPropertyDeclarationBody:
     NL* block;
@@ -60,13 +59,16 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | stringLiteral                                                 # stringLiteralExpression
+           | functionCallExpression                                        # functionCall
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression
            | name=ID NL* functionCallParameters NL*                        # functionCall
-           | widgetCall #widgetCallExpression
-           | horizontalAlignment #horizontalAlignmentExpression
-           | verticalAlignment #verticalAlignmentExpression
-           | color                       # colorLiteral;
+           | widgetCall                                                    # widgetCallExpression
+           | horizontalAlignment                                           # horizontalAlignmentExpression
+           | verticalAlignment                                             # verticalAlignmentExpression
+           | color                                                         # colorLiteral
+           | SELF                                                          # selfExpression
+           | (ID | functionCallExpression | SELF) (accessSuffix)*          # complexExpression;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -76,9 +78,23 @@ if
       | SEMICOLON)
     ;
 
+accessSuffix:
+(navSuffix expression);
+
+navSuffix:
+    DOT #dotNavigation
+    | ELVIS DOT #elvisNavigation;
+
+functionCallExpression:
+    name=ID NL* functionCallParameters NL* ;
+
 controlStructureBody
     : block
     | statement
+    ;
+
+functionCallParameters
+    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
     ;
 
 block
@@ -107,10 +123,6 @@ functionValueParameter
     : parameter (NL* ASSIGN NL* expression)?
     ;
 
-functionCallParameters
-    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
-    ;
-
 parameter
     : ID NL* COLON NL* SOME? type
     ;
@@ -131,17 +143,25 @@ structDeclaration:
     (NL* classBody)?
     ;
 
+classDeclaration:
+    (CLASS|STRUCT) ID (NL* COLON NL* delegationSpecifiers)?
+    (NL* classBody)?
+    ;
+
 classBody
-    : LCURL NL* classMemberDeclarations NL* RCURL
+    : LCURL NL* (classMemberDeclaration semis?)* NL* RCURL
     ;
 delegationSpecifiers
-    : ID (NL* COMMA NL* ID)*
+    : type (NL* COMMA NL* type)*
     ;
 
-classMemberDeclarations
-    : (declaration semis?)*
-    ;
+classMemberDeclaration
+    :  primaryConstructor
+    |  declaration;
 
+primaryConstructor
+    : CONSTRUCTOR NL* functionValueParameters  NL* block?
+    ;
 semis
     : (SEMICOLON | NL)+
     ;
@@ -157,14 +177,13 @@ type : INT     # integer |
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
-    | BUTTON_WIDGET LPAREN ID COLON action = functionBody RPAREN body = block #buttonWidget
+    | BUTTON_WIDGET LPAREN ID COLON action = functionBody NL* RPAREN body = block #buttonWidget
     | DIVIDER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #dividerWidget
     | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
-    |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #vStackWidget |
-    HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  RPAREN block? #hStackWidget |
-    SCROLL_VIEW LPAREN (DOT ID)? RPAREN block #scrollViewWidget |
+    |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #vStackWidget |
+    HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #hStackWidget |
+    SCROLL_VIEW LPAREN (DOT ID)? NL*RPAREN block #scrollViewWidget |
     ZSTACK block? #zStackWidget;
-
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix

@@ -15,7 +15,7 @@ DOUBLE             : 'Double';
 BOOL               : 'Boolean';
 STRING             : 'String';
 DP                 : 'Dp';
-
+INIT               : 'init';
 
 INT_LIT
     : DecDigitNoZero DecDigit*
@@ -54,13 +54,16 @@ LANGLE: '<';
 RANGLE: '>';
 AT                 : '@';
 DOT                : '.';
-
+ELVIS : '?';
 IF: 'if';
 ELSE: 'else';
 FUN: 'fun';
 PACKAGE: 'package';
 RETURN                  : 'return' ;
 LISTOF: 'listOf';
+CLASS: 'class';
+DATA: 'data';
+THIS: 'this';
 
 //Colors
 COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;

@@ -140,7 +140,7 @@ fun Node.commonValidation(): LinkedList<Error> {
     this.specificProcess(ControlStructureBody::class.java) { block ->
         if (block is Block) {
             block.searchByType(Assignment::class.java).forEach {
-                val assignmentName = it.varName
+                val assignmentName = it.variable.generateCode()
 
                 val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
 
@@ -178,13 +178,34 @@ fun Node.commonValidation(): LinkedList<Error> {
     this.specificProcess(ControlStructureBody::class.java) { block ->
         if (block is Block) {
             block.searchByType(Assignment::class.java).forEach {
-                val assignmentName = it.varName
-                val assignmentType = it.value.type
+                if(it.variable is VarReference){
+                    val assignmentName = it.variable.varName
+                    val assignmentType = it.value.type
 
-                val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
+                    val declarationsInBlock = block.body.filterIsInstance(PropertyDeclaration::class.java)
 
-                if (declarationsInBlock.isNotEmpty()) {
-                    declarationsInBlock.forEach {
+                    if (declarationsInBlock.isNotEmpty()) {
+                        declarationsInBlock.forEach {
+                            if (it.varName == assignmentName) {
+                                // Search if assignment type matches declaration type
+                                if (assignmentType.generateCode() != it.type.generateCode()) {
+                                    errors.add(
+                                        Error(
+                                            """
+                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
+                            """.trimIndent(), this.position
+                                        )
+                                    )
+                                }
+
+                                // match found, no need to iterate anymore
+                                return@specificProcess
+                            }
+                        }
+                    }
+
+                    // If a declaration is not found in scope, search in global variables
+                    globalVariables.forEach {
                         if (it.varName == assignmentName) {
                             // Search if assignment type matches declaration type
                             if (assignmentType.generateCode() != it.type.generateCode()) {
@@ -203,24 +224,6 @@ fun Node.commonValidation(): LinkedList<Error> {
                     }
                 }
 
-                // If a declaration is not found in scope, search in global variables
-                globalVariables.forEach {
-                    if (it.varName == assignmentName) {
-                        // Search if assignment type matches declaration type
-                        if (assignmentType.generateCode() != it.type.generateCode()) {
-                            errors.add(
-                                Error(
-                                    """
-                                Type mismatch (${assignmentType.generateCode()} assigned to a variable of type ${it.type.generateCode()}).
-                            """.trimIndent(), this.position
-                                )
-                            )
-                        }
-
-                        // match found, no need to iterate anymore
-                        return@specificProcess
-                    }
-                }
             }
         }
     }

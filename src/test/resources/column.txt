@@ -1,0 +1,4 @@
+Column(
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+    horizontalAlignment = Alignment.Start
+)

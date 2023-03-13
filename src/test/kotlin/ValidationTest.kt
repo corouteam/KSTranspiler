@@ -270,4 +270,24 @@ class ValidationTest {
             Struct declaration is required to return a widget
         """.trimIndent(), parseResult.errors.first().message)
     }
+
+    @Test
+    fun `data class must have only property parameters`(){
+        val code = """
+        data class Person(
+        firstName: String,
+        val lastName: String
+        ): Address, Jks {
+            init {
+                print("Hello")
+            }
+        }""".trimMargin()
+
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("""
+            Data class must have only property parameters
+        """.trimIndent(), parseResult.errors.first().message)
+    }
 }
