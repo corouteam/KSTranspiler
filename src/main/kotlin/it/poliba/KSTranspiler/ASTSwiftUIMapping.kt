@@ -18,6 +18,7 @@ fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression =
     is DividerWidgetContext -> this.toAst(considerPosition)
     is SpacerWidgetContext -> this.toAst(considerPosition)
     is SwiftParser.ButtonWidgetContext -> this.toAst(considerPosition)
+    is SwiftParser.ImageWidgetContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -201,3 +202,18 @@ fun SwiftParser.ScrollViewWidgetContext.toAst(considerPosition: Boolean = false)
     }
 }
 
+
+fun SwiftParser.ImageWidgetContext.toAst(considerPosition: Boolean): Expression {
+    val expressionAst = this.expression().toAst()
+    if(expressionAst.type != StringType()) throw IllegalArgumentException("String expected in Image composable")
+    val resizable = swiftUIImageSuffix().firstOrNull { it is ResizableSuffixContext } != null
+    var aspectRatio = (swiftUIImageSuffix().firstOrNull { it is AspectRatioSuffixContext } as? AspectRatioSuffixContext)?.expression()?.toAst(considerPosition)
+
+    return ImageComposableCall(expressionAst, resizable, aspectRatio)
+}
+
+fun SwiftParser.ContentModeContext.toAst(considerPosition: Boolean): Expression = when(this){
+    is SwiftParser.ContentModeFitContext -> ContentFit()
+    is SwiftParser.ContentModeFillContext -> ContentFill()
+    else -> throw java.lang.IllegalArgumentException("ContentMode not recognized")
+}

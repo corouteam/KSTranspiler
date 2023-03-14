@@ -68,7 +68,8 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | verticalAlignment                                             # verticalAlignmentExpression
            | color                                                         # colorLiteral
            | SELF                                                          # selfExpression
-           | (ID | functionCallExpression | SELF) (accessSuffix)*          # complexExpression;
+           | (ID | functionCallExpression | SELF) (accessSuffix)*          # complexExpression
+           | CONTENT_MODE DOT contentMode #contentModeExpression;
 
 if
     : IF NL* LPAREN NL* expression NL* RPAREN NL*
@@ -171,7 +172,8 @@ type : INT     # integer |
        BOOL    # bool |
        STRING  # string |
        ID      #userType |
-       CG_FLOAT #cgFloat;
+       CG_FLOAT #cgFloat |
+       CONTENT_MODE #contentModeType;
 
 
 
@@ -183,7 +185,8 @@ widgetCall:
     |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #vStackWidget |
     HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #hStackWidget |
     SCROLL_VIEW LPAREN (DOT ID)? NL*RPAREN block #scrollViewWidget |
-    ZSTACK block? #zStackWidget;
+    ZSTACK block? #zStackWidget
+    | IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUIImageSuffix) (NL* DOT NL* swiftUIImageSuffix)*)?  #imageWidget;
 
 swiftUITextSuffix:
     FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
@@ -218,3 +221,11 @@ fontWeight:
 
 color:
      COLOR DOT COLOR_BLUE #blueColor;
+
+swiftUIImageSuffix:
+    RESIZABLE LPAREN RPAREN # resizableSuffix |
+    ASPECT_RATIO_PARAM LPAREN  CONTENT_MODE_PARAM COLON expression RPAREN # aspectRatioSuffix;
+
+ contentMode:
+     CONTENT_FIT  #contentModeFit |
+     CONTENT_FILL #contentModeFill;

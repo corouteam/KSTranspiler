@@ -140,9 +140,20 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     is ButtonComposableCall -> this.generateCode(depth)
     is AccessExpression -> this.generateCode(depth)
     is ThisExpression -> this.generateCode(depth)
+    is AspectRatioLit -> this.generateCode(depth)
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
+    is ImageComposableCall -> this.generateCode()
+
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun AspectRatioLit.generateCode(depth: Int = 0): String{
+    var res = when(this){
+        is ContentFit -> "ContentMode.fit"
+        is ContentFill -> "ContentMode.fill"
+    }
+    return "${getPrefix(depth)}$res"
 }
 
 fun DividerComposableCall.generateCode(depth: Int = 0): String{
@@ -189,6 +200,16 @@ fun Type.generateCode() : String = when (this) {
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     is ListType -> "[${this.itemsType.generateCode()}]"
     is UserType -> this.name
+    is ImageComposableType -> "Image"
+    is TextComposableType -> "Text"
+    is ColumnComposableType -> "VStack"
+    is SpacerComposableType -> "Spacer"
+    is ZStackComposableType -> "ZStack"
+    is ButtonComposableType -> "Button"
+    is DividerComposableType -> "Divider"
+    is DpType -> "CGFloat"
+    is ColorType -> "Color"
+    is AspectRatioType -> "ContentMode"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -231,6 +252,8 @@ fun WidgetDeclaration.generateCode(depth: Int = 0): String {
     val body = "${getPrefix(depth+1)}var body: some View ${body.generateCode(depth + 1)}"
     return "${getPrefix(depth)}struct $id: View{\n$convertedProperties\n${body}\n}"
 }
+
+
 
 fun ColumnComposableCall.generateCode(depth: Int = 0): String{
     var param1: String? = null
@@ -285,4 +308,20 @@ fun getPrefix(depth: Int): String{
         prefix += "\t"
     }
     return prefix
+}
+
+
+fun ImageComposableCall.generateCode(): String{
+    val base =  "Image(${this.value.generateCode()})"
+
+    var resizableSuffix = ""
+    var aspectRatioSuffix = ""
+
+   if(this.resizable) {
+        resizableSuffix = "\n.resizable()"
+    }
+    this.aspectRatio?.generateCode()?.let {
+        aspectRatioSuffix = "\n.aspectRatio(contentMode: $it)"
+    }
+    return "$base$resizableSuffix$aspectRatioSuffix"
 }

@@ -71,6 +71,15 @@ COLOR_LITERAL: '0'[xX][0-9a-fA-F]+;
 QUOTE_OPEN: '"' -> pushMode(LineString);
 
 TEXT_WIDGET: 'Text';
+IMAGE_WIDGET: 'Image';
+RESIZABLE: 'resizable';
+
+ASPECT_RATIO_PARAM: 'aspectRatio';
+CONTENT_MODE_PARAM: 'contentMode';
+CONTENT_MODE: 'ContentMode';
+CONTENT_FIT: 'fit';
+CONTENT_FILL: 'fill';
+
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';

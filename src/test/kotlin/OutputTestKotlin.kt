@@ -1,5 +1,6 @@
 package it.poliba.KSTranspiler
 
+import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
@@ -309,6 +310,37 @@ Button(onClick = {
 } 
             """.trimIndent()
         val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
+    }
+
+    @Test
+    fun mapImageWithSuffix(){
+        val code = "Image(\"nome-immagine-test\")"
+        val result = """
+            Image(painter = painterResource(id = getResources().getIdentifier("nome-immagine-test", "drawable", context.getPackageName())))
+            """.trimIndent()
+        val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
+    }
+    @Test
+    fun mapImageWithSuffixComplete(){
+        val result = """
+            Image(
+            painter = painterResource(id = getResources().getIdentifier("nome-immagine-test", "drawable", context.getPackageName())),
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.fillMaxSize())
+            """.trimIndent()
+
+        val code = "Image(\"nome-immagine-test\")\n.resizable()\n.aspectRatio(contentMode: ContentMode.fill)"
+        val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
+    }
+
+    @Test
+    fun mapContentScale(){
+        val code = "var a: ContentMode = ContentMode.fill"
+        val result = """  var a:ContentScale = ContentScale.FillWidth""".trimIndent()
+        val parseResult = SwiftParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
     }
 

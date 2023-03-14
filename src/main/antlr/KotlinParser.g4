@@ -80,7 +80,6 @@ extendedClasses
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
-           | LPAREN expression RPAREN                                      # parenExpression
            | ID                                                            # varReference
            | MINUS expression                                              # minusExpression
            | INT_LIT                                                       # intLiteral
@@ -96,11 +95,13 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral
            | fontWeight                                                    # fontWeightLiteral
+           | fontWeight                                                    # fontWeightLiteral
            | horizontalAlignment                                           #horizhontalAlignmentExpression
            | verticalAlignment                                             #verticalAlignmentExpression
            | arrangement                                                   #arrangementExpression
            | THIS                                                          #thisExpression
-           | (ID | functionCallExpression | THIS) (accessSuffix)*  #complexExpression ;
+           | (ID | functionCallExpression | THIS) (accessSuffix)*  #complexExpression
+           | CONTENTSCALE DOT contentScadeMode                             #contentScaleExpression;
 
 functionCallExpression:
     name=ID NL* functionCallParameters NL* ;
@@ -189,7 +190,8 @@ composableCall:
     | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  NL* RPAREN block? #columnComposable
     | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  NL* RPAREN block? #rowComposable
     | BOX LPAREN (NL* modifierParameter NL*)? RPAREN block? #boxComposable
-    | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable;
+    | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable
+    | IMAGE_COMPOSE LPAREN (NL* imageComposeParameter) ((NL* COMMA NL* imageComposeParameter)*)? NL* RPAREN #imageComposable;
 
 textComposeParameter:
     COLOR_PARAM ASSIGN color #colorParameter
@@ -227,6 +229,15 @@ verticalAlignment:
     ALIGNMENT DOT BOTTOM #bottomAlignment |
     ALIGNMENT DOT CENTER_VERTICALLY #centerVerticalltAlignment;
 
+imageComposeParameter:
+     PAINTER_PARAM ASSIGN PAINTER_RESOURCE LPAREN PAINTER_RESOURCE_PARAM ASSIGN resource RPAREN #painterParameter |
+     modifierParameter #modifierImageParameter |
+     CONTENTSCALE_PARAM ASSIGN expression #contentScale ;
+
+contentScadeMode:
+    FIT  #contentScaleFit |
+    FILLWIDTH #contentScaleFillWidth;
+
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor
      | COLOR DOT COLOR_BLUE #blueColor
@@ -247,4 +258,10 @@ modifierSuffix:
    HORIZONTAL_SCROLL_SUFFIX LPAREN REMEMBER_SCROLL LPAREN RPAREN RPAREN #horizontalScrollSuffix |
    HEIGHT LPAREN expression RPAREN #heightSuffix |
    WIDTH LPAREN expression RPAREN #widthSuffix |
+   RESIZABLE LPAREN RPAREN  #resizableSuffix |
    ZINDEX LPAREN expression RPAREN #zIndexSuffix;
+
+
+
+resource:
+    GET_RESOURCE LPAREN RPAREN DOT GET_IDENTIFIER LPAREN imageName = expression COMMA expression COMMA CONTEXT DOT GET_PACKAGENAME LPAREN RPAREN RPAREN;

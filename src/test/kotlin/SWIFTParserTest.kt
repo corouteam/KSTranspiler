@@ -113,6 +113,45 @@ class SWIFTParserTest {
     }
 
     @Test
+    fun parseSwiftImageWithResizableAndAspectRatio(){
+        val expected = "SwiftScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      WidgetCallExpression\n" +
+                "        ImageWidget\n" +
+                "          T[Image]\n" +
+                "          T[(]\n" +
+                "          StringLiteralExpression\n" +
+                "            StringLiteral\n" +
+                "              LineStringLiteral\n" +
+                "                T[\"]\n" +
+                "                LineStringContent\n" +
+                "                  T[nome-immagine-test]\n" +
+                "                T[\"]\n" +
+                "          T[)]\n" +
+                "          T[.]\n" +
+                "          ResizableSuffix\n" +
+                "            T[resizable]\n" +
+                "            T[(]\n" +
+                "            T[)]\n" +
+                "          T[.]\n" +
+                "          AspectRatioSuffix\n" +
+                "            T[aspectRatio]\n" +
+                "            T[(]\n" +
+                "            T[contentMode]\n" +
+                "            T[:]\n" +
+                "            ContentModeExpression\n" +
+                "              T[ContentMode]\n" +
+                "              T[.]\n" +
+                "              ContentModeFit\n" +
+                "                T[fit]\n" +
+                "            T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("swift/imageWithResizableAndScaledToFit")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseStruct(){
         val expected = "SwiftFile\n" +
                 "  Declaration\n" +

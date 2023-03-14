@@ -510,6 +510,137 @@ KotlinScript
     }
 
     @Test
+    fun parseImageComposebale(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        ImageComposable\n" +
+                "          T[Image]\n" +
+                "          T[(]\n" +
+                "          PainterParameter\n" +
+                "            T[painter]\n" +
+                "            T[=]\n" +
+                "            T[painterResource]\n" +
+                "            T[(]\n" +
+                "            T[id]\n" +
+                "            T[=]\n" +
+                "            Resource\n" +
+                "              T[getResources]\n" +
+                "              T[(]\n" +
+                "              T[)]\n" +
+                "              T[.]\n" +
+                "              T[getIdentifier]\n" +
+                "              T[(]\n" +
+                "              StringLiteralExpression\n" +
+                "                StringLiteral\n" +
+                "                  LineStringLiteral\n" +
+                "                    T[\"]\n" +
+                "                    LineStringContent\n" +
+                "                      T[nome-immagine-test]\n" +
+                "                    T[\"]\n" +
+                "              T[,]\n" +
+                "              StringLiteralExpression\n" +
+                "                StringLiteral\n" +
+                "                  LineStringLiteral\n" +
+                "                    T[\"]\n" +
+                "                    LineStringContent\n" +
+                "                      T[drawable]\n" +
+                "                    T[\"]\n" +
+                "              T[,]\n" +
+                "              T[context]\n" +
+                "              T[.]\n" +
+                "              T[getPackageName]\n" +
+                "              T[(]\n" +
+                "              T[)]\n" +
+                "              T[)]\n" +
+                "            T[)]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("imageComposable")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseImageComposebaleWithModifiers(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ComposableCallExpression\n" +
+                "        ImageComposable\n" +
+                "          T[Image]\n" +
+                "          T[(]\n" +
+                "          T[\n" +
+                "]\n" +
+                "          PainterParameter\n" +
+                "            T[painter]\n" +
+                "            T[=]\n" +
+                "            T[painterResource]\n" +
+                "            T[(]\n" +
+                "            T[id]\n" +
+                "            T[=]\n" +
+                "            Resource\n" +
+                "              T[getResources]\n" +
+                "              T[(]\n" +
+                "              T[)]\n" +
+                "              T[.]\n" +
+                "              T[getIdentifier]\n" +
+                "              T[(]\n" +
+                "              StringLiteralExpression\n" +
+                "                StringLiteral\n" +
+                "                  LineStringLiteral\n" +
+                "                    T[\"]\n" +
+                "                    LineStringContent\n" +
+                "                      T[nome-immagine-test]\n" +
+                "                    T[\"]\n" +
+                "              T[,]\n" +
+                "              StringLiteralExpression\n" +
+                "                StringLiteral\n" +
+                "                  LineStringLiteral\n" +
+                "                    T[\"]\n" +
+                "                    LineStringContent\n" +
+                "                      T[drawable]\n" +
+                "                    T[\"]\n" +
+                "              T[,]\n" +
+                "              T[context]\n" +
+                "              T[.]\n" +
+                "              T[getPackageName]\n" +
+                "              T[(]\n" +
+                "              T[)]\n" +
+                "              T[)]\n" +
+                "            T[)]\n" +
+                "          T[,]\n" +
+                "          T[\n" +
+                "]\n" +
+                "          ModifierImageParameter\n" +
+                "            ModifierParameter\n" +
+                "              T[modifier]\n" +
+                "              T[=]\n" +
+                "              Modifier\n" +
+                "                T[Modifier]\n" +
+                "                T[.]\n" +
+                "                ResizableSuffix\n" +
+                "                  T[fillMaxSize]\n" +
+                "                  T[(]\n" +
+                "                  T[)]\n" +
+                "          T[,]\n" +
+                "          T[\n" +
+                "]\n" +
+                "          ContentScale\n" +
+                "            T[contentScale]\n" +
+                "            T[=]\n" +
+                "            ContentScaleExpression\n" +
+                "              T[ContentScale]\n" +
+                "              T[.]\n" +
+                "              ContentScaleFillWidth\n" +
+                "                T[FillWidth]\n" +
+                "          T[)]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("imageComposableWithFillMaxSizeAndContentScale")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun testAnnotation(){
         val expected = "KotlinFile\n" +
                 "  Declaration\n" +

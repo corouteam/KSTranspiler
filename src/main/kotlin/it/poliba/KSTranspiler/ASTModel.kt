@@ -61,8 +61,8 @@ data class StringType(override var position: Position? = null) : Type()
 data class BoolType(override var position: Position? = null) : Type()
 data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
-
-
+data class ResizableType(override var position: Position? = null): Type()
+data class AspectRatioType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String, override var position: Position? = null): Type()
 data class DpType(override var position: Position? = null): Type()
@@ -82,6 +82,7 @@ class BoxComposableType(override var position: Position? = null): ComposableType
 class HorizontalAlignmentType(override var position: Position? = null): Type()
 class VerticalAlignmentType(override var position: Position? = null): Type()
 
+class ImageComposableType: ComposableType()
 // END TEST
 //
 // Expressions
@@ -291,6 +292,23 @@ class ThisExpression(position: Position?): Expression(StringType())
 
 
 
+
+
+class ImageComposableCall(
+    val value: Expression,
+    val resizable: Boolean,
+    val aspectRatio: Expression?,
+    zIndex: Expression? = null,
+    override var position: Position? = null,
+): ComposableCall(zIndex, ImageComposableType())
+
+sealed class ResizableLit: Expression(ResizableType())
+class Resizable : ResizableLit()
+class FillMaxSize: ResizableLit()
+
+sealed class AspectRatioLit: Expression(AspectRatioType())
+class ContentFit: AspectRatioLit()
+class ContentFill: AspectRatioLit()
 
 /**
  * Define a function for each node;

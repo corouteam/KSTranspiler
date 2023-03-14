@@ -76,6 +76,22 @@ QUOTE_OPEN: '"' -> pushMode(LineString);
 TEXT_COMPOSE: 'Text';
 COLUMN_COMPOSE: 'Column';
 ROW_COMPOSE: 'Row';
+IMAGE_COMPOSE: 'Image';
+RESIZABLE: 'fillMaxSize';
+
+PAINTER_PARAM: 'painter';
+PAINTER_RESOURCE: 'painterResource';
+PAINTER_RESOURCE_PARAM: 'id';
+GET_RESOURCE: 'getResources';
+GET_IDENTIFIER: 'getIdentifier';
+CONTEXT: 'context';
+GET_PACKAGENAME: 'getPackageName';
+MODIFIER: 'Modifier';
+MODIFIER_PARAM: 'modifier';
+CONTENTSCALE: 'ContentScale';
+CONTENTSCALE_PARAM: 'contentScale';
+FILLWIDTH: 'FillWidth';
+FIT: 'Fit';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';
@@ -112,14 +128,14 @@ CENTER_VERTICALLY: 'CenterVertically';
 END: 'End';
 SPACED_BY: 'spacedBy';
 DP_SUFFIX: 'dp';
-MODIFIER_PARAM: 'modifier';
 VERTICAL_SCROLL_SUFFIX: 'verticalScroll';
 HORIZONTAL_SCROLL_SUFFIX: 'horizontalScroll';
 REMEMBER_SCROLL: 'rememberScrollState';
-MODIFIER: 'Modifier';
 BUTTON_COMPOSABLE: 'Button';
 ICON_COMPOSABLE: 'Icon';
 
+ASPECT_RATIO: 'AspectRatio';
+ASPECT_RATIO_PARAM: 'aspectRatio';
 
 // Identifiers
 ID                 : [_]*[A-Za-z][A-Za-z0-9_]* ;

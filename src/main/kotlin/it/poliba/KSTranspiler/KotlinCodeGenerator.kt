@@ -151,6 +151,8 @@ fun Expression.generateKotlinCode(depth: Int=0) : String = when (this) {
     is ButtonComposableCall -> this.generateKotlinCode(depth)
     is AccessExpression -> this.generateKotlinCode(depth)
     is ThisExpression -> this.generateKotlinCode(depth)
+    is AspectRatioLit -> this.generateKotlinCode()
+    is ImageComposableCall -> this.generateKotlinCode(depth)
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -192,6 +194,7 @@ fun Type.generateKotlinCode(depth: Int=0) : String = when (this) {
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateKotlinCode()}>"
     is ListType -> "[${this.itemsType.generateKotlinCode()}]"
+    is AspectRatioType -> "ContentScale"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -256,8 +259,46 @@ fun ColumnComposableCall.generateKotlinCode(depth: Int=0): String{
         return """${getPrefix(depth)}Column($parameters)$bodyString"""
     }
 }
+fun AspectRatioLit.generateKotlinCode(depth: Int = 0): String{
+    var res = when(this){
+        is ContentFit -> "ContentScale.Fit"
+        is ContentFill -> "ContentScale.FillWidth"
+        else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+    }
+    return "$res" //TODO: ADD PREFIX
+}
 
-fun HorizontalAlignment.generateKotlinCode(depth: Int=0): String{
+
+fun ImageComposableCall.generateKotlinCode(depth: Int = 0): String{
+    var imageName = this.value.generateKotlinCode()
+    var painter = "painter = painterResource(id = getResources().getIdentifier($imageName, \"drawable\", context.getPackageName()))"
+
+    var parameters = arrayListOf<String>()
+    var modifierParams = arrayListOf<String>()
+        //TODO: resizable
+    this.aspectRatio?.generateKotlinCode()?.let {
+        parameters.add("contentScale = $it")
+    }
+    if(resizable){
+        modifierParams.add(".fillMaxSize()")
+    }
+    zIndex?.let {
+        modifierParams.add(".zIndex(${it.generateKotlinCode()}")
+    }
+    if(modifierParams.isNotEmpty()){
+        var modifierParamsString = modifierParams.joinToString("")
+        parameters.add("modifier = Modifier$modifierParamsString")
+    }
+    if(parameters.isEmpty()){
+        return "${getPrefix(depth)}Image($painter)"
+    }else{
+        var param = parameters.joinToString ( ",\n${getPrefix(depth)}" )
+        return "${getPrefix(depth)}Image(\n${getPrefix(depth)}$painter,\n${getPrefix(depth)}$param)"
+
+    }
+}
+
+fun HorizontalAlignment.generateKotlinCode(depth: Int = 0): String{
     return when(this){
         is StartAlignment -> "${getPrefix(depth)}Alignment.Start"
         is EndAlignment -> "${getPrefix(depth)}Alignment.End"

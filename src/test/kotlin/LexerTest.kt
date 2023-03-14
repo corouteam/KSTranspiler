@@ -498,4 +498,60 @@ class LexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
+    @Test
+    fun parseImageComposable(){
+        val code = "Image(painter = painterResource(id = R.drawable.dog))"
+        val result = listOf("IMAGE_COMPOSE",
+            "LPAREN",
+            "PAINTER_PARAM",
+            "ASSIGN",
+            "PAINTER_RESOURCE",
+            "LPAREN",
+            "PAINTER_RESOURCE_PARAM",
+            "ASSIGN",
+            "ID",
+            "DOT",
+            "ID",
+            "DOT",
+            "ID",
+            "RPAREN",
+            "RPAREN",
+            "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseCustomAspectRatio(){
+        val code = "AspectRatio(16f)"
+        val result = listOf("ASPECT_RATIO", "LPAREN", "FLOAT_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseImage(){
+        val code = "Image(painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName())))"
+        val result = listOf("IMAGE_COMPOSE",
+                "LPAREN",
+                "PAINTER_PARAM", "ASSIGN", "PAINTER_RESOURCE", "LPAREN", "PAINTER_RESOURCE_PARAM", "ASSIGN", "GET_RESOURCE", "LPAREN", "RPAREN", "DOT", "GET_IDENTIFIER", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "CONTEXT", "DOT", "GET_PACKAGENAME", "LPAREN", "RPAREN", "RPAREN", "RPAREN",
+                "RPAREN",
+                "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseImageWithModifierAndScale(){
+        val code = "Image(" +
+                "painter = painterResource(id = getResources().getIdentifier(\"nome-immagine-test\", \"drawable\", context.getPackageName()))," +
+                "modifier = Modifier.fillMaxSize()," +
+                "contentScale = ContentScale.FillWidth" +
+                ")"
+        val result = listOf("IMAGE_COMPOSE",
+            "LPAREN",
+            "PAINTER_PARAM", "ASSIGN", "PAINTER_RESOURCE", "LPAREN", "PAINTER_RESOURCE_PARAM", "ASSIGN", "GET_RESOURCE", "LPAREN", "RPAREN", "DOT", "GET_IDENTIFIER", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "COMMA", "CONTEXT", "DOT", "GET_PACKAGENAME", "LPAREN", "RPAREN", "RPAREN", "RPAREN","COMMA",
+            "MODIFIER_PARAM", "ASSIGN", "MODIFIER", "DOT", "RESIZABLE", "LPAREN", "RPAREN","COMMA",
+            "CONTENTSCALE_PARAM", "ASSIGN", "CONTENTSCALE", "DOT", "FILLWIDTH",
+            "RPAREN",
+            "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 }
