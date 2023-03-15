@@ -246,18 +246,14 @@ fun ColumnComposableCall.generateKotlinCode(depth: Int=0): String{
     }
 
     spacing?.generateKotlinCode()?.let {
-        arguments.add("verticalArrangement = $it")
+        arguments.add("verticalArrangement = Arrangement.spacedBy($it)")
     }
-    val parameters = arguments.joinToString(", ")
-    //TODO: CHECK SCOLLABLE AFTER FIX
-    if(scrollable){
-        val bodyString = body.generateKotlinCode(depth+1)
-        return "${getPrefix(depth)}ScrollView(.vertical){\n${getPrefix(depth)}VStack($parameters)" +
-                "$bodyString\n${getPrefix(depth)}}"
-    }else{
-        val bodyString = body.generateKotlinCode(depth)
-        return """${getPrefix(depth)}Column($parameters)$bodyString"""
-    }
+
+    val bodyString = body.generateKotlinCode(depth+1)
+    if (scrollable) arguments.add("modifier = Modifier.verticalScroll(rememberScrollState())")
+
+    val parameters = arguments.joinToString(",\n\t")
+    return "${getPrefix(depth)}Column(\n\t$parameters)$bodyString"
 }
 fun AspectRatioLit.generateKotlinCode(depth: Int = 0): String{
     var res = when(this){

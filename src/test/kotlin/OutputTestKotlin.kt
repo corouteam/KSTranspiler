@@ -205,10 +205,11 @@ class  OutputTestKotlin {
          	spacing: CGFloat(10)){}
         """.trimIndent()
 
-        val result = """
-Column(horizontalAlignment = Alignment.Start, verticalArrangement = 10.dp){
+        val result = """Column(
+	horizontalAlignment = Alignment.Start,
+	verticalArrangement = Arrangement.spacedBy(10.dp)){
 
-}""".trimIndent()
+	}""".trimIndent()
 
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
@@ -224,29 +225,29 @@ Column(horizontalAlignment = Alignment.Start, verticalArrangement = 10.dp){
         assertEquals(result, parseResult.root!!.generateKotlinCode())
     }
 
-//    @Test
-//    fun convertColumnScrollable(){
-//
-//        val code = """
-//        	ScrollView(.vertical){
-//        		VStack(
-//        		alignment: HorizontalAlignment.leading,
-//        		spacing: CGFloat(10)){
-//
-//        		}
-//        	}
-//    """.trimIndent()
-//
-//        val result = """
-//            Column(
-//            modifier = Modifier.verticalScroll(rememberScrollState()),
-//            verticalArrangement = Arrangement.spacedBy(10.dp),
-//            horizontalAlignment = Alignment.Start)
-//            """.trimIndent()
-//        val parseResult = SwiftParserFacadeScript.parse(code)
-//
-//        assertEquals(result, parseResult.root!!.generateKotlinCode())
-//    }
+    @Test
+    fun convertColumnScrollable(){
+
+        val code = """
+        	ScrollView(.vertical){
+        		VStack(
+        		alignment: HorizontalAlignment.leading,
+        		spacing: CGFloat(10)){
+
+        		}
+        	}
+    """.trimIndent()
+
+        val result = """Column(
+	horizontalAlignment = Alignment.Start,
+	verticalArrangement = Arrangement.spacedBy(10.dp),
+	modifier = Modifier.verticalScroll(rememberScrollState())){
+
+	}"""
+        val parseResult = SwiftParserFacadeScript.parse(code)
+
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
+    }
 
     @Test
     fun mapDividerWithParams() {
@@ -262,23 +263,22 @@ Column(horizontalAlignment = Alignment.Start, verticalArrangement = 10.dp){
 
     @Test
     fun convertColumnScrollableWithText() {
-        val code = """
-            Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.Start){
-                Text("Ciao")
-            }
-            """.trimIndent()
-        val result = """
-        	ScrollView(.vertical){
-        		VStack(
-        		alignment: HorizontalAlignment.start,
-        		spacing: CGFloat(10)){
-        			Text("Ciao")
-        		}
-        	}
-    """.trimIndent()
+        val code = """ScrollView(.vertical){
+	VStack(
+	alignment: HorizontalAlignment.leading,
+	spacing: CGFloat(10)){
+		Text("Ciao")
+	}
+}""".trimIndent()
+        val result = """Column(
+	horizontalAlignment = Alignment.Start,
+	verticalArrangement = Arrangement.spacedBy(10.dp),
+	modifier = Modifier.verticalScroll(rememberScrollState())){
+		Text("Ciao")
+	}""".trimIndent()
+
+        val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
     }
 
     @Test

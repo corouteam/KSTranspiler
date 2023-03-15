@@ -187,7 +187,13 @@ fun SwiftParser.VerticalAlignmentExpressionContext.toAst(considerPosition: Boole
 
 
 fun SwiftParser.ScrollViewWidgetContext.toAst(considerPosition: Boolean = false): Expression{
-    val block = if(this.block() != null) this.block().toAst(considerPosition) else Block(listOf(), toPosition(considerPosition))
+    val block: Block = this.block()?.toAst(considerPosition) ?: Block(listOf(), toPosition(considerPosition))
+    val possibleVStack = block.body.filterIsInstance(ColumnComposableCall::class.java).firstOrNull()
+
+    if (possibleVStack != null) {
+        return possibleVStack.copy(scrollable = true)
+    }
+
     if(this.ID() != null){
         if(this.ID().text == "vertical"){
             return ColumnComposableCall(null, null, true, block,null, toPosition(considerPosition))

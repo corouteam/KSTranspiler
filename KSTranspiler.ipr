@@ -139,7 +139,9 @@
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.5/f645ed69d595b24d4cf8b3fbb64cc505bede8829/gson-2.8.5.jar!/" />
       </CLASSES>
-      <JAVADOC />
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.5/a2841d93c258a70e320be81586e92208a60144f2/gson-2.8.5-javadoc.jar!/" />
+      </JAVADOC>
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.5/c5b4c491aecb72e7c32a78da0b5c6b9cda8dee0f/gson-2.8.5-sources.jar!/" />
       </SOURCES>
@@ -259,6 +261,15 @@
       <JAVADOC />
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.ktor/ktor-server-core-jvm/2.2.3/32dd43f3dc217a6856f2417eeeb508b53ccf03c2/ktor-server-core-jvm-2.2.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: io.ktor:ktor-server-cors-jvm:2.2.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.ktor/ktor-server-cors-jvm/2.2.3/6f833b457821f233f569b14e4feb821d778a9728/ktor-server-cors-jvm-2.2.3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.ktor/ktor-server-cors-jvm/2.2.3/5692a242e150266027f3d82846dcb0e989bc756b/ktor-server-cors-jvm-2.2.3-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Gradle: io.ktor:ktor-server-host-common-jvm:2.2.3">
