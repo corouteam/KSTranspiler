@@ -179,6 +179,22 @@ class  OutputTest {
     }
 
     @Test
+    fun convertIntArrayExpression(){
+        var code = "val array = arrayOf<Int>(1, 2, 3)"
+        val result = "let array:[Int] = [1, 2, 3]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
+    fun convertStringArrayExpression(){
+        var code = "val array = arrayOf<String>(\"a\", \"b\", \"c\")"
+        val result = "let array:[String] = [\"a\", \"b\", \"c\"]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
     fun convertTextWidget(){
         val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
         val result = "Text(\"Hello world\")\n.foregroundColor(Color.blue)\n.fontWeight(Font.Weight.bold)"

@@ -129,6 +129,7 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     is FunctionCall -> "${getPrefix(depth)}${this.name}(${this.parameters.map { it.generateCode(depth) }.joinToString(", " )})"
     is RangeExpression -> "${getPrefix(depth)}${this.leftExpression.generateCode(depth)}...${this.rightExpression.generateCode(depth)}"
     is ListExpression -> "${getPrefix(depth)}[${this.items.map { it.generateCode(depth) }.joinToString(", ")}]"
+    is ArrayExpression -> "${getPrefix(depth)}[${this.items.map { it.generateCode(depth) }.joinToString(", ")}]"
     is ColorLit -> this.generateCode(depth)
     is FontWeightLit -> this.generateCode(depth)
     is ReturnExpression -> "${getPrefix(depth)}return ${this.returnExpression.generateCode()}"
@@ -199,6 +200,7 @@ fun Type.generateCode() : String = when (this) {
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     is ListType -> "[${this.itemsType.generateCode()}]"
+    is ArrayType -> "[${this.itemsType.generateCode()}]"
     is UserType -> this.name
     is ImageComposableType -> "Image"
     is TextComposableType -> "Text"

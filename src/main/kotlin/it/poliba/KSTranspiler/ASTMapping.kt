@@ -193,6 +193,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
     is KotlinParser.FunctionCallContext -> toAst(considerPosition)
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
+    is KotlinParser.ArrayExpressionContext -> toAst(considerPosition)
     is KotlinParser.ReturnExpressionContext -> ReturnExpression(expression().toAst(considerPosition), toPosition(considerPosition))
     is KotlinParser.ComposableCallExpressionContext -> toAst(considerPosition)
     is KotlinParser.ArrangementExpressionContext -> toAst(considerPosition)
@@ -272,6 +273,15 @@ fun KotlinParser.ListExpressionContext.toAst(considerPosition: Boolean): Express
         position = toPosition(considerPosition),
     )
 }
+
+fun KotlinParser.ArrayExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return ArrayExpression(
+        // arrays can have just one type, take first of type arguments
+        itemsType = this.typeArguments().toAst(considerPosition).first(),
+        items = this.expression().map { it.toAst() }
+    )
+}
+
 
 fun KotlinParser.TypeArgumentsContext.toAst(considerPosition: Boolean): List<Type> {
     return this.type().map { it.toAst(considerPosition) }

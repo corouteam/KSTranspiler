@@ -91,6 +91,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
+           | ARRAYOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # arrayExpression
            | RETURN returnExpression=expression                            # returnExpression
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral

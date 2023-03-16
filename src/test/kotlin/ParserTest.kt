@@ -370,6 +370,33 @@ KotlinScript
         val actual = toParseTree(parseResourceScript("listof_expression")).multiLineString()
         assertEquals(expected, actual)
     }
+    @Test
+    fun parseArrayOfExpression() {
+        assertEquals(
+            """KotlinScript
+  Line
+    ExpressionStatement
+      ArrayExpression
+        T[arrayOf]
+        TypeArguments
+          T[<]
+          Integer
+            T[Int]
+          T[>]
+        T[(]
+        IntLiteral
+          T[1]
+        T[,]
+        IntLiteral
+          T[2]
+        T[,]
+        IntLiteral
+          T[3]
+        T[)]
+    T[<EOF>]
+""",
+            toParseTree(parseResourceScript("array_expression")).multiLineString())
+    }
 
 
     @Test

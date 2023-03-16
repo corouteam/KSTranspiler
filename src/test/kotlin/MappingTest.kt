@@ -294,7 +294,18 @@ class MappingTest {
 
         assertEquals(expectedAst, ast)
     }
+    @Test
+    fun mapArrayOfExpression() {
+        val code = "arrayOf<Int>(1, 2, 3)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ArrayExpression(
+                itemsType= IntType(position=null),
+                items=listOf(IntLit("1"), IntLit("2"), IntLit("3")))
+        ))
 
+        assertEquals(expectedAst, ast)
+    }
 
     @Test
     fun mapTextComposable() {

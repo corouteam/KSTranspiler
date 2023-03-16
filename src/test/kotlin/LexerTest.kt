@@ -270,6 +270,12 @@ class LexerTest {
         )
         assertEquals(result, tokens(lexerForCode(code)))
     }
+    @Test
+    fun parseArrayOfExpression(){
+        val code = "arrayOf<Int>(1, 2, 3)"
+        val result = listOf("ARRAYOF", "LANGLE", "INT", "RANGLE", "LPAREN", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RPAREN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 
     @Test
     fun parseTextComposable() {

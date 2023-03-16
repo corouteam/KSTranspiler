@@ -67,6 +67,7 @@ data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String, override var position: Position? = null): Type()
 data class DpType(override var position: Position? = null): Type()
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
+data class ArrayType(val itemsType: Type, override var position: Position? = null) : Type()
 
 
 
@@ -124,6 +125,12 @@ data class ListExpression(
     val items: List<Expression>,
     override var position: Position? = null
 ): Expression(ListType(itemsType, position))
+
+data class ArrayExpression(
+    val itemsType: Type,
+    val items: List<Expression>,
+    override var position: Position? = null
+): Expression(ArrayType(itemsType))
 
 data class UnaryMinusExpression(
     val value: Expression,
