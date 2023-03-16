@@ -190,6 +190,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
+    is KotlinParser.ForExpressionContext-> toAst(considerPosition)
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
     is KotlinParser.FunctionCallContext -> toAst(considerPosition)
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
@@ -294,7 +295,9 @@ fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expressio
     )
 }
 
-
+fun KotlinParser.ForExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return ForExpression(this.for_().ID().text, this.for_().expression().toAst(), this.for_().body.toAst())
+}
 fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
         return this.block().toAst(considerPosition)

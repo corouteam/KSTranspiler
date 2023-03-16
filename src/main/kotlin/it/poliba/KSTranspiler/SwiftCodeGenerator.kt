@@ -100,6 +100,12 @@ fun IfExpression.generateCode(depth: Int = 0): String{
     return result
 }
 
+fun ForExpression.generateCode(depth: Int = 0): String{
+    return "${getPrefix(depth)}for $varName in ${range.generateCode()} {\n"+
+            "\t${body.generateCode()}\n"+
+            "}"
+}
+
 fun ControlStructureBody.generateCode(depth: Int = 0): String{
     return when(this){
         is Block -> "${this.generateCode(depth)}"
@@ -142,6 +148,7 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     is AccessExpression -> this.generateCode(depth)
     is ThisExpression -> this.generateCode(depth)
     is AspectRatioLit -> this.generateCode(depth)
+    is ForExpression -> this.generateCode(depth)
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     is ImageComposableCall -> this.generateCode(depth)

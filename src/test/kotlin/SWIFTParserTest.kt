@@ -70,6 +70,48 @@ class SWIFTParserTest {
         val actual = toParseTree(parseResourceScript("swift/textWithBold")).multiLineString()
         assertEquals(expected, actual)
     }
+    @Test
+    fun parseSwiftForDeclaration(){
+        assertEquals(
+            """SwiftScript
+  Line
+    ExpressionStatement
+      ForExpression
+        For
+          T[for]
+          T[i]
+          T[in]
+          RangeExpression
+            IntLiteral
+              T[1]
+            T[...]
+            IntLiteral
+              T[42]
+          ControlStructureBody
+            Block
+              T[{]
+              T[
+]
+              PrintStatement
+                Print
+                  T[print]
+                  T[(]
+                  StringLiteralExpression
+                    StringLiteral
+                      LineStringLiteral
+                        T["]
+                        LineStringContent
+                          T[Hello world]
+                        T["]
+                  T[)]
+              Semis
+                T[
+]
+              T[}]
+    T[<EOF>]
+""",
+            toParseTree(parseResourceScript("swift/forDeclaration")).multiLineString())
+    }
 
     @Test
     fun parseSwiftTextWithColor(){

@@ -40,6 +40,14 @@ class SWIFTLexerTest {
     }
 
     @Test
+    fun parseForStatement(){
+        val code = "for i in 1...5 {"+
+                "   print(\"Hello world\")" +
+                "}"
+        val result = listOf("FOR", "ID", "IN", "INT_LIT", "RANGE", "INT_LIT", "LCURL", "PRINT", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+    @Test
     fun parseFunc(){
         val code = "func test() -> Int { return 3 }"
         val result = listOf("FUN", "ID", "LPAREN", "RPAREN", "FUNCTION_RETURN", "INT", "LCURL", "RETURN", "INT_LIT", "RCURL", "EOF")

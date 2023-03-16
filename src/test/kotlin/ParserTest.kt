@@ -197,6 +197,51 @@ class KotlinParserTest {
 """,
             toParseTree(parseResourceScript("ifDeclaration")).multiLineString())
     }
+
+    @Test
+    fun parseForDeclaration() {
+        assertEquals(
+            """KotlinScript
+  Line
+    ExpressionStatement
+      ForExpression
+        For
+          T[for]
+          T[(]
+          T[i]
+          T[in]
+          RangeExpression
+            IntLiteral
+              T[1]
+            T[..]
+            IntLiteral
+              T[10]
+          T[)]
+          ControlStructureBody
+            Block
+              T[{]
+              T[
+]
+              PrintStatement
+                Print
+                  T[print]
+                  T[(]
+                  StringLiteralExpression
+                    StringLiteral
+                      LineStringLiteral
+                        T["]
+                        LineStringContent
+                          T[Hello world]
+                        T["]
+                  T[)]
+              Semis
+                T[
+]
+              T[}]
+    T[<EOF>]
+""",
+            toParseTree(parseResourceScript("forDeclaration")).multiLineString())
+    }
     @Test
     fun parseSimpleFun(){
         var expected = """KotlinFile

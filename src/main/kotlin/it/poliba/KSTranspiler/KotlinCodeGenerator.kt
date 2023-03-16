@@ -73,6 +73,7 @@ fun Statement.generateKotlinCode(depth: Int = 0): String {
         is Assignment -> this.generateKotlinCode(depth)
         is Print -> this.generateKotlinCode(depth)
         is IfExpression -> this.generateKotlinCode(depth)
+        is ForExpression -> this.generateKotlinCode(depth)
         is Expression -> this.generateKotlinCode(depth)
         is FunctionDeclaration -> this.generateKotlinCode(depth)
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -109,6 +110,9 @@ fun IfExpression.generateKotlinCode(depth: Int = 0): String{
         }
     }
     return result
+}
+fun ForExpression.generateKotlinCode(depth: Int = 0): String{
+    return "${getPrefix(depth)}for(${varName} in ${range.generateKotlinCode()}) ${body.generateKotlinCode(depth)}"
 }
 
 fun ControlStructureBody.generateKotlinCode(depth: Int = 0): String{

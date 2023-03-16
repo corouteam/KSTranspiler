@@ -92,6 +92,21 @@ class SWIFTMappingTest {
         ))
         assertEquals(Gson().toJson(expectedAst), Gson().toJson(ast))
     }
+    @Test
+    fun mapFor(){
+        val code = "for i in 1...42 {\n" +
+                "    print(\"Hello world\")\n" +
+                "}"
+        val ast = SwiftAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ForExpression(varName="i", range=RangeExpression(leftExpression=IntLit(value="1", position=null), rightExpression=IntLit(value="42", position=null), type=RangeType(type=IntType())),Block(
+                listOf(
+                    Print(StringLit("Hello world"))
+                )
+            ))
+        ))
+        assertEquals(expectedAst,ast)
+    }
 
     @Test
     fun mapWidget() {
