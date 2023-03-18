@@ -276,15 +276,16 @@ ScrollView(.vertical){
                 Text("Ciao")
             }
             """.trimIndent()
-        val result = """
-        	ScrollView(.vertical){
-        		VStack(
-        		alignment: HorizontalAlignment.start,
-        		spacing: CGFloat(10)){
-        			Text("Ciao")
-        		}
-        	}
-    """.trimIndent()
+        val result = """ScrollView(.vertical){
+	VStack(
+	alignment: HorizontalAlignment.leading,
+	spacing: CGFloat(10)){
+		Text("Ciao")
+	}
+}""".trimIndent()
+
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
     }
 
     @Test
