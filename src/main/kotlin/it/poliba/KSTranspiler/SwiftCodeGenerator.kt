@@ -101,9 +101,8 @@ fun IfExpression.generateCode(depth: Int = 0): String{
 }
 
 fun ForExpression.generateCode(depth: Int = 0): String{
-    return "${getPrefix(depth)}for $varName in ${range.generateCode()} {\n"+
-            "\t${body.generateCode()}\n"+
-            "}"
+    return "${getPrefix(depth)}for $varName in ${range.generateCode()}"+
+            body.generateCode(depth)
 }
 
 fun ControlStructureBody.generateCode(depth: Int = 0): String{

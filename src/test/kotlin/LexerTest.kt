@@ -164,7 +164,9 @@ class LexerTest {
         assertEquals(listOf("FOR", "LPAREN", "ID", "IN", "INT_LIT", "RANGE", "INT_LIT", "RPAREN", "LCURL", "PRINT","LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL","EOF"),
             tokens(lexerForCode("for(i in 1..10){" +
                     "   print(\"Hello world\")" +
-                    "}")))
+                    "}"
+            ))
+        )
     }
 
     @Test

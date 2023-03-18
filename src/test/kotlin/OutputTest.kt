@@ -115,6 +115,24 @@ class  OutputTest {
     }
 
     @Test
+    fun convertFor(){
+        val code = """
+            for(i in 1..10){
+                print("ciao")
+            }
+        """.trimIndent()
+        val result = """
+            for i in 1...10{
+            	print("ciao")
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+
+
+    @Test
     fun convertFunction(){
         val code = "fun test(x: Int, y: Int){\tprint(\"ciao\")}"
         val result = "func test(x: Int, y: Int){\n\tprint(\"ciao\")\n}"

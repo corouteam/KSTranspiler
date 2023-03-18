@@ -140,6 +140,21 @@ class  OutputTestKotlin {
         val parseResult = SwiftParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateKotlinCode())
     }
+    @Test
+    fun convertFor(){
+        val code = """
+            for i in 1...10{
+            	print("ciao")
+            }
+        """.trimIndent()
+        val result = """
+            for(i in 1..10) {
+            	print("ciao")
+            }
+        """.trimIndent()
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
 
     @Test
     fun convertDoubleRangeExpression() {
