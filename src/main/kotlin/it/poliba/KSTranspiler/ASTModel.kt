@@ -197,14 +197,14 @@ class PrimaryConstructor(
     override var position: Position?
 ): Declaration()
 sealed class ComposableCall(
-    open var zIndex: Expression??,
+    open var zIndex: Expression?,
     type: ComposableType): Expression(type)
 
 class TextComposableCall(
     val value: Expression,
     val color: Expression?,
     val fontWeight: Expression?,
-    zIndex: Expression?? = null,
+    zIndex: Expression? = null,
     override var position: Position? = null,
 ): ComposableCall( zIndex, TextComposableType(position))
 
@@ -219,18 +219,18 @@ class FontWeightBold(override var position: Position? = null): FontWeightLit()
 class DividerComposableCall(
     val frame: Frame?,
     val color: Expression?,
-    zIndex: Expression?? = null,
+    zIndex: Expression? = null,
     override var position: Position? = null): ComposableCall(zIndex, DividerComposableType(position))
 
 class SpacerComposableCall(
     val size: Frame?,
-    zIndex: Expression?? = null,
+    zIndex: Expression? = null,
     override var position: Position? = null,
     ): ComposableCall(zIndex, SpacerComposableType(position))
 
 class ZStackComposableCall(
     val body: ControlStructureBody,
-    zIndex: Expression?? = null,
+    zIndex: Expression? = null,
     override var position: Position? = null,
 ): ComposableCall(zIndex, ZStackComposableType(position))
 
@@ -242,7 +242,7 @@ data class ColumnComposableCall(
     val horizontalAlignment: Expression?,
     val scrollable: Boolean,
     val body: ControlStructureBody,
-    override var zIndex: Expression?? = null,
+    override var zIndex: Expression? = null,
     override var position: Position? = null,
 ): ComposableCall(zIndex, ColumnComposableType(position))
 
@@ -251,7 +251,7 @@ data class RowComposableCall(
     val verticalAlignment: Expression?,
     val scrollable: Boolean,
     val body: ControlStructureBody,
-    override var zIndex: Expression?? = null,
+    override var zIndex: Expression? = null,
     override var position: Position? = null
 ): ComposableCall(zIndex, ColumnComposableType(position))
 
