@@ -52,9 +52,9 @@ object KotlinParserFacadeScript {
         val antlrResult = KotlinAntlrParserFacadeScript.parse(inputStream)
         val (antlrRoot, lexicalAndSyntacticErrors) = antlrResult
 
-        val astRoot: AstScript? = if (lexicalAndSyntacticErrors.isEmpty()) {
+        val astRoot = if (lexicalAndSyntacticErrors.isEmpty()) {
             try {
-                antlrRoot?.toAst()
+                antlrRoot?.toAst(considerPosition = true)
             } catch (e: Error) {
                 return KotlinScriptParsingResult(null, lexicalAndSyntacticErrors + e)
             }

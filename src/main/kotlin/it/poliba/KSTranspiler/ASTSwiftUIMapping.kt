@@ -3,6 +3,7 @@ package it.poliba.KSTranspiler
 import com.strumenta.kolasu.parsing.position
 import it.poliba.KSTranspiler.SwiftParser.*
 import it.poliba.KSTranspiler.Error
+import it.poliba.KSTranspiler.KotlinParser.ColorParameterContext
 
 fun  SwiftParser.WidgetCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
     return this.widgetCall().toAst(considerPosition)
@@ -26,8 +27,11 @@ fun SwiftParser.TextWidgetContext.toAst(considerPosition: Boolean = false): Expr
     val expressionAst = this.expression().toAst(considerPosition)
     if(expressionAst.type.nodeType != StringType(toPosition(considerPosition)).nodeType) throw IllegalArgumentException("String expected in Text composable")
     val params = swiftUITextSuffix().map { it.toAst(considerPosition) }
-    val color = params.firstOrNull { it is ColorLit } as ColorLit?
-    val fontWeight = params.firstOrNull { it is FontWeightLit } as FontWeightLit?
+    val color = (swiftUITextSuffix()
+        .firstOrNull { it is ForegroundColorSuffixContext } as? ForegroundColorSuffixContext)?.expression()?.toAst(considerPosition)
+    val fontWeight = (swiftUITextSuffix()
+        .firstOrNull { it is FontWeightSuffixContext } as? FontWeightSuffixContext)?.expression()?.toAst(considerPosition)
+
     return TextComposableCall(expressionAst, color, fontWeight, null, toPosition(considerPosition))
 }
 
@@ -69,8 +73,8 @@ fun SwiftParser.ZStackWidgetContext.toAst(considerPosition: Boolean = false): Ex
 }
 
 fun SwiftParser.SwiftUITextSuffixContext.toAst(considerPosition: Boolean = false): Expression = when(this){
-    is ForegroundColorSuffixContext -> color().toAst(considerPosition)
-    is BoldSuffixContext -> FontWeightBold(toPosition(considerPosition))
+    is ForegroundColorSuffixContext -> expression().toAst(considerPosition)
+    is FontWeightSuffixContext -> expression().toAst(considerPosition)
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 

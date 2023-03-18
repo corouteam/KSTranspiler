@@ -1,8 +1,7 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.SwiftParser.BlockContext
-import it.poliba.KSTranspiler.SwiftParser.FunctionCallContext
-import it.poliba.KSTranspiler.SwiftParser.SELF
+import it.poliba.KSTranspiler.SwiftParser.BoldContext
 
 fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
     return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
@@ -122,8 +121,11 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
     is SwiftParser.ContentModeExpressionContext -> contentMode().toAst(considerPosition)
     is SwiftParser.ComplexExpressionContext -> toAst(considerPosition)
+    is SwiftParser.ColorLiteralContext -> color().toAst(considerPosition)
+    is SwiftParser.FontWeightLiteralContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
+
 
 fun SwiftParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expression{
     var base = if(ID() != null){
@@ -140,6 +142,14 @@ fun SwiftParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expre
         return getAccessSuffix(accessSuffix(), base)
     }else{
         return base
+    }
+
+}
+
+fun SwiftParser.FontWeightLiteralContext.toAst(considerPosition: Boolean): Expression{
+    return when(fontWeight()){
+        is BoldContext -> FontWeightBold(toPosition(considerPosition))
+        else -> throw Exception("FontWeight not recognized")
     }
 }
 
@@ -229,6 +239,8 @@ fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = wh
     is SwiftParser.StringContext -> StringType(toPosition(considerPosition))
     is SwiftParser.CgFloatContext -> DpType(toPosition(considerPosition))
     is SwiftParser.ContentModeTypeContext -> AspectRatioType(toPosition(considerPosition))
+    is SwiftParser.FontWeightTypeContext -> FontWeightType(toPosition(considerPosition))
+    is SwiftParser.ColorTypeContext -> ColorType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

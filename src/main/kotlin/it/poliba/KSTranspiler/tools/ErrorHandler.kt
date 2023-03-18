@@ -2,15 +2,13 @@ package it.poliba.KSTranspiler.tools
 
 import com.strumenta.kolasu.model.Point
 import com.strumenta.kolasu.model.Position
+import com.strumenta.kolasu.model.pos
 import it.poliba.KSTranspiler.Error
 import it.poliba.KSTranspiler.KotlinLexer
 import it.poliba.KSTranspiler.KotlinParser
 import it.poliba.KSTranspiler.SwiftLexer
 import it.poliba.KSTranspiler.SwiftParser
-import org.antlr.v4.runtime.ANTLRErrorListener
-import org.antlr.v4.runtime.Parser
-import org.antlr.v4.runtime.RecognitionException
-import org.antlr.v4.runtime.Recognizer
+import org.antlr.v4.runtime.*
 import org.antlr.v4.runtime.atn.ATNConfigSet
 import org.antlr.v4.runtime.dfa.DFA
 import java.util.*
@@ -51,8 +49,9 @@ object ErrorHandler {
             ex: RecognitionException?
         ) {
             ex?.printStackTrace()
+            val message = "Unrecognized symbol ${(offendingSymbol as CommonToken).text}"
 
-            lexicalAndSyntaticErrors.add(Error(msg ?: "Syntax Error",
+            lexicalAndSyntaticErrors.add(Error(message,
                 Position(
                     Point(line, charPositionInline),
                     Point(line, charPositionInline+1))

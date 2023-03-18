@@ -149,17 +149,10 @@ fun KotlinParser.RowComposableContext.toAst(considerPosition: Boolean = false): 
 fun KotlinParser.TextComposableContext.toAst(considerPosition: Boolean = false): Expression {
     val expressionAst = this.expression().toAst(considerPosition)
     if(expressionAst.type.nodeType != StringType(toPosition(considerPosition)).nodeType) throw IllegalArgumentException("String expected in Text composable")
-    val params = textComposeParameter().filterNot { it is ModifierTextParameterContext}.map { it.toAst(considerPosition) }
-    val color = params.firstOrNull { it is ColorLit } as ColorLit?
-    val fontWeight = params.firstOrNull { it is FontWeightLit } as FontWeightLit?
+    val fontWeight = (textComposeParameter().firstOrNull { it is FontWeightParameterContext } as FontWeightParameterContext? )?.expression()?.toAst(considerPosition)
     val modifier = (textComposeParameter().firstOrNull { it is ModifierTextParameterContext } as ModifierTextParameterContext? )?.modifierParameter()?.modifier()?.toModifier(considerPosition)
+    val color = (textComposeParameter().firstOrNull { it is ColorParameterContext } as ColorParameterContext? )?.expression()?.toAst(considerPosition)
     return TextComposableCall(expressionAst, color, fontWeight,modifier?.zIndex, toPosition(considerPosition))
-}
-
-fun KotlinParser.TextComposeParameterContext.toAst(considerPosition: Boolean = false): Expression = when(this){
-    is ColorParameterContext -> this.color().toAst(considerPosition)
-    is FontWeightParameterContext -> this.fontWeight().toAst(considerPosition)
-    else -> throw java.lang.IllegalArgumentException("Text compose parameter not recognized")
 }
 
 fun KotlinParser.ColorContext.toAst(considerPosition: Boolean = false): Expression = when(this){
@@ -169,7 +162,7 @@ fun KotlinParser.ColorContext.toAst(considerPosition: Boolean = false): Expressi
 }
 
 fun KotlinParser.FontWeightContext.toAst(considerPosition: Boolean = false): Expression = when(this){
-    is CustomWeightContext -> CustomFontWeight(IntLit(INT_LIT().text, toPosition(considerPosition)), toPosition(considerPosition))
+    is CustomWeightContext -> CustomFontWeight(expression().toAst(considerPosition), toPosition(considerPosition))
     is BoldFontWeightContext ->  FontWeightBold(toPosition(considerPosition))
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }

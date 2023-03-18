@@ -95,7 +95,6 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | composableCall #composableCallExpression
            | color                                                         # colorLiteral
            | fontWeight                                                    # fontWeightLiteral
-           | fontWeight                                                    # fontWeightLiteral
            | horizontalAlignment                                           #horizhontalAlignmentExpression
            | verticalAlignment                                             #verticalAlignmentExpression
            | arrangement                                                   #arrangementExpression
@@ -194,8 +193,8 @@ composableCall:
     | IMAGE_COMPOSE LPAREN (NL* imageComposeParameter) ((NL* COMMA NL* imageComposeParameter)*)? NL* RPAREN #imageComposable;
 
 textComposeParameter:
-    COLOR_PARAM ASSIGN color #colorParameter
-    | FONT_WEIGHT_PARAM ASSIGN fontWeight #fontWeightParameter
+    COLOR_PARAM ASSIGN expression #colorParameter
+    | FONT_WEIGHT_PARAM ASSIGN expression #fontWeightParameter
     | modifierParameter #modifierTextParameter;
 
 composableUIGenericWidgetSuffix:
@@ -240,11 +239,10 @@ contentScadeMode:
 
 color:
      COLOR LPAREN COLOR_LITERAL RPAREN #customColor
-     | COLOR DOT COLOR_BLUE #blueColor
-     | ID #idColor ;
+     | COLOR DOT COLOR_BLUE #blueColor ;
 
 fontWeight:
-    FONT_WEIGHT LPAREN INT_LIT RPAREN #customWeight
+    FONT_WEIGHT LPAREN expression RPAREN #customWeight
     | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 
 modifierParameter:

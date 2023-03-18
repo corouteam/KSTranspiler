@@ -195,6 +195,8 @@ fun Type.generateKotlinCode(depth: Int=0) : String = when (this) {
     is RangeType -> "ClosedRange<${this.type.generateKotlinCode()}>"
     is ListType -> "[${this.itemsType.generateKotlinCode()}]"
     is AspectRatioType -> "ContentScale"
+    is ColorType -> "Color"
+    is FontWeightType -> "FontWeight"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -207,8 +209,7 @@ fun BinaryExpression.generateKotlinCode(depth: Int=0): String = when(this) {
 }
 fun TextComposableCall.generateKotlinCode(depth: Int=0): String{
     val parameters = arrayListOf<String>()
-
-    parameters.add("${this.value.generateKotlinCode()}")
+    parameters.add(this.value.generateKotlinCode())
 
     this.color?.generateKotlinCode()?.let {
         parameters.add("color = $it")

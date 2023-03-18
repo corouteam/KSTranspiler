@@ -210,6 +210,7 @@ fun Type.generateCode() : String = when (this) {
     is DpType -> "CGFloat"
     is ColorType -> "Color"
     is AspectRatioType -> "ContentMode"
+    is FontWeightType -> "Font.Weight"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

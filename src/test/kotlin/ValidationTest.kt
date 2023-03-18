@@ -75,7 +75,6 @@ class ValidationTest {
         assert(parseResult.errors.isNotEmpty())
         assertEquals("A variable named 'a' is used but never declared", parseResult.errors.first().message)
     }
-
     @Test
     fun `variable declared in different scope does not throw error`() {
         var code = """

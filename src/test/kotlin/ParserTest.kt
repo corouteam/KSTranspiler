@@ -1,3 +1,4 @@
+/*
 package it.poliba.KSTranspiler
 import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacade
 import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacadeScript
@@ -854,4 +855,4 @@ KotlinScript
     }
 
 
-}
+}*/

@@ -67,6 +67,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | horizontalAlignment                                           # horizontalAlignmentExpression
            | verticalAlignment                                             # verticalAlignmentExpression
            | color                                                         # colorLiteral
+           | FONT DOT WEIGHT DOT fontWeight #fontWeightLiteral
            | SELF                                                          # selfExpression
            | (ID | functionCallExpression | SELF) (accessSuffix)*          # complexExpression
            | CONTENT_MODE DOT contentMode #contentModeExpression;
@@ -173,7 +174,9 @@ type : INT     # integer |
        STRING  # string |
        ID      #userType |
        CG_FLOAT #cgFloat |
-       CONTENT_MODE #contentModeType;
+       CONTENT_MODE #contentModeType |
+       COLOR #colorType |
+       FONT DOT WEIGHT #fontWeightType ;
 
 
 
@@ -189,9 +192,12 @@ widgetCall:
     | IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUIImageSuffix) (NL* DOT NL* swiftUIImageSuffix)*)?  #imageWidget;
 
 swiftUITextSuffix:
-    FOREGROUND_COLOR LPAREN color RPAREN # foregroundColorSuffix
-    | FONT_WEIGHT_PARAM LPAREN fontWeight RPAREN # boldSuffix
+    FOREGROUND_COLOR LPAREN expression RPAREN # foregroundColorSuffix
+    | FONT_WEIGHT_PARAM LPAREN expression RPAREN # fontWeightSuffix
     ;
+
+fontWeight:
+    FONT_WEIGHT_BOLD #bold;
 
 swiftUIColumnParam:
     ALIGNMENT_PARAM COLON expression # alignmentParameter |
@@ -215,9 +221,6 @@ swiftUIGenericWidgetSuffix:
 frameParam:
      HEIGHT COLON expression #heightParam |
      WIDTH COLON expression #widthParam;
-
-fontWeight:
-     FONT DOT WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
 
 color:
      COLOR DOT COLOR_BLUE #blueColor;

@@ -213,7 +213,7 @@ class CustomColor(val hex: StringLit, override var position: Position? = null): 
 class ColorBlue(override var position: Position? = null): ColorLit()
 sealed class FontWeightLit(): Expression(FontWeightType())
 
-class CustomFontWeight(val value: IntLit, override var position: Position? = null): FontWeightLit()
+class CustomFontWeight(val value: Expression, override var position: Position? = null): FontWeightLit()
 class FontWeightBold(override var position: Position? = null): FontWeightLit()
 
 class DividerComposableCall(

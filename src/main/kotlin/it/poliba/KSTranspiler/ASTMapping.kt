@@ -200,6 +200,8 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.VerticalAlignmentExpressionContext -> toAst(considerPosition)
     is KotlinParser.ComplexExpressionContext -> toAst(considerPosition)
     is KotlinParser.ContentScaleExpressionContext -> toAst(considerPosition)
+    is KotlinParser.ColorLiteralContext -> this.color().toAst(considerPosition)
+    is KotlinParser.FontWeightLiteralContext -> this.fontWeight().toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
