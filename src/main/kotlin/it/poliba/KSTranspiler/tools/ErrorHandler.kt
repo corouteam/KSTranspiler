@@ -49,7 +49,13 @@ object ErrorHandler {
             ex: RecognitionException?
         ) {
             ex?.printStackTrace()
-            val message = "Unrecognized symbol ${(offendingSymbol as CommonToken).text}"
+            val token = offendingSymbol as? CommonToken
+            val message = if(token != null){
+                "Unrecognized symbol ${token.text}"
+            }else {
+                msg ?: "Unexpected symbol"
+            }
+
 
             lexicalAndSyntaticErrors.add(Error(message,
                 Position(

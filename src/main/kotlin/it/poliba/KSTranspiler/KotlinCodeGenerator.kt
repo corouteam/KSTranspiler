@@ -197,6 +197,9 @@ fun Type.generateKotlinCode(depth: Int=0) : String = when (this) {
     is AspectRatioType -> "ContentScale"
     is ColorType -> "Color"
     is FontWeightType -> "FontWeight"
+    is DpType -> "Dp"
+    is HorizontalAlignmentType -> "Alignment.Horizontal"
+    is VerticalAlignmentType -> "Alignment.Vertical"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -250,11 +253,11 @@ fun ColumnComposableCall.generateKotlinCode(depth: Int=0): String{
         arguments.add("verticalArrangement = Arrangement.spacedBy($it)")
     }
 
-    val bodyString = body.generateKotlinCode(depth+1)
+    val bodyString = body.generateKotlinCode(depth)
     if (scrollable) arguments.add("modifier = Modifier.verticalScroll(rememberScrollState())")
 
     val parameters = arguments.joinToString(",\n\t")
-    return "${getPrefix(depth)}Column(\n\t$parameters)$bodyString"
+    return "${getPrefix(depth)}Column(\n\t$parameters\n)$bodyString"
 }
 fun AspectRatioLit.generateKotlinCode(depth: Int = 0): String{
     var res = when(this){

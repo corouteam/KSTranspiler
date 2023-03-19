@@ -205,11 +205,13 @@ class  OutputTestKotlin {
          	spacing: CGFloat(10)){}
         """.trimIndent()
 
-        val result = """Column(
+        val result = """
+Column(
 	horizontalAlignment = Alignment.Start,
-	verticalArrangement = Arrangement.spacedBy(10.dp)){
+	verticalArrangement = Arrangement.spacedBy(10.dp)
+){
 
-	}""".trimIndent()
+}""".trimIndent()
 
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
@@ -238,12 +240,14 @@ class  OutputTestKotlin {
         	}
     """.trimIndent()
 
-        val result = """Column(
+        val result =
+"""Column(
 	horizontalAlignment = Alignment.Start,
 	verticalArrangement = Arrangement.spacedBy(10.dp),
-	modifier = Modifier.verticalScroll(rememberScrollState())){
+	modifier = Modifier.verticalScroll(rememberScrollState())
+){
 
-	}"""
+}"""
         val parseResult = SwiftParserFacadeScript.parse(code)
 
         assertEquals(result, parseResult.root!!.generateKotlinCode())
@@ -270,12 +274,14 @@ class  OutputTestKotlin {
 		Text("Ciao")
 	}
 }""".trimIndent()
-        val result = """Column(
+        val result =
+"""Column(
 	horizontalAlignment = Alignment.Start,
 	verticalArrangement = Arrangement.spacedBy(10.dp),
-	modifier = Modifier.verticalScroll(rememberScrollState())){
-		Text("Ciao")
-	}""".trimIndent()
+	modifier = Modifier.verticalScroll(rememberScrollState())
+){
+	Text("Ciao")
+}""".trimIndent()
 
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())

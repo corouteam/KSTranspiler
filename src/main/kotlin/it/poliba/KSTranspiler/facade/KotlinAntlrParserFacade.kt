@@ -35,7 +35,7 @@ object KotlinAntlrParserFacade {
         val parser = KotlinParser(CommonTokenStream(lexer))
             .attachErrorHandler()
 
-        val antlrRoot = parser.file() as? KotlinFileContext ?: throw  FileExpectedException()
+        val antlrRoot = parser.file() as? KotlinFileContext
 
         return AntlrParsingResult(antlrRoot, getLexicalAndSyntaticErrors())
     }
@@ -62,7 +62,7 @@ object KotlinAntlrParserFacadeScript {
         val parser = KotlinParser(CommonTokenStream(lexer))
             .attachErrorHandler()
 
-        val antlrRoot = parser.file() as? KotlinScriptContext ?: throw  ScriptExpectedException()
+        val antlrRoot = parser.file() as? KotlinScriptContext
 
         val lexicalAndSyntaticErrors = getLexicalAndSyntaticErrors()
 

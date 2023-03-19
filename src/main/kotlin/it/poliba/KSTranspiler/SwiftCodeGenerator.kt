@@ -211,6 +211,8 @@ fun Type.generateCode() : String = when (this) {
     is ColorType -> "Color"
     is AspectRatioType -> "ContentMode"
     is FontWeightType -> "Font.Weight"
+    is HorizontalAlignmentType -> "HorizontalAlignment"
+    is VerticalAlignmentType -> "VerticalAlignment"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

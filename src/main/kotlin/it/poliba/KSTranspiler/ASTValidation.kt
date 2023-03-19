@@ -270,6 +270,15 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    this.specificProcess(ColumnComposableCall::class.java) {
+        if(it.spacing?.type != null && it.spacing.type !is DpType){
+            errors.add(Error("Column spacing requires a dp literal", it.position?.start?.asPosition))
+        }
+        if(it.horizontalAlignment?.type != null && it.horizontalAlignment.type !is HorizontalAlignmentType){
+            errors.add(Error("Column horizontal alignment requires a HorizontalAlignmentType", it.position?.start?.asPosition))
+        }
+    }
+
     return errors
 }
 
