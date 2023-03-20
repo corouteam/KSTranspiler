@@ -190,6 +190,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
+    is KotlinParser.WhileExpressionContext-> toAst(considerPosition)
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
     is KotlinParser.FunctionCallContext -> toAst(considerPosition)
     is KotlinParser.ListExpressionContext -> toAst(considerPosition)
@@ -290,6 +291,10 @@ fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expressio
         elseBranch = elseBody,
         position = toPosition(considerPosition)
     )
+}
+
+fun KotlinParser.WhileExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return WhileExpression(this.while_().expression().toAst(), this.while_().body.toAst())
 }
 
 

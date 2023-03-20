@@ -52,6 +52,7 @@ DOT                : '.';
 
 IF: 'if';
 ELSE: 'else';
+WHILE: 'while';
 FUN: 'func';
 PACKAGE: 'package';
 RETURN                  : 'return' ;

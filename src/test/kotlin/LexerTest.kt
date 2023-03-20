@@ -160,6 +160,38 @@ class LexerTest {
     }
 
     @Test
+    fun parseWhileStatement() {
+        assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "PRINT","LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL","EOF"),
+            tokens(lexerForCode("while(true){" +
+                    "   print(\"Hello world\")" +
+                    "}")))
+    }
+
+    @Test
+    fun parseWhileBreakStatement() {
+        assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "BREAK", "RCURL","EOF"),
+            tokens(lexerForCode("while(true){" +
+                    "   break" +
+                    "}")))
+    }
+
+    @Test
+    fun parseWhileContinueStatement() {
+        assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "CONTINUE", "RCURL","EOF"),
+            tokens(lexerForCode("while(true){" +
+                    "   continue" +
+                    "}")))
+    }
+
+    @Test
+    fun parseWhileReturnStatement() {
+        assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "RETURN", "INT_LIT", "RCURL","EOF"),
+            tokens(lexerForCode("while(true){" +
+                    "   return 1" +
+                    "}")))
+    }
+
+    @Test
     fun parseFunction() {
         val code = "fun test(x: Int, y: Int)\t{\tprint(\"ciao\")}"
         val result = listOf(

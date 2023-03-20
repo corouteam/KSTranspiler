@@ -88,6 +88,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT DOT DP_SUFFIX                                         # dpLiteral
            | functionCallExpression                        # functionCall
            | if                                                            # ifExpression
+           | while                                                         # whileExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
@@ -119,6 +120,9 @@ if
       | body=controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (elseBody=controlStructureBody | SEMICOLON)
       | SEMICOLON)
     ;
+
+while: WHILE LPAREN expression RPAREN NL* body=controlStructureBody;
+
 
 controlStructureBody
     : block

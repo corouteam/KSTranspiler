@@ -63,6 +63,7 @@ fun Statement.generateCode(depth: Int = 0): String {
         is Assignment -> this.generateCode(depth)
         is Print -> this.generateCode(depth)
         is IfExpression -> this.generateCode(depth)
+        is WhileExpression -> this.generateCode()
         is Expression -> this.generateCode(depth)
         is FunctionDeclaration -> this.generateCode(depth)
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -98,6 +99,12 @@ fun IfExpression.generateCode(depth: Int = 0): String{
         }
     }
     return result
+}
+
+fun WhileExpression.generateCode(): String{
+    return "while(${condition.generateCode()}){\n"+
+            "\t${body.generateCode()}\n"+
+            "}"
 }
 
 fun ControlStructureBody.generateCode(depth: Int = 0): String{

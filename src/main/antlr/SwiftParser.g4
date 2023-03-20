@@ -58,6 +58,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | BOOL_LIT                                                      # boolLiteral
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
+           | while                                                         # whileExpression
            | stringLiteral                                                 # stringLiteralExpression
            | functionCallExpression                                        # functionCall
            | left=expression RANGE NL* right=expression                    # rangeExpression
@@ -78,6 +79,8 @@ if
       | body=controlStructureBody? NL* SEMICOLON? NL* ELSE NL* (elseBody=controlStructureBody | SEMICOLON)
       | SEMICOLON)
     ;
+while : WHILE NL* LPAREN NL* expression NL* RPAREN NL* body=controlStructureBody;
+
 
 accessSuffix:
 (navSuffix expression);

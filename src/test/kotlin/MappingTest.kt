@@ -258,6 +258,29 @@ class MappingTest {
     }
 
     @Test
+    fun mapWhile() {
+        val code = "while(true) print(\"Hello world\")"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            WhileExpression(BoolLit("true"), Print(StringLit("Hello world")))
+        ))
+        assertEquals(expectedAst, ast)
+    }
+
+    @Test
+    fun mapWhileBlock() {
+        val code = "while(true){" +
+                "print(\"Hello world\")" +
+                "}"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            WhileExpression(BoolLit("true"), Block(listOf(Print(StringLit("Hello world")))))
+        ))
+        assertEquals(expectedAst, ast)
+    }
+
+
+    @Test
     fun mapRangeExpression() {
         val code = "val a = 1..42"
         val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()

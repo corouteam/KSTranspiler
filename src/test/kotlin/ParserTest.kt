@@ -168,6 +168,45 @@ class KotlinParserTest {
     }
 
     @Test
+    fun parseWhileDeclaration() {
+        assertEquals(
+            """KotlinScript
+  Line
+    ExpressionStatement
+      WhileExpression
+        While
+          T[while]
+          T[(]
+          BoolLiteral
+            T[true]
+          T[)]
+          ControlStructureBody
+            Block
+              T[{]
+              T[
+]
+              PrintStatement
+                Print
+                  T[print]
+                  T[(]
+                  StringLiteralExpression
+                    StringLiteral
+                      LineStringLiteral
+                        T["]
+                        LineStringContent
+                          T[ciao]
+                        T["]
+                  T[)]
+              Semis
+                T[
+]
+              T[}]
+    T[<EOF>]
+""",
+            toParseTree(parseResourceScript("while_loop")).multiLineString())
+    }
+
+    @Test
     fun parseIfDeclaration() {
         assertEquals(
             """KotlinScript
