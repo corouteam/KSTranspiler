@@ -147,7 +147,9 @@ fun Expression.generateKotlinCode(depth: Int=0) : String = when (this) {
     is DividerComposableCall -> this.generateKotlinCode(depth)
     is SpacerComposableCall -> this.generateKotlinCode(depth)
     is ColumnComposableCall -> this.generateKotlinCode(depth)
+    is RowComposableCall -> this.generateKotlinCode(depth)
     is HorizontalAlignment -> this.generateKotlinCode(depth)
+    is VerticalAlignment -> this.generateKotlinCode(depth)
     is ButtonComposableCall -> this.generateKotlinCode(depth)
     is AccessExpression -> this.generateKotlinCode(depth)
     is ThisExpression -> this.generateKotlinCode(depth)
@@ -259,6 +261,26 @@ fun ColumnComposableCall.generateKotlinCode(depth: Int=0): String{
     val parameters = arguments.joinToString(",\n\t")
     return "${getPrefix(depth)}Column(\n\t$parameters\n)$bodyString"
 }
+
+fun RowComposableCall.generateKotlinCode(depth: Int=0): String{
+
+    val arguments = arrayListOf<String>()
+
+    verticalAlignment?.generateKotlinCode()?.let {
+        arguments.add("verticalAlignment = $it")
+    }
+
+    spacing?.generateKotlinCode()?.let {
+        arguments.add("horizontalArrangement = Arrangement.spacedBy($it)")
+    }
+
+    val bodyString = body.generateKotlinCode(depth)
+    if (scrollable) arguments.add("modifier = Modifier.horizontalScroll(rememberScrollState())")
+
+    val parameters = arguments.joinToString(",\n\t")
+    return "${getPrefix(depth)}Row(\n\t$parameters\n)$bodyString"
+}
+
 fun AspectRatioLit.generateKotlinCode(depth: Int = 0): String{
     var res = when(this){
         is ContentFit -> "ContentScale.Fit"
@@ -303,6 +325,14 @@ fun HorizontalAlignment.generateKotlinCode(depth: Int = 0): String{
         is StartAlignment -> "${getPrefix(depth)}Alignment.Start"
         is EndAlignment -> "${getPrefix(depth)}Alignment.End"
         is CenterHorizAlignment -> "${getPrefix(depth)}Alignment.Center"
+    }
+}
+
+fun VerticalAlignment.generateKotlinCode(depth: Int = 0): String{
+    return when(this){
+        is TopAlignment -> "${getPrefix(depth)}Alignment.Top"
+        is BottomAlignment -> "${getPrefix(depth)}Alignment.Bottom"
+        is CenterVerticallyAlignment -> "${getPrefix(depth)}Alignment.Center"
     }
 }
 fun AccessExpression.generateKotlinCode(depth: Int = 0): String{

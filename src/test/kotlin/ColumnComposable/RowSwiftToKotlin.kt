@@ -1,6 +1,5 @@
 package it.poliba.KSTranspiler.TextComposable
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
@@ -8,19 +7,18 @@ import it.poliba.KSTranspiler.generateCode
 import it.poliba.KSTranspiler.generateKotlinCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 /**
  * Test for Column. This class aims to verify the correctness of
  * the conversion of Column Widget from SwiftUI to Kotlin.
  * It also verifies alignment and spacing since were introduced for this widget
  */
-class ColumnSwiftToKotlin {
+class RowSwiftToKotlin {
     @Test
-    fun convertColumn() {
+    fun convertRow() {
         val code = """
-         VStack(
-         	alignment: HorizontalAlignment.leading,
+         HStack(
+         	alignment: VerticalAlignment.top,
          	spacing: CGFloat(10)){
    
          }
@@ -28,9 +26,9 @@ class ColumnSwiftToKotlin {
 
         val result =
     """
-Column(
-	horizontalAlignment = Alignment.Start,
-	verticalArrangement = Arrangement.spacedBy(10.dp)
+Row(
+	verticalAlignment = Alignment.Top,
+	horizontalArrangement = Arrangement.spacedBy(10.dp)
 ){
 
 }""".trimIndent()
@@ -39,9 +37,9 @@ Column(
     }
 
     @Test
-    fun convertColumnOnlyVerticalArrangement() {
+    fun convertColumnOnlyArrangement() {
        val code =
-           """VStack(
+           """HStack(
          	spacing: CGFloat(10)){
    
          }
@@ -49,8 +47,8 @@ Column(
 
         val result =
             """
-Column(
-	verticalArrangement = Arrangement.spacedBy(10.dp)
+Row(
+	horizontalArrangement = Arrangement.spacedBy(10.dp)
 ){
 
 }""".trimIndent()
@@ -60,11 +58,11 @@ Column(
     }
 
     @Test
-    fun convertColumnOnlyVerticalArrangementVariable() {
+    fun convertColumnOnlyArrangementVariable() {
 
         val code = """
          var cSpacing:CGFloat = CGFloat(10)
-         VStack(
+         HStack(
          	spacing: cSpacing){
    
          }
@@ -72,8 +70,8 @@ Column(
 
         val result = """
             var cSpacing:Dp = 10.dp
-            Column(
-            	verticalArrangement = Arrangement.spacedBy(cSpacing)
+            Row(
+            	horizontalArrangement = Arrangement.spacedBy(cSpacing)
             ){
 
             }
@@ -86,13 +84,13 @@ Column(
     @Test
     fun convertColumnOnlyVerticalAlignment() {
         val code = """
-VStack(
-	alignment: HorizontalAlignment.leading){
+HStack(
+	alignment: VerticalAlignment.top){
 
 }""".trimIndent()
         val result = """
-Column(
-	horizontalAlignment = Alignment.Start
+Row(
+	verticalAlignment = Alignment.Top
 ){
 
 }""".trimIndent()
@@ -105,16 +103,16 @@ Column(
         fun convertColumnOnlyVerticalAlignmentVariable() {
 
             val code = """
-        var cAlignment = HorizontalAlignment.leading
-        VStack(
+        var cAlignment = VerticalAlignment.top
+        HStack(
             alignment: cAlignment){
 
         }""".trimIndent()
 
             val result = """
-var cAlignment:Alignment.Horizontal = Alignment.Start
-Column(
-	horizontalAlignment = cAlignment
+var cAlignment:Alignment.Vertical = Alignment.Top
+Row(
+	verticalAlignment = cAlignment
 ){
 
 }""".trimIndent()
@@ -122,14 +120,14 @@ Column(
             assertEquals(result, parseResult.root!!.generateKotlinCode())
         }
     @Test
-    fun parseHorizontalAlignmentWithImplicitType() {
+    fun parseAlignmentWithImplicitType() {
 
         val code = """
-        var cAlignment = HorizontalAlignment.leading
+        var cAlignment = VerticalAlignment.top
         """.trimIndent()
 
         val result = """
-var cAlignment:Alignment.Horizontal = Alignment.Start
+var cAlignment:Alignment.Vertical = Alignment.Top
 """.trimIndent()
         val parseResult = SwiftParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
@@ -154,63 +152,48 @@ var cAlignment:Alignment.Horizontal = Alignment.Start
 
     @Test
     fun wrongAlignmentThrowsError() {
-        val code =  " var cAlignment = HorizontalAlignment.leadings"
+        val code =  " var cAlignment = VerticalAlignment.tops"
 
         val parseResult = SwiftParserFacade.parse(code)
 
-        assertEquals("Unrecognized symbol leadings", parseResult.errors.first().message)
+        assertEquals("Unrecognized symbol tops", parseResult.errors.first().message)
     }
 
     @Test
-    fun convertColumnOnlyVerticalAlignmentVariableFailsIfWrongType() {
+    fun convertColumnOnlyAlignmentVariableFailsIfWrongType() {
 
         val code = """
             var cAlignment:String = "Ciao"
-            VStack(
+            HStack(
                 alignment: cAlignment){
 
             }""".trimIndent()
 
-        val result = """
-            var cAlignment = "Ciao"
-            Column(
-             horizontalAlignment = cAlignment)
-            """.trimIndent()
-
         val parseResult = SwiftParserFacadeScript.parse(code)
-        assertEquals("Column horizontal alignment requires a HorizontalAlignmentType", parseResult.errors.first().message)
+        assertEquals("Row vertical alignment requires a VerticalAlignmentType", parseResult.errors.first().message)
     }
 
     @Test
-    fun convertColumnOnlyVerticalArrangementVariableFailsIfWrongType() {
+    fun convertColumnOnlyArrangementVariableFailsIfWrongType() {
         val code = """
                  var cSpacing:String = "Ciao"
-                 VStack(
+                 HStack(
                      spacing: cSpacing){
 
                  }
                 """.trimIndent()
-        val result = """
-var cSpacing:String = "Ciao"
-Column(
-	verticalArrangement = Arrangement.spacedBy(cSpacing)
-){
-
-}""".trimIndent()
-
 
         val parseResult = SwiftParserFacadeScript.parse(code)
 
-        assertEquals("Column spacing requires a dp literal", parseResult.errors.first().message)
-        assertEquals(result, parseResult.root!!.generateKotlinCode())
+        assertEquals("Row spacing requires a dp literal", parseResult.errors.first().message)
     }
 
     @Test
-    fun convertColumnWithChildren() {
+    fun convertRowWithChildren() {
 
         val code = """
-                 VStack(
-                     alignment: HorizontalAlignment.leading,
+                 HStack(
+                     alignment: VerticalAlignment.top,
                      spacing: CGFloat(10)){
                      Text("Ciao")
                      Text("Linea2")
@@ -218,15 +201,41 @@ Column(
                  }
                 """.trimIndent()
         val result = """
-Column(
-	horizontalAlignment = Alignment.Start,
-	verticalArrangement = Arrangement.spacedBy(10.dp)
+Row(
+	verticalAlignment = Alignment.Top,
+	horizontalArrangement = Arrangement.spacedBy(10.dp)
 ){
 	Text("Ciao")
 	Text("Linea2")
 	Text("Linea3")
 }""".trimIndent()
         val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
+    }
+
+    @Test
+    fun convertHorizontalScrollView(){
+        val code = """
+ScrollView(.horizontal){
+	HStack(
+	alignment: VerticalAlignment.top,
+	spacing: CGFloat(10)){
+
+	}
+}
+    """.trimIndent()
+        val result = """
+ Row(
+ 	verticalAlignment = Alignment.Top,
+ 	horizontalArrangement = Arrangement.spacedBy(10.dp),
+ 	modifier = Modifier.horizontalScroll(rememberScrollState())
+ ){
+
+ }
+            """.trimIndent()
+
+        val parseResult = SwiftParserFacadeScript.parse(code)
+
         assertEquals(result, parseResult.root!!.generateKotlinCode())
     }
 

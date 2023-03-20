@@ -136,6 +136,7 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     is DividerComposableCall -> this.generateCode(depth)
     is SpacerComposableCall -> this.generateCode(depth)
     is ColumnComposableCall -> this.generateCode(depth)
+    is RowComposableCall -> this.generateCode(depth)
     is HorizontalAlignment -> this.generateCode(depth)
     is ButtonComposableCall -> this.generateCode(depth)
     is AccessExpression -> this.generateCode(depth)
@@ -143,8 +144,8 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     is AspectRatioLit -> this.generateCode(depth)
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
-    is ImageComposableCall -> this.generateCode()
-
+    is ImageComposableCall -> this.generateCode(depth)
+    is VerticalAlignment -> this.generateCode(depth)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -280,11 +281,42 @@ fun ColumnComposableCall.generateCode(depth: Int = 0): String{
     }
 }
 
+fun RowComposableCall.generateCode(depth: Int = 0): String{
+    var param1: String? = null
+    verticalAlignment?.generateCode(depth)?.let {
+        param1 ="\n\talignment: $it"
+    }
+    var param2: String? = null
+    spacing?.generateCode(depth)?.let {
+        param2 = "\n\tspacing: $it"
+    }
+    val parameters = listOf(param1, param2).filterNotNull().joinToString(",")
+
+    if(scrollable){
+        val bodyString = body.generateCode(depth+1)
+        return "${getPrefix(depth)}ScrollView(.horizontal){\n${getPrefix(depth + 1)}HStack($parameters)" +
+                "$bodyString\n" +
+                "${getPrefix(depth)}}"
+    }else{
+        val bodyString = body.generateCode(depth)
+        return """${getPrefix(depth)}HStack($parameters)$bodyString"""
+    }
+}
+
 fun HorizontalAlignment.generateCode(depth: Int = 0): String{
     var alignment = when(this){
         is StartAlignment -> "HorizontalAlignment.leading"
         is EndAlignment -> "HorizontalAlignment.trailing"
         is CenterHorizAlignment -> "HorizontalAlignment.center"
+    }
+    return "${getPrefix(depth)}$alignment"
+}
+
+fun VerticalAlignment.generateCode(depth: Int = 0): String{
+    var alignment = when(this){
+        is TopAlignment -> "VerticalAlignment.top"
+        is BottomAlignment -> "VerticalAlignment.bottom"
+        is CenterVerticallyAlignment -> "VerticalAlignment.center"
     }
     return "${getPrefix(depth)}$alignment"
 }

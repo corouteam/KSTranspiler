@@ -16,8 +16,6 @@ fun SwiftParser.WidgetCallContext.toAst(considerPosition: Boolean): Expression =
     is HStackWidgetContext -> this.toAst(considerPosition)
     is ScrollViewWidgetContext -> this.toAst(considerPosition)
     is ZStackWidgetContext -> this.toAst(considerPosition)
-    is DividerWidgetContext -> this.toAst(considerPosition)
-    is SpacerWidgetContext -> this.toAst(considerPosition)
     is SwiftParser.ButtonWidgetContext -> this.toAst(considerPosition)
     is SwiftParser.ImageWidgetContext -> this.toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -192,17 +190,26 @@ fun SwiftParser.VerticalAlignmentExpressionContext.toAst(considerPosition: Boole
 
 fun SwiftParser.ScrollViewWidgetContext.toAst(considerPosition: Boolean = false): Expression{
     val block: Block = this.block()?.toAst(considerPosition) ?: Block(listOf(), toPosition(considerPosition))
-    val possibleVStack = block.body.filterIsInstance(ColumnComposableCall::class.java).firstOrNull()
+    val possibleVStack = block.body.firstOrNull { it is ColumnComposableCall } as? ColumnComposableCall
+    val possibleHStack = block.body.firstOrNull { it is RowComposableCall } as? RowComposableCall
 
-    if (possibleVStack != null) {
-        return possibleVStack.copy(scrollable = true)
-    }
+
+
+
 
     if(this.ID() != null){
         if(this.ID().text == "vertical"){
-            return ColumnComposableCall(null, null, true, block,null, toPosition(considerPosition))
+            if (possibleVStack != null )  {
+                return possibleVStack.copy(scrollable = true)
+            }else{
+                return ColumnComposableCall(null, null, true, block,null, toPosition(considerPosition))
+            }
         }else if(this.ID().text == "horizontal"){
-            return RowComposableCall(null, null, true, block,null, toPosition(considerPosition))
+            if(possibleHStack != null){
+                return possibleHStack.copy(scrollable = true)
+            }else{
+                return RowComposableCall(null, null, true, block,null, toPosition(considerPosition))
+            }
 
         }else{
             throw java.lang.IllegalArgumentException("Scroll parameter not recognized")

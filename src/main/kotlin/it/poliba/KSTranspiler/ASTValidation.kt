@@ -279,6 +279,15 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    this.specificProcess(RowComposableCall::class.java) {
+        if(it.spacing?.type != null && it.spacing.type !is DpType){
+            errors.add(Error("Row spacing requires a dp literal", it.position?.start?.asPosition))
+        }
+        if(it.verticalAlignment?.type != null && it.verticalAlignment.type !is VerticalAlignmentType){
+            errors.add(Error("Row vertical alignment requires a VerticalAlignmentType", it.position?.start?.asPosition))
+        }
+    }
+
     return errors
 }
 
