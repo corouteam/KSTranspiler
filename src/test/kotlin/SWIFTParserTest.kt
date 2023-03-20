@@ -71,6 +71,41 @@ class SWIFTParserTest {
     }
 
     @Test
+    fun parseWhileDeclaration() {
+        assertEquals(
+            """SwiftScript
+              Line
+                ExpressionStatement
+                  WhileStatement
+                    T[while.txt]
+                    T[(]
+                    BoolLiteral
+                      T[true]
+                    T[)]
+                    ControlStatementBody
+                    Block
+                      T[{]
+                      T[
+                        ]
+                        PrintStatement
+                          T[print]
+                          T[(]
+                          StringLiteralExpression
+                            StringLiteral
+                              LineStringLiteral
+                                T[\"]\n\"
+                                LineStringContent
+                                  T[Hello world]
+                                T[\"]\n\"
+                          T[)]
+                          T[;]
+                    
+                T[<EOF>]
+            """,
+            toParseTree(parseResourceScript("swift/while")).multiLineString())
+    }
+
+    @Test
     fun parseSwiftTextWithColor(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +

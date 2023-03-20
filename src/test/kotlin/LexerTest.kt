@@ -162,7 +162,7 @@ class LexerTest {
     @Test
     fun parseWhileStatement() {
         assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "PRINT","LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL","EOF"),
-            tokens(lexerForCode("while(true){" +
+            tokens(lexerForCode("while.txt(true){" +
                     "   print(\"Hello world\")" +
                     "}")))
     }
@@ -170,7 +170,7 @@ class LexerTest {
     @Test
     fun parseWhileBreakStatement() {
         assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "BREAK", "RCURL","EOF"),
-            tokens(lexerForCode("while(true){" +
+            tokens(lexerForCode("while.txt(true){" +
                     "   break" +
                     "}")))
     }
@@ -178,7 +178,7 @@ class LexerTest {
     @Test
     fun parseWhileContinueStatement() {
         assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "CONTINUE", "RCURL","EOF"),
-            tokens(lexerForCode("while(true){" +
+            tokens(lexerForCode("while.txt(true){" +
                     "   continue" +
                     "}")))
     }
@@ -186,7 +186,7 @@ class LexerTest {
     @Test
     fun parseWhileReturnStatement() {
         assertEquals(listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "RETURN", "INT_LIT", "RCURL","EOF"),
-            tokens(lexerForCode("while(true){" +
+            tokens(lexerForCode("while.txt(true){" +
                     "   return 1" +
                     "}")))
     }

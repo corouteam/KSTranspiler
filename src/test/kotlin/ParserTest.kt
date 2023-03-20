@@ -41,7 +41,6 @@ class KotlinParserTest {
         assertEquals(
             """KotlinScript
   Line
-    AssignmentStatement
       Assignment
         VarReference
           T[a]
@@ -175,7 +174,7 @@ class KotlinParserTest {
     ExpressionStatement
       WhileExpression
         While
-          T[while]
+          T[while.txt]
           T[(]
           BoolLiteral
             T[true]

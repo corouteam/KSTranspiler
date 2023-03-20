@@ -38,6 +38,33 @@ class SWIFTLexerTest {
 
         return tokens
     }
+    @Test
+    fun parseWhileStatement(){
+        val code = "while.txt (true) { print(\"Hello world\") }"
+        val result = listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "PRINT", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseWhileBreakStatement(){
+        val code = "while.txt (true) { print(\"Hello world\"); break }"
+        val result = listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "PRINT", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "SEMICOLON", "BREAK", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseWhileContinueStatement(){
+        val code = "while.txt (true) { print(\"Hello world\"); continue }"
+        val result = listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "PRINT", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "SEMICOLON", "CONTINUE", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseWhileReturnStatement(){
+        val code = "while.txt (true) { print(\"Hello world\"); return 42 }"
+        val result = listOf("WHILE", "LPAREN", "BOOL_LIT", "RPAREN", "LCURL", "PRINT", "LPAREN", "QUOTE_OPEN", "LineStrText", "QUOTE_CLOSE", "RPAREN", "SEMICOLON", "RETURN", "INT_LIT", "RCURL", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 
     @Test
     fun parseFunc(){

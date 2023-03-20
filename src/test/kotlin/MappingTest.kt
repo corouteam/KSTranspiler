@@ -259,7 +259,7 @@ class MappingTest {
 
     @Test
     fun mapWhile() {
-        val code = "while(true) print(\"Hello world\")"
+        val code = "while.txt(true) print(\"Hello world\")"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
         val expectedAst = AstScript(listOf(
             WhileExpression(BoolLit("true"), Print(StringLit("Hello world")))
@@ -269,7 +269,7 @@ class MappingTest {
 
     @Test
     fun mapWhileBlock() {
-        val code = "while(true){" +
+        val code = "while.txt(true){" +
                 "print(\"Hello world\")" +
                 "}"
         val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
