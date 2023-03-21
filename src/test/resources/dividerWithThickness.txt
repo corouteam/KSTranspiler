@@ -1,1 +1,1 @@
-Divider(thickness = 8.dp)
+DividerComposable(thickness = 8.dp)

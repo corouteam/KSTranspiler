@@ -1,1 +1,1 @@
-Divider()
+DividerComposable()

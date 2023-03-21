@@ -1,1 +1,1 @@
-Divider().overlay(Color.blue)
+DividerComposable().overlay(Color.blue)

@@ -346,8 +346,8 @@ fun getPrefix(depth: Int): String{
 }
 
 
-fun ImageComposableCall.generateCode(): String{
-    val base =  "Image(${this.value.generateCode()})"
+fun ImageComposableCall.generateCode(depth: Int = 0): String{
+    val base =  "${getPrefix(depth)}Image(${this.value.generateCode()})"
 
     var resizableSuffix = ""
     var aspectRatioSuffix = ""

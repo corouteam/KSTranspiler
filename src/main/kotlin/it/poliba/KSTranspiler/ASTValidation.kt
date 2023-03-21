@@ -288,6 +288,13 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
+    this.specificProcess(DividerComposableCall::class.java) {
+        if(it.color?.type != null && it.color.type !is ColorType){
+            errors.add(Error("Expecting a color", it.position?.start?.asPosition))
+        }
+
+    }
+
     return errors
 }
 

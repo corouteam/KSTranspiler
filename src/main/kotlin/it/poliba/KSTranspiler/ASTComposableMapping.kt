@@ -82,7 +82,7 @@ fun KotlinParser.DividerComposableContext.toAst(considerPosition: Boolean): Expr
     var thicknessExpression = thickness?.expression()?.toAst(considerPosition)
 
     val color = dividerComposeParameter().firstOrNull { it is DividerColorParameterContext } as? DividerColorParameterContext
-    val colorExpression = color?.color()?.toAst(considerPosition)
+    val colorExpression = color?.expression()?.toAst(considerPosition)
     var frameOrThickness = frame ?: thickness?.let { Frame(width = null, height = thicknessExpression) }
 
     val modifier =  (dividerComposeParameter().firstOrNull() {it is DividerModifierParameterContext} as? DividerModifierParameterContext)?.modifierParameter()?.modifier()?.toModifier(considerPosition)

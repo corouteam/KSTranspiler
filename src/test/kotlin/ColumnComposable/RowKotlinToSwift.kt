@@ -21,7 +21,7 @@ class RowKotlinToSwift {
              verticalAlignment = Alignment.Top)
             """.trimIndent()
         val result = """HStack(
-	alignment: HorizontalAlignment.top,
+	alignment: VerticalAlignment.top,
 	spacing: CGFloat(10)){
 
 }""".trimIndent()

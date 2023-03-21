@@ -258,7 +258,7 @@ Column(
         val code = "Divider()\n\t.frame(height: CGFloat(8))"
 
         val result = """
-                Divider(modifier: Modifier.height(8.dp))
+                Divider(thickness = 8.dp)
             """.trimIndent()
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())

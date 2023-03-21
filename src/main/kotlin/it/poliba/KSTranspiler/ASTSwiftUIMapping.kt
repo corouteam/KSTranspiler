@@ -78,7 +78,7 @@ fun SwiftParser.SwiftUITextSuffixContext.toAst(considerPosition: Boolean = false
 
 fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(considerPosition: Boolean): Any = when(this){
     is FrameSuffixContext -> toAst(considerPosition)
-    is OverlaySuffixContext -> this.color().toAst(considerPosition)
+    is OverlaySuffixContext -> this.expression().toAst(considerPosition)
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
 

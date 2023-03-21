@@ -216,7 +216,7 @@ verticalAlignment:
 
 swiftUIGenericWidgetSuffix:
     FRAME LPAREN ((NL* frameParam) (NL* COMMA NL* frameParam)*)? RPAREN #frameSuffix
-    | OVERLAY LPAREN color RPAREN #overlaySuffix;
+    | OVERLAY LPAREN expression RPAREN #overlaySuffix;
 
 frameParam:
      HEIGHT COLON expression #heightParam |

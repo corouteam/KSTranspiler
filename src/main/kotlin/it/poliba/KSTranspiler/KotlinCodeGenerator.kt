@@ -163,11 +163,11 @@ fun Expression.generateKotlinCode(depth: Int=0) : String = when (this) {
 fun DividerComposableCall.generateKotlinCode(depth: Int=0): String{
     var params: ArrayList<String> = arrayListOf()
 
-    color?.let { params.add("color: ${it.generateKotlinCode()}") }
-    frame?.let { params.add("modifier: ${it.generateKotlinCode()}") }
+    color?.let { params.add("color = ${it.generateKotlinCode()}") }
+    frame?.let { params.add("thickness = ${it.height?.generateKotlinCode()}") }
 
     print("SIZE: ${params.size}")
-    var paramString = params.joinToString("")
+    var paramString = params.joinToString(", ")
     return "${getPrefix(depth)}Divider($paramString)"
 }
 fun ButtonComposableCall.generateKotlinCode(depth: Int=0): String{

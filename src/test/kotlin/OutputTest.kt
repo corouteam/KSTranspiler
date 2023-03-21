@@ -226,12 +226,16 @@ struct test: View{
     @Test
      fun mapDivider(){
         val code = """
-            Divider()
+            Divider(color = Color.Blue)
             """.trimIndent()
-        val result = "Divider()"
+        val result = """
+Divider()
+	.overlay(Color.blue)
+        """.trimIndent()
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
+
 
     @Test
     fun convertColumnScrollable(){

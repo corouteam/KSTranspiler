@@ -212,7 +212,7 @@ rowComposeParameter:
 
 dividerComposeParameter:
     THICKNESS ASSIGN expression #dividerTicknessParamater |
-    COLOR_PARAM ASSIGN color #dividerColorParameter |
+    COLOR_PARAM ASSIGN expression #dividerColorParameter |
     modifierParameter #dividerModifierParameter;
 
 arrangement:
