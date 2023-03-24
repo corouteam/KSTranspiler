@@ -43,18 +43,20 @@ Divider()
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
     }
-/*
+
     @Test
     fun convertOnlyColorVariable() {
-        val result = """
-            var myColor = Color.Blue
-            Divider(color = myColor)
-            """.trimIndent()
+
         val code = """
 var myColor:Color = Color.blue
 Divider()
 	.overlay(myColor)
         """.trimIndent()
+
+        val result = """
+            var myColor:Color = Color.Blue
+            Divider(color = myColor)
+            """.trimIndent()
 
         val parseResult = SwiftParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateKotlinCode())
@@ -63,42 +65,46 @@ Divider()
     @Test
     fun convertOnlyColorVariableFailsIfWrongType() {
         val code = """
-            var myColor = "Ciao"
-            Divider(color = myColor)
+var myColor:Color = "Color.blue"
+Divider()
+	.overlay(myColor)
             """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
-        assertEquals("Expecting a color", parseResult.errors.first().message)
+        val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals("Type mismatch (String assigned to a variable of type Color).", parseResult.errors.first().message)
     }
 
     @Test
     fun convertOnlyThickness() {
         val code = """
-            Divider(thickness = 8.dp)
-            """.trimIndent()
-        val result = """
 Divider()
 	.frame(height: CGFloat(8))
         """.trimIndent()
+        val result = """
+            Divider(thickness = 8.dp)
+            """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
-        assertEquals(result, parseResult.root!!.generateCode())
+
+        val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
     }
 
     @Test
     fun convertOnlyThicknessVariable() {
         val code = """
-            var dividerThickness = 8.dp
-            Divider(thickness = dividerThickness)
-            """.trimIndent()
-        val result = """
 var dividerThickness:CGFloat = CGFloat(8)
 Divider()
 	.frame(height: dividerThickness)
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
-        assertEquals(result, parseResult.root!!.generateCode())
+        val result = """
+            var dividerThickness:Dp = 8.dp
+            Divider(thickness = dividerThickness)
+            """.trimIndent()
+
+
+        val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateKotlinCode())
     }
-*/
+
 }

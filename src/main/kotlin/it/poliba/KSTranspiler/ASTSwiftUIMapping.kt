@@ -43,9 +43,9 @@ fun SwiftParser.ButtonWidgetContext.toAst(considerPosition: Boolean = false): Ex
 }
 
 fun DividerWidgetContext.toAst(considerPosition: Boolean = false): Expression {
-    val params = swiftUIGenericWidgetSuffix().map { it.toAst(considerPosition) }
-    val frame = params.firstOrNull { it is Frame } as Frame?
-    val color = params.firstOrNull { it is ColorLit } as ColorLit?
+    val params = swiftUIGenericWidgetSuffix()
+    val frame = (params.firstOrNull { it is FrameSuffixContext } as? FrameSuffixContext)?.toAst(considerPosition)
+    val color = (params.firstOrNull { it is OverlaySuffixContext } as? OverlaySuffixContext)?.expression()?.toAst(considerPosition)
 
     return DividerComposableCall(frame, color,null, toPosition(considerPosition))
 }
@@ -81,6 +81,7 @@ fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(considerPosition: Boolea
     is OverlaySuffixContext -> this.expression().toAst(considerPosition)
     else -> throw IllegalArgumentException("Parametro non riconosciuto")
 }
+
 
 fun SwiftParser.ColorContext.toAst(considerPosition: Boolean = false): Expression = when(this){
     is SwiftParser.BlueColorContext ->  ColorBlue(toPosition(considerPosition))
