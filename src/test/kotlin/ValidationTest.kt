@@ -75,6 +75,18 @@ class ValidationTest {
         assert(parseResult.errors.isNotEmpty())
         assertEquals("A variable named 'a' is used but never declared", parseResult.errors.first().message)
     }
+
+    @Test
+    fun `variable not declared in script throws error`() {
+        var code = """
+            print(a)
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("A variable named 'a' is used but never declared", parseResult.errors.first().message)
+    }
+
     @Test
     fun `variable declared in different scope does not throw error`() {
         var code = """
