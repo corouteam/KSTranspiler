@@ -51,8 +51,7 @@ fun DividerWidgetContext.toAst(considerPosition: Boolean = false): Expression {
 }
 
 fun SwiftParser.SpacerWidgetContext.toAst(considerPosition: Boolean = false): Expression {
-    val params = swiftUIGenericWidgetSuffix().map { it.toAst(considerPosition) }
-    val frame = params.firstOrNull { it is Frame } as Frame?
+    val frame = (swiftUIGenericWidgetSuffix().firstOrNull { it is FrameSuffixContext } as? FrameSuffixContext)?.toAst(considerPosition)
 
     return SpacerComposableCall(frame, null, toPosition(considerPosition))
 }
