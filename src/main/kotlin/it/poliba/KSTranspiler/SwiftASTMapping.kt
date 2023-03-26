@@ -128,7 +128,7 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
 }
 
 fun SwiftParser.ForExpressionContext.toAst(considerPosition: Boolean): Expression {
-    return ForExpression(this.for_().ID().text, this.for_().expression().toAst(), this.for_().body.toAst())
+    return ForExpression(this.for_().ID().text, this.for_().expression().toAst(considerPosition), this.for_().body.toAst(considerPosition))
 }
 fun SwiftParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expression{
     var base = if(ID() != null){
