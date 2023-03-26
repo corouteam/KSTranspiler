@@ -218,6 +218,7 @@ fun Type.generateKotlinCode(depth: Int=0) : String = when (this) {
     is DpType -> "Dp"
     is HorizontalAlignmentType -> "Alignment.Horizontal"
     is VerticalAlignmentType -> "Alignment.Vertical"
+    is UserType -> "${this.name}"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

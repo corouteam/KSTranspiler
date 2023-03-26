@@ -461,9 +461,9 @@ class MappingTest {
 
         val zstack = (ast?.statement?.first() as ZStackComposableCall)
         val block = zstack.body as Block
-        val text = block.body.first() as TextComposableCall
+        val text = block.body[1] as TextComposableCall
 
-        val divider = block.body[1] as DividerComposableCall
+        val divider = block.body[0] as DividerComposableCall
         val spacer = block.body[2] as SpacerComposableCall
         val column = block.body[3] as ColumnComposableCall
         val row = block.body[4] as RowComposableCall
