@@ -144,19 +144,13 @@ HStack(
 
 
     @Test
-    fun wrongCGFloatValueThrowsError() {
-        val code =  "CGFloat('ciao')"
-        val parseResult = KotlinParserFacadeScript.parse(code)
-
-        assertEquals("token recognition error at: '''", parseResult.errors.first().message)
+    fun mapCGFloat() {
+        val code =  "var dimens = 4.dp"
+        val result = "var dimens:CGFloat = CGFloat(4)"
+        val parseResult = KotlinParserFacade.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
     }
 
-    @Test
-    fun CGFloatWithValueIsRecognized() {
-        val code =  "CGFloat(valore)"
-        val parseResult = KotlinParserFacadeScript.parse(code)
-        assert( parseResult.isCorrect())
-    }
 
     @Test
     fun convertRowOnlyAlignmentVariableFailsIfWrongType() {

@@ -358,10 +358,10 @@ fun ImageComposableCall.generateCode(depth: Int = 0): String{
     var aspectRatioSuffix = ""
 
    if(this.resizable) {
-        resizableSuffix = "\n.resizable()"
+        resizableSuffix = "\n${getPrefix(depth+1)}.resizable()"
     }
     this.aspectRatio?.generateCode()?.let {
-        aspectRatioSuffix = "\n.aspectRatio(contentMode: $it)"
+        aspectRatioSuffix = "\n${getPrefix(depth+1)}.aspectRatio(contentMode: $it)"
     }
     return "$base$resizableSuffix$aspectRatioSuffix"
 }

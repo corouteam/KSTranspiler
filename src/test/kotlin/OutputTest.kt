@@ -342,7 +342,10 @@ ScrollView(.vertical){
  
             """.trimIndent()
 
-        val result = "Image(\"nome-immagine-test\")\n.resizable()\n.aspectRatio(contentMode: ContentMode.fill)"
+        val result = """
+Image("nome-immagine-test")
+	.resizable()
+	.aspectRatio(contentMode: ContentMode.fill)""".trimIndent()
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }

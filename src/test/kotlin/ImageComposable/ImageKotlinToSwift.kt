@@ -45,7 +45,10 @@ class ImageKotlinToSwift {
  
             """.trimIndent()
 
-        val result = "Image(\"nome-immagine-test\")\n.resizable()\n.aspectRatio(contentMode: ContentMode.fill)"
+        val result = """
+Image("nome-immagine-test")
+	.resizable()
+	.aspectRatio(contentMode: ContentMode.fill)""".trimIndent()
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
@@ -61,10 +64,10 @@ class ImageKotlinToSwift {
             """.trimIndent()
 
         val result = """
-        var fillVariable:ContentMode = ContentMode.fill
-        Image("nome-immagine-test")
-        .resizable()
-        .aspectRatio(contentMode: fillVariable)
+var fillVariable:ContentMode = ContentMode.fill
+Image("nome-immagine-test")
+	.resizable()
+	.aspectRatio(contentMode: fillVariable)
         """.trimIndent()
         val parseResult = KotlinParserFacadeScript.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
