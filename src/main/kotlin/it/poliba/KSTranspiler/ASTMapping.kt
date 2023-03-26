@@ -296,7 +296,8 @@ fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expressio
 }
 
 fun KotlinParser.ForExpressionContext.toAst(considerPosition: Boolean): Expression {
-    return ForExpression(this.for_().ID().text, this.for_().expression().toAst(), this.for_().body.toAst())
+    return ForExpression(this.for_().ID().text, this.for_().expression().toAst(considerPosition), this.for_().body.toAst(considerPosition))
+
 }
 fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
     if(this.block() != null){
