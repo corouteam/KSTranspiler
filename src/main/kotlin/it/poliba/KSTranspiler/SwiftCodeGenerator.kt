@@ -223,6 +223,19 @@ fun BinaryExpression.generateCode(depth: Int = 0): String {
     }
     return "${getPrefix(depth)}${exp}"
 }
+
+fun LogicalExpression.generateCode(): String = when(this) {
+    is EqualExpression -> "${left.generateCode()} == ${right.generateCode()}"
+    is NotEqualExpression -> "${left.generateCode()} != ${right.generateCode()}"
+    is GTEqualExpression -> "${left.generateCode()} >= ${right.generateCode()}"
+    is LTEqualExpression -> "${left.generateCode()} <= ${right.generateCode()}"
+    is GreaterThanExpression -> "${left.generateCode()} > ${right.generateCode()}"
+    is LessThanExpression -> "${left.generateCode()} < ${right.generateCode()}"
+    is AndExpression -> "${left.generateCode()} && ${right.generateCode()}"
+    is OrExpression -> "${left.generateCode()} || ${right.generateCode()}"
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
 fun TextComposableCall.generateCode(depth: Int = 0): String{
 
     val base =  "Text(${this.value.generateCode()})"

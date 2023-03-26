@@ -188,6 +188,7 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
     is StringLiteralExpressionContext -> toAst(considerPosition)
     is KotlinParser.VarReferenceContext -> VarReference(text, type = StringType(toPosition(considerPosition)), toPosition(considerPosition))
     is KotlinParser.BinaryOperationContext -> toAst(considerPosition)
+    is KotlinParser.LogicalOperationContext -> toAst(considerPosition)
     is KotlinParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is KotlinParser.IfExpressionContext-> toAst(considerPosition)
     is KotlinParser.RangeExpressionContext -> toAst(considerPosition)
@@ -332,6 +333,18 @@ fun KotlinParser.BinaryOperationContext.toAst(considerPosition: Boolean = false)
     "-" -> SubtractionExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
     "*" -> MultiplicationExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
     "/" -> DivisionExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
+fun KotlinParser.LogicalOperationContext.toAst(considerPosition: Boolean = false) : Expression = when (operator.text) {
+    "==" -> EqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "!=" -> NotEqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "&&" -> AndExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "||" -> OrExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "<=" -> LTEqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    ">=" -> GTEqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "<" -> LessThanExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    ">" -> GreaterThanExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

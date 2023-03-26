@@ -88,6 +88,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | INT_LIT DOT DP_SUFFIX                                         # dpLiteral
            | functionCallExpression                        # functionCall
            | if                                                            # ifExpression
+           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # logicalOperation
+           | left=expression operator=(AND | OR) right=expression          # logicalOperation
+           | left=expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) right=expression # logicalOperation
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | LISTOF typeArguments LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN # listExpression
