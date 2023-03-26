@@ -35,7 +35,7 @@ fun ClassDeclaration.generateKotlinCode(depth: Int = 0): String{
     var baseClassesString = ""
     if(baseClasses.isNotEmpty()){
         baseClassesString += ": "
-        baseClassesString += baseClasses.joinToString(", "){it.generateCode()}
+        baseClassesString += baseClasses.joinToString(", "){it.generateKotlinCode()}
     }
     var bodyStatement = body.map { it.generateKotlinCode(depth+1) }
     var bodyString = bodyStatement.joinToString("\n"){"$it"}
@@ -54,7 +54,7 @@ fun DataClassDeclaration.generateKotlinCode(depth: Int = 0): String{
     var baseClassesString = ""
     if(baseClasses.isNotEmpty()){
         baseClassesString += ": "
-        baseClassesString += baseClasses.joinToString(", "){it.generateCode()}
+        baseClassesString += baseClasses.joinToString(", "){it.generateKotlinCode()}
     }
     var bodyStatement = body.map { it.generateKotlinCode(depth+1) }
     var bodyString = bodyStatement.joinToString("\n"){"$it"}
@@ -155,6 +155,7 @@ fun Expression.generateKotlinCode(depth: Int=0) : String = when (this) {
     is ThisExpression -> this.generateKotlinCode(depth)
     is AspectRatioLit -> this.generateKotlinCode()
     is ImageComposableCall -> this.generateKotlinCode(depth)
+    is ZStackComposableCall -> this.generateKotlinCode(depth)
     //is KotlinParser.ParenExpressionContext -> expression().toAst(considerPosition)
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -165,18 +166,33 @@ fun DividerComposableCall.generateKotlinCode(depth: Int=0): String{
 
     color?.let { params.add("color = ${it.generateKotlinCode()}") }
     frame?.let { params.add("thickness = ${it.height?.generateKotlinCode()}") }
-
+    zIndex?.let {
+        params.add("modifier = Modifier.zIndex(${it.generateKotlinCode(0)})")
+    }
     print("SIZE: ${params.size}")
     var paramString = params.joinToString(", ")
     return "${getPrefix(depth)}Divider($paramString)"
 }
+fun ZStackComposableCall.generateKotlinCode(depth: Int=0): String{
+    return "${getPrefix(depth)}Box()${body.generateKotlinCode(depth)}"
+}
 fun ButtonComposableCall.generateKotlinCode(depth: Int=0): String{
-    return "${getPrefix(depth)}Button(onClick = ${this.action.generateKotlinCode(depth)})${this.body.generateKotlinCode(depth)} "
+    var modifier = ""
+    zIndex?.let {
+        modifier = ", modifier = Modifier.zIndex(${it.generateKotlinCode(0)})"
+    }
+    return "${getPrefix(depth)}Button(onClick = ${this.action.generateKotlinCode(depth)}$modifier)${this.body.generateKotlinCode(depth)} "
 }
 fun SpacerComposableCall.generateKotlinCode(depth: Int=0): String{
     val suffix = size?.let { "${it.generateKotlinCode()}" } ?: ""
-
-    return "${getPrefix(depth)}Spacer(modifier = $suffix)"
+    val zIndex = zIndex?.let {
+        ".zIndex(${it.generateKotlinCode(0)})"
+    } ?: ""
+    var modifier = ""
+    if(zIndex != "" || suffix != ""){
+        modifier = "modifier = Modifier$zIndex$suffix"
+    }
+    return "${getPrefix(depth)}Spacer($modifier)"
 }
 
 fun Frame.generateKotlinCode(depth: Int=0): String{
@@ -185,7 +201,7 @@ fun Frame.generateKotlinCode(depth: Int=0): String{
 
     val params = listOf(width, height).filterNotNull()
 
-    return "${getPrefix(depth)}Modifier${params.joinToString("")}"
+    return "${params.joinToString("")}"
 }
 
 
@@ -223,7 +239,9 @@ fun TextComposableCall.generateKotlinCode(depth: Int=0): String{
     this.fontWeight?.generateKotlinCode()?.let {
         parameters.add("fontWeight = $it")
     }
-
+    zIndex?.let {
+        parameters.add("modifier = Modifier.zIndex(${it.generateKotlinCode(0)})")
+    }
     return "${getPrefix(depth)}Text(${parameters.joinToString(", ") { it }})"
 }
 
@@ -256,10 +274,20 @@ fun ColumnComposableCall.generateKotlinCode(depth: Int=0): String{
     }
 
     val bodyString = body.generateKotlinCode(depth)
-    if (scrollable) arguments.add("modifier = Modifier.verticalScroll(rememberScrollState())")
+    var modifier = ""
+    if (scrollable) modifier = "modifier = Modifier.verticalScroll(rememberScrollState())"
+    zIndex?.let {
+        var indexSuffix = ".zIndex(${it.generateKotlinCode()})"
+        if(modifier == "") modifier = "modifier = Modifier"
+        modifier += indexSuffix
+    }
+    if(modifier != ""){
+        arguments.add(modifier)
+    }
 
-    val parameters = arguments.joinToString(",\n\t")
-    return "${getPrefix(depth)}Column(\n\t$parameters\n)$bodyString"
+    val parameters = arguments.joinToString(",\n${getPrefix(depth+1)}")
+
+    return "${getPrefix(depth)}Column(\n${getPrefix(depth+1)}$parameters\n${getPrefix(depth)})$bodyString"
 }
 
 fun RowComposableCall.generateKotlinCode(depth: Int=0): String{
@@ -275,10 +303,18 @@ fun RowComposableCall.generateKotlinCode(depth: Int=0): String{
     }
 
     val bodyString = body.generateKotlinCode(depth)
-    if (scrollable) arguments.add("modifier = Modifier.horizontalScroll(rememberScrollState())")
-
-    val parameters = arguments.joinToString(",\n\t")
-    return "${getPrefix(depth)}Row(\n\t$parameters\n)$bodyString"
+    var modifier = ""
+    if (scrollable) modifier = "modifier = Modifier.horizontalScroll(rememberScrollState())"
+    zIndex?.let {
+        var indexSuffix = ".zIndex(${it.generateKotlinCode()})"
+        if(modifier == "") modifier = "modifier = Modifier"
+        modifier += indexSuffix
+    }
+    if(modifier != ""){
+        arguments.add(modifier)
+    }
+    val parameters = arguments.joinToString(",\n${getPrefix(depth+1)}")
+    return "${getPrefix(depth)}Row(\n${getPrefix(depth+1)}$parameters\n${getPrefix(depth)})$bodyString"
 }
 
 fun AspectRatioLit.generateKotlinCode(depth: Int = 0): String{
@@ -305,7 +341,7 @@ fun ImageComposableCall.generateKotlinCode(depth: Int = 0): String{
         modifierParams.add(".fillMaxSize()")
     }
     zIndex?.let {
-        modifierParams.add(".zIndex(${it.generateKotlinCode()}")
+        modifierParams.add(".zIndex(${it.generateKotlinCode()})")
     }
     if(modifierParams.isNotEmpty()){
         var modifierParamsString = modifierParams.joinToString("")

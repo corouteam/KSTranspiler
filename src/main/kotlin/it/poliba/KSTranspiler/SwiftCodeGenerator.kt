@@ -146,6 +146,7 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     //is KotlinParser.TypeConversionContext -> TypeConversion(expression().toAst(considerPosition), targetType.toAst(considerPosition), toPosition(considerPosition))
     is ImageComposableCall -> this.generateCode(depth)
     is VerticalAlignment -> this.generateCode(depth)
+    is ZStackComposableCall -> this.generateCode(depth)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -155,6 +156,10 @@ fun AspectRatioLit.generateCode(depth: Int = 0): String{
         is ContentFill -> "ContentMode.fill"
     }
     return "${getPrefix(depth)}$res"
+}
+
+fun ZStackComposableCall.generateCode(depth: Int = 0): String{
+    return "${getPrefix(depth)}ZStack${body.generateCode(depth)}"
 }
 
 fun DividerComposableCall.generateCode(depth: Int = 0): String{

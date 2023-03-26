@@ -39,6 +39,7 @@ import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
+import it.poliba.KSTranspiler.SwiftParser.WidgetCallContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
     return this.composableCall().toAst(considerPosition)
@@ -59,10 +60,12 @@ fun KotlinParser.ComposableCallContext.toAst(considerPosition: Boolean = false):
 fun KotlinParser.BoxComposableContext.toAst(considerPosition: Boolean): Expression {
     val modifier =  modifierParameter()?.modifier()?.toModifier(considerPosition)
 
-    val block = if (this.block() != null) this.block().toAst(considerPosition) else Block(
+    var block = if (this.block() != null) this.block().toAst(considerPosition) else Block(
         listOf(),
         toPosition(considerPosition)
     )
+    var call = block.body.filterIsInstance<ComposableCall>()
+    block = Block(call.sortedBy { ((it.zIndex as? IntLit)?.value ?: "0").toInt() })
     return ZStackComposableCall(block, modifier?.zIndex)
 }
 
