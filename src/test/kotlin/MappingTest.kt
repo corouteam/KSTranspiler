@@ -258,6 +258,17 @@ class MappingTest {
     }
 
     @Test
+    fun mapIfWithLogical() {
+        val code = "if(true && false || true && 1==1 && 2!=3 && 4<5 && 6>7 && 8<=9 && 10>=11) print(\"Hello world\")"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(
+            listOf(IfExpression(condition=GTEqualExpression(left=LTEqualExpression(left=GreaterThanExpression(left=LessThanExpression(left=AndExpression(left=AndExpression(left=AndExpression(left=OrExpression(left=AndExpression(left=BoolLit(value="true", position=null), right=BoolLit(value="false", position=null), position=null), right=BoolLit(value="true", position=null), position=null), right=EqualExpression(left=IntLit(value="1", position=null), right=IntLit(value="1", position=null), position=null), position=null), right=NotEqualExpression(left=IntLit(value="2", position=null), right=IntLit(value="3", position=null), position=null), position=null), right=IntLit(value="4", position=null), position=null), right=AndExpression(left=IntLit(value="5", position=null), right=IntLit(value="6", position=null), position=null), position=null), right=AndExpression(left=IntLit(value="7", position=null), right=IntLit(value="8", position=null), position=null), position=null), right=AndExpression(left=IntLit(value="9", position=null), right=IntLit(value="10", position=null), position=null), position=null), right=IntLit(value="11", position=null), position=null), body=Print(value=StringLit(value="Hello world", position=null), position=null), elseBranch=null, position=null)
+            )
+        )
+        assertEquals(expectedAst, ast)
+    }
+
+    @Test
     fun mapRangeExpression() {
         val code = "val a = 1..42"
         val ast = KotlinAntlrParserFacade.parse(code).root?.toAst()

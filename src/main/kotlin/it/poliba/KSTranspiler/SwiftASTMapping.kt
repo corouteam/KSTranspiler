@@ -240,6 +240,18 @@ fun SwiftParser.BinaryOperationContext.toAst(considerPosition: Boolean = false) 
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
+fun SwiftParser.LogicalOperationContext.toAst(considerPosition: Boolean = false) : Expression = when (operator.text) {
+    "==" -> EqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "!=" -> NotEqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "&&" -> AndExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "||" -> OrExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "<=" -> LTEqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    ">=" -> GTEqualExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    "<" -> LessThanExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    ">" -> GreaterThanExpression(left.toAst(considerPosition), right.toAst(considerPosition), toPosition(considerPosition))
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
 class KotlinParseTreeToAstMapperSwift : ParseTreeToAstMapper<SwiftParser.SwiftFileContext, AstFile> {
     override fun map(parseTreeNode: SwiftParser.SwiftFileContext): AstFile = parseTreeNode.toAst()
 }

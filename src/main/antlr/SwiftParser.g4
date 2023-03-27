@@ -58,6 +58,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | BOOL_LIT                                                      # boolLiteral
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
+           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # logicalOperation
+           | left=expression operator=(AND | OR) right=expression          # logicalOperation
+           | left=expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) right=expression # logicalOperation
            | stringLiteral                                                 # stringLiteralExpression
            | functionCallExpression                                        # functionCall
            | left=expression RANGE NL* right=expression                    # rangeExpression

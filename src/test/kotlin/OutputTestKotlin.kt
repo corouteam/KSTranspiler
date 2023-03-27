@@ -76,6 +76,15 @@ class  OutputTestKotlin {
     }
 
     @Test
+    fun convertIfWithLogical(){
+        val code = "if(1 == 1) {\n\tprint(\"Is true \")\n}"
+        val result = "if(1 == 1){ print(\"Is true \")}"
+        val parseResult = SwiftParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+
+    }
+
+    @Test
     fun convertIfElse() {
         val code = "if(true){ print(\"Is true \") }else{print(\"Is false\")}"
         val result = "if(true) {\n\tprint(\"Is true \")\n}else {\n\tprint(\"Is false\")\n}"

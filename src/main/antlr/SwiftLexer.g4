@@ -49,6 +49,14 @@ COMMA              : ',';
 RANGE              : '...';
 AT                 : '@';
 DOT                : '.';
+EQUAL              : '==' ;
+NOT_EQUAL          : '!=' ;
+LANGLE             : '<'  ;
+RANGLE             : '>'  ;
+LTEQ               : '<=' ;
+GTEQ               : '>=' ;
+AND                : '&&' ;
+OR                 : '||' ;
 
 IF: 'if';
 ELSE: 'else';
