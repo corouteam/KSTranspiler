@@ -27,7 +27,7 @@ INT_LIT
 BOOL_LIT : 'true' | 'false';
 
 DOUBLE_LIT
-     : DecDigits? '.' DecDigits
+     : DecDigits '.' DecDigits
      | DecDigits
      ;
 
@@ -57,6 +57,8 @@ DOT                : '.';
 ELVIS : '?';
 IF: 'if';
 ELSE: 'else';
+FOR: 'for';
+IN: 'in';
 FUN: 'fun';
 PACKAGE: 'package';
 RETURN                  : 'return' ;

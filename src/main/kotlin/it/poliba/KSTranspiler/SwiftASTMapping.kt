@@ -123,10 +123,13 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.ComplexExpressionContext -> toAst(considerPosition)
     is SwiftParser.ColorLiteralContext -> color().toAst(considerPosition)
     is SwiftParser.FontWeightLiteralContext -> toAst(considerPosition)
+    is SwiftParser.ForExpressionContext -> toAst(considerPosition)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-
+fun SwiftParser.ForExpressionContext.toAst(considerPosition: Boolean): Expression {
+    return ForExpression(this.for_().ID().text, this.for_().expression().toAst(considerPosition), this.for_().body.toAst(considerPosition))
+}
 fun SwiftParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expression{
     var base = if(ID() != null){
         VarReference(ID().text, StringType())

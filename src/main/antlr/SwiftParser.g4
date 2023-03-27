@@ -58,6 +58,7 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | BOOL_LIT                                                      # boolLiteral
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
+           | for                                                           # forExpression
            | stringLiteral                                                 # stringLiteralExpression
            | functionCallExpression                                        # functionCall
            | left=expression RANGE NL* right=expression                    # rangeExpression
@@ -89,6 +90,8 @@ navSuffix:
 
 functionCallExpression:
     name=ID NL* functionCallParameters NL* ;
+
+for: FOR NL* ID NL* IN NL* expression NL* body=controlStructureBody;
 
 controlStructureBody
     : block

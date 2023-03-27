@@ -256,6 +256,26 @@ class MappingTest {
         )
         assertEquals(expectedAst, ast)
     }
+    @Test
+    fun mapFor() {
+        val code = "for(i in 1..42) print(\"Hello world\")"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ForExpression("i", RangeExpression(leftExpression= IntLit(value="1"), rightExpression= IntLit(value="42", position=null), type= RangeType(type= IntType())), Print(StringLit("Hello world")))
+        ))
+        assertEquals(expectedAst, ast)
+    }
+    @Test
+    fun mapForBlock() {
+        val code = "for(i in 1..42){" +
+                "print(\"Hello world\")" +
+                "}"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+        val expectedAst = AstScript(listOf(
+            ForExpression("i", RangeExpression(leftExpression= IntLit(value="1"), rightExpression= IntLit(value="42", position=null), type= RangeType(type= IntType())), Block(listOf(Print(StringLit("Hello world")))))
+        ))
+        assertEquals(expectedAst, ast)
+    }
 
     @Test
     fun mapRangeExpression() {

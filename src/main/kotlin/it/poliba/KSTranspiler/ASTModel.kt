@@ -155,6 +155,8 @@ data class IfExpression(
     override var position: Position? = null
 ): Expression(IntType(position))
 
+data class ForExpression(val varName: String, val range: Expression, var body: ControlStructureBody): Expression(IntType())
+
 open class ControlStructureBody : Node()
 
 data class Block(val body: List<Statement>, override var position: Position? = null): ControlStructureBody()
