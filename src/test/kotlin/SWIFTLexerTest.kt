@@ -46,6 +46,19 @@ class SWIFTLexerTest {
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
+    @Test
+    fun parseArray(){
+        val code = "var array = [1,2,3]"
+        val result = listOf("VAR", "ID", "ASSIGN", "LBRAK", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RBRAK", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseArrayType(){
+        val code = "var array: [Int] = [1,2,3]"
+        val result = listOf("VAR", "ID", "COLON", "LBRAK", "INT", "RBRAK", "ASSIGN", "LBRAK", "INT_LIT", "COMMA", "INT_LIT", "COMMA", "INT_LIT", "RBRAK", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
 
     @Test
     fun parseTextComposable(){

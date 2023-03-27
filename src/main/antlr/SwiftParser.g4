@@ -35,10 +35,13 @@ statement : propertyDeclaration # propertyDeclarationStatement
 print : PRINT LPAREN expression RPAREN ;
 
 varDeclaration : VAR ID (NL* COLON NL* SOME? type)?;
-
 letDeclaration : LET ID (NL* COLON NL* SOME? type)?;
 
-propertyDeclaration:  (varDeclaration|letDeclaration) ((ASSIGN expression)|computedPropertyDeclarationBody)?;
+propertyDeclaration:  (varDeclaration|letDeclaration|arrayDeclaration) ((ASSIGN expression)|computedPropertyDeclarationBody)?;
+
+arrayDeclaration: VAR ID NL* COLON NL* ARRAY NL* LANGLE NL* type NL* RANGLE NL* ASSIGN NL* arrayLiteral;
+
+arrayLiteral: LCURL NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RCURL;
 
 annotation: AT ID;
 
