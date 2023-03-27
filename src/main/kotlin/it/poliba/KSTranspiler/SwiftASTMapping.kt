@@ -112,6 +112,7 @@ fun SwiftParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Exp
     is SwiftParser.StringLiteralExpressionContext -> toAst(considerPosition)
     is SwiftParser.VarReferenceContext -> VarReference(text, type = StringType(toPosition(considerPosition)),  toPosition(considerPosition))
     is SwiftParser.BinaryOperationContext -> toAst(considerPosition)
+    is SwiftParser.LogicalOperationContext -> toAst(considerPosition)
     is SwiftParser.DoubleLiteralContext-> DoubleLit(text, toPosition(considerPosition))
     is SwiftParser.FunctionCallContext ->toAst(considerPosition)
     is SwiftParser.IfExpressionContext-> toAst(considerPosition)
