@@ -1,0 +1,1 @@
+var array:[Int]=[1,2,3]

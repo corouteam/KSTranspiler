@@ -36,6 +36,41 @@ class SWIFTParserTest {
         }
     }
 
+    @Test
+    fun parseArray(){
+        val expected = """SwiftScript
+    Line
+       VariableDeclaration
+          T[var]
+          T[ ]
+          T[array]
+            T[:]
+            T[ ]
+            ArrayType
+                T[[]]
+                T[ ]
+                T[Int]
+                T[ ]]
+            T[ ]
+            T[=]
+            T[ ]
+            ArrayLiteral
+                T[[]]
+                T[ ]
+                T[1]
+                T[,]
+                T[ ]
+                T[2]
+                T[,]
+                T[ ]
+                T[3]
+                T[ ]]
+            T[;]
+    T[EOF]""".trimIndent()
+        val actual = toParseTree(parseResourceScript("swift/array")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
 
     @Test
     fun parseSwiftTextWithBold(){

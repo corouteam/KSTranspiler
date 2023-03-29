@@ -41,7 +41,7 @@ propertyDeclaration:  (varDeclaration|letDeclaration|arrayDeclaration) ((ASSIGN 
 
 arrayDeclaration: VAR ID NL* COLON NL* ARRAY NL* LANGLE NL* type NL* RANGLE NL* ASSIGN NL* arrayLiteral;
 
-arrayLiteral: LCURL NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RCURL;
+arrayLiteral: LBRAK NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RBRAK;
 
 annotation: AT ID;
 
