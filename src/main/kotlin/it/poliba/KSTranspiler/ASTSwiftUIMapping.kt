@@ -84,6 +84,8 @@ fun SwiftParser.SwiftUIGenericWidgetSuffixContext.toAst(considerPosition: Boolea
 
 fun SwiftParser.ColorContext.toAst(considerPosition: Boolean = false): Expression = when(this){
     is SwiftParser.BlueColorContext ->  ColorBlue(toPosition(considerPosition))
+    is SwiftParser.RedColorContext ->  ColorRed(toPosition(considerPosition))
+    is SwiftParser.GreenColorContext ->  ColorGreen(toPosition(considerPosition))
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 

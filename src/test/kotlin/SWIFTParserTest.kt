@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-/*
 
 class SWIFTParserTest {
 
@@ -152,6 +151,52 @@ class SWIFTParserTest {
                 "            T[)]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("swift/textWithColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseSwiftTextWithRedColor(){
+        val expected = """SwiftScript
+  Line
+    ExpressionStatement
+      WidgetCallExpression
+        TextWidget
+          T[Text]
+          T[(]
+          StringLiteralExpression
+            StringLiteral
+              LineStringLiteral
+                T["]
+                LineStringContent
+                  T[Music]
+                T["]
+          T[)]
+          T[.]
+          ForegroundColorSuffix
+            T[foregroundColor]
+            T[(]
+            ColorLiteral
+              RedColor
+                T[Color]
+                T[.]
+                T[red]
+            T[)]
+          T[.]
+          FontWeightSuffix
+            T[fontWeight]
+            T[(]
+            FontWeightLiteral
+              T[Font]
+              T[.]
+              T[Weight]
+              T[.]
+              Bold
+                T[bold]
+            T[)]
+    T[<EOF>]
+
+        """.trimIndent()
+        val actual = toParseTree(parseResourceScript("swift/textWithRedColor")).multiLineString()
         assertEquals(expected, actual)
     }
 
@@ -376,4 +421,4 @@ class SWIFTParserTest {
         assertEquals(expected, actual)
     }
 
-}*/
+}

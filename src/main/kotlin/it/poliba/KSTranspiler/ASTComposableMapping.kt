@@ -1,6 +1,8 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.KotlinParser.BlueColorContext
+import it.poliba.KSTranspiler.KotlinParser.RedColorContext
+import it.poliba.KSTranspiler.KotlinParser.GreenColorContext
 import it.poliba.KSTranspiler.KotlinParser.BoldFontWeightContext
 import it.poliba.KSTranspiler.KotlinParser.BottomAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.CenterHorizontallyAlignmentContext
@@ -161,6 +163,8 @@ fun KotlinParser.TextComposableContext.toAst(considerPosition: Boolean = false):
 fun KotlinParser.ColorContext.toAst(considerPosition: Boolean = false): Expression = when(this){
     is CustomColorContext -> CustomColor(StringLit(COLOR_LITERAL().text, toPosition(considerPosition)), toPosition(considerPosition))
     is BlueColorContext ->  ColorBlue(toPosition(considerPosition))
+    is RedColorContext ->  ColorRed(toPosition(considerPosition))
+    is GreenColorContext ->  ColorGreen(toPosition(considerPosition))
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 

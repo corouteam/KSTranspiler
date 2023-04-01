@@ -252,6 +252,8 @@ fun TextComposableCall.generateKotlinCode(depth: Int=0): String{
 
 fun ColorLit.generateKotlinCode(depth: Int=0): String = when(this){
     is ColorBlue -> "${getPrefix(depth)}Color.Blue"
+    is ColorRed -> "${getPrefix(depth)}Color.Red"
+    is ColorGreen -> "${getPrefix(depth)}Color.Green"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

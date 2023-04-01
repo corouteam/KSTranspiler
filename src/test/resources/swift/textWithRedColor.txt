@@ -1,0 +1,1 @@
+Text( "Music").foregroundColor(Color.red).fontWeight(Font.Weight.bold)

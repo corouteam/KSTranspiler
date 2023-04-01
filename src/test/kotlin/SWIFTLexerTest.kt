@@ -77,6 +77,20 @@ class SWIFTLexerTest {
     }
 
     @Test
+    fun parseRedColor(){
+        val code = "Color.red"
+        val result = listOf("COLOR", "DOT", "COLOR_RED", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseGreenColor(){
+        val code = "Color.green"
+        val result = listOf("COLOR", "DOT", "COLOR_GREEN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
     fun parseBoldFontWeight(){
         val code = ".fontWeight(Font.Weight.bold)"
         val result = listOf("DOT", "FONT_WEIGHT_PARAM","LPAREN","FONT","DOT", "WEIGHT","DOT","FONT_WEIGHT_BOLD", "RPAREN", "EOF")

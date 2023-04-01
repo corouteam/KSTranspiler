@@ -310,6 +310,20 @@ class LexerTest {
     }
 
     @Test
+    fun parseRedColor() {
+        val code = "Color.Red"
+        val result = listOf("COLOR", "DOT", "COLOR_RED", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseGreenColor() {
+        val code = "Color.Green"
+        val result = listOf("COLOR", "DOT", "COLOR_GREEN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
     fun parseCustomFontWeight() {
         val code = "FontWeight(200)"
         val result = listOf("FONT_WEIGHT", "LPAREN", "INT_LIT", "RPAREN", "EOF")

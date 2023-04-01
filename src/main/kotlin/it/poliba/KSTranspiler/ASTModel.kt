@@ -213,6 +213,8 @@ class TextComposableCall(
 sealed class ColorLit(): Expression(ColorType())
 class CustomColor(val hex: StringLit, override var position: Position? = null): ColorLit()
 class ColorBlue(override var position: Position? = null): ColorLit()
+class ColorRed(override var position: Position? = null): ColorLit()
+class ColorGreen(override var position: Position? = null): ColorLit()
 sealed class FontWeightLit(): Expression(FontWeightType())
 
 class CustomFontWeight(val value: Expression, override var position: Position? = null): FontWeightLit()

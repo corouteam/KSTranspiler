@@ -85,6 +85,8 @@ CONTENT_FILL: 'fill';
 FONT_WEIGHT_PARAM: 'fontWeight';
 COLOR: 'Color';
 COLOR_BLUE: 'blue';
+COLOR_RED: 'red';
+COLOR_GREEN: 'green';
 FONT_WEIGHT_BOLD: 'bold';
 FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';

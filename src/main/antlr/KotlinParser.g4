@@ -242,8 +242,10 @@ contentScadeMode:
     FILLWIDTH #contentScaleFillWidth;
 
 color:
-     COLOR LPAREN COLOR_LITERAL RPAREN #customColor
-     | COLOR DOT COLOR_BLUE #blueColor ;
+     COLOR LPAREN COLOR_LITERAL RPAREN #customColor |
+     COLOR DOT COLOR_BLUE #blueColor |
+     COLOR DOT COLOR_RED #redColor |
+     COLOR DOT COLOR_GREEN #greenColor;
 
 fontWeight:
     FONT_WEIGHT LPAREN expression RPAREN #customWeight

@@ -1,4 +1,3 @@
-/*
 package it.poliba.KSTranspiler
 import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacade
 import it.poliba.KSTranspiler.facade.KotlinAntlrParserFacadeScript
@@ -472,6 +471,36 @@ KotlinScript
     }
 
     @Test
+    fun parseRedColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        RedColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Red]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("redColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseGreenColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        GreenColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Green]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("greenColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun parseCustomFontWeight(){
         val expected = "KotlinScript\n" +
                 "  Line\n" +
@@ -900,4 +929,4 @@ KotlinScript
     }
 
 
-}*/
+}

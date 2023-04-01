@@ -97,6 +97,10 @@ FIT: 'Fit';
 
 COLOR: 'Color';
 COLOR_BLUE: 'Blue';
+COLOR_RED: 'Red';
+COLOR_GREEN: 'Green';
+COLOR_ALPHA: 'Alpha';
+
 
 FONT_WEIGHT: 'FontWeight';
 FONT_WEIGHT_BOLD: 'Bold';
