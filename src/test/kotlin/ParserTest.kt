@@ -454,7 +454,20 @@ KotlinScript
         val actual = toParseTree(parseResourceScript("customColor")).multiLineString()
         assertEquals(expected, actual)
     }
-
+    @Test
+    fun parseBlackColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        BlackColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Black]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("blackColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
     @Test
     fun parseBlueColor(){
         val expected = "KotlinScript\n" +
@@ -467,6 +480,51 @@ KotlinScript
                 "          T[Blue]\n" +
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("blueColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseCyanColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        CyanColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Cyan]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("cyanColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseGrayColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        GrayColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Gray]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("grayColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseGreenColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        GreenColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Green]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("greenColor")).multiLineString()
         assertEquals(expected, actual)
     }
 
@@ -486,17 +544,32 @@ KotlinScript
     }
 
     @Test
-    fun parseGreenColor(){
+    fun parseWhiteColor(){
         val expected = "KotlinScript\n" +
                 "  Line\n" +
                 "    ExpressionStatement\n" +
                 "      ColorLiteral\n" +
-                "        GreenColor\n" +
+                "        WhiteColor\n" +
                 "          T[Color]\n" +
                 "          T[.]\n" +
-                "          T[Green]\n" +
+                "          T[White]\n" +
                 "    T[<EOF>]\n"
-        val actual = toParseTree(parseResourceScript("greenColor")).multiLineString()
+        val actual = toParseTree(parseResourceScript("whiteColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseYellowColor(){
+        val expected = "KotlinScript\n" +
+                "  Line\n" +
+                "    ExpressionStatement\n" +
+                "      ColorLiteral\n" +
+                "        YellowColor\n" +
+                "          T[Color]\n" +
+                "          T[.]\n" +
+                "          T[Yellow]\n" +
+                "    T[<EOF>]\n"
+        val actual = toParseTree(parseResourceScript("yellowColor")).multiLineString()
         assertEquals(expected, actual)
     }
 
