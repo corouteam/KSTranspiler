@@ -181,6 +181,69 @@ class  OutputTestKotlin {
     //   }
 
     @Test
+    fun mapColorBlack() {
+        val code = "Color.black"
+        val result = "Color.Black"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+    @Test
+    fun mapColorBlue() {
+        val code = "Color.blue"
+        val result = "Color.Blue"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+
+    @Test
+    fun mapColorCyan() {
+        val code = "Color.cyan"
+        val result = "Color.Cyan"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+
+    @Test
+    fun mapColorGray() {
+        val code = "Color.gray"
+        val result = "Color.Gray"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+
+    @Test
+    fun mapColorGreen() {
+        val code = "Color.green"
+        val result = "Color.Green"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+
+    @Test
+    fun mapColorRed() {
+        val code = "Color.red"
+        val result = "Color.Red"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+
+    @Test
+    fun mapColorWhite() {
+        val code = "Color.white"
+        val result = "Color.White"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+
+    @Test
+    fun mapColorYellow() {
+        val code = "Color.yellow"
+        val result = "Color.Yellow"
+        val parseResult = SwiftParserFacadeScript.parse(code).root!!
+        assertEquals(result, parseResult.generateKotlinCode())
+    }
+
+    @Test
     fun convertTextWidget() {
         val code = "Text(\"Hello world\")\n.foregroundColor(Color.blue)\n.fontWeight(Font.Weight.bold)"
         val result = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"

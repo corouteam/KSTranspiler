@@ -96,7 +96,15 @@ FILLWIDTH: 'FillWidth';
 FIT: 'Fit';
 
 COLOR: 'Color';
+COLOR_BLACK: 'Black';
 COLOR_BLUE: 'Blue';
+COLOR_CYAN: 'Cyan';
+COLOR_GRAY: 'Gray';
+COLOR_GREEN: 'Green';
+COLOR_MAGENTA: 'Magenta';
+COLOR_RED: 'Red';
+COLOR_WHITE: 'White';
+COLOR_YELLOW: 'Yellow';
 
 FONT_WEIGHT: 'FontWeight';
 FONT_WEIGHT_BOLD: 'Bold';

@@ -253,7 +253,14 @@ fun TextComposableCall.generateCode(depth: Int = 0): String{
 }
 
 fun ColorLit.generateCode(depth: Int = 0): String = when(this){
+    is ColorBlack -> "${getPrefix(depth)}Color.black"
     is ColorBlue -> "${getPrefix(depth)}Color.blue"
+    is ColorCyan -> "${getPrefix(depth)}Color.cyan"
+    is ColorGray -> "${getPrefix(depth)}Color.gray"
+    is ColorGreen -> "${getPrefix(depth)}Color.green"
+    is ColorRed -> "${getPrefix(depth)}Color.red"
+    is ColorWhite -> "${getPrefix(depth)}Color.white"
+    is ColorYellow -> "${getPrefix(depth)}Color.yellow"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

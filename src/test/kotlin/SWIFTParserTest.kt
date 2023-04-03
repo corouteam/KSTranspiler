@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-/*
 
 class SWIFTParserTest {
 
@@ -40,33 +39,37 @@ class SWIFTParserTest {
 
     @Test
     fun parseSwiftTextWithBold(){
-        val expected = "SwiftScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      WidgetCallExpression\n" +
-                "        TextWidget\n" +
-                "          T[Text]\n" +
-                "          T[(]\n" +
-                "          StringLiteralExpression\n" +
-                "            StringLiteral\n" +
-                "              LineStringLiteral\n" +
-                "                T[\"]\n" +
-                "                LineStringContent\n" +
-                "                  T[Hello world]\n" +
-                "                T[\"]\n" +
-                "          T[)]\n" +
-                "          T[.]\n" +
-                "          BoldSuffix\n" +
-                "            T[fontWeight]\n" +
-                "            T[(]\n" +
-                "            BoldFontWeight\n" +
-                "              T[Font]\n" +
-                "              T[.]\n" +
-                "              T[Weight]\n" +
-                "              T[.]\n" +
-                "              T[bold]\n" +
-                "            T[)]\n" +
-                "    T[<EOF>]\n"
+        val expected = """
+            SwiftScript
+              Line
+                ExpressionStatement
+                  WidgetCallExpression
+                    TextWidget
+                      T[Text]
+                      T[(]
+                      StringLiteralExpression
+                        StringLiteral
+                          LineStringLiteral
+                            T["]
+                            LineStringContent
+                              T[Hello world]
+                            T["]
+                      T[)]
+                      T[.]
+                      FontWeightSuffix
+                        T[fontWeight]
+                        T[(]
+                        FontWeightLiteral
+                          T[Font]
+                          T[.]
+                          T[Weight]
+                          T[.]
+                          Bold
+                            T[bold]
+                        T[)]
+                T[<EOF>]
+
+        """.trimIndent()
         val actual = toParseTree(parseResourceScript("swift/textWithBold")).multiLineString()
         assertEquals(expected, actual)
     }
@@ -115,43 +118,93 @@ class SWIFTParserTest {
 
     @Test
     fun parseSwiftTextWithColor(){
-        val expected = "SwiftScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      WidgetCallExpression\n" +
-                "        TextWidget\n" +
-                "          T[Text]\n" +
-                "          T[(]\n" +
-                "          StringLiteralExpression\n" +
-                "            StringLiteral\n" +
-                "              LineStringLiteral\n" +
-                "                T[\"]\n" +
-                "                LineStringContent\n" +
-                "                  T[Music]\n" +
-                "                T[\"]\n" +
-                "          T[)]\n" +
-                "          T[.]\n" +
-                "          ForegroundColorSuffix\n" +
-                "            T[foregroundColor]\n" +
-                "            T[(]\n" +
-                "            BlueColor\n" +
-                "              T[Color]\n" +
-                "              T[.]\n" +
-                "              T[blue]\n" +
-                "            T[)]\n" +
-                "          T[.]\n" +
-                "          BoldSuffix\n" +
-                "            T[fontWeight]\n" +
-                "            T[(]\n" +
-                "            BoldFontWeight\n" +
-                "              T[Font]\n" +
-                "              T[.]\n" +
-                "              T[Weight]\n" +
-                "              T[.]\n" +
-                "              T[bold]\n" +
-                "            T[)]\n" +
-                "    T[<EOF>]\n"
+        val expected = """SwiftScript
+  Line
+    ExpressionStatement
+      WidgetCallExpression
+        TextWidget
+          T[Text]
+          T[(]
+          StringLiteralExpression
+            StringLiteral
+              LineStringLiteral
+                T["]
+                LineStringContent
+                  T[Music]
+                T["]
+          T[)]
+          T[.]
+          ForegroundColorSuffix
+            T[foregroundColor]
+            T[(]
+            ColorLiteral
+              BlueColor
+                T[Color]
+                T[.]
+                T[blue]
+            T[)]
+          T[.]
+          FontWeightSuffix
+            T[fontWeight]
+            T[(]
+            FontWeightLiteral
+              T[Font]
+              T[.]
+              T[Weight]
+              T[.]
+              Bold
+                T[bold]
+            T[)]
+    T[<EOF>]
+
+        """.trimIndent()
         val actual = toParseTree(parseResourceScript("swift/textWithColor")).multiLineString()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun parseSwiftTextWithRedColor(){
+        val expected = """SwiftScript
+  Line
+    ExpressionStatement
+      WidgetCallExpression
+        TextWidget
+          T[Text]
+          T[(]
+          StringLiteralExpression
+            StringLiteral
+              LineStringLiteral
+                T["]
+                LineStringContent
+                  T[Music]
+                T["]
+          T[)]
+          T[.]
+          ForegroundColorSuffix
+            T[foregroundColor]
+            T[(]
+            ColorLiteral
+              RedColor
+                T[Color]
+                T[.]
+                T[red]
+            T[)]
+          T[.]
+          FontWeightSuffix
+            T[fontWeight]
+            T[(]
+            FontWeightLiteral
+              T[Font]
+              T[.]
+              T[Weight]
+              T[.]
+              Bold
+                T[bold]
+            T[)]
+    T[<EOF>]
+
+        """.trimIndent()
+        val actual = toParseTree(parseResourceScript("swift/textWithRedColor")).multiLineString()
         assertEquals(expected, actual)
     }
 
@@ -277,20 +330,24 @@ class SWIFTParserTest {
 
     @Test
     fun parseSwiftDivider(){
-        val expected = "SwiftScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      WidgetCallExpression\n" +
-                "        DividerWidget\n" +
-                "          T[Divider]\n" +
-                "          T[(]\n" +
-                "          T[)]\n" +
-                "    T[<EOF>]\n"
+        val expected = """
+            SwiftScript
+              Line
+                ExpressionStatement
+                  FunctionCall
+                    FunctionCallExpression
+                      T[DividerComposable]
+                      FunctionCallParameters
+                        T[(]
+                        T[)]
+                T[<EOF>]
+
+        """.trimIndent()
         val actual = toParseTree(parseResourceScript("swift/divider")).multiLineString()
         assertEquals(expected, actual)
     }
 
-    @Test
+    /*@Test
     fun parseSwiftDividerWithOverlay(){
         val expected = "SwiftScript\n" +
                 "  Line\n" +
@@ -312,7 +369,7 @@ class SWIFTParserTest {
                 "    T[<EOF>]\n"
         val actual = toParseTree(parseResourceScript("swift/dividerWithOverlay")).multiLineString()
         assertEquals(expected, actual)
-    }
+    }*/
 
     @Test
     fun parseSpacer(){
@@ -376,4 +433,4 @@ class SWIFTParserTest {
         assertEquals(expected, actual)
     }
 
-}*/
+}

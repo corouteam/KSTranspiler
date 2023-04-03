@@ -303,9 +303,58 @@ class LexerTest {
     }
 
     @Test
+    fun parseBlackColor() {
+        val code = "Color.Black"
+        val result = listOf("COLOR", "DOT", "COLOR_BLACK", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
     fun parseBlueColor() {
         val code = "Color.Blue"
         val result = listOf("COLOR", "DOT", "COLOR_BLUE", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseCyanColor() {
+        val code = "Color.Cyan"
+        val result = listOf("COLOR", "DOT", "COLOR_CYAN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseGrayColor() {
+        val code = "Color.Gray"
+        val result = listOf("COLOR", "DOT", "COLOR_GRAY", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseGreenColor() {
+        val code = "Color.Green"
+        val result = listOf("COLOR", "DOT", "COLOR_GREEN", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseRedColor() {
+        val code = "Color.Red"
+        val result = listOf("COLOR", "DOT", "COLOR_RED", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseWhiteColor() {
+        val code = "Color.White"
+        val result = listOf("COLOR", "DOT", "COLOR_WHITE", "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+    @Test
+    fun parseYellowColor() {
+        val code = "Color.Yellow"
+        val result = listOf("COLOR", "DOT", "COLOR_YELLOW", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 

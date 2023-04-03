@@ -73,6 +73,102 @@ class  OutputTest {
     }
 
     @Test
+    fun mapColorBlack(){
+        val code = """
+            Color.Black
+            """.trimIndent()
+        val result = """
+Color.black
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapColorBlue(){
+        val code = """
+            Color.Blue
+            """.trimIndent()
+        val result = """
+Color.blue
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapColorCyan(){
+        val code = """
+            Color.Cyan
+            """.trimIndent()
+        val result = """
+Color.cyan
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapColorGray(){
+        val code = """
+            Color.Gray
+            """.trimIndent()
+        val result = """
+Color.gray
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapColorGreen(){
+        val code = """
+            Color.Green
+            """.trimIndent()
+        val result = """
+Color.green
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapColorRed(){
+        val code = """
+            Color.Red
+            """.trimIndent()
+        val result = """
+Color.red
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapColorWhite(){
+        val code = """
+            Color.White
+            """.trimIndent()
+        val result = """
+Color.white
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
+    fun mapColorYellow(){
+        val code = """
+            Color.Yellow
+            """.trimIndent()
+        val result = """
+Color.yellow
+        """.trimIndent()
+        val parseResult = KotlinParserFacadeScript.parse(code)
+        assertEquals(result, parseResult.root!!.generateCode())
+    }
+
+    @Test
     fun convertIfExpression(){
         val code = "if(true) print(\"Is true \")"
         val result = "if(true) print(\"Is true \")"

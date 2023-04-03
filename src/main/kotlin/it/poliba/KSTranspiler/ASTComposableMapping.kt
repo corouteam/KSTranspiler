@@ -1,6 +1,13 @@
 package it.poliba.KSTranspiler
 
+import it.poliba.KSTranspiler.KotlinParser.BlackColorContext
 import it.poliba.KSTranspiler.KotlinParser.BlueColorContext
+import it.poliba.KSTranspiler.KotlinParser.CyanColorContext
+import it.poliba.KSTranspiler.KotlinParser.GrayColorContext
+import it.poliba.KSTranspiler.KotlinParser.GreenColorContext
+import it.poliba.KSTranspiler.KotlinParser.RedColorContext
+import it.poliba.KSTranspiler.KotlinParser.WhiteColorContext
+import it.poliba.KSTranspiler.KotlinParser.YellowColorContext
 import it.poliba.KSTranspiler.KotlinParser.BoldFontWeightContext
 import it.poliba.KSTranspiler.KotlinParser.BottomAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.CenterHorizontallyAlignmentContext
@@ -39,7 +46,6 @@ import it.poliba.KSTranspiler.KotlinParser.TopAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalAlignmentParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalArrangementParameterContext
 import it.poliba.KSTranspiler.KotlinParser.VerticalScrollSuffixContext
-import it.poliba.KSTranspiler.SwiftParser.WidgetCallContext
 
 fun  KotlinParser.ComposableCallExpressionContext.toAst(considerPosition: Boolean = false): Expression {
     return this.composableCall().toAst(considerPosition)
@@ -160,7 +166,14 @@ fun KotlinParser.TextComposableContext.toAst(considerPosition: Boolean = false):
 
 fun KotlinParser.ColorContext.toAst(considerPosition: Boolean = false): Expression = when(this){
     is CustomColorContext -> CustomColor(StringLit(COLOR_LITERAL().text, toPosition(considerPosition)), toPosition(considerPosition))
+    is BlackColorContext ->  ColorBlack(toPosition(considerPosition))
     is BlueColorContext ->  ColorBlue(toPosition(considerPosition))
+    is CyanColorContext ->  ColorCyan(toPosition(considerPosition))
+    is GrayColorContext ->  ColorGray(toPosition(considerPosition))
+    is GreenColorContext ->  ColorGreen(toPosition(considerPosition))
+    is RedColorContext ->  ColorRed(toPosition(considerPosition))
+    is WhiteColorContext ->  ColorWhite(toPosition(considerPosition))
+    is YellowColorContext ->  ColorYellow(toPosition(considerPosition))
     else -> throw java.lang.IllegalArgumentException("Color not recognized")
 }
 

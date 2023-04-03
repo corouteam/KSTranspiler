@@ -426,6 +426,32 @@ class MappingTest {
         assert(divider.frame?.height is DpLit)
     }
 
+    @Test
+    fun convertComposableDividerWithThicknessAndRedColor() {
+        val code = "Divider(thickness = 8.dp, color = Color.Red)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val divider = (ast?.statement?.first() as DividerComposableCall)
+
+        assert(divider.color is ColorRed)
+        assert(divider.frame != null)
+        assert(divider.frame?.height != null)
+        assert(divider.frame?.height is DpLit)
+    }
+
+    @Test
+    fun convertComposableDividerWithThicknessAndGreenColor() {
+        val code = "Divider(thickness = 8.dp, color = Color.Green)"
+        val ast = KotlinAntlrParserFacadeScript.parse(code).root?.toAst()
+
+        val divider = (ast?.statement?.first() as DividerComposableCall)
+
+        assert(divider.color is ColorGreen)
+        assert(divider.frame != null)
+        assert(divider.frame?.height != null)
+        assert(divider.frame?.height is DpLit)
+    }
+
 
     @Test
     fun testSpacerWithHeightComposable() {

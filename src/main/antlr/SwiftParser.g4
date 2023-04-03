@@ -226,7 +226,14 @@ frameParam:
      WIDTH COLON expression #widthParam;
 
 color:
-     COLOR DOT COLOR_BLUE #blueColor;
+    COLOR DOT COLOR_BLACK #blackColor |
+    COLOR DOT COLOR_BLUE #blueColor |
+    COLOR DOT COLOR_CYAN #cyanColor |
+    COLOR DOT COLOR_GRAY #grayColor |
+    COLOR DOT COLOR_GREEN #greenColor |
+    COLOR DOT COLOR_RED #redColor |
+    COLOR DOT COLOR_WHITE #whiteColor |
+    COLOR DOT COLOR_YELLOW #yellowColor;
 
 swiftUIImageSuffix:
     RESIZABLE LPAREN RPAREN # resizableSuffix |
