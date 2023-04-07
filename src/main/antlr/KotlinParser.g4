@@ -180,7 +180,10 @@ type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
        ID      #userType |
-       STRING  # string;
+       STRING  # string |
+       COLOR #colorType |
+       ARRANGEMENT #arrangementType |
+       CONTENTSCALE #contentScaleType ;
 
 typeArguments
     : LANGLE NL* type (NL* COMMA NL* type)* (NL* COMMA)? NL* RANGLE

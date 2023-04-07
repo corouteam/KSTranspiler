@@ -54,22 +54,20 @@ class FunctionParameter(val id: String,val  type: Type, override var position: P
 data class FunctionCallType(override var position: Position? = null): Type()
 data class RangeType(val type: Type, override var position: Position? = null): Type()
 data class IntType(override var position: Position? = null) : Type()
-
 data class DoubleType(override var position: Position? = null) : Type()
-
 data class StringType(override var position: Position? = null) : Type()
 data class BoolType(override var position: Position? = null) : Type()
 data class ColorType(override var position: Position? = null): Type()
 data class FontWeightType(override var position: Position? = null): Type()
 data class ResizableType(override var position: Position? = null): Type()
 data class AspectRatioType(override var position: Position? = null): Type()
+data class ContentModeType(override var position: Position? = null): Type()
+data class ContentScaleType(override var position: Position? = null): Type()
 data class VoidType(override var position: Position? = null) : Type()
 data class UserType(var name: String, override var position: Position? = null): Type()
 data class DpType(override var position: Position? = null): Type()
 data class ListType(val itemsType: Type, override var position: Position? = null) : Type()
-
-
-
+data class ArrayType(val itemsType: Type, override var position: Position? = null) : Type()
 // EXPERIMENTAL COMPOSABLE
 sealed class ComposableType: Type()
 class ButtonComposableType(override var position: Position? = null): ComposableType()
@@ -78,6 +76,7 @@ class DividerComposableType(override var position: Position? = null): Composable
 class SpacerComposableType(override var position: Position? = null): ComposableType()
 class ColumnComposableType(override var position: Position? = null): ComposableType()
 class ZStackComposableType(override var position: Position? = null): ComposableType()
+class HStackComposableType(override var position: Position? = null): ComposableType()
 class BoxComposableType(override var position: Position? = null): ComposableType()
 class HorizontalAlignmentType(override var position: Position? = null): Type()
 class VerticalAlignmentType(override var position: Position? = null): Type()
