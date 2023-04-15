@@ -325,23 +325,17 @@ fun StringLiteralExpressionContext.toAst(considerPosition: Boolean): Expression 
     return StringLit(valueString, toPosition(considerPosition))
 }
 fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
-    is KotlinParser.FunctionCallContext -> FunctionCallType(toPosition(considerPosition))
-    is KotlinParser.RangeExpressionContext -> toRangeType(considerPosition)
+    /*is KotlinParser.FunctionCallContext -> FunctionCallType(toPosition(considerPosition))
+    is KotlinParser.RangeExpressionContext -> toRangeType(considerPosition)*/
     is KotlinParser.IntegerContext -> IntType(toPosition(considerPosition))
     is KotlinParser.DoubleContext -> DoubleType(toPosition(considerPosition))
     is KotlinParser.StringContext -> StringType(toPosition(considerPosition))
     is KotlinParser.BoolContext -> BoolType(toPosition(considerPosition))
-    is KotlinParser.ContentScaleTypeContext -> ContentScaleType(toPosition(considerPosition))
-    is KotlinParser.BoxComposableContext -> BoxComposableType(toPosition(considerPosition))
-    is KotlinParser.TextComposableContext -> TextComposableType(toPosition(considerPosition))
-    is KotlinParser.ImageComposableContext -> ImageComposableType()
-    is KotlinParser.ColumnComposableContext -> ColumnComposableType(toPosition(considerPosition))
-    is KotlinParser.HorizontalAlignmentContext -> HorizontalAlignmentType(toPosition(considerPosition))
-    is KotlinParser.VerticalAlignmentContext -> VerticalAlignmentType(toPosition(considerPosition))
-    is KotlinParser.DpLiteralContext -> DpType(toPosition(considerPosition))
+    is KotlinParser.ContentScaleTypeContext -> AspectRatioType(toPosition(considerPosition))
     is KotlinParser.ColorTypeContext -> ColorType(toPosition(considerPosition))
     is KotlinParser.FontWeightTypeContext -> FontWeightType(toPosition(considerPosition))
     is KotlinParser.UserTypeContext -> UserType(this.ID().text, toPosition(considerPosition))
+    is KotlinParser.DpTypeContext -> DpType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

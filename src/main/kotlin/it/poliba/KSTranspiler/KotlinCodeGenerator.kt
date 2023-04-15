@@ -216,14 +216,13 @@ fun Type.generateKotlinCode(depth: Int=0) : String = when (this) {
     is RangeType -> "ClosedRange<${this.type.generateKotlinCode()}>"
     is ListType -> "[${this.itemsType.generateKotlinCode()}]"
     is ArrayType -> "Array<${this.itemsType.generateKotlinCode()}>"
+    is UserType -> "${this.name}"
     is AspectRatioType -> "ContentScale"
     is ColorType -> "Color"
     is FontWeightType -> "FontWeight"
     is DpType -> "Dp"
     is HorizontalAlignmentType -> "Alignment.Horizontal"
     is VerticalAlignmentType -> "Alignment.Vertical"
-    is UserType -> "${this.name}"
-    is ContentModeType -> "ContentScale"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

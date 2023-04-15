@@ -182,6 +182,7 @@ type : INT     # integer |
        ID      #userType |
        STRING  # string |
        COLOR #colorType |
+       DP #dpType |
        FONT_WEIGHT #fontWeightType |
        ARRANGEMENT #arrangementType |
        CONTENTSCALE #contentScaleType ;
