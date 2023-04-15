@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.SwiftParser.BlockContext
-import it.poliba.KSTranspiler.SwiftParser.BoldContext
 
 fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
     return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
@@ -151,7 +150,15 @@ fun SwiftParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expre
 
 fun SwiftParser.FontWeightLiteralContext.toAst(considerPosition: Boolean): Expression{
     return when(fontWeight()){
-        is BoldContext -> FontWeightBold(toPosition(considerPosition))
+        is SwiftParser.BlackContext -> FontWeightBlack(toPosition(considerPosition))
+        is SwiftParser.HeavyContext -> FontWeightExtraBold(toPosition(considerPosition))
+        is SwiftParser.BoldContext -> FontWeightBold(toPosition(considerPosition))
+        is SwiftParser.SemiboldContext -> FontWeightSemiBold(toPosition(considerPosition))
+        is SwiftParser.MediumContext -> FontWeightMedium(toPosition(considerPosition))
+        is SwiftParser.RegularContext -> FontWeightNormal(toPosition(considerPosition))
+        is SwiftParser.LightContext -> FontWeightLight(toPosition(considerPosition))
+        is SwiftParser.ThinContext -> FontWeightExtraLight(toPosition(considerPosition))
+        is SwiftParser.UltralightContext -> FontWeightThin(toPosition(considerPosition))
         else -> throw Exception("FontWeight not recognized")
     }
 }

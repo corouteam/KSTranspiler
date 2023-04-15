@@ -317,9 +317,9 @@ Color.yellow
     }
 
     @Test
-    fun convertStringListExpressionContentScale(){
-        var code = "val list = listOf<String>()"
-        val result = "let list:[Font.Weight] = []"
+    fun convertStringListExpressionFont(){
+        var code = "val list = listOf<FontWeight>(FontWeight.Bold, FontWeight.Normal, FontWeight.Thin)"
+        val result = "let list:[Font.Weight] = [Font.Weight.bold, Font.Weight.regular, Font.Weight.ultralight]"
         val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }

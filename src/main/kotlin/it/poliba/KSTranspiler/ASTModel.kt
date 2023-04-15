@@ -222,7 +222,15 @@ class ColorYellow(override var position: Position? = null): ColorLit()
 sealed class FontWeightLit(): Expression(FontWeightType())
 
 class CustomFontWeight(val value: Expression, override var position: Position? = null): FontWeightLit()
+class FontWeightBlack(override var position: Position? = null): FontWeightLit()
+class FontWeightExtraBold(override var position: Position? = null): FontWeightLit()
 class FontWeightBold(override var position: Position? = null): FontWeightLit()
+class FontWeightSemiBold(override var position: Position? = null): FontWeightLit()
+class FontWeightMedium(override var position: Position? = null): FontWeightLit()
+class FontWeightNormal(override var position: Position? = null): FontWeightLit()
+class FontWeightLight(override var position: Position? = null): FontWeightLit()
+class FontWeightExtraLight(override var position: Position? = null): FontWeightLit()
+class FontWeightThin(override var position: Position? = null): FontWeightLit()
 
 class DividerComposableCall(
     val frame: Frame?,

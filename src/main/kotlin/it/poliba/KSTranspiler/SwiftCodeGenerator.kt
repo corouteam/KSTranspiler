@@ -213,7 +213,7 @@ fun Type.generateCode() : String = when (this) {
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     is ListType -> "[${this.itemsType.generateCode()}]"
     is UserType -> this.name
-    is AspectRatioType -> "ContentMode"
+    is ContentModeType -> "ContentMode"
     is ImageComposableType -> "Image"
     is TextComposableType -> "Text"
     is ColumnComposableType -> "VStack"
@@ -268,7 +268,15 @@ fun ColorLit.generateCode(depth: Int = 0): String = when(this){
 }
 
 fun FontWeightLit.generateCode(depth: Int = 0): String = when(this){
+    is FontWeightBlack -> "${getPrefix(depth)}Font.Weight.black"
+    is FontWeightExtraBold -> "${getPrefix(depth)}Font.Weight.heavy"
     is FontWeightBold -> "${getPrefix(depth)}Font.Weight.bold"
+    is FontWeightSemiBold -> "${getPrefix(depth)}Font.Weight.semibold"
+    is FontWeightMedium -> "${getPrefix(depth)}Font.Weight.medium"
+    is FontWeightNormal -> "${getPrefix(depth)}Font.Weight.regular"
+    is FontWeightLight -> "${getPrefix(depth)}Font.Weight.light"
+    is FontWeightExtraLight -> "${getPrefix(depth)}Font.Weight.thin"
+    is FontWeightThin -> "${getPrefix(depth)}Font.Weight.ultralight"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
