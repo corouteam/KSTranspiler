@@ -293,6 +293,38 @@ Color.yellow
     }
 
     @Test
+    fun convertStringListExpressionColors(){
+        var code = "val list = listOf<Color>(Color.Red, Color.Blue, Color.Green)"
+        val result = "let list:[Color] = [Color.red, Color.blue, Color.green]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
+    fun convertStringListExpressionDouble(){
+        var code = "val list = listOf<Double>(1.1, 2.2, 3.3)"
+        val result = "let list:[Double] = [1.1, 2.2, 3.3]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
+    fun convertStringListExpressionBool(){
+        var code = "val list = listOf<Bool>(true, false, true)"
+        val result = "let list:[Bool] = [true, false, true]"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
+    fun convertStringListExpressionContentScale(){
+        var code = "val list = listOf<String>()"
+        val result = "let list:[Font.Weight] = []"
+        val parseResult = KotlinParserFacade.parse(code).root!!
+        assertEquals(result, parseResult.generateCode())
+    }
+
+    @Test
     fun convertTextWidget(){
         val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
         val result = "Text(\"Hello world\")\n.foregroundColor(Color.blue)\n.fontWeight(Font.Weight.bold)"

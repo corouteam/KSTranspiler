@@ -73,7 +73,45 @@ class LexerTest {
             tokens(lexerForCode("val a: Int"))
         )
     }
+    @Test
+    fun parseVaLDeclarationColorType() {
+        assertEquals(
+            listOf("VAL", "ID", "COLON", "COLOR", "EOF"),
+            tokens(lexerForCode("val a: Color"))
+        )
+    }
 
+    @Test
+    fun parseVaLDeclarationDoubleType() {
+        assertEquals(
+            listOf("VAL", "ID", "COLON", "DOUBLE", "EOF"),
+            tokens(lexerForCode("val a: Double"))
+        )
+    }
+
+    @Test
+    fun parseVaLDeclarationBoolType() {
+        assertEquals(
+            listOf("VAL", "ID", "COLON", "BOOL", "EOF"),
+            tokens(lexerForCode("val a: Boolean"))
+        )
+    }
+
+    @Test
+    fun parseVaLDeclarationStringType() {
+        assertEquals(
+            listOf("VAL", "ID", "COLON", "STRING", "EOF"),
+            tokens(lexerForCode("val a: String"))
+        )
+    }
+
+    @Test
+    fun parseVaLDeclarationDpType() {
+        assertEquals(
+            listOf("VAL", "ID", "COLON", "DP", "EOF"),
+            tokens(lexerForCode("val a: Dp"))
+        )
+    }
 
     @Test
     fun parseValDeclarationAssignedAnIntegerLiteral() {

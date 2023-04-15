@@ -213,7 +213,7 @@ fun Type.generateCode() : String = when (this) {
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     is ListType -> "[${this.itemsType.generateCode()}]"
     is UserType -> this.name
-    is ContentModeType -> "ContentMode"
+    is AspectRatioType -> "ContentMode"
     is ImageComposableType -> "Image"
     is TextComposableType -> "Text"
     is ColumnComposableType -> "VStack"
