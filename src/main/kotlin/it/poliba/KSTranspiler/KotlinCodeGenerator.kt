@@ -208,7 +208,6 @@ fun Frame.generateKotlinCode(depth: Int=0): String{
     return "${params.joinToString("")}"
 }
 
-
 fun Type.generateKotlinCode(depth: Int=0) : String = when (this) {
     is IntType -> "Int"
     is DoubleType -> "Double"
@@ -216,13 +215,14 @@ fun Type.generateKotlinCode(depth: Int=0) : String = when (this) {
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateKotlinCode()}>"
     is ListType -> "[${this.itemsType.generateKotlinCode()}]"
+    is ArrayType -> "Array<${this.itemsType.generateKotlinCode()}>"
+    is UserType -> "${this.name}"
     is AspectRatioType -> "ContentScale"
     is ColorType -> "Color"
     is FontWeightType -> "FontWeight"
     is DpType -> "Dp"
     is HorizontalAlignmentType -> "Alignment.Horizontal"
     is VerticalAlignmentType -> "Alignment.Vertical"
-    is UserType -> "${this.name}"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
@@ -263,7 +263,15 @@ fun ColorLit.generateKotlinCode(depth: Int=0): String = when(this){
 }
 
 fun FontWeightLit.generateKotlinCode(depth: Int=0): String = when(this){
+    is FontWeightBlack -> "${getPrefix(depth)}FontWeight.Black"
+    is FontWeightExtraBold -> "${getPrefix(depth)}FontWeight.ExtraBold"
     is FontWeightBold -> "${getPrefix(depth)}FontWeight.Bold"
+    is FontWeightSemiBold -> "${getPrefix(depth)}FontWeight.SemiBold"
+    is FontWeightMedium -> "${getPrefix(depth)}FontWeight.Medium"
+    is FontWeightNormal -> "${getPrefix(depth)}FontWeight.Normal"
+    is FontWeightLight -> "${getPrefix(depth)}FontWeight.Light"
+    is FontWeightExtraLight -> "${getPrefix(depth)}FontWeight.ExtraLight"
+    is FontWeightThin -> "${getPrefix(depth)}FontWeight.Thin"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

@@ -180,7 +180,12 @@ type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
        ID      #userType |
-       STRING  # string;
+       STRING  # string |
+       COLOR #colorType |
+       DP #dpType |
+       FONT_WEIGHT #fontWeightType |
+       ARRANGEMENT #arrangementType |
+       CONTENTSCALE #contentScaleType ;
 
 typeArguments
     : LANGLE NL* type (NL* COMMA NL* type)* (NL* COMMA)? NL* RANGLE
@@ -253,8 +258,17 @@ color:
         COLOR DOT COLOR_YELLOW #yellowColor;
 
 fontWeight:
-    FONT_WEIGHT LPAREN expression RPAREN #customWeight
-    | FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight;
+    FONT_WEIGHT LPAREN expression RPAREN #customWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_BLACK #blackFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_EXTRA_BOLD #extraBoldFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_BOLD #boldFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_SEMI_BOLD #semiBoldFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_MEDIUM #mediumFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_NORMAL #normalFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_LIGHT #lightFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_EXTRA_LIGHT #extraLightFontWeight |
+    FONT_WEIGHT DOT FONT_WEIGHT_THIN #thinFontWeight;
+
 
 modifierParameter:
     MODIFIER_PARAM NL* ASSIGN NL* modifier;

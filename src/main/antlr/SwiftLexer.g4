@@ -93,7 +93,15 @@ COLOR_RED: 'red';
 COLOR_WHITE: 'white';
 COLOR_YELLOW: 'yellow';
 
+FONT_WEIGHT_BLACK: 'black';
+FONT_WEIGHT_HEAVY: 'heavy';
 FONT_WEIGHT_BOLD: 'bold';
+FONT_WEIGHT_SEMIBOLD: 'semibold';
+FONT_WEIGHT_MEDIUM: 'medium';
+FONT_WEIGHT_REGULAR: 'regular';
+FONT_WEIGHT_LIGHT: 'light';
+FONT_WEIGHT_THIN: 'thin';
+FONT_WEIGHT_ULTRALIGHT: 'ultralight';
 FOREGROUND_COLOR: 'foregroundColor';
 FONT: 'Font';
 WEIGHT: 'Weight';

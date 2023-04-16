@@ -8,7 +8,6 @@ import it.poliba.KSTranspiler.KotlinParser.GreenColorContext
 import it.poliba.KSTranspiler.KotlinParser.RedColorContext
 import it.poliba.KSTranspiler.KotlinParser.WhiteColorContext
 import it.poliba.KSTranspiler.KotlinParser.YellowColorContext
-import it.poliba.KSTranspiler.KotlinParser.BoldFontWeightContext
 import it.poliba.KSTranspiler.KotlinParser.BottomAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.CenterHorizontallyAlignmentContext
 import it.poliba.KSTranspiler.KotlinParser.CenterVerticalltAlignmentContext
@@ -179,8 +178,16 @@ fun KotlinParser.ColorContext.toAst(considerPosition: Boolean = false): Expressi
 
 fun KotlinParser.FontWeightContext.toAst(considerPosition: Boolean = false): Expression = when(this){
     is CustomWeightContext -> CustomFontWeight(expression().toAst(considerPosition), toPosition(considerPosition))
-    is BoldFontWeightContext ->  FontWeightBold(toPosition(considerPosition))
-    else -> throw java.lang.IllegalArgumentException("Color not recognized")
+    is KotlinParser.BlackFontWeightContext ->  FontWeightBlack(toPosition(considerPosition))
+    is KotlinParser.ExtraBoldFontWeightContext ->  FontWeightExtraBold(toPosition(considerPosition))
+    is KotlinParser.BoldFontWeightContext ->  FontWeightBold(toPosition(considerPosition))
+    is KotlinParser.SemiBoldFontWeightContext ->  FontWeightSemiBold(toPosition(considerPosition))
+    is KotlinParser.MediumFontWeightContext ->  FontWeightMedium(toPosition(considerPosition))
+    is KotlinParser.NormalFontWeightContext ->  FontWeightNormal(toPosition(considerPosition))
+    is KotlinParser.LightFontWeightContext ->  FontWeightLight(toPosition(considerPosition))
+    is KotlinParser.ExtraLightFontWeightContext ->  FontWeightExtraLight(toPosition(considerPosition))
+    is KotlinParser.ThinFontWeightContext ->  FontWeightThin(toPosition(considerPosition))
+    else -> throw java.lang.IllegalArgumentException("Font not recognized")
 }
 
 fun KotlinParser.ImageComposableContext.toAst(considerPosition: Boolean): Expression {

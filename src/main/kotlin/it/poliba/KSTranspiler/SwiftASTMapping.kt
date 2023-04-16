@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.SwiftParser.BlockContext
-import it.poliba.KSTranspiler.SwiftParser.BoldContext
 
 fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
     return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
@@ -151,7 +150,15 @@ fun SwiftParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expre
 
 fun SwiftParser.FontWeightLiteralContext.toAst(considerPosition: Boolean): Expression{
     return when(fontWeight()){
-        is BoldContext -> FontWeightBold(toPosition(considerPosition))
+        is SwiftParser.BlackContext -> FontWeightBlack(toPosition(considerPosition))
+        is SwiftParser.HeavyContext -> FontWeightExtraBold(toPosition(considerPosition))
+        is SwiftParser.BoldContext -> FontWeightBold(toPosition(considerPosition))
+        is SwiftParser.SemiboldContext -> FontWeightSemiBold(toPosition(considerPosition))
+        is SwiftParser.MediumContext -> FontWeightMedium(toPosition(considerPosition))
+        is SwiftParser.RegularContext -> FontWeightNormal(toPosition(considerPosition))
+        is SwiftParser.LightContext -> FontWeightLight(toPosition(considerPosition))
+        is SwiftParser.ThinContext -> FontWeightExtraLight(toPosition(considerPosition))
+        is SwiftParser.UltralightContext -> FontWeightThin(toPosition(considerPosition))
         else -> throw Exception("FontWeight not recognized")
     }
 }
@@ -236,14 +243,17 @@ fun SwiftParser.StringLiteralExpressionContext.toAst(considerPosition: Boolean):
     return StringLit(valueString, toPosition(considerPosition))
 }
 fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = when (this) {
+    /*is SwiftParser.FunctionCallContext -> FunctionCallType(toPosition(considerPosition))
+    is SwiftParser.RangeExpressionContext -> toRangeType(considerPosition)*/
     is SwiftParser.IntegerContext -> IntType(toPosition(considerPosition))
     is SwiftParser.DoubleContext -> DoubleType(toPosition(considerPosition))
-    is SwiftParser.UserTypeContext -> UserType(ID().text, toPosition(considerPosition))
     is SwiftParser.StringContext -> StringType(toPosition(considerPosition))
-    is SwiftParser.CgFloatContext -> DpType(toPosition(considerPosition))
+    is SwiftParser.BoolContext -> BoolType(toPosition(considerPosition))
     is SwiftParser.ContentModeTypeContext -> AspectRatioType(toPosition(considerPosition))
-    is SwiftParser.FontWeightTypeContext -> FontWeightType(toPosition(considerPosition))
     is SwiftParser.ColorTypeContext -> ColorType(toPosition(considerPosition))
+    is SwiftParser.FontWeightTypeContext -> FontWeightType(toPosition(considerPosition))
+    is SwiftParser.UserTypeContext -> UserType(ID().text, toPosition(considerPosition))
+    is SwiftParser.CgFloatContext -> DpType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

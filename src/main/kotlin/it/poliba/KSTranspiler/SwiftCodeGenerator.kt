@@ -1,5 +1,6 @@
 package it.poliba.KSTranspiler
 
+import it.poliba.KSTranspiler.SwiftParser.HStackWidgetContext
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
@@ -211,18 +212,12 @@ fun Type.generateCode() : String = when (this) {
     is BoolType -> "Boolean"
     is RangeType -> "ClosedRange<${this.type.generateCode()}>"
     is ListType -> "[${this.itemsType.generateCode()}]"
+    is ArrayType -> "[${this.itemsType.generateCode()}]"
     is UserType -> this.name
-    is ImageComposableType -> "Image"
-    is TextComposableType -> "Text"
-    is ColumnComposableType -> "VStack"
-    is SpacerComposableType -> "Spacer"
-    is ZStackComposableType -> "ZStack"
-    is ButtonComposableType -> "Button"
-    is DividerComposableType -> "Divider"
-    is DpType -> "CGFloat"
-    is ColorType -> "Color"
     is AspectRatioType -> "ContentMode"
+    is ColorType -> "Color"
     is FontWeightType -> "Font.Weight"
+    is DpType -> "CGFloat"
     is HorizontalAlignmentType -> "HorizontalAlignment"
     is VerticalAlignmentType -> "VerticalAlignment"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
@@ -265,7 +260,15 @@ fun ColorLit.generateCode(depth: Int = 0): String = when(this){
 }
 
 fun FontWeightLit.generateCode(depth: Int = 0): String = when(this){
+    is FontWeightBlack -> "${getPrefix(depth)}Font.Weight.black"
+    is FontWeightExtraBold -> "${getPrefix(depth)}Font.Weight.heavy"
     is FontWeightBold -> "${getPrefix(depth)}Font.Weight.bold"
+    is FontWeightSemiBold -> "${getPrefix(depth)}Font.Weight.semibold"
+    is FontWeightMedium -> "${getPrefix(depth)}Font.Weight.medium"
+    is FontWeightNormal -> "${getPrefix(depth)}Font.Weight.regular"
+    is FontWeightLight -> "${getPrefix(depth)}Font.Weight.light"
+    is FontWeightExtraLight -> "${getPrefix(depth)}Font.Weight.thin"
+    is FontWeightThin -> "${getPrefix(depth)}Font.Weight.ultralight"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 

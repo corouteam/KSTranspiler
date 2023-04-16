@@ -126,8 +126,8 @@ class SWIFTLexerTest {
 
     @Test
     fun parseBoldFontWeight(){
-        val code = ".fontWeight(Font.Weight.bold)"
-        val result = listOf("DOT", "FONT_WEIGHT_PARAM","LPAREN","FONT","DOT", "WEIGHT","DOT","FONT_WEIGHT_BOLD", "RPAREN", "EOF")
+        val code = ".fontWeight(Font.Weight.semibold)"
+        val result = listOf("DOT", "FONT_WEIGHT_PARAM","LPAREN","FONT","DOT", "WEIGHT","DOT","FONT_WEIGHT_SEMIBOLD", "RPAREN", "EOF")
         assertEquals(result, tokens(lexerForCode(code)))
     }
 
