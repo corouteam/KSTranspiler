@@ -2,12 +2,12 @@ parser grammar SwiftParser;
 
 options { tokenVocab=SwiftLexer; }
 
-file
-    : NL* declaration* EOF #swiftFile
-    |  lines=line+ #swiftScript;
+
+file:
+      lines=line+ #swiftScript;
 
 
-line      : statement (NL | EOF) ;
+line: (statement | declaration) (NL | EOF) ;
 
 packageHeader
     : (PACKAGE ID)?

@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler.ZStackComposable
 
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.generateCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -18,7 +17,7 @@ class ImageKotlinToSwift {
             """.trimIndent()
 
         val result = "Image(\"nome-immagine-test\")"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -32,7 +31,7 @@ class ImageKotlinToSwift {
         val result = """
         var imageName:String = "immagine-test"
         Image(imageName)""".trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
     @Test
@@ -49,7 +48,7 @@ class ImageKotlinToSwift {
 Image("nome-immagine-test")
 	.resizable()
 	.aspectRatio(contentMode: ContentMode.fill)""".trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
     @Test
@@ -69,7 +68,7 @@ Image("nome-immagine-test")
 	.resizable()
 	.aspectRatio(contentMode: fillVariable)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 

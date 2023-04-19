@@ -1,5 +1,6 @@
 package it.poliba.KSTranspiler.facade
 
+import com.strumenta.kolasu.parsing.toStream
 import it.poliba.KSTranspiler.*
 import it.poliba.KSTranspiler.tools.ErrorHandler
 import java.io.File
@@ -7,7 +8,7 @@ import java.io.FileInputStream
 import java.io.InputStream
 
 data class SwiftParsingResult(
-    val root : AstFile?,
+    val root : AstScript?,
     val errors: List<Error>
 ) {
     fun isCorrect() = errors.isEmpty() && root != null
@@ -54,7 +55,7 @@ object SwiftParserFacadeScript {
     fun parse(file: File) : SwiftScriptParsingResult = parse(FileInputStream(file))
 
     fun parse(inputStream: InputStream) : SwiftScriptParsingResult {
-        val antlrResult = SwiftAntlrParserFacadeScript.parse(inputStream)
+        val antlrResult = SwiftAntlrParserFacade.parse(inputStream)
         val (antlrRoot, lexicalAndSyntacticErrors) = antlrResult
 
         val astRoot: AstScript? = if (lexicalAndSyntacticErrors.isEmpty()) {

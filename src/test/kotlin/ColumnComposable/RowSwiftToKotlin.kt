@@ -1,6 +1,5 @@
 package it.poliba.KSTranspiler.TextComposable
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
 import it.poliba.KSTranspiler.generateCode

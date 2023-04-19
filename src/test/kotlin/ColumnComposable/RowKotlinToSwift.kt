@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler.TextComposable
 
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.generateCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -26,7 +25,7 @@ class RowKotlinToSwift {
 
 }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -44,7 +43,7 @@ class RowKotlinToSwift {
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -64,7 +63,7 @@ class RowKotlinToSwift {
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -84,7 +83,7 @@ class RowKotlinToSwift {
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals("Unrecognized symbol verticalArrangement", parseResult.errors.first().message)
     }
 
@@ -100,7 +99,7 @@ HStack(
 
 }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -118,7 +117,7 @@ HStack(
     
     }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -160,7 +159,7 @@ HStack(
                  verticalAlignment = cAlignment)
                 """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals("Row vertical alignment requires a VerticalAlignmentType", parseResult.errors.first().message)
     }
 
@@ -173,7 +172,7 @@ HStack(
             )
             """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
 
         assertEquals("Row spacing requires a dp literal", parseResult.errors.first().message)
     }
@@ -199,7 +198,7 @@ HStack(
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -220,7 +219,7 @@ ScrollView(.horizontal){
 	}
 }
     """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
 
         assertEquals(result, parseResult.root!!.generateCode())
     }

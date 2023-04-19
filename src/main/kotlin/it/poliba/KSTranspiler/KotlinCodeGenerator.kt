@@ -9,9 +9,6 @@ import java.util.StringJoiner
 
 val kotlinGroup: STGroup = STGroupFile("src/main/antlr/KotlinTemplate.stg")
 
-fun AstFile.generateKotlinCode(depth: Int = 0): String{
-    return declarations.joinToString("\n") { it.generateKotlinCode(depth) }
-}
 fun AstScript.generateKotlinCode(depth: Int = 0): String{
     return statement.joinToString("\n") { it.generateKotlinCode(depth) }
 }
@@ -76,6 +73,7 @@ fun Statement.generateKotlinCode(depth: Int = 0): String {
         is ForExpression -> this.generateKotlinCode(depth)
         is Expression -> this.generateKotlinCode(depth)
         is FunctionDeclaration -> this.generateKotlinCode(depth)
+        is Declaration -> this.generateKotlinCode(depth)
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
 }

@@ -1,6 +1,7 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.SwiftParser.HStackWidgetContext
+import org.antlr.v4.codegen.model.decl.Decl
 import org.stringtemplate.v4.STGroup
 import org.stringtemplate.v4.STGroupFile
 import java.lang.Exception
@@ -8,9 +9,7 @@ import java.util.ArrayList
 import java.util.StringJoiner
 
 //val group: STGroup = STGroupFile("src/main/antlr/SwiftTemplate.stg")
-fun AstFile.generateCode(depth: Int = 0): String{
-    return declarations.joinToString("\n") { it.generateCode(depth) }
-}
+
 fun AstScript.generateCode(depth: Int = 0): String{
     return statement.joinToString("\n") { it.generateCode(depth) }
 }
@@ -66,6 +65,7 @@ fun Statement.generateCode(depth: Int = 0): String {
         is IfExpression -> this.generateCode(depth)
         is Expression -> this.generateCode(depth)
         is FunctionDeclaration -> this.generateCode(depth)
+        is Declaration -> this.generateCode(depth)
         else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
 }

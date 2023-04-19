@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler.ZStackComposable
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
-import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.generateCode
 import it.poliba.KSTranspiler.generateKotlinCode
 import org.junit.jupiter.api.Test
@@ -35,7 +34,7 @@ ZStack{
 	}
 }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 }

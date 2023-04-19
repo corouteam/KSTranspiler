@@ -2,12 +2,11 @@ parser grammar KotlinParser;
 
 options { tokenVocab=KotlinLexer; }
 
-file
-    : NL* declaration* EOF #kotlinFile
-    |  lines=line+ #kotlinScript;
+file:
+      lines=line+ #kotlinScript;
 
 
-line      : statement (NL | EOF) ;
+line      : (statement | declaration) (NL | EOF) ;
 
 packageHeader
     : (PACKAGE ID)?

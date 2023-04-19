@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -51,7 +50,7 @@ class  OutputTest {
     fun convertAssignmentPropertyDefinition(){
 
         var code = "a = 5"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         val expected = "a = 5"
         assertEquals(expected, parseResult.generateCode())
     }
@@ -59,7 +58,7 @@ class  OutputTest {
     @Test
     fun convertPrintPropertyDefinition(){
         var code = "print(\"aa\")"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         val expected = "print(\"aa\")"
         assertEquals(expected, parseResult.generateCode())
     }
@@ -67,7 +66,7 @@ class  OutputTest {
     fun convertIf(){
         val code = "if(true){ print(\"Is true \")}"
         val result = "if(true) {\n\tprint(\"Is true \")\n}"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
 
     }
@@ -80,7 +79,7 @@ class  OutputTest {
         val result = """
 Color.black
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -92,7 +91,7 @@ Color.black
         val result = """
 Color.blue
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -104,7 +103,7 @@ Color.blue
         val result = """
 Color.cyan
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -116,7 +115,7 @@ Color.cyan
         val result = """
 Color.gray
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -128,7 +127,7 @@ Color.gray
         val result = """
 Color.green
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -140,7 +139,7 @@ Color.green
         val result = """
 Color.red
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -152,7 +151,7 @@ Color.red
         val result = """
 Color.white
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -164,7 +163,7 @@ Color.white
         val result = """
 Color.yellow
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -172,7 +171,7 @@ Color.yellow
     fun convertIfExpression(){
         val code = "if(true) print(\"Is true \")"
         val result = "if(true) print(\"Is true \")"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
 
     }
@@ -180,7 +179,7 @@ Color.yellow
     fun convertIfElseExpression(){
         val code = "if(true) print(\"Is true \") else print(\"Is false \")"
         val result = "if(true) print(\"Is true \") else print(\"Is false \")"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
 
     }
@@ -189,7 +188,7 @@ Color.yellow
     fun convertIfElse(){
         val code = "if(true) { print(\"Is true \") }else{print(\"Is false\")}"
         val result = "if(true) {\n\tprint(\"Is true \")\n} else {\n\tprint(\"Is false\")\n}"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
 
     }
@@ -198,7 +197,7 @@ Color.yellow
     fun convertIfElseIf(){
         val code = "if(true) { print(\"Is true \") }else if(false){print(\"Is false\")}"
         val result = "if(true) {\n\tprint(\"Is true \")\n} else if(false) {\n\tprint(\"Is false\")\n}"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -206,7 +205,7 @@ Color.yellow
     fun convertIfElseIfElse(){
         val code = "if(true) { print(\"Is true \") }else if(false){print(\"Is false\")}else{print(\"never\")}"
         val result = "if(true) {\n\tprint(\"Is true \")\n} else if(false) {\n\tprint(\"Is false\")\n} else {\n\tprint(\"never\")\n}"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -222,7 +221,7 @@ Color.yellow
             	print("ciao")
             }
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -256,7 +255,7 @@ Color.yellow
     fun convertFunctionCall(){
         val code = """test("hello", "world", 42)"""
         val result = """test("hello", "world", 42)"""
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -328,7 +327,7 @@ Color.yellow
     fun convertTextWidget(){
         val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
         val result = "Text(\"Hello world\")\n.foregroundColor(Color.blue)\n.fontWeight(Font.Weight.bold)"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -365,7 +364,7 @@ struct test: View{
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -378,7 +377,7 @@ struct test: View{
 Divider()
 	.overlay(Color.blue)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -400,7 +399,7 @@ ScrollView(.vertical){
 	}
 }
     """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
 
         assertEquals(result, parseResult.root!!.generateCode())
     }
@@ -411,7 +410,7 @@ ScrollView(.vertical){
             Divider(thickness = 8.dp)
             """.trimIndent()
         val result = "Divider()\n\t.frame(height: CGFloat(8))"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -434,7 +433,7 @@ ScrollView(.vertical){
 	}
 }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -444,7 +443,7 @@ ScrollView(.vertical){
             Spacer(modifier = Modifier.width(54.dp).height(54.dp))
             """.trimIndent()
         val result = "Spacer()\n\t.frame(width: CGFloat(54), height: CGFloat(54))"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -464,7 +463,7 @@ ScrollView(.vertical){
             	Text("Ciao")
             }
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -475,7 +474,7 @@ ScrollView(.vertical){
             """.trimIndent()
 
         val result = "Image(\"nome-immagine-test\")"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
     @Test
@@ -492,7 +491,7 @@ ScrollView(.vertical){
 Image("nome-immagine-test")
 	.resizable()
 	.aspectRatio(contentMode: ContentMode.fill)""".trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
     @Test

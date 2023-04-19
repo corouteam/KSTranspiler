@@ -1,6 +1,6 @@
 package it.poliba.KSTranspiler.SpacerComposable
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.generateCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -20,7 +20,7 @@ Spacer()
 	.frame(width: CGFloat(54), height: CGFloat(54))
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -34,7 +34,7 @@ Spacer()
 	.frame(height: CGFloat(54))
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -48,7 +48,7 @@ Spacer()
 	.frame(width: CGFloat(54))
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -66,7 +66,7 @@ Spacer()
 	.frame(width: sWidth, height: sHeight)
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 

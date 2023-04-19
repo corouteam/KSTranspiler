@@ -1,6 +1,6 @@
 package it.poliba.KSTranspiler.TextComposable
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
 import it.poliba.KSTranspiler.generateCode
 import it.poliba.KSTranspiler.generateKotlinCode
@@ -96,7 +96,7 @@ class TextSwiftToKotlin {
             Text("Hello world")
             .fontWeight(Font.Weight.bold)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -106,7 +106,7 @@ class TextSwiftToKotlin {
             Text("Hello world", fontWeight = FontWeight.B)
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         var error = parseResult.errors.first()
         var message = error.message
         assertEquals("Unrecognized symbol B", message)
