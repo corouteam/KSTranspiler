@@ -9,13 +9,15 @@ object App {
     @JvmStatic
     fun main(args: Array<String>) {
         var code = """
-            for i in 1...42 {
-	print("Hello world")
-}
+            fun printMessage(message: String, times: Int){
+                for (i in 0..times) {
+                    print(message)
+                }
+            }
         """.trimIndent().trim()
-        var code2 = "let a = 5 + 2"
+        var code2 = """val a = "Hello world""""
         var actual = code
-        val parseResult = SwiftParserFacadeScript.parse(actual)
+        val parseResult = KotlinParserFacade.parse(actual)
 
         if (!parseResult.isCorrect()) {
             println("ERRORS FOUND")

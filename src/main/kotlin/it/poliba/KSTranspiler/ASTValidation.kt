@@ -2,6 +2,7 @@ package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
 import com.strumenta.kolasu.model.Position
+import com.strumenta.kolasu.traversing.findAncestorOfType
 import com.strumenta.kolasu.traversing.searchByType
 import com.strumenta.kolasu.traversing.walkAncestors
 import java.util.*
@@ -64,14 +65,20 @@ fun Node.validateVariablesAndInferType(): LinkedList<Error> {
 
 
     // check if used variable is declared before and assign type
-    this.specificProcess(ControlStructureBody::class.java) { block ->
+    this.specificProcess(FunctionDeclaration::class.java) { function ->
+        val block = function.body
         if (block is Block) {
             block.searchByType(VarReference::class.java).forEach { varReference ->
                 val name = varReference.varName
                 // check in function scope first
-                val varDeclarations = block.body
+                val blockDeclarations = block.body
                     .filterIsInstance(PropertyDeclaration::class.java)
                     .filter { it.varName == name }
+
+                val functionArguments = function.parameters
+                    .filter { it.id == name }
+
+                val varDeclarations = (blockDeclarations + functionArguments).filterNotNull()
 
                 if (varDeclarations.isEmpty()) {
                     // not found, check global variables then
@@ -90,8 +97,13 @@ fun Node.validateVariablesAndInferType(): LinkedList<Error> {
                     }
                 } else {
                     // var found, copy type from declaration
-                    val declaration = varDeclarations.first()
-                    varReference.type = declaration.type
+                    blockDeclarations.firstOrNull()?.let {
+                        varReference.type = it.type
+                    }
+
+                    functionArguments?.firstOrNull()?.let {
+                        varReference.type = it.type
+                    }
                 }
             }
         }
