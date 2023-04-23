@@ -298,15 +298,6 @@ fun Node.commonValidation(): LinkedList<Error> {
     return errors
 }
 
-fun AstFile.validate(): List<Error> {
-    val errors = LinkedList<Error>()
-
-    clearValues()
-    errors.addAll(validateVariablesAndInferType())
-    errors.addAll(commonValidation())
-    return errors
-}
-
 fun AstScript.validate(): List<Error> {
     val errors = LinkedList<Error>()
 

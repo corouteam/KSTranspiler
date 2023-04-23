@@ -5,12 +5,10 @@ import com.strumenta.kolasu.model.Position
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-
 //
 // Kotlin specific part
 //
 
-data class AstFile(val declarations: List<Declaration>, override var position: Position? = null) : Node()
 data class AstScript(val statement: List<Statement>, override var position: Position? = null) : Node()
 
 sealed class Declaration: Statement()

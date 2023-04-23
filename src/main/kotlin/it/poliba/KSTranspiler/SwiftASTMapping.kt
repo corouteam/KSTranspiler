@@ -3,10 +3,13 @@ package it.poliba.KSTranspiler
 import it.poliba.KSTranspiler.SwiftParser.BlockContext
 
 fun SwiftParser.SwiftScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
-    return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
-}
-fun SwiftParser.SwiftFileContext.toAst(considerPosition: Boolean = false) : AstFile {
-    return AstFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
+    return AstScript(this.line().map {
+        if(it.statement() != null){
+            it.statement().toAst(considerPosition)
+        }else{
+            it.declaration().toAst(considerPosition)
+        }
+    },  toPosition(considerPosition))
 }
 
 fun SwiftParser.DeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
@@ -252,7 +255,7 @@ fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = wh
     is SwiftParser.ContentModeTypeContext -> AspectRatioType(toPosition(considerPosition))
     is SwiftParser.ColorTypeContext -> ColorType(toPosition(considerPosition))
     is SwiftParser.FontWeightTypeContext -> FontWeightType(toPosition(considerPosition))
-    is SwiftParser.UserTypeContext -> UserType(ID().text, toPosition(considerPosition))
+    is SwiftParser.UserTypeContext -> UserType(identifier().text, toPosition(considerPosition))
     is SwiftParser.CgFloatContext -> DpType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
@@ -265,6 +268,3 @@ fun SwiftParser.BinaryOperationContext.toAst(considerPosition: Boolean = false) 
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class KotlinParseTreeToAstMapperSwift : ParseTreeToAstMapper<SwiftParser.SwiftFileContext, AstFile> {
-    override fun map(parseTreeNode: SwiftParser.SwiftFileContext): AstFile = parseTreeNode.toAst()
-}

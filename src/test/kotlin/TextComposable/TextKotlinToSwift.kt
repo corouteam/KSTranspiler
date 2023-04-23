@@ -1,6 +1,6 @@
 package it.poliba.KSTranspiler.TextComposable
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.generateCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -15,14 +15,14 @@ class TextKotlinToSwift {
     fun convertTextWidgetComplete(){
         val code = "Text(\"Hello world\", color = Color.Blue, fontWeight = FontWeight.Bold)"
         val result = "Text(\"Hello world\")\n.foregroundColor(Color.blue)\n.fontWeight(Font.Weight.bold)"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
     @Test
     fun completeTextWidgetOnlyTextLiteral(){
         val code = "Text(\"Hello world\")"
         val result = "Text(\"Hello world\")"
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
     @Test
@@ -35,7 +35,7 @@ class TextKotlinToSwift {
             let name:String = "Ciao"
             Text(name)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -50,7 +50,7 @@ class TextKotlinToSwift {
             Text("Hello")
             .foregroundColor(myColor)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -63,7 +63,7 @@ class TextKotlinToSwift {
             Text("Hello")
             .foregroundColor(Color.blue)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -78,7 +78,7 @@ class TextKotlinToSwift {
             Text("Hello")
             .fontWeight(myWeight)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -91,7 +91,7 @@ class TextKotlinToSwift {
             Text("Hello world")
             .fontWeight(Font.Weight.bold)
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code).root!!
+        val parseResult = KotlinParserFacade.parse(code).root!!
         assertEquals(result, parseResult.generateCode())
     }
 
@@ -101,7 +101,7 @@ class TextKotlinToSwift {
             Text("Hello world", fontWeight = FontWeight.B)
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         var error = parseResult.errors.first()
         var message = error.message
         assertEquals("Unrecognized symbol B", message)

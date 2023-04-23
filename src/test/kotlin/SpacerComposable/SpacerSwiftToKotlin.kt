@@ -1,6 +1,4 @@
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
-import it.poliba.KSTranspiler.generateCode
 import it.poliba.KSTranspiler.generateKotlinCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

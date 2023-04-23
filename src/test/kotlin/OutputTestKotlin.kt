@@ -1,7 +1,5 @@
 package it.poliba.KSTranspiler
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
-import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import it.poliba.KSTranspiler.facade.SwiftParserFacadeScript
 import org.junit.jupiter.api.Test

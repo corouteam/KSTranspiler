@@ -1,6 +1,6 @@
 package it.poliba.KSTranspiler.ButtonComposable
 
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
+import it.poliba.KSTranspiler.facade.KotlinParserFacade
 import it.poliba.KSTranspiler.generateCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -23,7 +23,7 @@ Button(action: {
 	Text("Ciao")
 }
 """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 }

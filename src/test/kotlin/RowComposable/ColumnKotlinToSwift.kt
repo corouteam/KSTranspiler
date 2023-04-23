@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler.TextComposable
 
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.generateCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -28,7 +27,7 @@ class ColumnKotlinToSwift {
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -46,7 +45,7 @@ class ColumnKotlinToSwift {
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -66,7 +65,7 @@ class ColumnKotlinToSwift {
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -82,7 +81,7 @@ VStack(
 
 }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -100,7 +99,7 @@ VStack(
     
     }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -165,7 +164,7 @@ VStack(
     
     }""".trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals("Column horizontal alignment requires a HorizontalAlignmentType", parseResult.errors.first().message)
     }
 
@@ -185,7 +184,7 @@ VStack(
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
 
         assertEquals("Column spacing requires a dp literal", parseResult.errors.first().message)
         assertEquals(result, parseResult.root!!.generateCode())
@@ -212,7 +211,7 @@ VStack(
          }
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -233,7 +232,7 @@ ScrollView(.vertical){
 	}
 }
     """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
 
         assertEquals(result, parseResult.root!!.generateCode())
     }

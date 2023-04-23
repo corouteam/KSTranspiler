@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler.DividerComposable
 
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.generateCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -22,7 +21,7 @@ Divider()
 	 .frame(height: CGFloat(8))
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -36,7 +35,7 @@ Divider()
 	.overlay(Color.blue)
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -52,7 +51,7 @@ Divider()
 	.overlay(myColor)
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -63,7 +62,7 @@ Divider()
             Divider(color = myColor)
             """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals("Expecting a color", parseResult.errors.first().message)
     }
 
@@ -77,7 +76,7 @@ Divider()
 	.frame(height: CGFloat(8))
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 
@@ -93,7 +92,7 @@ Divider()
 	.frame(height: dividerThickness)
         """.trimIndent()
 
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
     }
 }

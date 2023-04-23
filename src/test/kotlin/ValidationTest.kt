@@ -1,7 +1,6 @@
 package it.poliba.KSTranspiler
 
 import it.poliba.KSTranspiler.facade.KotlinParserFacade
-import it.poliba.KSTranspiler.facade.KotlinParserFacadeScript
 import it.poliba.KSTranspiler.facade.SwiftParserFacade
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -57,7 +56,7 @@ class ValidationTest {
             val a = 1
             val a = 2
         """.trimIndent()
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
 
         assert(parseResult.errors.isNotEmpty())
         assertEquals("A variable named 'a' has been already declared", parseResult.errors.first().message)

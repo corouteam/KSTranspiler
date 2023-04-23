@@ -19,10 +19,13 @@ interface ParseTreeToAstMapper<in PTN : ParserRuleContext, out ASTN : Node> {
 }
 
 fun KotlinParser.KotlinScriptContext.toAst(considerPosition: Boolean = false) : AstScript {
-    return AstScript(this.line().map { it.statement().toAst(considerPosition) }, toPosition(considerPosition))
-}
-fun KotlinParser.KotlinFileContext.toAst(considerPosition: Boolean = false) : AstFile {
-    return AstFile(this.declaration().map { it.toAst(considerPosition) }, toPosition(considerPosition))
+    return AstScript(this.line().map {
+    if(it.statement() != null){
+        it.statement().toAst(considerPosition)
+    }else{
+        it.declaration().toAst(considerPosition)
+    }
+ },  toPosition(considerPosition))
 }
 fun Token.startPoint() = Point(line, charPositionInLine)
 
@@ -48,7 +51,7 @@ fun KotlinParser.DeclarationContext.toAst(considerPosition: Boolean = false): De
 fun KotlinParser.FunctionDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
     var annotation: String = ""
     if(annotation() != null){
-        annotation = annotation().ID().text
+        annotation = annotation().identifier().text
     }
     if(annotation == "Composable"){
         return this.toWidgetAst(considerPosition)
@@ -65,12 +68,12 @@ fun KotlinParser.ClassDeclarationContext.toClassAst(considerPosition: Boolean = 
     if(primaryConstructor() != null && primaryConstructor().classParameter() != null){
         constProp = primaryConstructor().classParameter().map {
             if(it.VAR() != null || it.VAL() != null){
-                var prop = PropertyDeclaration(it.ID().text, it.type().toAst(), null, null,it.VAR() != null)
+                var prop = PropertyDeclaration(it.identifier().text, it.type().toAst(), null, null,it.VAR() != null)
                 defaultConstructorPropertiesParams.add(prop)
                 classPropertiesNumber += 1
             }
 
-            FunctionParameter(it.ID().text, it.type().toAst(considerPosition))
+            FunctionParameter(it.identifier().text, it.type().toAst(considerPosition))
         }
     }
     var body = arrayListOf<Declaration>()
@@ -98,7 +101,7 @@ fun KotlinParser.ClassDeclarationContext.toClassAst(considerPosition: Boolean = 
     constructor?.let {
         body.add(it)
     }
-    return ClassDeclaration(ID().text,  body, baseClasses, toPosition(considerPosition))
+    return ClassDeclaration(identifier().text,  body, baseClasses, toPosition(considerPosition))
 
 }
 fun KotlinParser.ClassDeclarationContext.toAst(considerPosition: Boolean = false): Declaration {
@@ -118,14 +121,14 @@ fun KotlinParser.ClassDeclarationContext.toDataClass(considerPosition: Boolean):
         if(primaryConstructor().classParameter().firstOrNull { it.VAR() == null && it .VAL() == null } != null){
             throw Error("Data class must have only property parameters", this.toPosition(true))
         }
-        properties = primaryConstructor().classParameter().map { PropertyDeclaration(it.ID().text, it.type().toAst(considerPosition), null, null, it.VAR() != null, toPosition(considerPosition)) }
+        properties = primaryConstructor().classParameter().map { PropertyDeclaration(it.identifier().text, it.type().toAst(considerPosition), null, null, it.VAR() != null, toPosition(considerPosition)) }
     }
-   return DataClassDeclaration(ID().text, properties, bodyDecl, baseClasses, toPosition(considerPosition))
+   return DataClassDeclaration(identifier().text, properties, bodyDecl, baseClasses, toPosition(considerPosition))
 }
 
 
 fun KotlinParser.FunctionDeclarationContext.toNormalAst(considerPosition: Boolean = false): FunctionDeclaration {
-    val id = this.ID().text
+    val id = this.identifier().text
     val params = this.functionValueParameters().functionValueParameter().map { it.toAst(considerPosition) }
     var type: Type? = null
     if(this.type() != null){
@@ -163,7 +166,7 @@ fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Propert
             expression = expression().toAst(considerPosition)
         }
         val type = if(varDeclaration().type() != null) varDeclaration().type().toAst(considerPosition) else  expression?.type ?: throw Exception("Type missing")
-        PropertyDeclaration(varDeclaration().ID().text, type, expression,
+        PropertyDeclaration(varDeclaration().identifier().text, type, expression,
             mutable = true,
             position = toPosition(considerPosition))
     }else{
@@ -174,7 +177,7 @@ fun PropertyDeclarationContext.toAst(considerPosition: Boolean = false): Propert
         }
         val type = if(valDeclaration().type() != null) valDeclaration().type().toAst(considerPosition) else expression?.type ?: throw Exception("Type missing")
 
-        PropertyDeclaration(valDeclaration().ID().text, type, expression,
+        PropertyDeclaration(valDeclaration().identifier().text, type, expression,
             mutable = false,
             position = toPosition(considerPosition))
 
@@ -207,8 +210,8 @@ fun KotlinParser.ExpressionContext.toAst(considerPosition: Boolean = false) : Ex
 }
 
 fun KotlinParser.ComplexExpressionContext.toAst(considerPosition: Boolean): Expression{
-    var base = if(ID() != null){
-        VarReference(ID().text, StringType())
+    var base = if(identifier() != null){
+        VarReference(identifier().text, StringType())
     }else if(functionCallExpression()!= null){
         functionCallExpression().toAst(considerPosition)
     }else if(THIS() != null){
@@ -296,7 +299,7 @@ fun KotlinParser.IfExpressionContext.toAst(considerPosition: Boolean): Expressio
 }
 
 fun KotlinParser.ForExpressionContext.toAst(considerPosition: Boolean): Expression {
-    return ForExpression(this.for_().ID().text, this.for_().expression().toAst(considerPosition), this.for_().body.toAst(considerPosition))
+    return ForExpression(this.for_().identifier().text, this.for_().expression().toAst(considerPosition), this.for_().body.toAst(considerPosition))
 
 }
 fun ControlStructureBodyContext.toAst(considerPosition: Boolean = false): ControlStructureBody {
@@ -334,7 +337,7 @@ fun KotlinParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = w
     is KotlinParser.ContentScaleTypeContext -> AspectRatioType(toPosition(considerPosition))
     is KotlinParser.ColorTypeContext -> ColorType(toPosition(considerPosition))
     is KotlinParser.FontWeightTypeContext -> FontWeightType(toPosition(considerPosition))
-    is KotlinParser.UserTypeContext -> UserType(this.ID().text, toPosition(considerPosition))
+    is KotlinParser.UserTypeContext -> UserType(this.identifier().text, toPosition(considerPosition))
     is KotlinParser.DpTypeContext -> DpType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
@@ -347,6 +350,3 @@ fun KotlinParser.BinaryOperationContext.toAst(considerPosition: Boolean = false)
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 
-class KotlinParseTreeToAstMapper : ParseTreeToAstMapper<KotlinParser.KotlinFileContext, AstFile> {
-    override fun map(parseTreeNode: KotlinParser.KotlinFileContext): AstFile = parseTreeNode.toAst()
-}

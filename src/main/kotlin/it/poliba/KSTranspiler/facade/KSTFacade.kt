@@ -27,7 +27,7 @@ object KSTFacade {
     }
 
     private fun transpileKotlinToSwiftScript(code: String): KSTranspileResult{
-        var parseResult = KotlinParserFacadeScript.parse(code)
+        var parseResult = KotlinParserFacade.parse(code)
         if(parseResult.errors.isEmpty()){
             val result  = parseResult.root!!.generateCode()
             return KSTranspileResultSuccess(result)
@@ -58,7 +58,7 @@ object KSTFacade {
     }
 
     private fun transpileSwiftToKotlinScript(code: String): KSTranspileResult{
-        var parseResult = SwiftAntlrParserFacadeScript.parse(code)
+        var parseResult = SwiftAntlrParserFacade.parse(code)
         if(parseResult.errors.isEmpty()){
             throw Exception("Not implemented yet")
             /*val result  = parseResult.root!!.generateCode()

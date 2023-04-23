@@ -2,12 +2,12 @@ parser grammar SwiftParser;
 
 options { tokenVocab=SwiftLexer; }
 
-file
-    : NL* declaration* EOF #swiftFile
-    |  lines=line+ #swiftScript;
+
+file:
+      lines=line+ #swiftScript;
 
 
-line      : statement (NL | EOF) ;
+line: (statement | declaration) (NL | EOF) ;
 
 packageHeader
     : (PACKAGE ID)?
@@ -29,8 +29,9 @@ declaration:
 
 statement : propertyDeclaration # propertyDeclarationStatement
           | assignment     # assignmentStatement
+          | print          # printStatement
           | expression     #expressionStatement
-          | print          # printStatement;
+          ;
 
 print : PRINT LPAREN expression RPAREN ;
 
@@ -59,12 +60,12 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | CG_FLOAT LPAREN INT_LIT RPAREN                                # cgFloatLiteral
            | if                                                            # ifExpression
            | for                                                           # forExpression
+           | widgetCall                                                    # widgetCallExpression
            | stringLiteral                                                 # stringLiteralExpression
            | functionCallExpression                                        # functionCall
            | left=expression RANGE NL* right=expression                    # rangeExpression
            | RETURN returnExpression=expression                            # returnExpression
            | name=ID NL* functionCallParameters NL*                        # functionCall
-           | widgetCall                                                    # widgetCallExpression
            | horizontalAlignment                                           # horizontalAlignmentExpression
            | verticalAlignment                                             # verticalAlignmentExpression
            | color                                                         # colorLiteral
@@ -88,8 +89,7 @@ navSuffix:
     DOT #dotNavigation
     | ELVIS DOT #elvisNavigation;
 
-functionCallExpression:
-    name=ID NL* functionCallParameters NL* ;
+
 
 for: FOR NL* ID NL* IN NL* expression NL* body=controlStructureBody;
 
@@ -98,9 +98,7 @@ controlStructureBody
     | statement
     ;
 
-functionCallParameters
-    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
-    ;
+
 
 block
     : LCURL NL* (statement semis?)* NL* RCURL
@@ -175,22 +173,22 @@ type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
        STRING  # string |
-       ID      #userType |
        CG_FLOAT #cgFloat |
        CONTENT_MODE #contentModeType |
        COLOR #colorType |
-       FONT DOT WEIGHT #fontWeightType ;
+       FONT DOT WEIGHT #fontWeightType |
+       identifier      #userType ;
 
 
 
 widgetCall:
     TEXT_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUITextSuffix) (NL* DOT NL* swiftUITextSuffix)*)?  #textWidget
-    | BUTTON_WIDGET LPAREN ID COLON action = functionBody NL* RPAREN body = block #buttonWidget
+    | BUTTON_WIDGET LPAREN identifier COLON action = functionBody NL* RPAREN body = block #buttonWidget
     | DIVIDER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #dividerWidget
     | SPACER_WIDGET LPAREN RPAREN (NL* DOT NL* swiftUIGenericWidgetSuffix)*? #spacerWidget
     |VSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #vStackWidget |
     HSTACK_WIDGET LPAREN ((NL* swiftUIColumnParam) (NL* COMMA NL* swiftUIColumnParam)*)?  NL*RPAREN block? #hStackWidget |
-    SCROLL_VIEW LPAREN (DOT ID)? NL*RPAREN block #scrollViewWidget |
+    SCROLL_VIEW LPAREN (DOT identifier)? NL*RPAREN block #scrollViewWidget |
     ZSTACK block? #zStackWidget
     | IMAGE_WIDGET LPAREN expression RPAREN ((NL* DOT NL* swiftUIImageSuffix) (NL* DOT NL* swiftUIImageSuffix)*)?  #imageWidget;
 
@@ -250,3 +248,22 @@ swiftUIImageSuffix:
  contentMode:
      CONTENT_FIT  #contentModeFit |
      CONTENT_FILL #contentModeFill;
+
+ functionCallExpression:
+     name=identifier NL* functionCallParameters NL* ;
+
+ functionCallParameters
+     : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
+     ;
+
+identifier :
+    ID | TEXT_WIDGET  | PRINT | TEXT_WIDGET | IMAGE_WIDGET | RESIZABLE | ASPECT_RATIO_PARAM
+    | CONTENT_MODE_PARAM | CONTENT_MODE | CONTENT_FIT | CONTENT_FILL | FONT_WEIGHT_PARAM | COLOR
+    | COLOR_BLACK | COLOR_BLUE | COLOR_CYAN | COLOR_GRAY | COLOR_GREEN | COLOR_RED | COLOR_WHITE | COLOR_YELLOW
+    | FONT_WEIGHT_BLACK | FONT_WEIGHT_HEAVY | FONT_WEIGHT_BOLD | FONT_WEIGHT_SEMIBOLD | FONT_WEIGHT_MEDIUM | FONT_WEIGHT_REGULAR
+    | FONT_WEIGHT_LIGHT | FONT_WEIGHT_THIN | FONT_WEIGHT_ULTRALIGHT | FOREGROUND_COLOR | FONT | WEIGHT |
+    BUTTON_WIDGET | SPACER_WIDGET | DIVIDER_WIDGET | OVERLAY | FRAME | WIDTH | HEIGHT | VSTACK_WIDGET | HSTACK_WIDGET
+    | ALIGNMENT_PARAM | SPACING_PARAM | SCROLL_VIEW | ZSTACK | VERTICAL_ALIGNMENT | HORIZONTAL_ALIGNMENT | LEADING
+    | TOP | CENTER | TRAILING | BOTTOM
+    ;
+
