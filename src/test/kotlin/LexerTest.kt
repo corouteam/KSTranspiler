@@ -300,6 +300,44 @@ class LexerTest {
     }
 
     @Test
+    fun parseLogicalExpression() {
+        val code = "true && false || true && 1==1 && 2!=3 && 4<5 && 6>7 && 8<=9 && 10>=11"
+        val result = listOf(
+            "BOOL_LIT",
+            "AND",
+            "BOOL_LIT",
+            "OR",
+            "BOOL_LIT",
+            "AND",
+            "INT_LIT",
+            "EQUAL",
+            "INT_LIT",
+            "AND",
+            "INT_LIT",
+            "NOT_EQUAL",
+            "INT_LIT",
+            "AND",
+            "INT_LIT",
+            "LANGLE",
+            "INT_LIT",
+            "AND",
+            "INT_LIT",
+            "RANGLE",
+            "INT_LIT",
+            "AND",
+            "INT_LIT",
+            "LTEQ",
+            "INT_LIT",
+            "AND",
+            "INT_LIT",
+            "GTEQ",
+            "INT_LIT",
+            "EOF")
+        assertEquals(result, tokens(lexerForCode(code)))
+    }
+
+
+    @Test
     fun parseListOfExpression() {
         val code = "listOf<Int>(1, 2, 3)"
         val result = listOf(

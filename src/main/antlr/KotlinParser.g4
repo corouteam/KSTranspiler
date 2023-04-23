@@ -86,6 +86,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | BOOL_LIT                                                      # boolLiteral
            | INT_LIT DOT DP_SUFFIX                                         # dpLiteral
            | if                                                            # ifExpression
+           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # logicalOperation
+           | left=expression operator=(AND | OR) right=expression          # logicalOperation
+           | left=expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) right=expression # logicalOperation
            | for                                                           # forExpression
            | stringLiteral                                                 # stringLiteralExpression
            | left=expression RANGE NL* right=expression                    # rangeExpression

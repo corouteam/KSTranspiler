@@ -137,6 +137,7 @@ fun Expression.generateKotlinCode(depth: Int=0) : String = when (this) {
     is DpLit -> "${getPrefix(depth)}${this.value}.dp"
     is VarReference -> "${getPrefix(depth)}${this.varName}"
     is BinaryExpression -> this.generateKotlinCode(depth)
+    is LogicalExpression -> this.generateKotlinCode(depth)
     is StringLit -> "${getPrefix(depth)}\"${this.value}\""
     is BoolLit -> "${getPrefix(depth)}${this.value}"
     is FunctionCall -> "${getPrefix(depth)}${this.name}(${this.parameters.map { it.generateKotlinCode() }.joinToString(", " )})"
@@ -229,6 +230,17 @@ fun BinaryExpression.generateKotlinCode(depth: Int=0): String = when(this) {
     is SubtractionExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} - ${right.generateKotlinCode()}"
     is MultiplicationExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} * ${right.generateKotlinCode()}"
     is DivisionExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} / ${right.generateKotlinCode()}"
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+fun LogicalExpression.generateKotlinCode(depth: Int=0): String = when(this) {
+    is EqualExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} == ${right.generateKotlinCode()}"
+    is NotEqualExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} != ${right.generateKotlinCode()}"
+    is AndExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} && ${right.generateKotlinCode()}"
+    is OrExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} || ${right.generateKotlinCode()}"
+    is LTEqualExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} <= ${right.generateKotlinCode()}"
+    is GTEqualExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} >= ${right.generateKotlinCode()}"
+    is LessThanExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} < ${right.generateKotlinCode()}"
+    is GreaterThanExpression -> "${getPrefix(depth)}${left.generateKotlinCode()} > ${right.generateKotlinCode()}"
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }
 fun TextComposableCall.generateKotlinCode(depth: Int=0): String{

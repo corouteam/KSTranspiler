@@ -61,6 +61,9 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | if                                                            # ifExpression
            | for                                                           # forExpression
            | widgetCall                                                    # widgetCallExpression
+           | left=expression operator=(EQUAL | NOT_EQUAL) right=expression # logicalOperation
+           | left=expression operator=(AND | OR) right=expression          # logicalOperation
+           | left=expression operator=(LANGLE | RANGLE | LTEQ | GTEQ) right=expression # logicalOperation
            | stringLiteral                                                 # stringLiteralExpression
            | functionCallExpression                                        # functionCall
            | left=expression RANGE NL* right=expression                    # rangeExpression

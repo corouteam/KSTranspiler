@@ -130,6 +130,7 @@ fun Expression.generateCode(depth: Int = 0) : String = when (this) {
     is DpLit -> "${getPrefix(depth)}CGFloat(${this.value})"
     is VarReference ->"${getPrefix(depth)}${this.varName}"
     is BinaryExpression -> this.generateCode(depth)
+    is LogicalExpression -> this.generateCode(depth)
     is StringLit -> "${getPrefix(depth)}\"${this.value}\""
     is BoolLit -> "${getPrefix(depth)}${this.value}"
     is FunctionCall -> "${getPrefix(depth)}${this.name}(${this.parameters.map { it.generateCode(depth) }.joinToString(", " )})"
@@ -233,6 +234,19 @@ fun BinaryExpression.generateCode(depth: Int = 0): String {
     }
     return "${getPrefix(depth)}${exp}"
 }
+
+fun LogicalExpression.generateCode(depth: Int = 0): String = when(this) {
+    is EqualExpression -> "${left.generateCode()} == ${right.generateCode()}"
+    is NotEqualExpression -> "${left.generateCode()} != ${right.generateCode()}"
+    is GTEqualExpression -> "${left.generateCode()} >= ${right.generateCode()}"
+    is LTEqualExpression -> "${left.generateCode()} <= ${right.generateCode()}"
+    is GreaterThanExpression -> "${left.generateCode()} > ${right.generateCode()}"
+    is LessThanExpression -> "${left.generateCode()} < ${right.generateCode()}"
+    is AndExpression -> "${left.generateCode()} && ${right.generateCode()}"
+    is OrExpression -> "${left.generateCode()} || ${right.generateCode()}"
+    else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
+}
+
 fun TextComposableCall.generateCode(depth: Int = 0): String{
 
     val base =  "Text(${this.value.generateCode()})"

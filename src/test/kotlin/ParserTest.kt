@@ -226,6 +226,92 @@ class KotlinParserTest {
 """,
             toParseTree(parseResource("forDeclaration")).multiLineString())
     }
+
+    @Test
+    fun parseIfWithLogical() {
+        assertEquals(
+            """KotlinScript
+  Line
+    ExpressionStatement
+      IfExpression
+        If
+          T[if]
+          T[(]
+          LogicalOperation
+            LogicalOperation
+              LogicalOperation
+                LogicalOperation
+                  LogicalOperation
+                    LogicalOperation
+                      LogicalOperation
+                        LogicalOperation
+                          LogicalOperation
+                            BoolLiteral
+                              T[true]
+                            T[&&]
+                            BoolLiteral
+                              T[false]
+                          T[||]
+                          BoolLiteral
+                            T[true]
+                        T[&&]
+                        LogicalOperation
+                          IntLiteral
+                            T[1]
+                          T[==]
+                          IntLiteral
+                            T[1]
+                      T[&&]
+                      LogicalOperation
+                        IntLiteral
+                          T[2]
+                        T[!=]
+                        IntLiteral
+                          T[3]
+                    T[&&]
+                    IntLiteral
+                      T[4]
+                  T[<]
+                  LogicalOperation
+                    IntLiteral
+                      T[5]
+                    T[&&]
+                    IntLiteral
+                      T[6]
+                T[>]
+                LogicalOperation
+                  IntLiteral
+                    T[7]
+                  T[&&]
+                  IntLiteral
+                    T[8]
+              T[<=]
+              LogicalOperation
+                IntLiteral
+                  T[9]
+                T[&&]
+                IntLiteral
+                  T[10]
+            T[>=]
+            IntLiteral
+              T[11]
+          T[)]
+          ControlStructureBody
+            Block
+              T[{]
+              PropertyDeclarationStatement
+                PropertyDeclaration
+                  ValDeclaration
+                    T[val]
+                    T[a]
+                  T[=]
+                  IntLiteral
+                    T[5]
+              T[}]
+    T[<EOF>]
+""",
+            toParseTree(parseResourceScript("ifLogical")).multiLineString())
+    }
     @Test
     fun parseSimpleFun(){
         var expected = """KotlinFile
