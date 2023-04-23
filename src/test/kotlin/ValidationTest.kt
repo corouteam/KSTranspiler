@@ -89,6 +89,31 @@ class ValidationTest {
     }
 
     @Test
+    fun `variable not declared but in function argument doesn't throws error`() {
+        var code = """
+            fun test(message: String) {
+                print(message)
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isEmpty())
+    }
+
+    @Test
+    fun `variable not declared in function argument throws error`() {
+        var code = """
+            fun test(message: String) {
+                print(message2)
+            }
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("A variable named 'message2' is used but never declared", parseResult.errors.first().message)
+    }
+
+    @Test
     fun `var type mismatch is reported`() {
         var code = """
             val a: Int = "a"
