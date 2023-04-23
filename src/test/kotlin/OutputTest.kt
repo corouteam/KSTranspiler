@@ -171,7 +171,7 @@ Color.yellow
     fun convertIfWithLogical(){
         val code = "if(1 == 1){ print(\"Is true \")}"
         val result = "if(1 == 1) {\n\tprint(\"Is true \")\n}"
-        val parseResult = KotlinParserFacadeScript.parse(code)
+        val parseResult = KotlinParserFacade.parse(code)
         assertEquals(result, parseResult.root!!.generateCode())
 
     }
