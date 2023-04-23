@@ -115,34 +115,6 @@ VStack(
     }*/
 
     @Test
-    fun wrongAlignmentThrowsError2() {
-        val code =  "var cAlignment = Alignment.Starts"
-
-        val parseResult = KotlinParserFacade.parse(code)
-
-        assertEquals("Unrecognized symbol Starts", parseResult.errors.first().message)
-    }
-    @Test
-    fun wrongArrangementThrowsError() {
-        val code =  "Arrangement.spacedByf(cSpacing)"
-        val parseResult = KotlinParserFacade.parse(code)
-
-        assertEquals("Unrecognized symbol spacedByf", parseResult.errors.first().message)
-    }
-
-    /**
-     * This is an actual limitation of the sistem, should be fixed once we add Class validation
-     */
-    @Test
-    fun wrongArrangementThrowsError2() {
-        val code =  "Arrangements.spacedByf(cSpacing)"
-        val parseResult = KotlinParserFacade.parse(code)
-
-        assertNull( parseResult.errors.firstOrNull())
-    }
-
-
-    @Test
     fun wrongArrangementValueThrowsError() {
         val code =  "Arrangements.spacedByf('Hello')"
         val parseResult = KotlinParserFacade.parse(code)

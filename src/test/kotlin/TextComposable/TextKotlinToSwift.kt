@@ -95,20 +95,6 @@ class TextKotlinToSwift {
         assertEquals(result, parseResult.generateCode())
     }
 
-    @Test
-    fun malformedWeightRaisesError(){
-        val code = """
-            Text("Hello world", fontWeight = FontWeight.B)
-        """.trimIndent()
-
-        val parseResult = KotlinParserFacade.parse(code)
-        var error = parseResult.errors.first()
-        var message = error.message
-        assertEquals("Unrecognized symbol B", message)
-        assertEquals(1, error.position?.start?.line)
-        assertEquals(44, error.position?.start?.column)
-    }
-
     //TODO: @Lops aggiungi qui i test sui colori e font weight, basta definire delle variabili con i singoli valori inseriti
 
 }

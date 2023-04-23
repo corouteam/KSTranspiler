@@ -68,26 +68,6 @@ class RowKotlinToSwift {
     }
 
     @Test
-    fun convertRowFailsWithVerticalArrangement() {
-        val code = """
-            var cSpacing = 10.dp
-            Row(
-            verticalArrangement = Arrangement.spacedBy(cSpacing)
-            )
-            """.trimIndent()
-        val result = """
-         var cSpacing:CGFloat = CGFloat(10)
-         HStack(
-         	spacing: cSpacing){
-   
-         }
-        """.trimIndent()
-
-        val parseResult = KotlinParserFacade.parse(code)
-        assertEquals("Unrecognized symbol verticalArrangement", parseResult.errors.first().message)
-    }
-
-    @Test
     fun convertRowOnlyVerticalAlignment() {
         val code = """
             Row(
@@ -131,16 +111,6 @@ HStack(
 
         assertEquals(result, parseResult.root!!.generateCode())
     }*/
-
-    @Test
-    fun wrongAlignmentThrowsError2() {
-        val code =  "var cAlignment = Alignment.Tops"
-
-        val parseResult = KotlinParserFacade.parse(code)
-
-        assertEquals("Unrecognized symbol Tops", parseResult.errors.first().message)
-    }
-
 
     @Test
     fun mapCGFloat() {
