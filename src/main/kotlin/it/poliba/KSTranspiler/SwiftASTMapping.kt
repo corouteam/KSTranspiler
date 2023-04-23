@@ -255,7 +255,7 @@ fun SwiftParser.TypeContext.toAst(considerPosition: Boolean = false) : Type = wh
     is SwiftParser.ContentModeTypeContext -> AspectRatioType(toPosition(considerPosition))
     is SwiftParser.ColorTypeContext -> ColorType(toPosition(considerPosition))
     is SwiftParser.FontWeightTypeContext -> FontWeightType(toPosition(considerPosition))
-    is SwiftParser.UserTypeContext -> UserType(ID().text, toPosition(considerPosition))
+    is SwiftParser.UserTypeContext -> UserType(identifier().text, toPosition(considerPosition))
     is SwiftParser.CgFloatContext -> DpType(toPosition(considerPosition))
     else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
 }

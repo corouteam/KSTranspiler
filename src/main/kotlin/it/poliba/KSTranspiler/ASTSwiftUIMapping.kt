@@ -204,14 +204,14 @@ fun SwiftParser.ScrollViewWidgetContext.toAst(considerPosition: Boolean = false)
 
 
 
-    if(this.ID() != null){
-        if(this.ID().text == "vertical"){
+    if(this.identifier() != null){
+        if(this.identifier().text == "vertical"){
             if (possibleVStack != null )  {
                 return possibleVStack.copy(scrollable = true)
             }else{
                 return ColumnComposableCall(null, null, true, block,null, toPosition(considerPosition))
             }
-        }else if(this.ID().text == "horizontal"){
+        }else if(this.identifier().text == "horizontal"){
             if(possibleHStack != null){
                 return possibleHStack.copy(scrollable = true)
             }else{

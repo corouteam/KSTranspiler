@@ -219,7 +219,7 @@ fun ContentScaleExpressionContext.toAst(considerPosition: Boolean): AspectRatioL
 
 
 fun KotlinParser.FunctionDeclarationContext.toWidgetAst(considerPosition: Boolean = false): WidgetDeclaration {
-    val id = this.ID().text
+    val id = this.identifier().text
     val params = this.functionValueParameters().functionValueParameter().map { it.toAst(considerPosition) }
     var block: Block
     if(this.functionBody().block() != null){

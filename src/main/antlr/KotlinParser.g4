@@ -9,7 +9,7 @@ file:
 line      : (statement | declaration) (NL | EOF) ;
 
 packageHeader
-    : (PACKAGE ID)?
+    : (PACKAGE identifier)?
     ;
 
 importList
@@ -17,7 +17,7 @@ importList
     ;
 
 importHeader
-    : IMPORT ID?
+    : IMPORT identifier?
     ;
 
 declaration:
@@ -36,19 +36,19 @@ statement : propertyDeclaration # propertyDeclarationStatement
 print : PRINT LPAREN expression RPAREN ;
 
 
-varDeclaration : VAR ID (NL* COLON NL* type)?;
+varDeclaration : VAR identifier (NL* COLON NL* type)?;
 
-valDeclaration : VAL ID (NL* COLON NL* type)?;
+valDeclaration : VAL identifier (NL* COLON NL* type)?;
 
 propertyDeclaration:  (varDeclaration|valDeclaration) (ASSIGN expression)?;
 
-annotation: AT ID;
+annotation: AT identifier;
 
 assignment : left=expression ASSIGN right=expression ;
 
 //Section class
 classDeclaration
-    : DATA? CLASS NL* ID
+    : DATA? CLASS NL* identifier
       (NL* primaryConstructor)?
       (NL* COLON  NL* extendedClasses)?
       (NL* classBody)?
@@ -68,7 +68,7 @@ constructor:
     ;
 
 classParameter
-    : (VAL | VAR)? NL* ID COLON NL* type
+    : (VAL | VAR)? NL* identifier COLON NL* type
     ;
 
 extendedClasses
@@ -79,13 +79,12 @@ extendedClasses
 expression : left=expression operator=(DIVISION|ASTERISK) right=expression # binaryOperation
            | left=expression operator=(PLUS|MINUS) right=expression        # binaryOperation
            | value=expression AS targetType=type                           # typeConversion
-           | ID                                                            # varReference
+           | identifier                                                    # varReference
            | MINUS expression                                              # minusExpression
            | INT_LIT                                                       # intLiteral
            | DOUBLE_LIT                                                    # doubleLiteral
            | BOOL_LIT                                                      # boolLiteral
            | INT_LIT DOT DP_SUFFIX                                         # dpLiteral
-           | functionCallExpression                        # functionCall
            | if                                                            # ifExpression
            | for                                                           # forExpression
            | stringLiteral                                                 # stringLiteralExpression
@@ -99,11 +98,12 @@ expression : left=expression operator=(DIVISION|ASTERISK) right=expression # bin
            | verticalAlignment                                             #verticalAlignmentExpression
            | arrangement                                                   #arrangementExpression
            | THIS                                                          #thisExpression
-           | (ID | functionCallExpression | THIS) (accessSuffix)*  #complexExpression
-           | CONTENTSCALE DOT contentScadeMode                             #contentScaleExpression;
+           | CONTENTSCALE DOT contentScadeMode                             #contentScaleExpression
+           | (identifier | functionCallExpression | THIS) (accessSuffix)*  #complexExpression
+           | functionCallExpression                        # functionCall
+;
 
-functionCallExpression:
-    name=ID NL* functionCallParameters NL* ;
+
 
 accessSuffix:
 (navSuffix expression);
@@ -120,7 +120,7 @@ if
     ;
 
 for
-    : FOR NL* LPAREN NL* ID NL* IN NL* expression NL* RPAREN NL* body=controlStructureBody;
+    : FOR NL* LPAREN NL* identifier NL* IN NL* expression NL* RPAREN NL* body=controlStructureBody;
 
 controlStructureBody
     : block
@@ -157,16 +157,7 @@ parameter
     : ID NL* COLON NL* type
     ;
 
-functionCallParameters
-    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
-    ;
 
-functionDeclaration:
-    annotation? NL* FUN NL* ID
-    NL* functionValueParameters
-    (NL* COLON NL* type)?
-    (NL* functionBody)?
-    ;
 
 functionBody
     : block
@@ -178,13 +169,14 @@ semis
 type : INT     # integer |
        DOUBLE  # double |
        BOOL    # bool |
-       ID      #userType |
        STRING  # string |
        COLOR #colorType |
        DP #dpType |
        FONT_WEIGHT #fontWeightType |
        ARRANGEMENT #arrangementType |
-       CONTENTSCALE #contentScaleType ;
+       CONTENTSCALE #contentScaleType |
+       identifier      #userType
+;
 
 typeArguments
     : LANGLE NL* type (NL* COMMA NL* type)* (NL* COMMA)? NL* RANGLE
@@ -197,7 +189,7 @@ composableCall:
     | COLUMN_COMPOSE LPAREN ((NL* columnComposeParameter) (NL* COMMA NL* columnComposeParameter)*)?  NL* RPAREN block? #columnComposable
     | ROW_COMPOSE LPAREN ((NL* rowComposeParameter) (NL* COMMA NL* rowComposeParameter)*)?  NL* RPAREN block? #rowComposable
     | BOX LPAREN (NL* modifierParameter NL*)? RPAREN block? #boxComposable
-    | BUTTON_COMPOSABLE LPAREN ID ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable
+    | BUTTON_COMPOSABLE LPAREN identifier ASSIGN action = functionBody (NL* COMMA NL* modifierParameter)?  RPAREN body = block #iconButtonComposable
     | IMAGE_COMPOSE LPAREN (NL* imageComposeParameter) ((NL* COMMA NL* imageComposeParameter)*)? NL* RPAREN #imageComposable;
 
 textComposeParameter:
@@ -287,3 +279,33 @@ modifierSuffix:
 
 resource:
     GET_RESOURCE LPAREN RPAREN DOT GET_IDENTIFIER LPAREN imageName = expression COMMA expression COMMA CONTEXT DOT GET_PACKAGENAME LPAREN RPAREN RPAREN;
+
+functionCallParameters
+    : LPAREN NL* (expression (NL* COMMA NL* expression)* (NL* COMMA)?)? NL* RPAREN
+    ;
+
+
+identifier :
+    ID | TEXT_COMPOSE | COLUMN_COMPOSE |  ROW_COMPOSE | IMAGE_COMPOSE | RESIZABLE |
+    PAINTER_PARAM | PAINTER_RESOURCE | PAINTER_RESOURCE_PARAM | GET_RESOURCE | GET_IDENTIFIER
+    | CONTEXT | GET_PACKAGENAME | MODIFIER | MODIFIER_PARAM | CONTENTSCALE | CONTENTSCALE_PARAM | FILLWIDTH
+    | FIT | COLOR | COLOR_BLACK | COLOR_BLUE | COLOR_CYAN | COLOR_GRAY | COLOR_GREEN | COLOR_MAGENTA | COLOR_RED
+    | COLOR_WHITE | COLOR_YELLOW | FONT_WEIGHT | FONT_WEIGHT_BLACK | FONT_WEIGHT_EXTRA_BOLD | FONT_WEIGHT_BOLD |
+    FONT_WEIGHT_SEMI_BOLD | FONT_WEIGHT_MEDIUM | FONT_WEIGHT_NORMAL |  FONT_WEIGHT_LIGHT | FONT_WEIGHT_EXTRA_LIGHT |
+    FONT_WEIGHT_THIN | FONT_WEIGHT_PARAM | COLOR_PARAM | SPACER_COMPOSE | DIVIDER_COMPOSE | THICKNESS
+    | SIZE | WIDTH | HEIGHT | BOX | ZINDEX | VERTICAL_ARRANGEMENT_PARAM | HORIZONTAL_ARRANGEMENT_PARAM
+    | HORIZONTAL_ALIGNMENT_PARAM | VERTICAL_ALIGNMENT_PARAM | ARRANGEMENT | ALIGNMENT | TOP | START
+    | BOTTOM | CENTER_HORIZONTALLY | CENTER_VERTICALLY | END | SPACED_BY | DP_SUFFIX | VERTICAL_SCROLL_SUFFIX
+    | HORIZONTAL_SCROLL_SUFFIX | REMEMBER_SCROLL | BUTTON_COMPOSABLE | ICON_COMPOSABLE
+    | ASPECT_RATIO | ASPECT_RATIO_PARAM
+    ;
+
+functionDeclaration:
+    annotation? NL* FUN NL* identifier
+    NL* functionValueParameters
+    (NL* COLON NL* type)?
+    (NL* functionBody)?
+    ;
+
+functionCallExpression:
+    name=identifier NL* functionCallParameters NL* ;

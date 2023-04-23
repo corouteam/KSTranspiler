@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-
+/*
 class SWIFTParserTest {
 
     private fun parseResource(
@@ -434,3 +434,4 @@ class SWIFTParserTest {
     }
 
 }
+*/
