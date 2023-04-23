@@ -1,10 +1,7 @@
 package it.poliba.KSTranspiler
 
 import com.strumenta.kolasu.model.Node
-import com.strumenta.kolasu.model.Position
-import com.strumenta.kolasu.traversing.findAncestorOfType
 import com.strumenta.kolasu.traversing.searchByType
-import com.strumenta.kolasu.traversing.walkAncestors
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -64,7 +61,7 @@ fun Node.validateVariablesAndInferType(): LinkedList<Error> {
         }
 
 
-    // check if used variable is declared before and assign type
+    // check if used variable is declared in function before and assign type
     this.specificProcess(FunctionDeclaration::class.java) { function ->
         val block = function.body
         if (block is Block) {
@@ -103,6 +100,32 @@ fun Node.validateVariablesAndInferType(): LinkedList<Error> {
 
                     functionArguments?.firstOrNull()?.let {
                         varReference.type = it.type
+                    }
+                }
+            }
+        }
+    }
+
+    // check if used variable is declared before and assign type
+    this.specificProcess(AstScript::class.java) { function ->
+        function.statement.forEach { statement ->
+            // don't run validation on functions in Scripts,
+            // because they already have been validated with the Block rule above
+            if (statement !is FunctionDeclaration) {
+                statement.searchByType(VarReference::class.java).forEach { varReference ->
+                    // check only global variables since it's a script
+                    val globalDeclarations = globalVariables.filter { it.varName == varReference.varName }
+                    if (globalDeclarations.isEmpty()) {
+                        errors.add(
+                            Error(
+                                "A variable named '${varReference.varName}' is used but never declared",
+                                varReference.position?.start?.asPosition
+                            )
+                        )
+                    } else {
+                        // var found, copy type from declaration
+                        val declaration = globalDeclarations.first()
+                        varReference.type = declaration.type
                     }
                 }
             }
@@ -148,7 +171,7 @@ fun Node.commonValidation(): LinkedList<Error> {
         }
     }
 
-    // check val is not reassigned
+    // check val is not reassigned in bodies
     this.specificProcess(ControlStructureBody::class.java) { block ->
         if (block is Block) {
             block.searchByType(Assignment::class.java).forEach {
@@ -185,6 +208,28 @@ fun Node.commonValidation(): LinkedList<Error> {
             }
         }
     }
+
+    // check val is not reassigned in scripts
+    this.specificProcess(AstScript::class.java) { script ->
+        val scriptCodeBlock = Block(body = script.statement, script.position)
+
+        scriptCodeBlock.searchByType(Assignment::class.java).forEach {
+            val assignmentName = it.variable.generateCode()
+
+            globalVariables.forEach {
+                if (it.varName == assignmentName && !it.mutable) {
+                    errors.add(Error("""
+                            Final variable ${it.varName} can not be reassigned.
+                        """.trimIndent(), this.position
+                    ))
+
+                    // match found, no need to iterate anymore
+                    return@specificProcess
+                }
+            }
+        }
+    }
+
 
     // check if assignment type matches declaration
     this.specificProcess(ControlStructureBody::class.java) { block ->

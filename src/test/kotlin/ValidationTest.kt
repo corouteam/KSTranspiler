@@ -127,6 +127,42 @@ class ValidationTest {
     }
 
     @Test
+    fun `variable not declared in script throws error`() {
+        var code = """
+            print(a)
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("A variable named 'a' is used but never declared", parseResult.errors.first().message)
+    }
+
+    @Test
+    fun `final variable re-assigned in script throws error`() {
+        var code = """
+            val a = 2
+            a = 4
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("Final variable a can not be reassigned.", parseResult.errors.first().message)
+    }
+
+
+    @Test
+    fun `duplicate variables in scripts throws error`() {
+        var code = """
+            val a = 2
+            var a = 3
+        """.trimIndent()
+        val parseResult = KotlinParserFacade.parse(code)
+
+        assert(parseResult.errors.isNotEmpty())
+        assertEquals("A variable named 'a' has been already declared", parseResult.errors.first().message)
+    }
+
+    @Test
     fun `if condition must be boolean`() {
         var code = """
             fun main(){
