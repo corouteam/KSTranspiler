@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-/*
 class SWIFTParserTest {
 
     private fun parseResource(
@@ -365,81 +364,86 @@ class SWIFTParserTest {
 
     @Test
     fun parseStruct(){
-        val expected = "SwiftScript\n" +
-                "  Line\n" +
-                "    Declaration\n" +
-                "      ClassDeclaration\n" +
-                "        T[struct]\n" +
-                "        T[MainView]\n" +
-                "        T[:]\n" +
-                "        DelegationSpecifiers\n" +
-                "          UserType\n" +
-                "            T[View]\n" +
-                "        ClassBody\n" +
-                "          T[{]\n" +
-                "          T[\n" +
-                "]\n" +
-                "          ClassMemberDeclaration\n" +
-                "            Declaration\n" +
-                "              PropertyDeclaration\n" +
-                "                VarDeclaration\n" +
-                "                  T[var]\n" +
-                "                  T[body]\n" +
-                "                  T[:]\n" +
-                "                  T[some]\n" +
-                "                  UserType\n" +
-                "                    T[View]\n" +
-                "                ComputedPropertyDeclarationBody\n" +
-                "                  Block\n" +
-                "                    T[{]\n" +
-                "                    T[\n" +
-                "]\n" +
-                "                    ExpressionStatement\n" +
-                "                      WidgetCallExpression\n" +
-                "                        TextWidget\n" +
-                "                          T[Text]\n" +
-                "                          T[(]\n" +
-                "                          StringLiteralExpression\n" +
-                "                            StringLiteral\n" +
-                "                              LineStringLiteral\n" +
-                "                                T[\"]\n" +
-                "                                LineStringContent\n" +
-                "                                  T[Ciao]\n" +
-                "                                T[\"]\n" +
-                "                          T[)]\n" +
-                "                    Semis\n" +
-                "                      T[\n" +
-                "]\n" +
-                "                    T[}]\n" +
-                "          Semis\n" +
-                "            T[\n" +
-                "]\n" +
-                "          T[}]\n" +
-                "    T[<EOF>]\n"
+        val expected = """SwiftScript
+  Line
+    Declaration
+      ClassDeclaration
+        T[struct]
+        T[MainView]
+        T[:]
+        DelegationSpecifiers
+          UserType
+            Identifier
+              T[View]
+        ClassBody
+          T[{]
+          T[
+]
+          ClassMemberDeclaration
+            Declaration
+              PropertyDeclaration
+                VarDeclaration
+                  T[var]
+                  T[body]
+                  T[:]
+                  T[some]
+                  UserType
+                    Identifier
+                      T[View]
+                ComputedPropertyDeclarationBody
+                  Block
+                    T[{]
+                    T[
+]
+                    ExpressionStatement
+                      WidgetCallExpression
+                        TextWidget
+                          T[Text]
+                          T[(]
+                          StringLiteralExpression
+                            StringLiteral
+                              LineStringLiteral
+                                T["]
+                                LineStringContent
+                                  T[Ciao]
+                                T["]
+                          T[)]
+                    Semis
+                      T[
+]
+                    T[}]
+          Semis
+            T[
+]
+          T[}]
+    T[<EOF>]
+"""
         val actual = toParseTree(parseResource("swift/structDeclaration")).multiLineString()
         assertEquals(expected, actual)
     }
 
     @Test
     fun parseSwiftButton(){
-        val expected = "SwiftScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      WidgetCallExpression\n" +
-                "        ButtonWidget\n" +
-                "          T[Button]\n" +
-                "          T[(]\n" +
-                "          T[action]\n" +
-                "          T[:]\n" +
-                "          FunctionBody\n" +
-                "            Block\n" +
-                "              T[{]\n" +
-                "              T[}]\n" +
-                "          T[)]\n" +
-                "          Block\n" +
-                "            T[{]\n" +
-                "            T[}]\n" +
-                "    T[<EOF>]\n"
+        val expected = """SwiftScript
+  Line
+    ExpressionStatement
+      WidgetCallExpression
+        ButtonWidget
+          T[Button]
+          T[(]
+          Identifier
+            T[action]
+          T[:]
+          FunctionBody
+            Block
+              T[{]
+              T[}]
+          T[)]
+          Block
+            T[{]
+            T[}]
+    T[<EOF>]
+"""
         val actual = toParseTree(parseResourceScript("swift/button")).multiLineString()
         assertEquals(expected, actual)
     }
@@ -447,19 +451,19 @@ class SWIFTParserTest {
 
     @Test
     fun parseSwiftDivider(){
-        val expected = """
-            SwiftScript
-              Line
-                ExpressionStatement
-                  FunctionCall
-                    FunctionCallExpression
-                      T[DividerComposable]
-                      FunctionCallParameters
-                        T[(]
-                        T[)]
-                T[<EOF>]
+        val expected = """SwiftScript
+  Line
+    ExpressionStatement
+      FunctionCall
+        FunctionCallExpression
+          Identifier
+            T[DividerComposable]
+          FunctionCallParameters
+            T[(]
+            T[)]
+    T[<EOF>]
 
-        """.trimIndent()
+""".trimIndent()
         val actual = toParseTree(parseResourceScript("swift/divider")).multiLineString()
         assertEquals(expected, actual)
     }
@@ -551,4 +555,3 @@ class SWIFTParserTest {
     }
 
 }
-*/
