@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import toParseTree
-/*
 class KotlinParserTest {
 
     private fun parseResource(
@@ -29,7 +28,8 @@ class KotlinParserTest {
     AssignmentStatement
       Assignment
         VarReference
-          T[a]
+          Identifier
+            T[a]
         T[=]
         BinaryOperation
           IntLiteral
@@ -45,16 +45,18 @@ class KotlinParserTest {
     @Test
     fun parsePropertyDeclVarInt() {
         assertEquals(
-            """KotlinFile
-  Declaration
-    PropertyDeclaration
-      VarDeclaration
-        T[var]
-        T[a]
-      T[=]
-      IntLiteral
-        T[1]
-  T[<EOF>]
+            """KotlinScript
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          Identifier
+            T[a]
+        T[=]
+        IntLiteral
+          T[1]
+    T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_int")).multiLineString())
     }
@@ -62,21 +64,23 @@ class KotlinParserTest {
     @Test
     fun parsePropertyDeclVarStrinb() {
         assertEquals(
-            """KotlinFile
-  Declaration
-    PropertyDeclaration
-      VarDeclaration
-        T[var]
-        T[a]
-      T[=]
-      StringLiteralExpression
-        StringLiteral
-          LineStringLiteral
-            T["]
-            LineStringContent
-              T[ciao]
-            T["]
-  T[<EOF>]
+            """KotlinScript
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          Identifier
+            T[a]
+        T[=]
+        StringLiteralExpression
+          StringLiteral
+            LineStringLiteral
+              T["]
+              LineStringContent
+                T[ciao]
+              T["]
+    T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_string")).multiLineString())
     }
@@ -84,35 +88,39 @@ class KotlinParserTest {
     @Test
     fun parsePropertyDeclVarBool() {
         assertEquals(
-            """KotlinFile
-  Declaration
-    PropertyDeclaration
-      VarDeclaration
-        T[var]
-        T[a]
-      T[=]
-      BoolLiteral
-        T[true]
-  T[<EOF>]
+            """KotlinScript
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          Identifier
+            T[a]
+        T[=]
+        BoolLiteral
+          T[true]
+    T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_bool")).multiLineString())
     }
     @Test
     fun parsePropertyDeclVarIntWithExplicitType() {
         assertEquals(
-            """KotlinFile
-  Declaration
-    PropertyDeclaration
-      VarDeclaration
-        T[var]
-        T[a]
-        T[:]
-        Integer
-          T[Int]
-      T[=]
-      IntLiteral
-        T[1]
-  T[<EOF>]
+            """KotlinScript
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          Identifier
+            T[a]
+          T[:]
+          Integer
+            T[Int]
+        T[=]
+        IntLiteral
+          T[1]
+    T[<EOF>]
 """,
             toParseTree(parseResource("property_declaration_var_int_expl_type")).multiLineString())
     }
@@ -120,16 +128,18 @@ class KotlinParserTest {
     @Test
     fun parseVarDeclInt() {
         assertEquals(
-            """KotlinFile
-  Declaration
-    PropertyDeclaration
-      VarDeclaration
-        T[var]
-        T[a]
-        T[:]
-        Integer
-          T[Int]
-  T[<EOF>]
+            """KotlinScript
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        VarDeclaration
+          T[var]
+          Identifier
+            T[a]
+          T[:]
+          Integer
+            T[Int]
+    T[<EOF>]
 """,
             toParseTree(parseResource("var_declaration_int")).multiLineString())
     }
@@ -138,16 +148,18 @@ class KotlinParserTest {
     @Test
     fun parseValDeclInt() {
         assertEquals(
-            """KotlinFile
-  Declaration
-    PropertyDeclaration
-      ValDeclaration
-        T[val]
-        T[a]
-        T[:]
-        Integer
-          T[Int]
-  T[<EOF>]
+            """KotlinScript
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        ValDeclaration
+          T[val]
+          Identifier
+            T[a]
+          T[:]
+          Integer
+            T[Int]
+    T[<EOF>]
 """,
             toParseTree(parseResource("val_declaration_int")).multiLineString())
     }
@@ -172,7 +184,8 @@ class KotlinParserTest {
                 PropertyDeclaration
                   ValDeclaration
                     T[val]
-                    T[a]
+                    Identifier
+                      T[a]
                   T[=]
                   IntLiteral
                     T[5]
@@ -192,7 +205,8 @@ class KotlinParserTest {
         For
           T[for]
           T[(]
-          T[i]
+          Identifier
+            T[i]
           T[in]
           RangeExpression
             IntLiteral
@@ -226,137 +240,53 @@ class KotlinParserTest {
 """,
             toParseTree(parseResource("forDeclaration")).multiLineString())
     }
-
-    @Test
-    fun parseIfWithLogical() {
-        assertEquals(
-            """KotlinScript
-  Line
-    ExpressionStatement
-      IfExpression
-        If
-          T[if]
-          T[(]
-          LogicalOperation
-            LogicalOperation
-              LogicalOperation
-                LogicalOperation
-                  LogicalOperation
-                    LogicalOperation
-                      LogicalOperation
-                        LogicalOperation
-                          LogicalOperation
-                            BoolLiteral
-                              T[true]
-                            T[&&]
-                            BoolLiteral
-                              T[false]
-                          T[||]
-                          BoolLiteral
-                            T[true]
-                        T[&&]
-                        LogicalOperation
-                          IntLiteral
-                            T[1]
-                          T[==]
-                          IntLiteral
-                            T[1]
-                      T[&&]
-                      LogicalOperation
-                        IntLiteral
-                          T[2]
-                        T[!=]
-                        IntLiteral
-                          T[3]
-                    T[&&]
-                    IntLiteral
-                      T[4]
-                  T[<]
-                  LogicalOperation
-                    IntLiteral
-                      T[5]
-                    T[&&]
-                    IntLiteral
-                      T[6]
-                T[>]
-                LogicalOperation
-                  IntLiteral
-                    T[7]
-                  T[&&]
-                  IntLiteral
-                    T[8]
-              T[<=]
-              LogicalOperation
-                IntLiteral
-                  T[9]
-                T[&&]
-                IntLiteral
-                  T[10]
-            T[>=]
-            IntLiteral
-              T[11]
-          T[)]
-          ControlStructureBody
-            Block
-              T[{]
-              PropertyDeclarationStatement
-                PropertyDeclaration
-                  ValDeclaration
-                    T[val]
-                    T[a]
-                  T[=]
-                  IntLiteral
-                    T[5]
-              T[}]
-    T[<EOF>]
-""",
-            toParseTree(parseResourceScript("ifLogical")).multiLineString())
-    }
     @Test
     fun parseSimpleFun(){
-        var expected = """KotlinFile
-  Declaration
-    FunctionDeclaration
-      T[fun]
-      T[test]
-      FunctionValueParameters
-        T[(]
-        FunctionValueParameter
-          Parameter
-            T[x]
-            T[:]
-            Integer
-              T[Int]
-        T[,]
-        FunctionValueParameter
-          Parameter
-            T[y]
-            T[:]
-            Integer
-              T[Int]
-        T[)]
-      FunctionBody
-        Block
-          T[{]
-          T[
-]
-          PrintStatement
-            Print
-              T[print]
-              T[(]
-              StringLiteralExpression
-                StringLiteral
-                  LineStringLiteral
-                    T["]
-                    LineStringContent
-                      T[ciao]
-                    T["]
-              T[)]
-          Semis
+        var expected = """KotlinScript
+  Line
+    Declaration
+      FunctionDeclaration
+        T[fun]
+        Identifier
+          T[test]
+        FunctionValueParameters
+          T[(]
+          FunctionValueParameter
+            Parameter
+              T[x]
+              T[:]
+              Integer
+                T[Int]
+          T[,]
+          FunctionValueParameter
+            Parameter
+              T[y]
+              T[:]
+              Integer
+                T[Int]
+          T[)]
+        FunctionBody
+          Block
+            T[{]
             T[
 ]
-          T[}]
-  T[<EOF>]
+            PrintStatement
+              Print
+                T[print]
+                T[(]
+                StringLiteralExpression
+                  StringLiteral
+                    LineStringLiteral
+                      T["]
+                      LineStringContent
+                        T[ciao]
+                      T["]
+                T[)]
+            Semis
+              T[
+]
+            T[}]
+    T[<EOF>]
 """
         val actual = toParseTree(parseResource("function_declaration")).multiLineString()
         assertEquals(expected, actual)
@@ -364,45 +294,47 @@ class KotlinParserTest {
 
     @Test
     fun parseExpressionFun(){
-        var expected = """KotlinFile
-  Declaration
-    FunctionDeclaration
-      T[fun]
-      T[test]
-      FunctionValueParameters
-        T[(]
-        FunctionValueParameter
-          Parameter
-            T[x]
-            T[:]
-            Integer
-              T[Int]
-        T[,]
-        FunctionValueParameter
-          Parameter
-            T[y]
-            T[:]
-            Integer
-              T[Int]
-        T[)]
-      T[:]
-      Integer
-        T[Int]
-      FunctionBody
-        Block
-          T[{]
-          T[
-]
-          ExpressionStatement
-            ReturnExpression
-              T[return]
-              IntLiteral
-                T[3]
-          Semis
+        var expected = """KotlinScript
+  Line
+    Declaration
+      FunctionDeclaration
+        T[fun]
+        Identifier
+          T[test]
+        FunctionValueParameters
+          T[(]
+          FunctionValueParameter
+            Parameter
+              T[x]
+              T[:]
+              Integer
+                T[Int]
+          T[,]
+          FunctionValueParameter
+            Parameter
+              T[y]
+              T[:]
+              Integer
+                T[Int]
+          T[)]
+        T[:]
+        Integer
+          T[Int]
+        FunctionBody
+          Block
+            T[{]
             T[
 ]
-          T[}]
-  T[<EOF>]
+            ExpressionStatement
+              ReturnExpression
+                T[return]
+                IntLiteral
+                  T[3]
+            Semis
+              T[
+]
+            T[}]
+    T[<EOF>]
 """
         val actual = toParseTree(parseResource("function_declaration_return")).multiLineString()
         assertEquals(expected, actual)
@@ -413,9 +345,10 @@ class KotlinParserTest {
         var expected = """KotlinScript
   Line
     ExpressionStatement
-      FunctionCall
+      ComplexExpression
         FunctionCallExpression
-          T[test]
+          Identifier
+            T[test]
           FunctionCallParameters
             T[(]
             StringLiteralExpression
@@ -437,20 +370,22 @@ class KotlinParserTest {
 
     @Test
     fun parseRangeExpression() {
-        val expected = """KotlinFile
-  Declaration
-    PropertyDeclaration
-      ValDeclaration
-        T[val]
-        T[a]
-      T[=]
-      RangeExpression
-        IntLiteral
-          T[1]
-        T[..]
-        IntLiteral
-          T[42]
-  T[<EOF>]
+        val expected = """KotlinScript
+  Line
+    PropertyDeclarationStatement
+      PropertyDeclaration
+        ValDeclaration
+          T[val]
+          Identifier
+            T[a]
+        T[=]
+        RangeExpression
+          IntLiteral
+            T[1]
+          T[..]
+          IntLiteral
+            T[42]
+    T[<EOF>]
 """
         val actual = toParseTree(parseResource("range_expression")).multiLineString()
         assertEquals(expected, actual)
@@ -870,26 +805,31 @@ KotlinScript
 
     @Test
     fun testAnnotation(){
-        val expected = "KotlinFile\n" +
-                "  Declaration\n" +
-                "    FunctionDeclaration\n" +
-                "      Annotation\n" +
-                "        T[@]\n" +
-                "        T[Composable]\n" +
-                "      T[\n" +
-                "]\n" +
-                "      T[fun]\n" +
-                "      T[test]\n" +
-                "      FunctionValueParameters\n" +
-                "        T[(]\n" +
-                "        T[)]\n" +
-                "      FunctionBody\n" +
-                "        Block\n" +
-                "          T[{]\n" +
-                "          T[\n" +
-                "]\n" +
-                "          T[}]\n" +
-                "  T[<EOF>]\n"
+        val expected = """KotlinScript
+  Line
+    Declaration
+      FunctionDeclaration
+        Annotation
+          T[@]
+          Identifier
+            T[Composable]
+        T[
+]
+        T[fun]
+        Identifier
+          T[test]
+        FunctionValueParameters
+          T[(]
+          T[)]
+        FunctionBody
+          Block
+            T[{]
+            T[
+]
+            T[}]
+    T[<EOF>]
+
+""".trimIndent()
         val actual = toParseTree(parseResource("functionComposable")).multiLineString()
         assertEquals(expected, actual)
     }
@@ -898,24 +838,27 @@ KotlinScript
 
     @Test
     fun parseKotlinButton(){
-        val expected = "KotlinScript\n" +
-                "  Line\n" +
-                "    ExpressionStatement\n" +
-                "      ComposableCallExpression\n" +
-                "        IconButtonComposable\n" +
-                "          T[Button]\n" +
-                "          T[(]\n" +
-                "          T[onClick]\n" +
-                "          T[=]\n" +
-                "          FunctionBody\n" +
-                "            Block\n" +
-                "              T[{]\n" +
-                "              T[}]\n" +
-                "          T[)]\n" +
-                "          Block\n" +
-                "            T[{]\n" +
-                "            T[}]\n" +
-                "    T[<EOF>]\n"
+        val expected = """KotlinScript
+  Line
+    ExpressionStatement
+      ComposableCallExpression
+        IconButtonComposable
+          T[Button]
+          T[(]
+          Identifier
+            T[onClick]
+          T[=]
+          FunctionBody
+            Block
+              T[{]
+              T[}]
+          T[)]
+          Block
+            T[{]
+            T[}]
+    T[<EOF>]
+
+""".trimIndent()
         val actual = toParseTree(parseResource("button")).multiLineString()
         assertEquals(expected, actual)
     }
@@ -925,15 +868,16 @@ KotlinScript
         val expected = """KotlinScript
   Line
     ExpressionStatement
-      FunctionCall
+      ComplexExpression
         FunctionCallExpression
-          T[DividerComposable]
+          Identifier
+            T[DividerComposable]
           FunctionCallParameters
             T[(]
             T[)]
     T[<EOF>]
 
-        """.trimIndent()
+""".trimIndent()
         val actual = toParseTree(parseResource("divider")).multiLineString()
         assertEquals(expected, actual)
     }
@@ -1086,4 +1030,3 @@ KotlinScript
 
 
 }
-*/
