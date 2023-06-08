@@ -2,6 +2,7 @@ package it.poliba.KSTranspiler.facade
 
 import it.poliba.KSTranspiler.FileExpectedException
 import it.poliba.KSTranspiler.generateCode
+import it.poliba.KSTranspiler.generateKotlinCode
 import it.poliba.KSTranspiler.server.*
 import org.antlr.v4.runtime.NoViableAltException
 
@@ -49,7 +50,7 @@ object KSTFacade {
     private fun transpileSwiftToKotlinFile(code: String): KSTranspileResult{
         var parseResult = SwiftParserFacade.parse(code)
         if(parseResult.errors.isEmpty()){
-            val result  = parseResult.root!!.generateCode()
+            val result  = parseResult.root!!.generateKotlinCode()
             return KSTranspileResultSuccess(result)
         }else{
             val result = ParseErrorResult("Si è verificato un errore", parseResult.errors.map { ParseError(it.message, it.position?.toString() ?: "") })
